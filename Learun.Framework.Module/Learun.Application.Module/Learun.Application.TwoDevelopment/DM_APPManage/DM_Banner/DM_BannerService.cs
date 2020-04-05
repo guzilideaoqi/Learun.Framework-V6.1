@@ -15,6 +15,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 	{
 		private ICache redisCache = CacheFactory.CaChe();
 
+		private DM_BaseSettingService dM_BaseSettingService = new DM_BaseSettingService();
+
 		private string fieldSql;
 
 		public DM_BannerService()
@@ -69,15 +71,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public IEnumerable<dm_bannerEntity> GetPageListByCache(Pagination pagination, int type, string appid)
 		{
+			dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(appid);
 			string cacheKey = "Banner" + appid;
-			IEnumerable<dm_bannerEntity> dm_BannerEntities = redisCache.Read<IEnumerable<dm_bannerEntity>>(cacheKey, 7L);
-			if (dm_BannerEntities != null)
+			IEnumerable<dm_bannerEntity> dm_BannerEntities2 = redisCache.Read<IEnumerable<dm_bannerEntity>>(cacheKey, 7L);
+			if (dm_BannerEntities2 != null)
 			{
-				return dm_BannerEntities.Where((dm_bannerEntity t) => t.b_type == type).Skip((pagination.page - 1) * pagination.rows).Take(pagination.rows);
+				dm_BannerEntities2 = dm_BannerEntities2.Where((dm_bannerEntity t) => t.b_type == type).Skip((pagination.page - 1) * pagination.rows).Take(pagination.rows);
 			}
-			IEnumerable<dm_bannerEntity> AllBannerEntityList = GetList("{\"appid\":\"" + appid + "\"}").AsList();
-			redisCache.Write(cacheKey, AllBannerEntityList, 7L);
-			return AllBannerEntityList.Where((dm_bannerEntity t) => t.b_type == type).Skip((pagination.page - 1) * pagination.rows).Take(pagination.rows);
+			else
+			{
+				IEnumerable<dm_bannerEntity> AllBannerEntityList = GetList("{\"appid\":\"" + appid + "\"}").AsList();
+				redisCache.Write(cacheKey, AllBannerEntityList, 7L);
+				dm_BannerEntities2 = AllBannerEntityList.Where((dm_bannerEntity t) => t.b_type == type).Skip((pagination.page - 1) * pagination.rows).Take(pagination.rows);
+			}
+			return dm_BannerEntities2.Select(delegate(dm_bannerEntity t)
+			{
+				t.b_image = dm_BasesettingEntity.qianzhui_image + t.b_image;
+				return t;
+			});
 		}
 
 		public dm_bannerEntity GetEntity(int keyValue)

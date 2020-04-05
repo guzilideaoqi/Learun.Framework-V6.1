@@ -2,6 +2,7 @@ using Learun.DataBase.Repository;
 using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
@@ -12,7 +13,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public DM_IntergralDetailService()
 		{
-			fieldSql = "\r\n                t.id,\r\n                t.currentvalue,\r\n                t.stepvalue,\r\n                t.user_id,\r\n                t.title,\r\n                t.type,\r\n                t.remark,\r\n                t.createtime,\r\n                t.createcode\r\n            ";
+			fieldSql = "    t.id,    t.currentvalue,    t.stepvalue,    t.user_id,    t.title,    t.type,    t.remark,    t.createtime,    t.createcode";
 		}
 
 		public IEnumerable<dm_intergraldetailEntity> GetList(string queryJson)
@@ -23,7 +24,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				strSql.Append("SELECT ");
 				strSql.Append(fieldSql);
 				strSql.Append(" FROM dm_intergraldetail t ");
-				return BaseRepository("多米易购").FindList<dm_intergraldetailEntity>(strSql.ToString());
+				return BaseRepository("dm_data").FindList<dm_intergraldetailEntity>(strSql.ToString());
 			}
 			catch (Exception ex)
 			{
@@ -43,7 +44,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				strSql.Append("SELECT ");
 				strSql.Append(fieldSql);
 				strSql.Append(" FROM dm_intergraldetail t ");
-				return BaseRepository("多米易购").FindList<dm_intergraldetailEntity>(strSql.ToString(), pagination);
+				return BaseRepository("dm_data").FindList<dm_intergraldetailEntity>(strSql.ToString(), pagination);
 			}
 			catch (Exception ex)
 			{
@@ -59,7 +60,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		{
 			try
 			{
-				return BaseRepository("多米易购").FindEntity<dm_intergraldetailEntity>(keyValue);
+				return BaseRepository("dm_data").FindEntity<dm_intergraldetailEntity>(keyValue);
 			}
 			catch (Exception ex)
 			{
@@ -75,7 +76,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		{
 			try
 			{
-				BaseRepository("多米易购").Delete((dm_intergraldetailEntity t) => t.id == keyValue);
+				BaseRepository("dm_data").Delete((dm_intergraldetailEntity t) => t.id == keyValue);
 			}
 			catch (Exception ex)
 			{
@@ -94,12 +95,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				if (keyValue > 0)
 				{
 					entity.Modify(keyValue);
-					BaseRepository("多米易购").Update(entity);
+					BaseRepository("dm_data").Update(entity);
 				}
 				else
 				{
 					entity.Create();
-					BaseRepository("多米易购").Insert(entity);
+					BaseRepository("dm_data").Insert(entity);
 				}
 			}
 			catch (Exception ex)
@@ -110,6 +111,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				}
 				throw ExceptionEx.ThrowServiceException(ex);
 			}
+		}
+
+		public dm_intergraldetailEntity GetLastSignData(int user_id)
+		{
+			return (from t in BaseRepository("dm_data").IQueryable((dm_intergraldetailEntity t) => t.user_id == (int?)user_id)
+				orderby t.createtime descending
+				select t).Take(1).FirstOrDefault();
 		}
 	}
 }

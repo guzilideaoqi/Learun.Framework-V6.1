@@ -183,5 +183,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				throw ExceptionEx.ThrowBusinessException(ex);
 			}
 		}
+
+		public dynamic SignIn(int userid)
+		{
+			try
+			{
+				return dM_UserService.SignIn(userid);
+			}
+			catch (Exception ex)
+			{
+				if (ex is ExceptionEx)
+				{
+					throw;
+				}
+				throw ExceptionEx.ThrowBusinessException(ex);
+			}
+		}
 	}
 }

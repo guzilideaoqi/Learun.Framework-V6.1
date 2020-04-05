@@ -19,7 +19,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public DM_AnnouncementService()
 		{
-			fieldSql = "t.id,t.a_title,t.a_content,t.a_image,t.appid,t.createtime,t.createcode";
+			fieldSql = "    t.id,    t.a_title,    t.a_content,    t.a_image,    t.appid,    t.createtime,    t.createcode";
 		}
 
 		public IEnumerable<dm_announcementEntity> GetList(string queryJson)

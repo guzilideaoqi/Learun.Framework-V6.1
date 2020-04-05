@@ -50,6 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DM_APPManage\DM_Order\CalculateComissionEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Order\DM_OrderBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Order\dm_orderEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Order\DM_OrderIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Order\DM_OrderService.cs" />
+    <Compile Include="DM_APPManage\DM_UserRelation\UserRelationEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemDemo\Demoleave\DemoleaveBLL.cs" />
     <Compile Include="SystemDemo\Demoleave\DemoleaveEntity.cs" />

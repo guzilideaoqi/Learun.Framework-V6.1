@@ -17,6 +17,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		private DM_BaseSettingService dm_BaseSettingService = new DM_BaseSettingService();
 
+		private DM_IntergralDetailService dM_IntergralDetailService = new DM_IntergralDetailService();
+
 		private string fieldSql;
 
 		private static object lockObject = new object();
@@ -65,7 +67,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public DM_UserService()
 		{
-			fieldSql = "\r\n                t.id,\r\n                t.realname,\r\n                t.identitycard,\r\n                t.isreal,\r\n                t.phone,\r\n                t.token,\r\n                t.pwd,\r\n                t.nickname,\r\n                t.accountprice,\r\n                t.invitecode,\r\n                t.partners,\r\n                t.partnersstatus,\r\n                t.tb_pid,\r\n                t.tb_relationid,\r\n                t.tb_orderrelationid,\r\n                t.jd_pid,\r\n                t.pdd_pid,\r\n                t.userlevel,\r\n                t.createtime,\r\n                t.updatetime,\r\n                t.appid,\r\n                t.province,\r\n                t.city,\r\n                t.down,\r\n                t.address\r\n            ";
+			fieldSql = "    t.id,    t.realname,    t.identitycard,    t.isreal,    t.phone,    t.token,    t.pwd,    t.nickname,    t.accountprice,    t.invitecode,    t.partners,    t.partnersstatus,    t.tb_pid,    t.tb_relationid,    t.tb_orderrelationid,    t.jd_pid,    t.pdd_pid,    t.userlevel,    t.createtime,    t.updatetime,    t.appid,    t.province,    t.city,    t.down,    t.address";
 		}
 
 		public IEnumerable<dm_userEntity> GetList(string queryJson)
@@ -144,7 +146,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		{
 			try
 			{
-				string cacheKey = "UserInfo" + id;
+				string cacheKey = "UserInfo" + id.ToString();
 				dm_userEntity dm_UserEntity = redisCache.Read<dm_userEntity>(cacheKey, 7L);
 				if (dm_UserEntity == null)
 				{
@@ -243,7 +245,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 						throw new Exception("您的邀请人用户异常!");
 					}
 					dm_user_relationEntity dm_Parent_User_RelationEntity = dm_UserRelationService.GetEntityByParentID(parent_id);
-					if (GetEntityByPhone(dm_UserEntity.phone, appid) != null)
+					dm_userEntity dm_UserEntity_exist = GetEntityByPhone(dm_UserEntity.phone, appid);
+					if (dm_UserEntity_exist != null)
 					{
 						throw new Exception("该手机号已注册!");
 					}
@@ -291,13 +294,102 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				catch (Exception ex)
 				{
 					db.Rollback();
-					LogFactory.GetLogger("workflowapi").Error("上下级绑定失败,当前用户" + id + ",上级用户" + parent_id + ex.Message + ex.StackTrace);
+					Log log = LogFactory.GetLogger("workflowapi");
+					string[] obj = new string[6]
+					{
+						"上下级绑定失败,当前用户",
+						null,
+						null,
+						null,
+						null,
+						null
+					};
+					int? num2 = id;
+					obj[1] = num2.ToString();
+					obj[2] = ",上级用户";
+					num2 = parent_id;
+					obj[3] = num2.ToString();
+					obj[4] = ex.Message;
+					obj[5] = ex.StackTrace;
+					log.Error(string.Concat(obj));
 					if (ex is ExceptionEx)
 					{
 						throw;
 					}
 					throw ExceptionEx.ThrowServiceException(ex);
 				}
+			}
+		}
+
+		public dynamic SignIn(int userid)
+		{
+			IRepository db = BaseRepository("dm_data").BeginTrans();
+			try
+			{
+				dm_userEntity dm_UserEntity = GetEntityByCache(userid);
+				if (dm_UserEntity.IsEmpty())
+				{
+					throw new Exception("用户信息异常!");
+				}
+				dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(dm_UserEntity.appid);
+				if (dm_BasesettingEntity.IsEmpty())
+				{
+					throw new Exception("获取基础配置信息异常!");
+				}
+				int? currentIntegral = 0;
+				int signCount = 0;
+				dm_intergraldetailEntity dm_IntergraldetailEntity = dM_IntergralDetailService.GetLastSignData(userid);
+				if (dm_IntergraldetailEntity == null)
+				{
+					currentIntegral = dm_BasesettingEntity.firstsign;
+					signCount = 1;
+				}
+				else
+				{
+					if (dm_IntergraldetailEntity.createtime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
+					{
+						throw new Exception("今日已签到!");
+					}
+					if (dm_IntergraldetailEntity.createtime.ToString("yyyy-MM-dd") == DateTime.Now.AddDays(-1.0).ToString("yyyy-MM-dd"))
+					{
+						int? todayIntegral = dm_IntergraldetailEntity.stepvalue + dm_BasesettingEntity.signscrement;
+						currentIntegral = ((todayIntegral > dm_BasesettingEntity.signcapping) ? dm_BasesettingEntity.signcapping : todayIntegral);
+						signCount = int.Parse(dm_IntergraldetailEntity.remark) + 1;
+					}
+					else
+					{
+						currentIntegral = dm_BasesettingEntity.firstsign;
+						signCount = 1;
+					}
+				}
+				dm_UserEntity.integral += currentIntegral;
+				dm_UserEntity.Modify(dm_UserEntity.id);
+				db.Update(dm_UserEntity);
+				db.Insert(new dm_intergraldetailEntity
+				{
+					currentvalue = dm_UserEntity.integral,
+					stepvalue = currentIntegral,
+					user_id = userid,
+					title = "签到奖励",
+					remark = signCount.ToString(),
+					type = 2,
+					createtime = DateTime.Now
+				});
+				db.Commit();
+				return new
+				{
+					CurrentIntegral = currentIntegral,
+					SignCount = signCount
+				};
+			}
+			catch (Exception ex)
+			{
+				db.Rollback();
+				if (ex is ExceptionEx)
+				{
+					throw;
+				}
+				throw ExceptionEx.ThrowServiceException(ex);
 			}
 		}
 

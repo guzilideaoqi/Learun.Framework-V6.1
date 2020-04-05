@@ -12,7 +12,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public DM_MessageRecordService()
 		{
-			fieldSql = "\r\n                t.id,\r\n                t.messagetitle,\r\n                t.messagecontent,\r\n                t.user_id,\r\n                t.messagetype,\r\n                t.createtime,\r\n                t.createcode\r\n            ";
+			fieldSql = "    t.id,    t.messagetitle,    t.messagecontent,    t.user_id,    t.messagetype,    t.createtime,    t.createcode";
 		}
 
 		public IEnumerable<dm_messagerecordEntity> GetList(string queryJson)
@@ -23,7 +23,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				strSql.Append("SELECT ");
 				strSql.Append(fieldSql);
 				strSql.Append(" FROM dm_messagerecord t ");
-				return BaseRepository("多米易购").FindList<dm_messagerecordEntity>(strSql.ToString());
+				return BaseRepository("dm_data").FindList<dm_messagerecordEntity>(strSql.ToString());
 			}
 			catch (Exception ex)
 			{
@@ -43,7 +43,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				strSql.Append("SELECT ");
 				strSql.Append(fieldSql);
 				strSql.Append(" FROM dm_messagerecord t ");
-				return BaseRepository("多米易购").FindList<dm_messagerecordEntity>(strSql.ToString(), pagination);
+				return BaseRepository("dm_data").FindList<dm_messagerecordEntity>(strSql.ToString(), pagination);
 			}
 			catch (Exception ex)
 			{
@@ -59,7 +59,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		{
 			try
 			{
-				return BaseRepository("多米易购").FindEntity<dm_messagerecordEntity>(keyValue);
+				return BaseRepository("dm_data").FindEntity<dm_messagerecordEntity>(keyValue);
 			}
 			catch (Exception ex)
 			{
@@ -75,7 +75,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		{
 			try
 			{
-				BaseRepository("多米易购").Delete((dm_messagerecordEntity t) => t.id == keyValue);
+				BaseRepository("dm_data").Delete((dm_messagerecordEntity t) => t.id == keyValue);
 			}
 			catch (Exception ex)
 			{
@@ -94,12 +94,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				if (keyValue > 0)
 				{
 					entity.Modify(keyValue);
-					BaseRepository("多米易购").Update(entity);
+					BaseRepository("dm_data").Update(entity);
 				}
 				else
 				{
 					entity.Create();
-					BaseRepository("多米易购").Insert(entity);
+					BaseRepository("dm_data").Insert(entity);
 				}
 			}
 			catch (Exception ex)

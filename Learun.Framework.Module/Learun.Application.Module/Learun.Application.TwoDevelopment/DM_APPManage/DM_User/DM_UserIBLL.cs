@@ -26,5 +26,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		string EncodeInviteCode(int? id);
 
 		int? DecodeInviteCode(string InviteCode);
+
+		dynamic SignIn(int userid);
 	}
 }

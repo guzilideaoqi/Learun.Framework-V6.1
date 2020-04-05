@@ -93,6 +93,28 @@ namespace Learun.Application.Web.App_Start._01_Handler
             return Content(new ResParameter { code = ResponseCode.success, info = info, data = new object { } }.ToJson());
         }
 
+        protected virtual ActionResult SuccessList(string info, object data)
+        {
+            return Content(new ResParameter
+            {
+                code = ResponseCode.success,
+                info = info,
+                data = new
+                {
+                    list = data
+                }
+            }.ToJson());
+        }
+
+        protected virtual ActionResult NoRelationID(string info)
+        {
+            return Content(new ResParameter
+            {
+                code = ResponseCode.NoRelation,
+                info = info
+            }.ToJson());
+        }
+
         /// <summary>
         /// 返回失败消息
         /// </summary>

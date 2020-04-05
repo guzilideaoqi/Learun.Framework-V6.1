@@ -41,6 +41,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
+		[Column("TB_RELATION_PID")]
+		public string tb_relation_pid
+		{
+			get;
+			set;
+		}
+
 		[Column("TB_AUTHORENDTIME")]
 		public DateTime? tb_authorendtime
 		{
@@ -161,49 +168,49 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		}
 
 		[Column("SHOPPING_PAY_JUNIOR")]
-		public int? shopping_pay_junior
+		public int shopping_pay_junior
 		{
 			get;
 			set;
 		}
 
 		[Column("SHOPPING_PAY_MIDDLE")]
-		public int? shopping_pay_middle
+		public int shopping_pay_middle
 		{
 			get;
 			set;
 		}
 
 		[Column("SHOPPING_PAY_SENIOR")]
-		public int? shopping_pay_senior
+		public int shopping_pay_senior
 		{
 			get;
 			set;
 		}
 
 		[Column("SHOPPING_ONE")]
-		public int? shopping_one
+		public int shopping_one
 		{
 			get;
 			set;
 		}
 
 		[Column("SHOPPING_TWO")]
-		public int? shopping_two
+		public int shopping_two
 		{
 			get;
 			set;
 		}
 
 		[Column("SHOPPING_ONE_PARTNERS")]
-		public int? shopping_one_partners
+		public int shopping_one_partners
 		{
 			get;
 			set;
 		}
 
 		[Column("SHOPPING_TWO_PARTNERS")]
-		public int? shopping_two_partners
+		public int shopping_two_partners
 		{
 			get;
 			set;
@@ -253,6 +260,34 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		[Column("NEW_PEOPLE_PARENT")]
 		public int? new_people_parent
+		{
+			get;
+			set;
+		}
+
+		[Column("DTK_APPKEY")]
+		public string dtk_appkey
+		{
+			get;
+			set;
+		}
+
+		[Column("DTK_APPSECRET")]
+		public string dtk_appsecret
+		{
+			get;
+			set;
+		}
+
+		[Column("QIANZHUI_IMAGE")]
+		public string qianzhui_image
+		{
+			get;
+			set;
+		}
+
+		[Column("PREVIEWVERSION")]
+		public string previewversion
 		{
 			get;
 			set;

@@ -20,6 +20,7 @@
         /// <summary>
         /// 异常
         /// </summary>
-        exception = 500
+        exception = 500,
+        NoRelation=101
     }
 }

@@ -56,7 +56,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		}
 
 		[Column("CREATETIME")]
-		public DateTime? createtime
+		public DateTime createtime
 		{
 			get;
 			set;

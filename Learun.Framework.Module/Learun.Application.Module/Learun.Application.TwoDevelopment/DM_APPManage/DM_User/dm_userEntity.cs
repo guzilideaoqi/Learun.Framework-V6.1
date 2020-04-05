@@ -200,7 +200,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		public void Modify(int? keyValue)
 		{
 			id = keyValue;
-			string cacheKey = "UserInfo" + keyValue;
+			int? num = keyValue;
+			string cacheKey = "UserInfo" + num.ToString();
 			CacheFactory.CaChe().Remove(cacheKey, 7L);
 		}
 	}

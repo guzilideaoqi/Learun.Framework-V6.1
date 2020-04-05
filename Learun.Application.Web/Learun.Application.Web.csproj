@@ -53,6 +53,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\HYG.CommonHelper.dll</HintPath>
     </Reference>
+    <Reference Include="HYG.DTK.Helper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\HYG.DTK.Helper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -150,6 +154,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\AppManager\AppManagerAreaRegistration.cs" />
     <Compile Include="Areas\AppManager\Controllers\FunctionManagerController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_OrderController.cs" />
     <Compile Include="Areas\DM_APPManage\DM_APPManageRegistration.cs" />
     <Compile Include="Areas\Hyg_RobotModule\Hyg_RobotModuleRegistration.cs" />
     <Compile Include="Areas\LR_AuthorizeModule\Controllers\AuthorizeController.cs" />
@@ -216,10 +221,12 @@
     <Compile Include="Areas\LR_WorkFlowModule\Controllers\WfSchemeController.cs" />
     <Compile Include="Areas\LR_WorkFlowModule\Controllers\WfSystemDemoController.cs" />
     <Compile Include="Areas\LR_WorkFlowModule\LR_WorkFlowModuleAreaRegistration.cs" />
+    <Compile Include="Controllers\DM_APIControl\BannerInfo.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_ExtendOperateController.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_GoodController.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_TaskCenterController.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_UserCenterController.cs" />
+    <Compile Include="Controllers\DM_APIControl\SmallCate.cs" />
     <Compile Include="Controllers\RobotApiController.cs" />
     <Compile Include="Controllers\TBUserInfoControllerController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />

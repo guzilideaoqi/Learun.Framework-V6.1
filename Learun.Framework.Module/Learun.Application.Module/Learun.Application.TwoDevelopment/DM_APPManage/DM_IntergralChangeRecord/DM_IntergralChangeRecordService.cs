@@ -12,7 +12,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public DM_IntergralChangeRecordService()
 		{
-			fieldSql = "\r\n                t.id,\r\n                t.user_id,\r\n                t.goodid,\r\n                t.createtime,\r\n                t.updatetime,\r\n                t.sendstatus,\r\n                t.expresscode,\r\n                t.remark,\r\n                t.appid,\r\n                t.province,\r\n                t.city,\r\n                t.down,\r\n                t.address,\r\n                t.phone,\r\n                t.username\r\n            ";
+			fieldSql = "    t.id,    t.user_id,    t.goodid,    t.createtime,    t.updatetime,    t.sendstatus,    t.expresscode,    t.remark,    t.appid,    t.province,    t.city,    t.down,    t.address,    t.phone,    t.username";
 		}
 
 		public IEnumerable<dm_intergralchangerecordEntity> GetList(string queryJson)
@@ -117,7 +117,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			IRepository db = BaseRepository("dm_data").BeginTrans();
 			try
 			{
-				dm_intergralchangegoodEntity dm_IntergralchangegoodEntity = new DM_IntergralChangeGoodService().GetEntity(dm_IntergralchangerecordEntity.goodid.ToInt());
+				DM_IntergralChangeGoodService dM_IntergralChangeGoodService = new DM_IntergralChangeGoodService();
+				dm_intergralchangegoodEntity dm_IntergralchangegoodEntity = dM_IntergralChangeGoodService.GetEntity(dm_IntergralchangerecordEntity.goodid.ToInt());
 				if (dm_IntergralchangegoodEntity == null)
 				{
 					throw new Exception("该商品不存在!");

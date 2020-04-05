@@ -19,7 +19,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public DM_IntergralChangeGoodService()
 		{
-			fieldSql = "\r\n                t.id,\r\n                t.goodtitle,\r\n                t.goodremark,\r\n                t.needintergral,\r\n                t.goodimage,\r\n                t.goodprice,\r\n                t.createtime,\r\n                t.createcode,\r\n                t.isexpress,\r\n                t.expressprice,\r\n                t.appid\r\n            ";
+			fieldSql = "    t.id,    t.goodtitle,    t.goodremark,    t.needintergral,    t.goodimage,    t.goodprice,    t.createtime,    t.createcode,    t.isexpress,    t.expressprice,    t.appid";
 		}
 
 		public IEnumerable<dm_intergralchangegoodEntity> GetList(string queryJson)
