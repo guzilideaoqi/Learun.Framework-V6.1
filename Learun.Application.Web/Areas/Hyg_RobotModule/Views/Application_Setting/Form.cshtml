@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "应用商信息设置";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">联盟账户ID<font face="宋体">*</font></div>
+        <input id="F_TB_AccountId" type="text" class="form-control" isvalid="yes" placeholder="联盟账户信息" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝AppKey<font face="宋体">*</font></div>
+        <input id="F_TB_AppKey" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝AppSecret<font face="宋体">*</font></div>
+        <input id="F_TB_Secret" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-4 lr-form-item">
+        <div class="lr-form-item-title">淘宝SessionKey<font face="宋体">*</font></div>
+        <input id="F_TB_SessionKey" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+	<div class="col-xs-2">
+		<div id="OpenTBAuthor" style="padding:8px 3px;text-align:center;background-color:green;border-radiaus:15px;color:white;">授权</div>
+		<!--<a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;授权</a>-->
+	</div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝授权时间<font face="宋体">*</font></div>
+        <input id="F_TB_AuthorEndTime" type="text" class="form-control" readonly="readonly" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东账户ID<font face="宋体">*</font></div>
+        <input id="F_JD_AccountId" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东AppKey<font face="宋体">*</font></div>
+        <input id="F_JD_AppKey" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东Secret<font face="宋体">*</font></div>
+        <input id="F_JD_Secret" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东SessionKey<font face="宋体">*</font></div>
+        <input id="F_JD_SessionKey" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="col-xs-3 lr-form-item-title">拼多多ID<font face="宋体">*</font></div>
+        <input id="F_PDD_AccountId" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">拼多多ClientID<font face="宋体">*</font></div>
+        <input id="F_PDD_ClientID" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">拼多多Secret<font face="宋体">*</font></div>
+        <input id="F_PDD_ClientSecret" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">应用商名称<font face="宋体">*</font></div>
+        <input id="F_ApplicationName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">应用商Logo<font face="宋体">*</font></div>
+        <input id="F_ApplicationLogo" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">公司名称<font face="宋体">*</font></div>
+        <input id="F_CompanyName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">联系方式<font face="宋体">*</font></div>
+        <input id="F_Telephone" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">QQ号<font face="宋体">*</font></div>
+        <input id="F_OICQ" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">微信号<font face="宋体">*</font></div>
+        <input id="F_WeChat" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">描述信息<font face="宋体">*</font></div>
+        <input id="F_Description" type="text" class="form-control" placeholder="描述信息可随意填写" isvalid="yes" checkexpession="NotNull" />
+    </div>
+	<div class="col-xs-12 lr-form-item">
+			<a id="btn_Search" class="btn btn-primary btn-sm" onclick="acceptClick();"><i class="fa fa-save"></i>&nbsp;保存</a>
+		</div>
+</div>
+@Html.AppendJsFile("/Areas/Hyg_RobotModule/Views/Application_Setting/Form.js")

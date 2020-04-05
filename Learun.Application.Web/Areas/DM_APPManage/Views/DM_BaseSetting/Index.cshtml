@@ -1,0 +1,271 @@
+﻿@{
+    ViewBag.Title = "个人中心";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+@Html.AppendCssFile("/Areas/DM_APPManage/Views/DM_BaseSetting/Index.css")
+<div style="
+    position: fixed;
+    z-index: 9;
+    width: 100%;
+    text-align: right;
+">
+    <a class="btn btn-primary" id="lr_save_btn"><i class="fa fa-save"></i>&nbsp;提&nbsp;交</a>
+</div>
+<div id="lr_layout" class="lr-layout lr-layout-left-center">
+    <div class="lr-layout-left">
+        <div class="lr-layout-wrap lr-layout-wrap-notitle" style="padding-top:10px;">
+            <div class="lr-layout-body">
+                <ul class="lr-left-list" id="lr_left_list">
+                    <li class="active" data-value="1">佣金比例设置</li>
+                    <li data-value="2">联盟信息设置</li>
+                    <li data-value="3">签到设置</li>
+                    <li data-value="4">阅赚任务设置</li>
+                    <li data-value="5">新人奖励</li>
+                    <li data-value="6">其他配置</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="lr-layout-center">
+        <div class="lr-layout-wrap">
+            <div class="lr-layout-wrap-item active" id="lr_layout_item1">
+                <div class="title">
+                    <div>代理佣金设置</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级代理</div>
+                        <input id="openagent_one" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级代理</div>
+                        <input id="openagent_two" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级合伙人</div>
+                        <input id="openagent_one_partners" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级合伙人</div>
+                        <input id="openagent_two_partners" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>任务佣金设置</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">做任务奖励</div>
+                        <input id="task_do" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级代理</div>
+                        <input id="task_one" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级代理</div>
+                        <input id="task_two" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级合伙人</div>
+                        <input id="task_one_partners" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级合伙人</div>
+                        <input id="task_two_partners" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>购物佣金设置</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">初级购物奖励</div>
+                        <input id="shopping_pay_junior" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">中级购物奖励</div>
+                        <input id="shopping_pay_middle" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">高级购物奖励</div>
+                        <input id="shopping_pay_senior" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级代理</div>
+                        <input id="shopping_one" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级代理</div>
+                        <input id="shopping_two" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级合伙人</div>
+                        <input id="shopping_one_partners" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级合伙人</div>
+                        <input id="shopping_two_partners" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item" id="lr_layout_item2">
+                <div class="title">
+                    <div>淘宝联盟信息</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">联盟ID</div>
+                        <input id="tb_accountid" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">联盟APPKEY</div>
+                        <input id="tb_appkey" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">联盟Secret</div>
+                        <input id="tb_appsecret" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">渠道专属PID</div>
+                        <input id="tb_relation_pid" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">sessionkey</div>
+                        <input id="tb_sessionkey" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">到期时间</div>
+                        <div>
+                            <input id="tb_authorendtime" type="text" class="form-control" placeholder="授权到期时间" readonly />
+                            <a id="OpenTBAuthor" class="btn btn-primary btn-sm"><i class="fa fa-add"></i>&nbsp;授权</a>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>京东联盟信息</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">京东账户ID</div>
+                        <input id="jd_accountid" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">京东APPKEY</div>
+                        <input id="jd_appkey" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">京东Secret</div>
+                        <input id="jd_appsecret" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">sessionkey</div>
+                        <input id="jd_sessionkey" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>多多进宝信息</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">账户ID</div>
+                        <input id="pdd_accountid" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">ClientID</div>
+                        <input id="pdd_clientid" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">ClientSecret</div>
+                        <input id="pdd_clientsecret" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>大淘客</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">Appkey</div>
+                        <input id="dtk_appkey" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">Appsecret</div>
+                        <input id="dtk_appsecret" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item" id="lr_layout_item3">
+                <div class="title">
+                    <div>签到设置</div>
+                </div>
+                <div class="content" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">初次签到奖励</div>
+                        <input id="firstsign" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">签到递增值</div>
+                        <input id="signscrement" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">签到封顶</div>
+                        <input id="signcapping" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item" id="lr_layout_item4">
+                <div class="title">
+                    <div>阅赚任务浏览增加值</div>
+                </div>
+                <div class="content" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">最小值</div>
+                        <input id="readtask_min" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">最大值</div>
+                        <input id="readtask_max" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item" id="lr_layout_item5">
+                <div class="title">
+                    <div>新人及新人的邀请人奖励(此处奖励积分)</div>
+                </div>
+                <div class="content" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">新人奖励</div>
+                        <input id="new_people" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">新人上级奖励</div>
+                        <input id="new_people_parent" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item" id="lr_layout_item6">
+                <div class="title">
+                    <div>系统配置</div>
+                </div>
+                <div class="content" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">图片前缀</div>
+                        <input id="qianzhui_image" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">上架版本号</div>
+                        <input id="previewversion" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item" id="lr_layout_item6" style="padding:0;">
+                <iframe class="lr-layout-iframe" frameborder="0" src="~/UserCenter/LogIndex"></iframe>
+            </div>
+
+        </div>
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_BaseSetting/Index.js")

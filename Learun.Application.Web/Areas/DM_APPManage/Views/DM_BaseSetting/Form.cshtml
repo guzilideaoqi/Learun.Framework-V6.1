@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "基础信息配置";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">账号配置id<font face="宋体">*</font></div>
+        <input id="appid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝账户ID<font face="宋体">*</font></div>
+        <input id="tb_accountid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝账户AppKey<font face="宋体">*</font></div>
+        <input id="tb_appkey" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝账户AppSecret<font face="宋体">*</font></div>
+        <input id="tb_appsecret" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝SessionKey<font face="宋体">*</font></div>
+        <input id="tb_sessionkey" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">授权到期时间<font face="宋体">*</font></div>
+        <input id="tb_authorendtime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东账户ID<font face="宋体">*</font></div>
+        <input id="jd_accountid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东appkey<font face="宋体">*</font></div>
+        <input id="jd_appkey" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东appsecret<font face="宋体">*</font></div>
+        <input id="jd_appsecret" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东sessionkey<font face="宋体">*</font></div>
+        <input id="jd_sessionkey" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">拼多多账户ID<font face="宋体">*</font></div>
+        <input id="pdd_accountid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">拼多多clientid<font face="宋体">*</font></div>
+        <input id="pdd_clientid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">拼多多secret<font face="宋体">*</font></div>
+        <input id="pdd_clientsecret" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">开通代理一级提成<font face="宋体">*</font></div>
+        <input id="openagent_one" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">开通代理二级提成<font face="宋体">*</font></div>
+        <input id="openagent_two" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">开通代理合伙人提成<font face="宋体">*</font></div>
+        <input id="openagent_partners" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">做任务的人佣金提成<font face="宋体">*</font></div>
+        <input id="task_do" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">task_one<font face="宋体">*</font></div>
+        <input id="task_one" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">task_two<font face="宋体">*</font></div>
+        <input id="task_two" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">task_one_partners<font face="宋体">*</font></div>
+        <input id="task_one_partners" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">task_two_partners<font face="宋体">*</font></div>
+        <input id="task_two_partners" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">初级用户购物佣金<font face="宋体">*</font></div>
+        <input id="shopping_pay_junior" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">中级用户购物佣金<font face="宋体">*</font></div>
+        <input id="shopping_pay_middle" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">高级用户购物佣金<font face="宋体">*</font></div>
+        <input id="shopping_pay_senior" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">购物一级代理提成<font face="宋体">*</font></div>
+        <input id="shopping_one" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">购物二级代理提成<font face="宋体">*</font></div>
+        <input id="shopping_two" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">购物一级合伙人提成<font face="宋体">*</font></div>
+        <input id="shopping_one_partners" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">购物二级合伙人提成<font face="宋体">*</font></div>
+        <input id="shopping_two_partners" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_BaseSetting/Form.js")

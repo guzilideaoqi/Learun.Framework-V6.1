@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "京东订单主表";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单完成时间(时间戳，毫秒)<font face="宋体">*</font></div>
+        <input id="finishTime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">下单设备(1:PC,2:无线)<font face="宋体">*</font></div>
+        <input id="orderEmt" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单ID<font face="宋体">*</font></div>
+        <input id="orderId" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">下单时间(时间戳，毫秒)<font face="宋体">*</font></div>
+        <input id="orderTime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">父单的订单ID，仅当发生订单拆分时返回， 0：未拆分，有值则表示此订单为子订单<font face="宋体">*</font></div>
+        <input id="parentId" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单维度预估结算时间,不建议使用，可以用订单行sku维度paymonth字段参考，（格式：yyyyMMdd），0：未结算，订单'预估结算时间'仅供参考。账号未通过资质审核或订单发生售后，会影响订单实际结算时间。<font face="宋体">*</font></div>
+        <input id="payMonth" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">下单用户是否为PLUS会员 0：否，1：是<font face="宋体">*</font></div>
+        <input id="plus" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单维度商家ID，不建议使用，可以用订单行sku维度popId参考<font face="宋体">*</font></div>
+        <input id="popId" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">推客的联盟ID<font face="宋体">*</font></div>
+        <input id="unionId" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单维度的推客生成推广链接时传入的扩展字段，不建议使用，可以用订单行sku维度ext1参考,（需要联系运营开放白名单才能拿到数据）<font face="宋体">*</font></div>
+        <input id="ext1" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单维度的有效码，不建议使用，可以用订单行sku维度validCode参考,（-1：未知,2.无效-拆单,3.无效-取消,4.无效-京东帮帮主订单,5.无效-账号异常,6.无效-赠品类目不返佣,7.无效-校园订单,8.无效-企业订单,9.无效-团购订单,10.无效-开增值税专用发票订单,11.无效-乡村推广员下单,12.无效-自己推广自己下单,13.无效-违规订单,14.无效-来源与备案网址不符,15.待付款,16.已付款,17.已完成,18.已结算（5.9号不再支持结算状态回写展示）,19.无效-佣金比例为0）注：自2018/7/13起，自己推广自己下单已经允许返佣，故12无效码仅针对历史数据有效<font face="宋体">*</font></div>
+        <input id="validCode" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/Hyg_RobotModule/Views/order_jd/Form.js")

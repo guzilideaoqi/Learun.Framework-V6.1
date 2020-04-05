@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "淘宝授权页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div style="position:absolute;top:70px;left:0;width:475px;height:530px;background-color:white;padding:20px;font-size:20px;font-weight:700;line-height:35px;">
+<P>1、授权成功之后请刷新配置页面</p>
+<P>2、如未显示授权的SESSIONKEY,请联系管理员</p>
+<P>3、授权过期请重新授权</p>
+</div>
+<iframe width="900" height="600" src="@ViewBag.AuthorilizeAddress"></iframe>

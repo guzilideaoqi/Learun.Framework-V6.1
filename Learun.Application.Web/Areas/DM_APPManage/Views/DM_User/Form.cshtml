@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "会员信息";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">用户id<font face="宋体">*</font></div>
+        <input id="id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">真是姓名<font face="宋体">*</font></div>
+        <input id="realname" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">身份证号<font face="宋体">*</font></div>
+        <input id="identitycard" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">0未实名  1已实名<font face="宋体">*</font></div>
+        <input id="isreal" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">手机号<font face="宋体">*</font></div>
+        <input id="phone" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">用户登录token<font face="宋体">*</font></div>
+        <input id="token" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">密码<font face="宋体">*</font></div>
+        <input id="pwd" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">用户昵称<font face="宋体">*</font></div>
+        <input id="nickname" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">账户余额<font face="宋体">*</font></div>
+        <input id="accountprice" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">邀请码<font face="宋体">*</font></div>
+        <input id="invitecode" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">合作伙伴id<font face="宋体">*</font></div>
+        <input id="partners" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">0非合伙人  1合伙人申请中   2已成为合伙人<font face="宋体">*</font></div>
+        <input id="partnersstatus" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝pid<font face="宋体">*</font></div>
+        <input id="tb_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝渠道id<font face="宋体">*</font></div>
+        <input id="tb_relationid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝跟单渠道id<font face="宋体">*</font></div>
+        <input id="tb_orderrelationid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东pid<font face="宋体">*</font></div>
+        <input id="jd_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">拼多多pid<font face="宋体">*</font></div>
+        <input id="pdd_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">用户等级  0普通用户   1初级用户  2高级用户<font face="宋体">*</font></div>
+        <input id="userlevel" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">创建时间<font face="宋体">*</font></div>
+        <input id="createtime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">修改时间<font face="宋体">*</font></div>
+        <input id="updatetime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">平台ID<font face="宋体">*</font></div>
+        <input id="appid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">省份<font face="宋体">*</font></div>
+        <input id="province" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">市<font face="宋体">*</font></div>
+        <input id="city" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">县区乡镇<font face="宋体">*</font></div>
+        <input id="down" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">详细地址<font face="宋体">*</font></div>
+        <input id="address" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_User/Form.js")

@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "阅赚任务";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<link href="~/Content/webuploader/webuploader.css" rel="stylesheet" />
+@Html.AppendCssFile("/Areas/DM_APPManage/Views/DM_ReadTask/Form.css")
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">任务标题<font face="宋体">*</font></div>
+        <input id="tasktitle" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+	    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">任务参与人数<font face="宋体">*</font></div>
+        <input id="peoplecount" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">任务描述<font face="宋体">*</font></div>
+        <textarea id="taskremark" class="form-control" style="height:100px;"></textarea>
+    </div>
+	<div class="lr-wrap col-xs-6 lr-form-item" >
+	   <div class="lr-form-item-title">任务图片<font face="宋体">*</font></div>
+		<div class="file" >
+			<input type="file" name="uploadFile" id="uploadFile">
+		</div>
+	</div>
+</div>
+<script src="~/Content/webuploader/webuploader.nolog.min.js"></script>
+@Html.AppendJsFile("/Views/LR_Content/script/lr-fileupload.js", "/Areas/DM_APPManage/Views/DM_ReadTask/Form.js")

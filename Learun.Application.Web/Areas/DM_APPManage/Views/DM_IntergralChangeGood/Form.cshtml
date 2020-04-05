@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "积分兑换商品";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<link href="~/Content/webuploader/webuploader.css" rel="stylesheet" />
+@Html.AppendCssFile("/Areas/DM_APPManage/Views/DM_IntergralChangeGood/Form.css")
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">商品标题<font face="宋体">*</font></div>
+        <input id="goodtitle" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">所需积分<font face="宋体">*</font></div>
+        <input id="needintergral" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">商品价格<font face="宋体">*</font></div>
+        <input id="goodprice" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">是否需要运费<font face="宋体">*</font></div>
+		 <div id="isexpress"><ul><li data-value="1">需要</li><li data-value="0">不需要</li></ul></div>
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">运费金额<font face="宋体">*</font></div>
+        <input id="expressprice" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+	                    <div class="col-xs-12 lr-form-item">
+                        <div class="lr-form-item-title">商品描述</div>
+                        <textarea id="goodremark" class="form-control" style="height:100px;"></textarea>
+                    </div>
+	<div class="lr-wrap col-xs-6 lr-form-item" >
+	   <div class="lr-form-item-title">图片<font face="宋体">*</font></div>
+		<div class="file" >
+			<input type="file" name="uploadFile" id="uploadFile">
+		</div>
+	</div>
+</div>
+
+<script src="~/Content/webuploader/webuploader.nolog.min.js"></script>
+@Html.AppendJsFile("/Views/LR_Content/script/lr-fileupload.js", "/Areas/DM_APPManage/Views/DM_IntergralChangeGood/Form.js")

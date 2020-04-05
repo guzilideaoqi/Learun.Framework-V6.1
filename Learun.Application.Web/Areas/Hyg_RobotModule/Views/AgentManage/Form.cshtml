@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "代理商管理";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">代理商账户<font face="宋体">*</font></div>
+        <input id="F_Account" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">代理商密码<font face="宋体">*</font></div>
+        <input id="F_Password" type="password" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">代理商昵称<font face="宋体">*</font></div>
+        <input id="F_NickName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">允许使用开始时间<font face="宋体">*</font></div>
+		<input id="F_AllowStartTime" type="text" class="form-control lr-input-wdatepicker" isvalid="yes" checkexpession="NotNull" readonly="readonly" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss',minDate: '%y-%M-%d',maxDate: '%y-#{%M+1}-%d',readOnly:false})" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">允许使用结束时间<font face="宋体">*</font></div>
+				<input id="F_AllowEndTime" type="text" class="form-control lr-input-wdatepicker" isvalid="yes" checkexpession="NotNull" readonly="readonly" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss',maxDate: '#{%y+1}-%M-%d',readOnly:false})"  />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">拼多多佣金比例(%)<font face="宋体">*</font></div>
+        <input id="F_PDD_ComissionRate" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东佣金比例(%)<font face="宋体">*</font></div>
+        <input id="F_JD_ComissionRate" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝佣金比例(%)<font face="宋体">*</font></div>
+        <input id="F_TB_ComissionRate" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝渠道ID<font face="宋体">*</font></div>
+        <input id="F_TB_RelationId" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">淘宝PID<font face="宋体">*</font></div>
+        <input id="F_TB_PID" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">京东PID<font face="宋体">*</font></div>
+        <input id="F_JD_PID" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">拼多多PID<font face="宋体">*</font></div>
+        <input id="F_PDD_PID" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/Hyg_RobotModule/Views/AgentManage/Form.js")
