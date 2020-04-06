@@ -1,4 +1,5 @@
 ﻿using Learun.Application.Base.SystemModule;
+using Learun.Application.Base.SystemModule.Log;
 using Learun.Cache.Base;
 using Learun.Cache.Factory;
 using Learun.Util;

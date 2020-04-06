@@ -2,6 +2,7 @@ using Learun.Cache.Base;
 using Learun.Cache.Factory;
 using Learun.DataBase.Repository;
 using Learun.Loger;
+//using Learun.Loger;
 using Learun.Util;
 using System;
 using System.Collections.Generic;

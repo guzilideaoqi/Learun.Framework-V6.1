@@ -1,5 +1,6 @@
 ﻿using Learun.Application.Base.AuthorizeModule;
 using Learun.Application.Base.SystemModule;
+using Learun.Application.Base.SystemModule.Log;
 using Learun.Application.Organization;
 using Learun.Cache.Base;
 using Learun.Cache.Factory;

@@ -1,4 +1,5 @@
 ﻿using Learun.Application.Base.SystemModule;
+using Learun.Application.Base.SystemModule.Log;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Learun.Application.Mapping

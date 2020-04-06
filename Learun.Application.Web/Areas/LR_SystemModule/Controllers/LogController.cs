@@ -1,4 +1,5 @@
 ﻿using Learun.Application.Base.SystemModule;
+using Learun.Application.Base.SystemModule.Log;
 using Learun.Util;
 using Learun.Util.Operat;
 using System.Web.Mvc;

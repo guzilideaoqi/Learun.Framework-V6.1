@@ -3,6 +3,7 @@ using Learun.Application.Base.SystemModule;
 using Learun.Util;
 using Learun.Util.Operat;
 using System.Web.Mvc;
+using Learun.Application.Base.SystemModule.Log;
 
 namespace Learun.Application.Web.Controllers
 {
