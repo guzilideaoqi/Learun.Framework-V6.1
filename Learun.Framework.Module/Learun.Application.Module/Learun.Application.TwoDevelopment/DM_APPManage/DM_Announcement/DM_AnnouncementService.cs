@@ -31,9 +31,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				strSql.Append("SELECT ");
 				strSql.Append(fieldSql);
 				strSql.Append(" FROM dm_announcement t ");
-				if (!queryParam["appid"].IsEmpty())
+				UserInfo userInfo = LoginUserInfo.Get();
+				string appid = userInfo.companyId;
+				if (!appid.IsEmpty())
 				{
-					strSql.Append(" where t.appid='" + queryParam["appid"].ToString() + "'");
+					strSql.Append(" where t.appid='" + appid + "'");
 				}
 				return BaseRepository("dm_data").FindList<dm_announcementEntity>(strSql.ToString());
 			}

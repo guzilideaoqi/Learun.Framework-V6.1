@@ -126,6 +126,18 @@
     <Compile Include="DM_APPManage\DM_UserRelation\DM_UserRelationService.cs" />
     <Compile Include="DM_APPManage\DM_UserRelation\DM_UserRelationIBLL.cs" />
     <Compile Include="DM_APPManage\DM_UserRelation\DM_UserRelationBLL.cs" />
+    <Compile Include="DM_APPManage\DM_APP_Partners_Record\dm_apply_partners_recordEntity.cs" />
+    <Compile Include="DM_APPManage\DM_APP_Partners_Record\DM_APP_Partners_RecordService.cs" />
+    <Compile Include="DM_APPManage\DM_APP_Partners_Record\DM_APP_Partners_RecordIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_APP_Partners_Record\DM_APP_Partners_RecordBLL.cs" />
+    <Compile Include="DM_APPManage\DM_CertificaRecord\dm_certifica_recordEntity.cs" />
+    <Compile Include="DM_APPManage\DM_CertificaRecord\DM_CertificaRecordService.cs" />
+    <Compile Include="DM_APPManage\DM_CertificaRecord\DM_CertificaRecordIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_CertificaRecord\DM_CertificaRecordBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Article\dm_articleEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Article\DM_ArticleService.cs" />
+    <Compile Include="DM_APPManage\DM_Article\DM_ArticleIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Article\DM_ArticleBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

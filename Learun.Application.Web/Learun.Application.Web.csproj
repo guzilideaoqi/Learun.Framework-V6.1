@@ -256,6 +256,9 @@
     <Compile Include="Areas\DM_APPManage\Controllers\DM_IntergralDetailController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_MessageRecordController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_UserRelationController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_APP_Partners_RecordController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_CertificaRecordController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_ArticleController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -2197,6 +2200,18 @@
     <Content Include="Areas\DM_APPManage\Views\DM_UserRelation\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_UserRelation\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_UserRelation\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_APP_Partners_Record\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_APP_Partners_Record\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_APP_Partners_Record\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_APP_Partners_Record\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Article\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Article\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Article\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Article\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />
