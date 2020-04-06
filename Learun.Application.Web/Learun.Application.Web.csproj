@@ -2089,6 +2089,7 @@
     <Content Include="Areas\Hyg_RobotModule\Views\Application_Setting\AuthorilizeForm.cshtml" />
     <Content Include="Areas\Hyg_RobotModule\Views\web.config" />
     <Content Include="Areas\DM_APPManage\Views\web.config" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\learunadms6.1.pubxml" />
     <Content Include="Views\LR_Content\style\lr-layer.css" />
     <Content Include="Views\UserCenter\ContactForm.css" />

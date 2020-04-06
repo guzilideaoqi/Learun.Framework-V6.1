@@ -66,7 +66,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 			return View();
 		}
 
-		public ActionResult GetReadEarnTaskList(int PageNo, int PageSize)
+        #region 获取阅赚任务
+        public ActionResult GetReadEarnTaskList(int PageNo, int PageSize)
 		{
 			try
 			{
@@ -85,8 +86,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 				return Fail(ex.Message);
 			}
 		}
+        #endregion
 
-		public ActionResult AddClickReadEarnTask(int id)
+        #region 增加任务点击次数
+        public ActionResult AddClickReadEarnTask(int id)
 		{
 			try
 			{
@@ -105,8 +108,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 				return Fail(ex.Message);
 			}
 		}
+        #endregion
 
-		public string CheckAPPID()
+        public string CheckAPPID()
 		{
 			if (base.Request.Headers["appid"].IsEmpty())
 			{

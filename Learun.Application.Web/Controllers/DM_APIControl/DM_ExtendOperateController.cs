@@ -18,7 +18,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
 		private DM_BaseSettingIBLL dm_BaseSettingIBLL = new DM_BaseSettingBLL();
 
-		public ActionResult GetPlaformSetting()
+        #region 获取平台设置
+        public ActionResult GetPlaformSetting()
 		{
 			try
 			{
@@ -30,8 +31,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 				return Fail(ex.Message);
 			}
 		}
+        #endregion
 
-		public ActionResult GetAnnouncementList()
+        #region 回去公告列表
+        public ActionResult GetAnnouncementList()
 		{
 			try
 			{
@@ -47,8 +50,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 				return Fail(ex.Message);
 			}
 		}
+        #endregion
 
-		public ActionResult GetBannerList(int type)
+        #region 获取banner图列表
+        public ActionResult GetBannerList(int type)
 		{
 			try
 			{
@@ -64,8 +69,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 				return Fail(ex.Message);
 			}
 		}
+        #endregion
 
-		public ActionResult GetCommonSetting()
+        #region 获取公用的配置信息
+        public ActionResult GetCommonSetting()
 		{
 			try
 			{
@@ -81,8 +88,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 				return Fail(ex.Message);
 			}
 		}
+        #endregion
 
-		public string CheckAPPID()
+        public string CheckAPPID()
 		{
 			if (base.Request.Headers["appid"].IsEmpty())
 			{

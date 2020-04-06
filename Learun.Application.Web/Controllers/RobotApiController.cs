@@ -179,7 +179,7 @@ namespace Learun.Application.Web.Controllers
             {
                 s_application_settingEntity s_Application_SettingEntity = application_SettingIBLL.GetEntityByApplicationId(AppID);
                 JDApi jDApi = new JDApi(s_Application_SettingEntity.F_JD_AppKey, s_Application_SettingEntity.F_JD_Secret, s_Application_SettingEntity.F_JD_SessionKey);
-                return Success("转链成功!", jDApi.ConvertUrl(ItemID, SiteID, PositionID));
+                return Success("转链成功!", jDApi.ConvertUrl(ItemID, SiteID, PositionID,""));
             }
             catch (Exception ex)
             {
@@ -230,7 +230,7 @@ namespace Learun.Application.Web.Controllers
             {
                 s_application_settingEntity s_Application_SettingEntity = application_SettingIBLL.GetEntityByApplicationId(AppID);
                 JDApi jDApi = new JDApi(s_Application_SettingEntity.F_JD_AppKey, s_Application_SettingEntity.F_JD_Secret, s_Application_SettingEntity.F_JD_SessionKey);
-                JFGoodsResp[] jDGoods = jDApi.GetGoodList(EliteID, PageNo, PageSize, SortName, Sort);
+                var jDGoods = jDApi.GetGoodList(EliteID, PageNo, PageSize, SortName, Sort);
 
                 return Success("商品查询成功!", jDGoods);
             }

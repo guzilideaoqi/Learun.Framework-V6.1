@@ -238,7 +238,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 					parent_id = DecodeInviteCode(VerifiCode);
 					if (parent_id <= 0)
 					{
-						throw new Exception("验证码错误!");
+						throw new Exception("邀请码错误!");
 					}
 					dm_userEntity parent_user_entity = GetEntity(parent_id.ToInt());
 					if (parent_user_entity == null)
