@@ -259,6 +259,7 @@
     <Compile Include="Areas\DM_APPManage\Controllers\DM_APP_Partners_RecordController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_CertificaRecordController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_ArticleController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_PidController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -2212,6 +2213,10 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Article\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Article\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Article\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Pid\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Pid\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Pid\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Pid\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

@@ -128,6 +128,7 @@
     <Compile Include="DM_APPManage\dm_apply_partners_recordMap.cs" />
     <Compile Include="DM_APPManage\dm_certifica_recordMap.cs" />
     <Compile Include="DM_APPManage\dm_articleMap.cs" />
+    <Compile Include="DM_APPManage\dm_pidMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

@@ -138,6 +138,10 @@
     <Compile Include="DM_APPManage\DM_Article\DM_ArticleService.cs" />
     <Compile Include="DM_APPManage\DM_Article\DM_ArticleIBLL.cs" />
     <Compile Include="DM_APPManage\DM_Article\DM_ArticleBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Pid\dm_pidEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Pid\DM_PidService.cs" />
+    <Compile Include="DM_APPManage\DM_Pid\DM_PidIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Pid\DM_PidBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">
