@@ -156,6 +156,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
         /// <summary>
+        /// 京东网站id
+        /// </summary>
+        [Column("JD_SITE")]
+        public string jd_site { get; set; }
+        /// <summary>
         /// 京东pid
         /// </summary>
 		[Column("JD_PID")]

@@ -4,6 +4,7 @@ using Learun.Cache.Base;
 using Learun.Cache.Factory;
 using Learun.Util;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -16,8 +17,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_UserIBLL dm_userIBLL = new DM_UserBLL();
 
+        private DM_CertificaRecordIBLL dm_CertificaRecordIBLL = new DM_CertificaRecordBLL();
+
+        private DM_MessageRecordIBLL dm_MessageRecordIBLL = new DM_MessageRecordBLL();
+
+
         #region 用户名密码登陆
-        [HttpPost]
+
         public ActionResult DM_Login(dm_userEntity dm_UserEntity)
         {
             try
@@ -32,13 +38,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
 
         #region 用户注册
-        [HttpPost]
+
         public ActionResult DM_Register(dm_userEntity dm_UserEntity, string ParentInviteCode, string VerifiCode)
         {
             try
@@ -68,7 +74,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -82,7 +88,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="VerifiCode">验证码</param>
         /// <param name="IsNewUser">是否是新用户  true:新用户  false:老用户</param>
         /// <returns></returns>
-        [HttpPost]
+
         public ActionResult DM_LoginByPhone(dm_userEntity dm_UserEntity, string ParentInviteCode, string VerifiCode, bool IsNewUser)
         {
             try
@@ -119,7 +125,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -131,7 +137,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="Phone">手机号</param>
         /// <param name="Type">验证码类型  1注册  2找回密码  3手机号+验证码登录</param>
         /// <returns></returns>
-        [HttpPost]
+
         public ActionResult GetVerification(string Phone, int Type)
         {
             try
@@ -178,7 +184,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -191,7 +197,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="Pwd">密码</param>
         /// <param name="VerifiCode">验证码</param>
         /// <returns></returns>
-        [HttpPost]
+
         public ActionResult ResetPwd(string Phone, string Pwd, string VerifiCode)
         {
             try
@@ -217,14 +223,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 dm_UserEntity.pwd = Md5Helper.Encrypt(Pwd, 16);
                 dm_userIBLL.SaveEntity(dm_UserEntity.id.ToInt(), dm_UserEntity);
-                return Success("密码修改成功,请重新登录!", new
-                {
-
-                });
+                return Success("密码修改成功,请重新登录!");
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -235,7 +238,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// </summary>
         /// <param name="id">用户id</param>
         /// <returns></returns>
-        [HttpPost]
+
         public ActionResult GetPersonInfo(int id)
         {
             try
@@ -244,7 +247,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -255,7 +258,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// </summary>
         /// <param name="userid">用户id</param>
         /// <returns></returns>
-        [HttpPost]
         public ActionResult SignIn(int userid)
         {
             try
@@ -264,13 +266,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
 
         #region 加密邀请码
-        [HttpPost]
+
         public ActionResult EncodeInviteCode(int id)
         {
             try
@@ -283,13 +285,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
 
         #region 解析邀请码
-        [HttpPost]
+
         public ActionResult DecodeInviteCode(string InviteCode)
         {
             try
@@ -302,17 +304,26 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
 
         #region 实名认证
-        [HttpPost]
-        public ActionResult Certification(int user_id, string name, string cardno)
+        /// <summary>
+        /// 实名认证提交
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="name"></param>
+        /// <param name="cardno"></param>
+        /// <param name="CertificaRecordID"></param>
+        /// <returns></returns>
+
+        public ActionResult Certification(int user_id, string name, string cardno, int CertificaRecordID = 0)
         {
             try
             {
+                string appid = CheckAPPID();
                 if (user_id.IsEmpty())
                 {
                     return Fail("用户id不能为空!");
@@ -339,32 +350,57 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 #endregion
 
-                dm_userEntity dm_UserEntity = new dm_userEntity();
+                dm_certifica_recordEntity dm_Certifica_RecordEntity = new dm_certifica_recordEntity();
 
                 #region 开始执行上传图片
-                dm_UserEntity.facecard = UpdateCardImage(facecard_file);
-                dm_UserEntity.frontcard = UpdateCardImage(frontcard_file);
+                dm_Certifica_RecordEntity.facecard = UpdateCardImage(facecard_file);
+                dm_Certifica_RecordEntity.frontcard = UpdateCardImage(frontcard_file);
                 #endregion
 
                 #region 构造其他信息
-                dm_UserEntity.id = user_id;
-                dm_UserEntity.realname = name;
-                dm_UserEntity.identitycard = cardno;
+                dm_Certifica_RecordEntity.user_id = user_id;
+                dm_Certifica_RecordEntity.realname = name;
+                dm_Certifica_RecordEntity.cardno = cardno;
+                dm_Certifica_RecordEntity.realstatus = 0;
+                dm_Certifica_RecordEntity.appid = appid;
                 #endregion
 
-                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                dm_CertificaRecordIBLL.SaveEntity(CertificaRecordID, dm_Certifica_RecordEntity);
 
                 return Success("提交成功!");
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 获取实名认证记录
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+
+        public ActionResult GetCertificationRecord(int user_id)
+        {
+            try
+            {
+                if (user_id.IsEmpty())
+                {
+                    return Fail("用户id不能为空!");
+                }
+
+                return Success("获取成功", dm_CertificaRecordIBLL.GetCertificationRecord(user_id));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
             }
         }
         #endregion
 
         #region 修改收货地址
-        [HttpPost]
+
         public ActionResult UpdateAddress(int user_id, dm_userEntity dm_UserEntity)
         {
             try
@@ -384,13 +420,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion
 
         #region 身份证正反面上传专用
-        [HttpPost]
+
         string UpdateCardImage(HttpPostedFile cardInfo)
         {
             string FileEextension = Path.GetExtension(cardInfo.FileName);
@@ -402,6 +438,83 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             cardInfo.SaveAs(fullFileName);
 
             return virtualPath;
+        }
+        #endregion
+
+        #region 系统消息
+        /// <summary>
+        /// 获取系统消息 (做短时间的缓存 10分钟)
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetSystemMessage(int user_id, int pageNo = 1, int pageSize = 10)
+        {
+            try
+            {
+                if (user_id.IsEmpty())
+                {
+                    return Fail("用户id不能为空!");
+                }
+                string cacheKey = Md5Helper.Hash("SystemMessage" + user_id + pageNo + pageSize);
+                IEnumerable<dm_messagerecordEntity> messageRecordList = redisCache.Read<IEnumerable<dm_messagerecordEntity>>(cacheKey, 7);
+                if (messageRecordList == null)
+                {
+                    messageRecordList = dm_MessageRecordIBLL.GetPageList(new Pagination { rows = pageSize, page = pageNo, sidx = "createtime", sord = "desc" }, "{\"user_id\":\""+ user_id + "\"}");
+                    if (messageRecordList != null)
+                    {
+                        redisCache.Write<IEnumerable<dm_messagerecordEntity>>(cacheKey, messageRecordList,DateTime.Now.AddMinutes(10) ,7);
+                    }
+                }
+
+                return SuccessList("系统消息获取成功!", messageRecordList);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 通过用户ID转已读
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        public ActionResult MessageToReadByUserID(int user_id)
+        {
+            try
+            {
+                if (user_id.IsEmpty())
+                {
+                    return Fail("用户id不能为空!");
+                }
+                dm_MessageRecordIBLL.MessageToReadByUserID(user_id);
+                return Success("状态更改成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 通过消息记录转已读
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult MessageToReadByID(int id)
+        {
+            try
+            {
+                if (id.IsEmpty())
+                {
+                    return Fail("消息id不能为空!");
+                }
+                dm_MessageRecordIBLL.MessageToReadByID(id);
+                return Success("状态更改成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
         #endregion
 

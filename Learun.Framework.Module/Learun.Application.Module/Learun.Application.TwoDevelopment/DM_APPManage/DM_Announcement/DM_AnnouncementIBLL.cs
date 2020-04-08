@@ -16,5 +16,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		void DeleteEntity(int keyValue);
 
 		void SaveEntity(int keyValue, dm_announcementEntity entity);
-	}
+
+    }
 }

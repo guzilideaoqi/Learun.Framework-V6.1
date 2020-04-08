@@ -30,7 +30,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        dm_pidEntity GetEntity(string keyValue);
+        dm_pidEntity GetEntity(int keyValue);
         #endregion
 
         #region 提交数据
@@ -40,14 +40,29 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        void DeleteEntity(string keyValue);
+        void DeleteEntity(int keyValue);
         /// <summary>
         /// 保存实体数据（新增、修改）
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        void SaveEntity(string keyValue, dm_pidEntity entity);
+        void SaveEntity(int keyValue, dm_pidEntity entity);
         #endregion
 
+        #region PID自动分配
+        /// <summary>
+        /// 自动分配京东pid
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        /// <returns></returns>
+        dm_userEntity AutoAssignJDPID(dm_userEntity dm_UserEntity);
+
+        /// <summary>
+        /// 自动分配拼多多pid
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        /// <returns></returns>
+        dm_userEntity AutoAssignPDDPID(dm_userEntity dm_UserEntity);
+        #endregion
     }
 }

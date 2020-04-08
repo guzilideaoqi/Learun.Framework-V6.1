@@ -72,19 +72,16 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 			try
 			{
 				string appid = CheckAPPID();
-				return Success("获取成功", new
-				{
-					list = dM_ReadTaskIBLL.GetPageListByCache(new Pagination
-					{
-						page = PageNo,
-						rows = PageSize
-					}, appid)
-				});
+				return SuccessList("获取成功", dM_ReadTaskIBLL.GetPageListByCache(new Pagination
+                {
+                    page = PageNo,
+                    rows = PageSize
+                }, appid));
 			}
 			catch (Exception ex)
 			{
-				return Fail(ex.Message);
-			}
+                return FailException(ex);
+            }
 		}
         #endregion
 
@@ -105,8 +102,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 			}
 			catch (Exception ex)
 			{
-				return Fail(ex.Message);
-			}
+                return FailException(ex);
+            }
 		}
         #endregion
 

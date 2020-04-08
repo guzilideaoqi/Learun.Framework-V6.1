@@ -77,7 +77,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetFormData(string keyValue)
+        public ActionResult GetFormData(int keyValue)
         {
             var data = dM_PidIBLL.GetEntity(keyValue);
             return Success(data);
@@ -93,7 +93,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpPost]
         [AjaxOnly]
-        public ActionResult DeleteForm(string keyValue)
+        public ActionResult DeleteForm(int keyValue)
         {
             dM_PidIBLL.DeleteEntity(keyValue);
             return Success("删除成功！");
@@ -106,7 +106,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(string keyValue,dm_pidEntity entity)
+        public ActionResult SaveForm(int keyValue,dm_pidEntity entity)
         {
             dM_PidIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");

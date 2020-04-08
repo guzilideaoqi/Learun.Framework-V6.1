@@ -49,5 +49,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void SaveEntity(int keyValue, dm_certifica_recordEntity entity);
         #endregion
 
+        #region 实名认证
+
+        /// <summary>
+        /// 获取实名认证记录
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        dm_certifica_recordEntity GetCertificationRecord(int user_id);
+        #endregion
     }
 }

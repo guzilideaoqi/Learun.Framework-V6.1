@@ -22,7 +22,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         private string fieldSql;
         public DM_PidService()
         {
-            fieldSql=@"
+            fieldSql = @"
                 t.id,
                 t.pid,
                 t.pidname,
@@ -41,7 +41,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_pidEntity> GetList( string queryJson )
+        public IEnumerable<dm_pidEntity> GetList(string queryJson)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
                 strSql.Append(" FROM dm_pid t ");
-                return this.BaseRepository("多米易购").FindList<dm_pidEntity>(strSql.ToString());
+                return this.BaseRepository("dm_data").FindList<dm_pidEntity>(strSql.ToString());
             }
             catch (Exception ex)
             {
@@ -82,7 +82,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
                 strSql.Append(" FROM dm_pid t ");
-                return this.BaseRepository("多米易购").FindList<dm_pidEntity>(strSql.ToString(), pagination);
+                return this.BaseRepository("dm_data").FindList<dm_pidEntity>(strSql.ToString(), pagination);
             }
             catch (Exception ex)
             {
@@ -102,11 +102,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public dm_pidEntity GetEntity(string keyValue)
+        public dm_pidEntity GetEntity(int keyValue)
         {
             try
             {
-                return this.BaseRepository("多米易购").FindEntity<dm_pidEntity>(keyValue);
+                return this.BaseRepository("dm_data").FindEntity<dm_pidEntity>(keyValue);
             }
             catch (Exception ex)
             {
@@ -130,11 +130,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public void DeleteEntity(string keyValue)
+        public void DeleteEntity(int keyValue)
         {
             try
             {
-                this.BaseRepository("多米易购").Delete<dm_pidEntity>(t=>t.id == keyValue);
+                this.BaseRepository("dm_data").Delete<dm_pidEntity>(t => t.id == keyValue);
             }
             catch (Exception ex)
             {
@@ -154,19 +154,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public void SaveEntity(string keyValue, dm_pidEntity entity)
+        public void SaveEntity(int keyValue, dm_pidEntity entity)
         {
             try
             {
-                if (!string.IsNullOrEmpty(keyValue))
+                if (keyValue > 0)
                 {
                     entity.Modify(keyValue);
-                    this.BaseRepository("多米易购").Update(entity);
+                    this.BaseRepository("dm_data").Update(entity);
                 }
                 else
                 {
                     entity.Create();
-                    this.BaseRepository("多米易购").Insert(entity);
+                    this.BaseRepository("dm_data").Insert(entity);
                 }
             }
             catch (Exception ex)
@@ -184,5 +184,92 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 自动分配京东PID
+        /// <summary>
+        /// 自动分配京东pid
+        /// </summary>
+        public dm_userEntity AutoAssignJDPID(dm_userEntity dm_UserEntity)
+        {
+            IRepository db = null;
+            try
+            {
+                dm_pidEntity dm_PidEntity = this.BaseRepository("dm_data").FindEntity<dm_pidEntity>("select * from dm_pid where usestate=0 and type=2 limit 1",null);
+                if (dm_PidEntity == null)
+                    throw new Exception("无可用京东PID，请联系客服!");
+                string site_id = dm_PidEntity.pids.Split('_')[1];
+                dm_UserEntity.jd_site = site_id;
+                dm_UserEntity.jd_pid = dm_PidEntity.pid;
+
+                dm_PidEntity.user_id = dm_UserEntity.id;
+                dm_PidEntity.usestate = 1;
+                dm_PidEntity.usetime = DateTime.Now;
+
+                db = this.BaseRepository("dm_data").BeginTrans();
+                db.Update(dm_UserEntity);
+                db.Update(dm_PidEntity);
+
+                db.Commit();
+
+                return dm_UserEntity;
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
+
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 自动分配拼多多PID
+        /// <summary>
+        /// 自动分配拼多多pid
+        /// </summary>
+        public dm_userEntity AutoAssignPDDPID(dm_userEntity dm_UserEntity)
+        {
+            IRepository db = null;
+            try
+            {
+                dm_pidEntity dm_PidEntity = this.BaseRepository("dm_data").FindEntity<dm_pidEntity>("select * from dm_pid where usestate=0 and type=3 limit 1",null);
+                if (dm_PidEntity == null)
+                    throw new Exception("无可用拼多多PID，请联系客服!");
+                dm_UserEntity.pdd_pid = dm_PidEntity.pid;
+
+                dm_PidEntity.user_id = dm_UserEntity.id;
+                dm_PidEntity.usestate = 1;
+                dm_PidEntity.usetime = DateTime.Now;
+
+                db = this.BaseRepository("dm_data").BeginTrans();
+                db.Update(dm_UserEntity);
+                db.Update(dm_PidEntity);
+
+                db.Commit();
+
+                return dm_UserEntity;
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
+
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

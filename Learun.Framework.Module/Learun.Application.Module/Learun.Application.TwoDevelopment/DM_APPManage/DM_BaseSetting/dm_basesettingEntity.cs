@@ -293,7 +293,32 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
-		public void Create()
+        /// <summary>
+        /// 开发私钥
+        /// </summary>
+        [Column("MERCHANT_PRIVATE_KEY")]
+        public string merchant_private_key { get; set; }
+
+        /// <summary>
+        /// 支付宝公钥
+        /// </summary>
+        [Column("ALIPAY_PUBLIC_KEY")]
+        public string alipay_public_key { get; set; }
+
+        /// <summary>
+        /// 支付宝APPID
+        /// </summary>
+        [Column("ALIPAY_APPID")]
+        public string alipay_appid { get; set; }
+
+        /// <summary>
+        /// 支付回调地址
+        /// </summary>
+        [Column("ALIPAY_NOTIFYURL")]
+        public string alipay_notifyurl { get; set; }
+
+
+        public void Create()
 		{
 			UserInfo userInfo = LoginUserInfo.Get();
 			appid = userInfo.companyId;

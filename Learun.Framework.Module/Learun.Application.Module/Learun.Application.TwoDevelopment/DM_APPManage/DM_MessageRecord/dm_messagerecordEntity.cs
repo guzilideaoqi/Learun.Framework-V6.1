@@ -55,7 +55,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
-		public void Create()
+        /// <summary>
+        ///  «∑Ò“—∂¡  0Œ¥∂¡  1“—∂¡
+        /// </summary>
+        [Column("ISREAD")]
+        public int isread { get; set; }
+
+
+        public void Create()
 		{
 		}
 

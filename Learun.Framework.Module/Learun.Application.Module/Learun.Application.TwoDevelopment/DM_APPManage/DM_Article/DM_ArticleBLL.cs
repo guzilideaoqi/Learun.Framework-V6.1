@@ -182,5 +182,58 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+
+        #region 获取子类别
+        /// <summary>
+        /// 获取文章子类别
+        /// </summary>
+        /// <param name="appid">平台id</param>
+        /// <param name="ModeType">1新手教程</param>
+        /// <returns></returns>
+        public IEnumerable<dm_articleEntity> GetChildrenArticle(string appid, int ModeType) {
+            try
+            {
+                return dM_ArticleService.GetChildrenArticle(appid,ModeType);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 获取文章详情
+        /// <summary>
+        /// 获取文章详情
+        /// </summary>
+        /// <param name="appid">平台id</param>
+        /// <param name="id">文章id</param>
+        /// <returns></returns>
+        public dm_articleEntity GetArticleDetail(string appid, int id) {
+            try
+            {
+                return dM_ArticleService.GetArticleDetail(appid, id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
+
     }
 }

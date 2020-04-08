@@ -1,4 +1,5 @@
-﻿using Learun.Util;
+﻿using Learun.Application.TwoDevelopment.Common;
+using Learun.Util;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Learun.Application.TwoDevelopment.DM_APPManage
@@ -11,14 +12,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 日 期：2020-04-06 21:08
     /// 描 述：身份证实名
     /// </summary>
-    public class dm_certifica_recordEntity 
+    public class dm_certifica_recordEntity
     {
         #region 实体成员
         /// <summary>
         /// 记录id
         /// </summary>
         /// <returns></returns>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("ID")]
         public int? id { get; set; }
         /// <summary>
         /// 用户id
@@ -38,18 +40,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("CARDNO")]
         public string cardno { get; set; }
+
+        private string _facecard;
         /// <summary>
         /// 身份证正面
         /// </summary>
         /// <returns></returns>
         [Column("FACECARD")]
-        public string facecard { get; set; }
+        public string facecard { get { if (!string.IsNullOrEmpty(_facecard)) return CommonConfig.ImageQianZhui + _facecard; return _facecard; } set { _facecard = value; } }
+
+        private string _frontcard;
         /// <summary>
         /// 身份证反面
         /// </summary>
         /// <returns></returns>
         [Column("FRONTCARD")]
-        public string frontcard { get; set; }
+        public string frontcard { get { if (!string.IsNullOrEmpty(_frontcard)) return CommonConfig.ImageQianZhui + _frontcard; return _frontcard; } set { _frontcard = value; } }
         /// <summary>
         /// 创建时间
         /// </summary>
@@ -74,6 +80,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("REALSTATUS")]
         public int? realstatus { get; set; }
+
+        /// <summary>
+        /// 平台id
+        /// </summary>
+        [Column("APPID")]
+        public string appid { get; set; }
         #endregion
 
         #region 扩展操作
@@ -82,6 +94,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         public void Create()
         {
+            this.createtime = DateTime.Now;
         }
         /// <summary>
         /// 编辑调用

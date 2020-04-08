@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CommonConfig.cs" />
     <Compile Include="DM_APPManage\DM_Order\CalculateComissionEntity.cs" />
     <Compile Include="DM_APPManage\DM_Order\DM_OrderBLL.cs" />
     <Compile Include="DM_APPManage\DM_Order\dm_orderEntity.cs" />

@@ -21,7 +21,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_pidEntity> GetList( string queryJson )
+        public IEnumerable<dm_pidEntity> GetList(string queryJson)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public dm_pidEntity GetEntity(string keyValue)
+        public dm_pidEntity GetEntity(int keyValue)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public void DeleteEntity(string keyValue)
+        public void DeleteEntity(int keyValue)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public void SaveEntity(string keyValue, dm_pidEntity entity)
+        public void SaveEntity(int keyValue, dm_pidEntity entity)
         {
             try
             {
@@ -142,5 +142,54 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region PID自动分配
+        /// <summary>
+        /// 自动分配京东pid
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        /// <returns></returns>
+        public dm_userEntity AutoAssignJDPID(dm_userEntity dm_UserEntity)
+        {
+            try
+            {
+                return dM_PidService.AutoAssignJDPID(dm_UserEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 自动分配拼多多pid
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        /// <returns></returns>
+        public dm_userEntity AutoAssignPDDPID(dm_userEntity dm_UserEntity)
+        {
+            try
+            {
+                return dM_PidService.AutoAssignPDDPID(dm_UserEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

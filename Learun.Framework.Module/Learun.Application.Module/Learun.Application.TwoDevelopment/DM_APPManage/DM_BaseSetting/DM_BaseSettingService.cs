@@ -1,3 +1,4 @@
+using Learun.Application.TwoDevelopment.Common;
 using Learun.Cache.Base;
 using Learun.Cache.Factory;
 using Learun.DataBase.Repository;
@@ -89,7 +90,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				dm_BasesettingEntity = GetEntity(appid);
 				redisCache.Write(cacheKey, dm_BasesettingEntity, 0L);
 			}
-			return dm_BasesettingEntity;
+
+            CommonConfig.ImageQianZhui = dm_BasesettingEntity.qianzhui_image;
+
+            return dm_BasesettingEntity;
 		}
 
 		public void DeleteEntity(string keyValue)

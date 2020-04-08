@@ -51,6 +51,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("CREATETIME")]
         public DateTime? createtime { get; set; }
         /// <summary>
+        /// 使用时间
+        /// </summary>
+        /// <returns></returns>
+        [Column("USETIME")]
+        public DateTime? usetime { get; set; }
+        /// <summary>
         /// 使用状态 0未使用  1已使用
         /// </summary>
         /// <returns></returns>

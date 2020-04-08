@@ -18,7 +18,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        IEnumerable<dm_articleEntity> GetList( string queryJson );
+        IEnumerable<dm_articleEntity> GetList(string queryJson);
         /// <summary>
         /// 获取列表分页数据
         /// <param name="pagination">分页参数</param>
@@ -53,5 +53,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         List<TreeModel> GetArticleTree();
         #endregion
 
+        #region 获取子类别
+        /// <summary>
+        /// 获取文章子类别
+        /// </summary>
+        /// <param name="appid">平台id</param>
+        /// <param name="ModeType">1新手教程</param>
+        /// <returns></returns>
+        IEnumerable<dm_articleEntity> GetChildrenArticle(string appid, int ModeType);
+        #endregion
+
+        #region 获取文章详情
+        /// <summary>
+        /// 获取文章详情
+        /// </summary>
+        /// <param name="appid">平台id</param>
+        /// <param name="id">文章id</param>
+        /// <returns></returns>
+        dm_articleEntity GetArticleDetail(string appid, int id);
+        #endregion
     }
 }

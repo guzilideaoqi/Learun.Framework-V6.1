@@ -71,6 +71,8 @@ namespace Learun.Application.Web.App_Start._01_Handler
         /// <returns></returns>
         protected virtual ActionResult Success(string info, object data)
         {
+            if (data == null)
+                data = new { };
             return Content(new ResParameter { code = ResponseCode.success, info = info, data = data }.ToJson());
         }
 
@@ -123,6 +125,14 @@ namespace Learun.Application.Web.App_Start._01_Handler
         protected virtual ActionResult Fail(string info)
         {
             return Content(new ResParameter { code = ResponseCode.fail, info = info }.ToJson());
+        }
+
+        protected virtual ActionResult FailException(Exception ex)
+        {
+            if (ex.InnerException.IsEmpty())
+                return Fail(ex.Message);
+            else
+                return Fail(ex.InnerException.Message);
         }
         /// <summary>
         /// 返回失败消息

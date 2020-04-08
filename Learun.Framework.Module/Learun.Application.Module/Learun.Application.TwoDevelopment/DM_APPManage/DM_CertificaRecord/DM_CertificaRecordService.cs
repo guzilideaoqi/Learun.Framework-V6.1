@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using Learun.Cache.Base;
+using Learun.Cache.Factory;
 using Learun.DataBase.Repository;
 using Learun.Util;
 using System;
@@ -17,12 +19,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// </summary>
     public class DM_CertificaRecordService : RepositoryFactory
     {
+        private ICache redisCache = CacheFactory.CaChe();
+
         #region 构造函数和属性
 
         private string fieldSql;
         public DM_CertificaRecordService()
         {
-            fieldSql=@"
+            fieldSql = @"
                 t.id,
                 t.user_id,
                 t.realname,
@@ -43,7 +47,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_certifica_recordEntity> GetList( string queryJson )
+        public IEnumerable<dm_certifica_recordEntity> GetList(string queryJson)
         {
             try
             {
@@ -140,7 +144,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                this.BaseRepository("dm_data").Delete<dm_certifica_recordEntity>(t=>t.id == keyValue);
+                this.BaseRepository("dm_data").Delete<dm_certifica_recordEntity>(t => t.id == keyValue);
             }
             catch (Exception ex)
             {
@@ -164,7 +168,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                if (keyValue>0)
+                if (keyValue > 0)
                 {
                     entity.Modify(keyValue);
                     this.BaseRepository("dm_data").Update(entity);
@@ -174,6 +178,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     entity.Create();
                     this.BaseRepository("dm_data").Insert(entity);
                 }
+                #region 清除缓存记录
+                string cacheKey = "CertificationRecord" + entity.user_id;
+                redisCache.Remove(cacheKey, 7);
+                #endregion
             }
             catch (Exception ex)
             {
@@ -190,5 +198,81 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+
+        #region 获取实名认证记录
+        public dm_certifica_recordEntity GetCertificationRecord(int user_id)
+        {
+            try
+            {
+                string cacheKey = "CertificationRecord" + user_id;
+                dm_certifica_recordEntity dm_Certifica_RecordEntity = redisCache.Read<dm_certifica_recordEntity>(cacheKey);
+
+                if (dm_Certifica_RecordEntity == null)
+                {
+                    dm_Certifica_RecordEntity = this.BaseRepository("dm_data").FindEntity<dm_certifica_recordEntity>(t => t.user_id == user_id);
+
+                    if (dm_Certifica_RecordEntity != null)
+                    {
+                        redisCache.Write<dm_certifica_recordEntity>(cacheKey, dm_Certifica_RecordEntity, DateTime.Now.AddHours(2), 7);
+                    }
+                }
+
+                return dm_Certifica_RecordEntity;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 审核实名认证
+        public void CheckCertificationRecord(dm_certifica_recordEntity entity)
+        {
+            IRepository db = null;
+            try
+            {
+                if (entity.realstatus == 1)
+                {
+                    dm_userEntity dm_UserEntity = new dm_userEntity();
+                    dm_UserEntity.isreal = 1;
+                    dm_UserEntity.id = entity.user_id;
+                    dm_UserEntity.realname = entity.realname;
+                    dm_UserEntity.frontcard = entity.frontcard;
+                    dm_UserEntity.facecard = entity.facecard;
+
+                    db = this.BaseRepository("dm_data").BeginTrans();
+                    db.Update(dm_UserEntity);
+                    db.Update(entity);
+
+                    db.Commit();
+                }
+                else if (entity.realstatus == 2)
+                {
+                    this.BaseRepository("dm_data").Update<dm_certifica_recordEntity>(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

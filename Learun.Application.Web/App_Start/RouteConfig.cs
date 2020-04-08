@@ -29,7 +29,8 @@ namespace Learun.Application.Web
             routes.MapRoute(
                 name: "DM_APIControl",
                 url: "DM_APIControl/{controller}/{action}/{id}",
-                defaults: new { controller = "Login", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Login", action = "Index", id = UrlParameter.Optional },
+                constraints: new { httpMethod = new HttpMethodConstraint("POST") }
             );
         }
     }

@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Linq;
+using Learun.Cache.Base;
+using Learun.Cache.Factory;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -17,12 +20,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// </summary>
     public class DM_ArticleService : RepositoryFactory
     {
+        private ICache redisCache = CacheFactory.CaChe();
         #region 构造函数和属性
 
         private string fieldSql;
+
+        private string childSql;
         public DM_ArticleService()
         {
-            fieldSql=@"
+            fieldSql = @"
                 t.id,
                 t.title,
                 t.content,
@@ -31,6 +37,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 t.updatetime,
                 t.sort
             ";
+
+            childSql = @"                t.id,
+                t.title";
         }
         #endregion
 
@@ -40,7 +49,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_articleEntity> GetList( string queryJson )
+        public IEnumerable<dm_articleEntity> GetList(string queryJson)
         {
             try
             {
@@ -57,14 +66,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 strSql.Append(fieldSql);
                 strSql.Append(" FROM dm_article t where 1=1");
 
-                UserInfo userInfo = LoginUserInfo.Get();
-                string appid = userInfo.companyId;
-                if (!appid.IsEmpty())
+                if (!queryParam["appid"].IsEmpty())
                 {
-                    strSql.Append(" and t.appid='" + appid + "'");
+                    strSql.Append(" and t.appid='" + queryParam["appid"].ToString() + "'");
                 }
 
-                if (!queryParam["keyword"].IsEmpty()) {
+                if (!queryParam["keyword"].IsEmpty())
+                {
                     strSql.Append(" and t.title like '%" + queryParam["keyword"].ToString() + "%'");
                 }
 
@@ -148,7 +156,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                this.BaseRepository("dm_data").Delete<dm_articleEntity>(t=>t.id == keyValue);
+                this.BaseRepository("dm_data").Delete<dm_articleEntity>(t => t.id == keyValue);
+
+                redisCache.Remove("ArticleList", 7);
             }
             catch (Exception ex)
             {
@@ -172,7 +182,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                if (keyValue>0)
+                if (keyValue > 0)
                 {
                     entity.Modify(keyValue);
                     this.BaseRepository("dm_data").Update(entity);
@@ -182,6 +192,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     entity.Create();
                     this.BaseRepository("dm_data").Insert(entity);
                 }
+
+                redisCache.Remove("ArticleList", 7);
             }
             catch (Exception ex)
             {
@@ -198,5 +210,76 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 获取文章子类
+        /// <summary>
+        /// 获取文章子类
+        /// </summary>
+        /// <param name="appid">平台id</param>
+        /// <param name="ModeType">父级id</param>
+        /// <returns></returns>
+        public IEnumerable<dm_articleEntity> GetChildrenArticle(string appid, int ModeType)
+        {
+            try
+            {
+                IEnumerable<dm_articleEntity> dm_ArticleEntities = redisCache.Read<IEnumerable<dm_articleEntity>>("ArticleList", 7);
+
+                if (dm_ArticleEntities == null)
+                {
+                    dm_ArticleEntities = GetList("{\"appid\":\"" + appid + "\"}");
+                    if (dm_ArticleEntities != null)
+                        redisCache.Write("ArticleList", dm_ArticleEntities, 7);
+                }
+
+                return dm_ArticleEntities.Where(t => t.parentid == ModeType);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 获取文章详情
+        /// <summary>
+        /// 获取文章详情
+        /// </summary>
+        /// <param name="appid">平台id</param>
+        /// <param name="id">文章id</param>
+        /// <returns></returns>
+        public dm_articleEntity GetArticleDetail(string appid, int id)
+        {
+            try
+            {
+                IEnumerable<dm_articleEntity> dm_ArticleEntities = redisCache.Read<IEnumerable<dm_articleEntity>>("ArticleList", 7);
+
+                if (dm_ArticleEntities == null)
+                {
+                    dm_ArticleEntities = GetList("{\"appid\":\"" + appid + "\"}");
+                    if (dm_ArticleEntities != null)
+                        redisCache.Write("ArticleList", dm_ArticleEntities, 7);
+                }
+
+                return dm_ArticleEntities.Where(t => t.id == id).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

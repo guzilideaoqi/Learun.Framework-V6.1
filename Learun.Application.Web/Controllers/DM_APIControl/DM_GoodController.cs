@@ -14,6 +14,7 @@ using HYG.CommonHelper.ShoppingAPI;
 using JDModel;
 using HYG.CommonHelper.JDModel;
 using HYG.CommonHelper.PDDModel;
+using System.Web;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -26,6 +27,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private DM_UserIBLL dm_userIBLL = new DM_UserBLL();
 
         private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
+
+        private DM_PidIBLL dM_PidIBLL = new DM_PidBLL();
 
         private ICache redisCache = CacheFactory.CaChe();
 
@@ -55,7 +58,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -86,7 +89,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -125,7 +128,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -170,7 +173,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -202,7 +205,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -224,7 +227,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = "SuperSerachGood";
+                string cacheKey = Md5Helper.Hash("SuperSerachGood" + type + pageId + pageSize + keyWords + tmall + haitao + sort);
                 List<SuperGoodItem> superGoodItems = redisCache.Read<List<SuperGoodItem>>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
 
@@ -255,7 +258,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -273,7 +276,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = "OPGood";
+                string cacheKey = Md5Helper.Hash("OPGood" + pageId + pageSize + nineCid);
                 List<OPGoodItem> oPGoodItems = redisCache.Read<List<OPGoodItem>>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
 
@@ -300,7 +303,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -317,7 +320,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = "Suggestion" + keyWords;
+                string cacheKey = Md5Helper.Hash("Suggestion" + keyWords + type);
                 List<SuggestionItem> SuggestionList = redisCache.Read<List<SuggestionItem>>(cacheKey, 7L);
                 if (SuggestionList == null)
                 {
@@ -339,7 +342,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -374,7 +377,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -385,7 +388,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = "ActivityGoodList";
+                string cacheKey = Md5Helper.Hash("ActivityGoodList" + activityId + pageId + pageSize + cid);
                 List<ActivityGoodItem> activityGoodItems = redisCache.Read<List<ActivityGoodItem>>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
 
@@ -411,7 +414,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -458,7 +461,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -469,7 +472,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = "TopicGoodList";
+                string cacheKey = Md5Helper.Hash("TopicGoodList" + topicId + pageId + pageSize);
                 List<TopicGoodItem> topicGoodItems = redisCache.Read<List<TopicGoodItem>>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
 
@@ -496,7 +499,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -507,7 +510,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = "TBTopicList";
+                string cacheKey = Md5Helper.Hash("TBTopicList" + type + pageId + pageSize);
                 List<TB_TopicItem> tB_TopicItems = redisCache.Read<List<TB_TopicItem>>(cacheKey, 7L);
                 if (tB_TopicItems == null)
                 {
@@ -536,7 +539,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -588,7 +591,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -597,6 +600,51 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             return View();
         }
+
+        #region 获取京东频道列表
+        /// <summary>
+        /// 获取京东频道列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Get_JD_EliteIDList()
+        {
+            try
+            {
+                List<JDEliteIDInfo> jDEliteIDInfos = redisCache.Read<List<JDEliteIDInfo>>("JDEliteIDList", 7);
+                if (jDEliteIDInfos == null)
+                {
+                    jDEliteIDInfos = new List<JDEliteIDInfo>();
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 1, name = "好券商品" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 2, name = "超级大卖场" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 10, name = "9.9专区" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 22, name = "热销爆品" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 23, name = "为你推荐" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 24, name = "数码家电" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 25, name = "超市" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 26, name = "母婴玩具" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 27, name = "家具日用" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 28, name = "美妆穿搭" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 29, name = "医药保健" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 30, name = "图书文具" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 31, name = "今日必推" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 32, name = "品牌好货" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 33, name = "秒杀商品" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 34, name = "拼购商品" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 109, name = "新品首发" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 110, name = "自营" });
+                    jDEliteIDInfos.Add(new JDEliteIDInfo { id = 125, name = "首购商品" });
+
+                    redisCache.Write<List<JDEliteIDInfo>>("JDEliteIDList", jDEliteIDInfos, 7);
+                }
+
+                return SuccessList("京东频道获取成功!", jDEliteIDInfos);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
 
         #region 获取京东商品列表(每两个小时更新一次)
         /// <summary>
@@ -614,7 +662,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = "JDGoodList";
+                string cacheKey = Md5Helper.Hash("JDGoodList" + eliteId + pageIndex + pageSize + sortname + sort);
                 List<JFGoodsRespRow> jFGoodsRespRows = redisCache.Read<List<JFGoodsRespRow>>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                 if (jFGoodsRespRows == null)
@@ -637,7 +685,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -648,7 +696,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = Md5Helper.Hash(user_id.ToString() + skuid);
+                string cacheKey = Md5Helper.Hash(user_id.ToString() + skuid + "2");
                 JDLinkInfo jDLinkInfo = redisCache.Read<JDLinkInfo>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                 if (jDLinkInfo == null)
@@ -660,11 +708,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dm_UserEntity.jd_pid.IsEmpty())
                     {
                         #region 自动分配京东pid
-
+                        dm_UserEntity = dM_PidIBLL.AutoAssignJDPID(dm_UserEntity);
                         #endregion
                     }
 
-                    jDLinkInfo = jDApi.ConvertUrl(skuid, dm_BasesettingEntity.jd_accountid.ToString(), dm_UserEntity.jd_pid, couponlink);
+                    couponlink = HttpUtility.UrlEncode(couponlink);
+                    jDLinkInfo = jDApi.ConvertUrl(skuid, dm_UserEntity.jd_site.ToString(), dm_UserEntity.jd_pid, couponlink);
 
                     if (jDLinkInfo != null)
                     {
@@ -676,7 +725,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -696,12 +745,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="pageSize">每页显示数量</param>
         /// <param name="sort">排序方式:0-综合排序;1-按佣金比率升序;2-按佣金比例降序;3-按价格升序;4-按价格降序;5-按销量升序;6-按销量降序;7-优惠券金额排序升序;8-优惠券金额排序降序;9-券后价升序排序;10-券后价降序排序;11-按照加入多多进宝时间升序;12-按照加入多多进宝时间降序;13-按佣金金额升序排序;14-按佣金金额降序排序;15-店铺描述评分升序;16-店铺描述评分降序;17-店铺物流评分升序;18-店铺物流评分降序;19-店铺服务评分升序;20-店铺服务评分降序;27-描述评分击败同类店铺百分比升序，28-描述评分击败同类店铺百分比降序，29-物流评分击败同类店铺百分比升序，30-物流评分击败同类店铺百分比降序，31-服务评分击败同类店铺百分比升序，32-服务评分击败同类店铺百分比降序</param>
         /// <returns></returns>
-        public ActionResult Get_PDD_GoodList(int user_id, string keyWord="女装", int pageIndex = 1, int pageSize = 20, int sort = 0, bool with_coupon = false)
+        public ActionResult Get_PDD_GoodList(int user_id, string keyWord = "女装", int pageIndex = 1, int pageSize = 20, int sort = 0, bool with_coupon = false)
         {
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = "PDDGoodList";
+                string cacheKey = Md5Helper.Hash("PDDGoodList" + keyWord + pageIndex + pageSize + sort + with_coupon);
                 List<GoodItem> goodItems = redisCache.Read<List<GoodItem>>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                 if (goodItems == null)
@@ -720,11 +769,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                return Success("获取成功!", goodItems.Select(t => { t.LevelCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, 2, dm_BasesettingEntity); return t; }));
+                return SuccessList("获取成功!", goodItems.Select(t => { t.LevelCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, 2, dm_BasesettingEntity); return t; }));
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -735,27 +784,34 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = Md5Helper.Hash(user_id.ToString() + skuid);
+                string cacheKey = Md5Helper.Hash(user_id.ToString() + skuid + "3");
                 GeneralUrl pDDLinkInfo = redisCache.Read<GeneralUrl>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                if (pDDLinkInfo == null) {
+                if (pDDLinkInfo == null)
+                {
                     PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
                     dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                    if (dm_UserEntity.pdd_pid.IsEmpty()) {
+                    if (dm_UserEntity.pdd_pid.IsEmpty())
+                    {
                         #region 自动分配拼多多pid
-
+                        dm_UserEntity = dM_PidIBLL.AutoAssignPDDPID(dm_UserEntity);
                         #endregion
                     }
 
                     pDDLinkInfo = pDDApi.GeneralUrl(skuid, dm_UserEntity.pdd_pid);
+
+                    if (pDDLinkInfo != null)
+                    {
+                        redisCache.Write(cacheKey, pDDLinkInfo, DateTime.Now.AddHours(2.0), 7L);
+                    }
                 }
 
                 return Success("转链成功!", pDDLinkInfo);
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -785,7 +841,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message);
+                return FailException(ex);
             }
         }
         #endregion
@@ -808,7 +864,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception ex)
             {
-                return Fail(ex.InnerException.Message);
+                return FailException(ex);
             }
         }
         #endregion

@@ -21,7 +21,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_certifica_recordEntity> GetList( string queryJson )
+        public IEnumerable<dm_certifica_recordEntity> GetList(string queryJson)
         {
             try
             {
@@ -142,5 +142,25 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 实名认证
+        public dm_certifica_recordEntity GetCertificationRecord(int user_id)
+        {
+            try
+            {
+                return dM_CertificaRecordService.GetCertificationRecord(user_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }
