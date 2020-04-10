@@ -34,6 +34,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
+        /// <summary>
+        /// 消息类型 1开通代理
+        /// </summary>
 		[Column("MESSAGETYPE")]
 		public int? messagetype
 		{

@@ -28,5 +28,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		int? DecodeInviteCode(string InviteCode);
 
 		dynamic SignIn(int userid);
-	}
+
+        #region 获取用户数据
+        IEnumerable<dm_userEntity> GetParentUser(int user_id);
+        IEnumerable<dm_userEntity> GetChildUser(int user_id);
+
+        dm_userEntity GetUserByPartnersID(int partnersid);
+        #endregion
+    }
 }

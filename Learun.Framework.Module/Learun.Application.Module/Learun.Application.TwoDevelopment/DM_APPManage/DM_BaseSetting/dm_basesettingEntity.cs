@@ -105,63 +105,63 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		}
 
 		[Column("OPENAGENT_ONE")]
-		public int? openagent_one
+		public int openagent_one
 		{
 			get;
 			set;
 		}
 
 		[Column("OPENAGENT_TWO")]
-		public int? openagent_two
+		public int openagent_two
 		{
 			get;
 			set;
 		}
 
 		[Column("OPENAGENT_ONE_PARTNERS")]
-		public int? openagent_one_partners
+		public int openagent_one_partners
 		{
 			get;
 			set;
 		}
 
 		[Column("OPENAGENT_TWO_PARTNERS")]
-		public int? openagent_two_partners
+		public int openagent_two_partners
 		{
 			get;
 			set;
 		}
 
 		[Column("TASK_DO")]
-		public int? task_do
+		public int task_do
 		{
 			get;
 			set;
 		}
 
 		[Column("TASK_ONE")]
-		public int? task_one
+		public int task_one
 		{
 			get;
 			set;
 		}
 
 		[Column("TASK_TWO")]
-		public int? task_two
+		public int task_two
 		{
 			get;
 			set;
 		}
 
 		[Column("TASK_ONE_PARTNERS")]
-		public int? task_one_partners
+		public int task_one_partners
 		{
 			get;
 			set;
 		}
 
 		[Column("TASK_TWO_PARTNERS")]
-		public int? task_two_partners
+		public int task_two_partners
 		{
 			get;
 			set;

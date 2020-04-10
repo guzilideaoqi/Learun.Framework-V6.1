@@ -41,6 +41,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
+        /// <summary>
+        /// 账户余额变更来源 类型 1订单佣金  2一级粉丝订单  3二级粉丝订单  4团队订单  5下级团队订单  6下级开通代理  7下下级开通代理
+        /// </summary>
 		[Column("TYPE")]
 		public int? type
 		{

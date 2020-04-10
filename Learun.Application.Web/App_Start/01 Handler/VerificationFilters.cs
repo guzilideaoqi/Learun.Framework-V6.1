@@ -31,7 +31,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
             }
             string ActionName = filterContext.RouteData.Values["action"].ToString().ToLower();
             //登录和注册不校验
-            if (ActionName == "dm_login" || ActionName == "dm_register") {
+            if (ActionName == "dm_login" || ActionName == "dm_register"||ActionName== "paycallback") {
                 return;
             }
             //return Content(new ResParameter { code = ResponseCode.success, info = info, data = new object { } }.ToJson());

@@ -129,6 +129,9 @@
     <Compile Include="DM_APPManage\dm_certifica_recordMap.cs" />
     <Compile Include="DM_APPManage\dm_articleMap.cs" />
     <Compile Include="DM_APPManage\dm_pidMap.cs" />
+    <Compile Include="DM_APPManage\dm_alipay_recordMap.cs" />
+    <Compile Include="DM_APPManage\dm_alipay_templateMap.cs" />
+    <Compile Include="DM_APPManage\dm_task_person_settingMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

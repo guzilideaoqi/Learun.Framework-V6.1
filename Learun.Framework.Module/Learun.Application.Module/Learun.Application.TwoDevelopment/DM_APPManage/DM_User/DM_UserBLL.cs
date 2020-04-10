@@ -199,5 +199,51 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 				throw ExceptionEx.ThrowBusinessException(ex);
 			}
 		}
-	}
+
+        #region 获取用户数据
+        public IEnumerable<dm_userEntity> GetParentUser(int user_id) {
+            try
+            {
+                return dM_UserService.GetParentUser(user_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        public IEnumerable<dm_userEntity> GetChildUser(int user_id) {
+            try
+            {
+                return dM_UserService.GetChildUser(user_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+
+        public dm_userEntity GetUserByPartnersID(int partnersid) {
+            try
+            {
+                return dM_UserService.GetUserByPartnersID(partnersid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+    }
 }

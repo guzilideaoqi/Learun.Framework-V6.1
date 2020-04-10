@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using Learun.Util;
 using Learun.Application.TwoDevelopment.DM_APPManage;
+using Learun.Loger;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -129,22 +130,66 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                //订单状态和外部交易订单号
+                string trade_status = "", out_trade_no = "", gmt_create = "", gmt_payment = "", notify_time = "", seller_id = "", notify_id = "";
+
+                Log log = LogFactory.GetLogger("workflowapi");
+
+                log.Error("回调成功");
+
                 int i = 0;
                 IDictionary<string, string> sArray = new Dictionary<string, string>();
                 NameValueCollection coll;
                 //Load Form variables into NameValueCollection variable.
                 coll = Request.Form;
-
                 // Get names of all forms into a string array.
                 String[] requestItem = coll.AllKeys;
 
-                for (i = 0; i < requestItem.Length; i++)
+                if (requestItem.Contains("trade_status"))
+                    trade_status = coll["trade_status"].ToString();//获取订单状态
+                if (requestItem.Contains("out_trade_no"))
+                    out_trade_no = coll["out_trade_no"].ToString();//获取外部交易订单号
+                if (requestItem.Contains("gmt_create"))//订单创建时间
+                    gmt_create = coll["gmt_create"].ToString();
+                if (requestItem.Contains("gmt_payment"))//订单支付时间
+                    gmt_payment = coll["gmt_payment"].ToString();
+                if (requestItem.Contains("notify_time"))//订单同步时间
+                    notify_time = coll["notify_time"].ToString();
+                if (requestItem.Contains("seller_id"))//支付宝id
+                    seller_id = coll["seller_id"].ToString();
+                if (requestItem.Contains("notify_id"))//回调id(支付宝返回)
+                    notify_id = coll["notify_id"].ToString();
+
+                if (trade_status != "" && out_trade_no != "")
+                {
+                    //交易成功才去执行开通代理
+                    if (trade_status.ToUpper() == "TRADE_SUCCESS")
+                    {
+                        #region 支付宝回调成功、开始开通
+                        dm_alipay_recordEntity dm_Alipay_RecordEntity = new dm_alipay_recordEntity();
+                        dm_Alipay_RecordEntity.out_trade_no = out_trade_no;
+                        dm_Alipay_RecordEntity.alipay_status = trade_status;
+                        dm_Alipay_RecordEntity.gmt_create = gmt_create;
+                        dm_Alipay_RecordEntity.gmt_payment = gmt_payment;
+                        dm_Alipay_RecordEntity.notify_time = notify_time;
+                        dm_Alipay_RecordEntity.seller_id = seller_id;
+                        dm_Alipay_RecordEntity.notify_id = notify_id;
+                        #endregion
+                    }
+                    else {
+
+                    }
+                }
+
+                /*for (i = 0; i < requestItem.Length; i++)
                 {
                     sArray.Add(requestItem[i], Request.Form[requestItem[i]]);
                 }
 
-                Logger.Info(JsonConvert.SerializeObject(sArray));
-                return Success("成功!");
+                string resultContent = JsonConvert.SerializeObject(sArray);
+
+                log.Error(resultContent);*/
+                return Success("成功!", "");
             }
             catch (Exception ex)
             {

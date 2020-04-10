@@ -143,6 +143,18 @@
     <Compile Include="DM_APPManage\DM_Pid\DM_PidService.cs" />
     <Compile Include="DM_APPManage\DM_Pid\DM_PidIBLL.cs" />
     <Compile Include="DM_APPManage\DM_Pid\DM_PidBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Alipay_Record\dm_alipay_recordEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Alipay_Record\DM_Alipay_RecordService.cs" />
+    <Compile Include="DM_APPManage\DM_Alipay_Record\DM_Alipay_RecordIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Alipay_Record\DM_Alipay_RecordBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Alipay_Template\dm_alipay_templateEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Alipay_Template\DM_Alipay_TemplateService.cs" />
+    <Compile Include="DM_APPManage\DM_Alipay_Template\DM_Alipay_TemplateIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Alipay_Template\DM_Alipay_TemplateBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Person_Setting\dm_task_person_settingEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Person_Setting\DM_Task_Person_SettingService.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Person_Setting\DM_Task_Person_SettingIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Person_Setting\DM_Task_Person_SettingBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">
