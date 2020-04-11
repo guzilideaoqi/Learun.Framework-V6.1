@@ -199,7 +199,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #region 支付回调中开通代理(并完成返佣)
         private List<dm_accountdetailEntity> dm_AccountdetailEntities = new List<dm_accountdetailEntity>();
-        private List<dm_userEntity> dm_UserEntities = new List<dm_userEntity>();
+        private List<dm_userEntity> calculateComissionEntities = new List<dm_userEntity>();
         /// <summary>
         /// 支付回调中开通代理(并完成返佣)
         /// </summary>
@@ -210,7 +210,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 dm_AccountdetailEntities.Clear();
-                dm_UserEntities.Clear();
+                calculateComissionEntities.Clear();
                 /*
                  * 根据外部交易单号获取订单记录
                  * 更改用户状态并完成返利
@@ -231,7 +231,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 if (dm_Alipay_RecordEntity_old.IsEmpty())
                     throw new Exception("根据外部交易单号未能查询到支付记录,当前传入外部交易单号" + dm_Alipay_RecordEntity.out_trade_no);
-                dm_Alipay_RecordEntity.Modify(dm_Alipay_RecordEntity.id);//更改交易信息
+                dm_Alipay_RecordEntity.Modify(dm_Alipay_RecordEntity_old.id);//更改交易信息
 
 
                 #region 获取上下级关系
@@ -261,7 +261,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     currentUser.userlevel = 2;
                 }
-                dm_UserEntities.Add(currentUser);
+                currentUser.Modify(currentUser.id);//必须加上这句，不然不会清除缓存
+                calculateComissionEntities.Add(currentUser);
                 #endregion
 
                 #region 增加开通代理消息记录
@@ -286,9 +287,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         one_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
                         if (one_agent_commission > 0)
                         {
-                            one_User.accountprice += one_agent_commission;//重置一级代理账户余额
+                            one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
                             dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 6, "下级开通代理", "您的下级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_agent_commission, one_User.accountprice));
-                            dm_UserEntities.Add(one_User);
                         }
 
                         #region 更改二级账户余额及明细
@@ -299,9 +299,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             two_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_two * dm_Alipay_RecordEntity_old.total_amount);
                             if (two_agent_commission > 0)
                             {
-                                two_User.accountprice += two_agent_commission;
+                                two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
                                 dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 7, "二级开通代理", "您的二级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_agent_commission, two_User.accountprice));
-                                dm_UserEntities.Add(two_User);
                             }
                         }
                         #endregion
@@ -317,9 +316,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     one_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_one_partners * dm_Alipay_RecordEntity_old.total_amount);
                     if (one_partners_commission > 0)
                     {
-                        one_partners.accountprice += one_partners_commission;
+                        one_partners = CalculateComission(one_partners.id, one_partners_commission, one_partners.accountprice);
                         dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 8, "团队成员开通代理", "您的团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_partners_commission, one_partners.accountprice));
-                        dm_UserEntities.Add(one_partners);
                     }
 
                     #region 二级合伙人
@@ -330,9 +328,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         two_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_two_partners * dm_Alipay_RecordEntity_old.total_amount);
                         if (two_partners_commission > 0)
                         {
-                            two_partners.accountprice += two_partners_commission;
+                            two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
                             dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 9, "下级团队成员开通代理", "您的下级团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_partners_commission, two_partners.accountprice));
-                            dm_UserEntities.Add(two_partners);
                         }
                     }
                     #endregion
@@ -340,13 +337,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 #endregion
 
 
-                if (dm_UserEntities.Count > 0)
+                if (calculateComissionEntities.Count > 0)
                 {
+                    //必须加上这个变量,用于清除当前返利账户的余额
+                    foreach (var item in calculateComissionEntities)
+                    {
+                        item.Modify(item.id);
+                    }
                     db = BaseRepository("dm_data").BeginTrans();
                     db.Update(dm_Alipay_RecordEntity);//修改原有的支付宝支付记录
                     db.Insert(dm_MessagerecordEntity);//增加消息记录
                     db.Insert(dm_AccountdetailEntities);//增加账户余额明细
-                    db.Update(dm_UserEntities);//批量修改用户信息
+                    db.Update(calculateComissionEntities);//批量修改用户信息
                     db.Commit();
                 }
             }
@@ -364,9 +366,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
         }
-        private decimal ConvertComission(decimal comissionamount)
+        private decimal ConvertComission(decimal? comissionamount)
         {
-            return Math.Round(comissionamount / 100m, 2);
+            return Math.Round(Convert.ToDecimal(comissionamount / 100m), 2);
         }
 
         private dm_accountdetailEntity GeneralAccountDetail(int? user_id, int type, string title, string remark, decimal billdetailCommission, decimal? currentaccountprice)
@@ -381,6 +383,26 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 type = type,
                 user_id = user_id
             };
+        }
+
+        private dm_userEntity CalculateComission(int? user_id, decimal? commission, decimal? currentaccount)
+        {
+            dm_userEntity calculateComissionEntity = calculateComissionEntities.Where((dm_userEntity t) => t.id == user_id).FirstOrDefault();
+            if (calculateComissionEntity.IsEmpty())
+            {
+                calculateComissionEntity = new dm_userEntity
+                {
+                    id = user_id,
+                    accountprice = currentaccount + commission
+                };
+                calculateComissionEntities.Add(calculateComissionEntity);
+            }
+            else
+            {
+                dm_userEntity dm_userEntity = calculateComissionEntity;
+                dm_userEntity.accountprice += commission;
+            }
+            return calculateComissionEntity;
         }
         #endregion
     }

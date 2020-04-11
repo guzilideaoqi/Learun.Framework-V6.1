@@ -18,28 +18,39 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
     public class A_PayController : MvcAPIControllerBase
     {
         private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
+        private DM_Alipay_TemplateIBLL dM_Alipay_TemplateIBLL = new DM_Alipay_TemplateBLL();
+        private DM_Alipay_RecordIBLL dM_Alipay_RecordIBLL = new DM_Alipay_RecordBLL();
+
 
         #region 生成支付参数
         /// <summary>
         /// 生成支付参数
         /// </summary>
         /// <param name="user_id">用户ID</param>
-        /// <param name="PackageType">套餐ID</param>
+        /// <param name="PackageType">套餐ID  1初级代理  2高级代理  3升级代理</param>
         /// <returns></returns>
         // GET: A_Pay
-        public ActionResult GeneralPayParam(int user_id, int PackageType)
+        public ActionResult GeneralPayParam(int user_id, int TemplateID)
         {
             try
             {
                 string appid = CheckAPPID();
 
-                if (PackageType <= 0)
+                if (TemplateID <= 0)
+                {
+                    return Fail("套餐信息异常!");
+                }
+                dm_alipay_templateEntity dm_Alipay_TemplateEntity = dM_Alipay_TemplateIBLL.GetEntityByCache(TemplateID, appid);
+                if (dm_Alipay_TemplateEntity.IsEmpty())
                 {
                     return Fail("套餐信息异常!");
                 }
 
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                if (dm_BasesettingEntity == null)
+                    return Fail("基础配置获取失败!");
 
+                string out_trade_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + user_id.ToString().PadLeft(6, '0');
                 IAopClient client = new DefaultAopClient("https://openapi.alipaydev.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
                 AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
                 request.SetNotifyUrl(dm_BasesettingEntity.alipay_notifyurl);
@@ -47,17 +58,17 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 request.BizContent = "{" +
     "\"timeout_express\":\"90m\"," +
-    "\"total_amount\":\"9.00\"," +
+    "\"total_amount\":\"" + dm_Alipay_TemplateEntity.finishprice + "\"," +
     "\"product_code\":\"QUICK_MSECURITY_PAY\"," +
-    "\"body\":\"服务开通\"," +
-    "\"subject\":\"高级代理\"," +
-    "\"out_trade_no\":\"70501111111S001111119\"," +
-    "\"time_expire\":\"2020-04-09 10:05\"," +
+    "\"body\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
+    "\"subject\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
+    "\"out_trade_no\":\"" + out_trade_no + "\"," +
+    "\"time_expire\":\"" + DateTime.Now.AddMinutes(30).ToString("yyyy-MM-dd HH:mm:ss") + "\"," +
     "\"goods_type\":\"1\"," +
     //"\"promo_params\":\"{\\\"storeIdType\\\":\\\"1\\\"}\"," +
-    "\"passback_params\":\"" + HttpUtility.UrlEncode("guzilideaoqi") + "\"," +
+    "\"passback_params\":\"" + HttpUtility.UrlEncode(dm_Alipay_TemplateEntity.name) + "\"," +
     "\"extend_params\":{" +
-    "\"sys_service_provider_id\":\"2088511833207846\"," +
+    "\"sys_service_provider_id\":\"" + user_id + "\"," +
     "\"hb_fq_num\":\"3\"," +
     "\"hb_fq_seller_percent\":\"100\"," +
     "\"industry_reflux_info\":\"{\\\\\\\"scene_code\\\\\\\":\\\\\\\"metro_tradeorder\\\\\\\",\\\\\\\"channel\\\\\\\":\\\\\\\"xxxx\\\\\\\",\\\\\\\"scene_data\\\\\\\":{\\\\\\\"asset_name\\\\\\\":\\\\\\\"ALIPAY\\\\\\\"}}\"," +
@@ -69,18 +80,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
     "\"specified_channel\":\"pcredit\"," +
     "\"disable_pay_channels\":\"pcredit,moneyFund,debitCardExpress\"," +
     "      \"goods_detail\":[{" +
-    "        \"goods_id\":\"apple-01\"," +
+    "        \"goods_id\":\"" + TemplateID + "\"," +
     "\"alipay_goods_id\":\"20010001\"," +
-    "\"goods_name\":\"ipad\"," +
+    "\"goods_name\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
     "\"quantity\":1," +
     "\"price\":2000," +
     "\"goods_category\":\"34543238\"," +
     "\"categories_tree\":\"124868003|126232002|126252004\"," +
-    "\"body\":\"开通代理\"," +
+    "\"body\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
     "\"show_url\":\"http://www.alipay.com/xxx.jpg\"" +
     "        }]," +
     "\"ext_user_info\":{" +
-    "\"name\":\"老王\"," +
+    "\"name\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
     "\"mobile\":\"16587658765\"," +
     "\"cert_type\":\"IDENTITY_CARD\"," +
     "\"cert_no\":\"362334768769238881\"," +
@@ -113,8 +124,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
     "      }" +
     "    }" +
     "  }";
-
                 AlipayTradeAppPayResponse response = client.SdkExecute(request);
+                dm_alipay_recordEntity dm_Alipay_RecordEntity = new dm_alipay_recordEntity();
+                dm_Alipay_RecordEntity.user_id = user_id;
+                dm_Alipay_RecordEntity.total_amount = dm_Alipay_TemplateEntity.finishprice;
+                dm_Alipay_RecordEntity.templateid = TemplateID;
+                dm_Alipay_RecordEntity.subject = dm_Alipay_TemplateEntity.name;
+                dm_Alipay_RecordEntity.out_trade_no = out_trade_no;
+                dM_Alipay_RecordIBLL.SaveEntity(0, dm_Alipay_RecordEntity);
 
                 return Success("支付参数获取成功!", new { PayParam = response.Body });
             }
@@ -135,7 +152,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 Log log = LogFactory.GetLogger("workflowapi");
 
-                log.Error("回调成功");
+                log.Error("\r\n回调成功");
 
                 int i = 0;
                 IDictionary<string, string> sArray = new Dictionary<string, string>();
@@ -145,20 +162,28 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 // Get names of all forms into a string array.
                 String[] requestItem = coll.AllKeys;
 
+                for (i = 0; i < requestItem.Length; i++)
+                {
+                    sArray.Add(requestItem[i], Request.Form[requestItem[i]]);
+                }
+
+                string resultContent = JsonConvert.SerializeObject(sArray);
+                log.Error(resultContent+ "\r\n");
+
                 if (requestItem.Contains("trade_status"))
-                    trade_status = coll["trade_status"].ToString();//获取订单状态
+                    trade_status = sArray["trade_status"];//获取订单状态
                 if (requestItem.Contains("out_trade_no"))
-                    out_trade_no = coll["out_trade_no"].ToString();//获取外部交易订单号
+                    out_trade_no = sArray["out_trade_no"].ToString();//获取外部交易订单号
                 if (requestItem.Contains("gmt_create"))//订单创建时间
-                    gmt_create = coll["gmt_create"].ToString();
+                    gmt_create = sArray["gmt_create"].ToString();
                 if (requestItem.Contains("gmt_payment"))//订单支付时间
-                    gmt_payment = coll["gmt_payment"].ToString();
+                    gmt_payment = sArray["gmt_payment"].ToString();
                 if (requestItem.Contains("notify_time"))//订单同步时间
-                    notify_time = coll["notify_time"].ToString();
+                    notify_time = sArray["notify_time"].ToString();
                 if (requestItem.Contains("seller_id"))//支付宝id
-                    seller_id = coll["seller_id"].ToString();
+                    seller_id = sArray["seller_id"].ToString();
                 if (requestItem.Contains("notify_id"))//回调id(支付宝返回)
-                    notify_id = coll["notify_id"].ToString();
+                    notify_id = sArray["notify_id"].ToString();
 
                 if (trade_status != "" && out_trade_no != "")
                 {
@@ -174,9 +199,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         dm_Alipay_RecordEntity.notify_time = notify_time;
                         dm_Alipay_RecordEntity.seller_id = seller_id;
                         dm_Alipay_RecordEntity.notify_id = notify_id;
+                        dm_Alipay_RecordEntity.alipay_status = "NoPay";
+
+                        dM_Alipay_RecordIBLL.OpenAgent(dm_Alipay_RecordEntity);
                         #endregion
                     }
-                    else {
+                    else
+                    {
 
                     }
                 }

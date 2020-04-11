@@ -142,5 +142,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 开通/升级代理
+        public void OpenAgent(dm_alipay_recordEntity dm_Alipay_RecordEntity) {
+            try
+            {
+                dM_Alipay_RecordService.OpenAgent(dm_Alipay_RecordEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

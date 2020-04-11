@@ -230,6 +230,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
                 if (dm_AccountdetailEntities.Count > 0)
                 {
+                    //清除当前结算用户的缓存信息
+                    foreach (var item in calculateComissionEntities)
+                    {
+                        item.Modify(item.id);
+                    }
                     db = BaseRepository("dm_data").BeginTrans();
                     db.Insert(dm_AccountdetailEntities);
                     db.Update(calculateComissionEntities);

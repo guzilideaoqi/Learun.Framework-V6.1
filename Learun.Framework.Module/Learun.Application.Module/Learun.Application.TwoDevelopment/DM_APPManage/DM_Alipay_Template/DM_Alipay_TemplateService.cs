@@ -212,7 +212,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 string cacheKey = "AliPayTemplate" + appid;
                 IEnumerable<dm_alipay_templateEntity> dm_Alipay_TemplateEntities = redisCache.Read<IEnumerable<dm_alipay_templateEntity>>(cacheKey, 7);
-                if (dm_Alipay_TemplateEntities.Count() <= 0)
+                if (dm_Alipay_TemplateEntities.IsEmpty())
                 {
                     dm_Alipay_TemplateEntities = GetList("{\"appid\":\"" + appid + "\"}");
 

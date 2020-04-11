@@ -31,7 +31,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("USER_ID")]
-        public int user_id { get; set; }
+        public int? user_id { get; set; }
         /// <summary>
         /// 支付宝交易订单号
         /// </summary>
@@ -43,7 +43,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("TOTAL_AMOUNT")]
-        public decimal total_amount { get; set; }
+        public decimal? total_amount { get; set; }
         /// <summary>
         /// 支付宝交易状态
         /// </summary>

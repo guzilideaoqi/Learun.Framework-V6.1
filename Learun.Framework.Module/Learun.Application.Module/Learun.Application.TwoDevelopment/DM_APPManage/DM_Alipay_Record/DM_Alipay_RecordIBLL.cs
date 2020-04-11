@@ -49,5 +49,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void SaveEntity(int keyValue, dm_alipay_recordEntity entity);
         #endregion
 
+        #region 开通/升级代理
+        void OpenAgent(dm_alipay_recordEntity dm_Alipay_RecordEntity);
+        #endregion
+
     }
 }

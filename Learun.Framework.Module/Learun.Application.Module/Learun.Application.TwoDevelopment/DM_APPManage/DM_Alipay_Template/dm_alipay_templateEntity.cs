@@ -31,13 +31,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("GOODPRICE")]
-        public decimal? goodprice { get; set; }
+        public decimal goodprice { get; set; }
         /// <summary>
         /// 套餐优惠价
         /// </summary>
         /// <returns></returns>
         [Column("FINISHPRICE")]
-        public decimal? finishprice { get; set; }
+        public decimal finishprice { get; set; }
         /// <summary>
         /// 是否为活动状态  0否  1是
         /// </summary>
@@ -56,6 +56,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("UPDATETIME")]
         public DateTime? updatetime { get; set; }
+
+        /// <summary>
+        /// 平台ID
+        /// </summary>
+        [Column("APPID")]
+        public string appid { get; set; }
         #endregion
 
         #region 扩展操作

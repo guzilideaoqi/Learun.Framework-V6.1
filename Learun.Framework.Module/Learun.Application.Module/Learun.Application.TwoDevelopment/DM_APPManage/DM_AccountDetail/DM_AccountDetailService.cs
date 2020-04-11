@@ -39,10 +39,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		{
 			try
 			{
+                var param = queryJson.ToJObject();
+
 				StringBuilder strSql = new StringBuilder();
 				strSql.Append("SELECT ");
 				strSql.Append(fieldSql);
-				strSql.Append(" FROM dm_accountdetail t ");
+				strSql.Append(" FROM dm_accountdetail t where 1=1");
+
+                if (!param["type"].IsEmpty())
+                {
+                    strSql.Append(" and type='" + param["type"].ToString() + "'");
+                }
+
+                if (!param["user_id"].IsEmpty()) {
+                    strSql.Append(" and user_id='" + param["user_id"].ToString() + "'");
+                }
+
 				return BaseRepository("dm_data").FindList<dm_accountdetailEntity>(strSql.ToString(), pagination);
 			}
 			catch (Exception ex)

@@ -193,10 +193,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             IRepository db = null;
             try
             {
-                dm_pidEntity dm_PidEntity = this.BaseRepository("dm_data").FindEntity<dm_pidEntity>("select * from dm_pid where usestate=0 and type=2 limit 1",null);
+                dm_pidEntity dm_PidEntity = this.BaseRepository("dm_data").FindEntity<dm_pidEntity>("select * from dm_pid where usestate=0 and type=2 limit 1", null);
                 if (dm_PidEntity == null)
                     throw new Exception("无可用京东PID，请联系客服!");
                 string site_id = dm_PidEntity.pids.Split('_')[1];
+                dm_UserEntity.Modify(dm_UserEntity.id);
                 dm_UserEntity.jd_site = site_id;
                 dm_UserEntity.jd_pid = dm_PidEntity.pid;
 
@@ -238,10 +239,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             IRepository db = null;
             try
             {
-                dm_pidEntity dm_PidEntity = this.BaseRepository("dm_data").FindEntity<dm_pidEntity>("select * from dm_pid where usestate=0 and type=3 limit 1",null);
+                dm_pidEntity dm_PidEntity = this.BaseRepository("dm_data").FindEntity<dm_pidEntity>("select * from dm_pid where usestate=0 and type=3 limit 1", null);
                 if (dm_PidEntity == null)
                     throw new Exception("无可用拼多多PID，请联系客服!");
                 dm_UserEntity.pdd_pid = dm_PidEntity.pid;
+                dm_UserEntity.Modify(dm_UserEntity.id);
 
                 dm_PidEntity.user_id = dm_UserEntity.id;
                 dm_PidEntity.usestate = 1;

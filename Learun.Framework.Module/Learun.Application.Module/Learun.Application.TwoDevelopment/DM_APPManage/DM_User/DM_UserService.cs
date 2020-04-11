@@ -450,7 +450,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="user_id"></param>
         /// <returns></returns>
-        public IEnumerable<dm_userEntity> GetParentUser(int user_id)
+        public IEnumerable<dm_userEntity> GetParentUser(int? user_id)
         {
             try
             {
@@ -493,7 +493,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                return BaseRepository("dm_data").FindEntity<dm_userEntity>("select * from dm_user where partners=" + partnersid + " and partnersstatus=1");
+                string querySql = "select * from dm_user where partners=" + partnersid + " and partnersstatus=1";
+                return BaseRepository("dm_data").FindEntity<dm_userEntity>(querySql,null);
             }
             catch (Exception ex)
             {

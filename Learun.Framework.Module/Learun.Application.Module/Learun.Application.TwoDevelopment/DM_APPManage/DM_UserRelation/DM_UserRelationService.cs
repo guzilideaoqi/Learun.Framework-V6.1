@@ -132,7 +132,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// 向上获取关系
         /// </summary>
-        public IEnumerable<dm_user_relationEntity> GetParentRelation(int user_id)
+        public IEnumerable<dm_user_relationEntity> GetParentRelation(int? user_id)
         {
             try
             {

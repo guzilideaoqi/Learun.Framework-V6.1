@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -20,6 +21,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private DM_CertificaRecordIBLL dm_CertificaRecordIBLL = new DM_CertificaRecordBLL();
 
         private DM_MessageRecordIBLL dm_MessageRecordIBLL = new DM_MessageRecordBLL();
+
+        private DM_AccountDetailIBLL dm_AccountDetailIBLL = new DM_AccountDetailBLL();
+
+        private DM_IntergralDetailIBLL dm_IntegralDetailIBLL = new DM_IntergralDetailBLL();
 
 
         #region 用户名密码登陆
@@ -70,6 +75,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     return Fail("验证码不能为空!");
                 }
+                dm_UserEntity.appid = appid;
                 return Success("注册成功!", dm_userIBLL.Register(dm_UserEntity, ParentInviteCode, appid));
             }
             catch (Exception ex)
@@ -425,6 +431,33 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 绑定支付宝
+        /// <summary>
+        /// 绑定支付宝
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="dm_UserEntity"></param>
+        /// <returns></returns>
+        public ActionResult UpdateZFBInfo(int user_id, dm_userEntity dm_UserEntity)
+        {
+            try
+            {
+                if (dm_UserEntity.zfb.IsEmpty())
+                    return Fail("支付宝账号不能为空!");
+                if (dm_UserEntity.realname.IsEmpty())
+                    return Fail("真实姓名不能为空!");
+
+                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+
+                return Success("修改成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 身份证正反面上传专用
 
         string UpdateCardImage(HttpPostedFile cardInfo)
@@ -458,10 +491,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 IEnumerable<dm_messagerecordEntity> messageRecordList = redisCache.Read<IEnumerable<dm_messagerecordEntity>>(cacheKey, 7);
                 if (messageRecordList == null)
                 {
-                    messageRecordList = dm_MessageRecordIBLL.GetPageList(new Pagination { rows = pageSize, page = pageNo, sidx = "createtime", sord = "desc" }, "{\"user_id\":\""+ user_id + "\"}");
+                    messageRecordList = dm_MessageRecordIBLL.GetPageList(new Pagination { rows = pageSize, page = pageNo, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + user_id + "\"}");
                     if (messageRecordList != null)
                     {
-                        redisCache.Write<IEnumerable<dm_messagerecordEntity>>(cacheKey, messageRecordList,DateTime.Now.AddMinutes(10) ,7);
+                        redisCache.Write<IEnumerable<dm_messagerecordEntity>>(cacheKey, messageRecordList, DateTime.Now.AddMinutes(10), 7);
                     }
                 }
 
@@ -517,6 +550,99 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
         #endregion
+
+        #region 获取明细信息
+        /// <summary>
+        /// 账户余额明细
+        /// </summary>
+        /// <param name="user_id">用户ID</param>
+        /// <param name="PageNo">页码</param>
+        /// <param name="PageSize">每页显示数量</param>
+        /// <param name="MessageType">消息类型 0全部 1订单佣金  2一级粉丝订单  3二级粉丝订单  4团队订单  5下级团队订单  6下级开通代理  7下下级开通代理 8团队成员  9下级团队成员</param>
+        /// <returns></returns>
+        public ActionResult GetAccountDetailList(int user_id, int pageNo = 1, int pageSize = 20, int MessageType = 0)
+        {
+            try
+            {
+                if (user_id.IsEmpty())
+                {
+                    return Fail("用户id不能为空!");
+                }
+
+                string cacheKey = Md5Helper.Hash("AccountDetail" + user_id + pageNo + pageSize + MessageType);
+
+                IEnumerable<dm_accountdetailEntity> accountDetailList = redisCache.Read<IEnumerable<dm_accountdetailEntity>>(cacheKey, 7);
+
+                if (accountDetailList == null)
+                {
+                    string queryJson = "{\"user_id\":\"" + user_id + "\"";
+                    if (MessageType == 0)
+                        queryJson += "}";
+                    else
+                        queryJson += ",\"type\":\"" + MessageType + "\"}";
+
+                    accountDetailList = dm_AccountDetailIBLL.GetPageList(new Pagination { rows = pageSize, page = pageNo, sidx = "createtime", sord = "desc" }, queryJson);
+
+                    if (accountDetailList.Count() > 0)
+                    {
+                        redisCache.Write<IEnumerable<dm_accountdetailEntity>>(cacheKey, accountDetailList, DateTime.Now.AddMinutes(10), 7);
+                    }
+                }
+
+                return SuccessList("账户明细获取成功!", accountDetailList);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 获取积分明细
+        /// </summary>
+        /// <param name="user_id">用户ID</param>
+        /// <param name="pageNo">页码</param>
+        /// <param name="pageSize">每页显示数量</param>
+        /// <param name="MessageType">类型  1新用户注册  2签到  3邀请好友奖励</param>
+        /// <returns></returns>
+        public ActionResult GetIntegralDetailList(int user_id, int pageNo = 1, int pageSize = 20, int MessageType = 0)
+        {
+            try
+            {
+                if (user_id.IsEmpty())
+                {
+                    return Fail("用户id不能为空!");
+                }
+
+                string cacheKey = Md5Helper.Hash("IntegralDetail" + user_id + pageNo + pageSize + MessageType);
+
+                IEnumerable<dm_intergraldetailEntity> intergralchangegoodList = redisCache.Read<IEnumerable<dm_intergraldetailEntity>>(cacheKey, 7);
+
+                if (intergralchangegoodList == null)
+                {
+                    string queryJson = "{\"user_id\":\"" + user_id + "\"";
+                    if (MessageType == 0)
+                        queryJson += "}";
+                    else
+                        queryJson += ",\"type\":\"" + MessageType + "\"}";
+
+                    intergralchangegoodList = dm_IntegralDetailIBLL.GetPageList(new Pagination { rows = pageSize, page = pageNo, sidx = "createtime", sord = "desc" }, queryJson);
+
+                    if (intergralchangegoodList.Count() > 0)
+                    {
+                        redisCache.Write<IEnumerable<dm_intergraldetailEntity>>(cacheKey, intergralchangegoodList, DateTime.Now.AddMinutes(10), 7);
+                    }
+                }
+
+                return SuccessList("账户明细获取成功!", intergralchangegoodList);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
 
         #region 申请合伙人
         public ActionResult ApplyPartners()

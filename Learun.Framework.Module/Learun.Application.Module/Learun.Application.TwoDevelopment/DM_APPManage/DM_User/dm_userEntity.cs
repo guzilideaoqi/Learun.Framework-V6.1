@@ -20,11 +20,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 真实姓名
         /// </summary>
 		[Column("REALNAME")]
-		public string realname
-		{
-			get;
-			set;
-		}
+        public string realname
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 支付宝账号
+        /// </summary>
+        [Column("ZFB")]
+        public string zfb {
+            get;set;
+        }
         /// <summary>
         /// 身份证号
         /// </summary>
