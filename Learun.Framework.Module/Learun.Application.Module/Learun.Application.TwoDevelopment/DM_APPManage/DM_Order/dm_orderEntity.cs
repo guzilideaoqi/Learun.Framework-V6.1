@@ -39,7 +39,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			get;
 			set;
 		}
-
+        /// <summary>
+        /// 大平台类型:1=淘宝和天猫,3=京东,4=拼多多
+        /// </summary>
 		[Column("TYPE_BIG")]
 		public int? type_big
 		{
@@ -277,7 +279,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			get;
 			set;
 		}
-
+        /// <summary>
+        /// 本站订单归类状态: 0=未处理,1=付款,2=收货未结,3=失效,4=结算至余额
+        /// </summary>
 		[Column("ORDER_TYPE_NEW")]
 		public int? order_type_new
 		{

@@ -26,7 +26,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                ExcuteSubCommission("e2b3ec3a-310b-4ab8-aa81-b563ac8f3006");
+                //ExcuteSubCommission("e2b3ec3a-310b-4ab8-aa81-b563ac8f3006");
                 StringBuilder strSql = new StringBuilder();
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
@@ -47,7 +47,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                ExcuteSubCommission("e2b3ec3a-310b-4ab8-aa81-b563ac8f3006");
+                //ExcuteSubCommission("e2b3ec3a-310b-4ab8-aa81-b563ac8f3006");
                 StringBuilder strSql = new StringBuilder();
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
@@ -121,6 +121,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        #region 订单结算
         public void ExcuteSubCommission(string appid)
         {
             IRepository db = null;
@@ -291,5 +292,83 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 user_id = user_id
             };
         }
+        #endregion
+
+        #region 绑定订单
+        /// <summary>
+        /// 绑定订单
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="OrderSn"></param>
+        public void BindOrder(int user_id, string appid, string OrderSn)
+        {
+            try
+            {
+                dm_orderEntity dm_OrderEntity = BaseRepository("dm_data").FindEntity<dm_orderEntity>(t => t.sub_order_sn == OrderSn && t.appid == appid);
+                if (dm_OrderEntity.IsEmpty())
+                    throw new Exception("该订单未同步到，请稍后重试!");
+                else if (!dm_OrderEntity.userid.IsEmpty())
+                {
+                    if (dm_OrderEntity.userid == user_id)
+                        throw new Exception("该订单已在您的账号下，无需重新绑定!");
+                    else
+                        throw new Exception("该订单已被其他人绑定,请勿将订单号泄露给他人!");
+                }
+                else
+                {
+                    dm_OrderEntity.userid = user_id;
+                    BaseRepository("dm_data").Update(dm_OrderEntity);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取我的订单
+        /// <summary>
+        /// 获取我的订单
+        /// </summary>
+        /// <param name="user_id">用户id</param>
+        /// <param name="plaformType">大平台类型:1=淘宝和天猫,3=京东,4=拼多多</param>
+        /// <param name="status">本站订单归类状态: 0=未处理,1=付款,2=收货未结,3=失效,4=结算至余额</param>
+        /// <param name="pagination"></param>
+        /// <returns></returns>
+        public IEnumerable<dm_orderEntity> GetMyOrder(int user_id, int plaformType, int status, Pagination pagination)
+        {
+            try
+            {
+                StringBuilder strSql = new StringBuilder();
+                strSql.Append("SELECT ");
+                strSql.Append(fieldSql);
+                strSql.Append(" FROM dm_order t where userid=" + user_id);
+                strSql.Append(" and type_big=" + plaformType);
+                strSql.Append(" and order_type_new=" + status);
+                IEnumerable<dm_orderEntity> dm_OrderEntities = BaseRepository("dm_data").FindList<dm_orderEntity>(strSql.ToString(), pagination);
+
+                return dm_OrderEntities;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取我的订单总数量
+        public int GetMyOrderCount(int user_id) {
+            return int.Parse(BaseRepository("dm_data").FindObject("select * from dm_order where userid=" + user_id).ToString());
+        }
+        #endregion
     }
 }

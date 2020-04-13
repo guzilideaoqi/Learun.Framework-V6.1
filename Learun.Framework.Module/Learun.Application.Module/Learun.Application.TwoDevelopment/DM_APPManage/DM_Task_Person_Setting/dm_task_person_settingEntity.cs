@@ -86,6 +86,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("REWARDCOUNT")]
         public decimal? rewardcount { get; set; }
+        [Column("FINISHCOUNT")]
+        public int finishcount { get; set; }
         #endregion
 
         #region 扩展操作

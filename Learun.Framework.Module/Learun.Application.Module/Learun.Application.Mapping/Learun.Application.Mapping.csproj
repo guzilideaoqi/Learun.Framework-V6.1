@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DM_APPManage\dm_orderMap.cs" />
     <Compile Include="LR_App\FunctionMap.cs" />
     <Compile Include="LR_App\FunctionSchemeMap.cs" />
     <Compile Include="LR_Authorize\AuthorizeMap.cs" />

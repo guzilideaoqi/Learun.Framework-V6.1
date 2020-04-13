@@ -100,6 +100,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			get;
 			set;
 		}
+
+        /// <summary>
+        /// 用户头像
+        /// </summary>
+        [Column("HEADPIC")]
+        public string headpic { get; set; }
+
         /// <summary>
         /// 账户余额
         /// </summary>

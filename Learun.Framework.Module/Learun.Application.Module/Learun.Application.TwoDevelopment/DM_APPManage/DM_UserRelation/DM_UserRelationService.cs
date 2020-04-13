@@ -3,6 +3,7 @@ using Learun.Util;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -167,6 +168,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
                 throw ExceptionEx.ThrowServiceException(ex);
             }
+        }
+        #endregion
+
+        #region 获取直属下级
+        public int GetMyChildCount(int user_id)
+        {
+            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where parent_id="+user_id).ToString());
+        }
+        #endregion
+
+        #region 获取二级粉丝
+        public int GetMySonChildCount(int user_id)
+        {
+            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where parent_id in(select user_id from dm_user_relation where parent_id="+user_id+")").ToString());
+        }
+        #endregion
+
+        #region 获取团队粉丝
+        public int GetPartnersChildCount(int partners_id)
+        {
+            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where partners_id="+ partners_id).ToString());
         }
         #endregion
     }

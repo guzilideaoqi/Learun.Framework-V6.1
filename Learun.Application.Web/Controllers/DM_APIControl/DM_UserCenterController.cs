@@ -26,6 +26,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_IntergralDetailIBLL dm_IntegralDetailIBLL = new DM_IntergralDetailBLL();
 
+        private DM_OrderIBLL dm_OrderIBLL = new DM_OrderBLL();
+
 
         #region 用户名密码登陆
 
@@ -458,6 +460,56 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 修改用户昵称
+        public ActionResult UpdateNickName(int user_id, dm_userEntity dm_UserEntity)
+        {
+            try
+            {
+                if (dm_UserEntity.nickname.IsEmpty())
+                    return Fail("用户昵称不能为空!");
+
+                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                return Success("修改成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 修改用户头像
+        public ActionResult UploadHeadPic(int user_id, dm_userEntity dm_UserEntity)
+        {
+            try
+            {
+                #region 头像上传
+                HttpPostedFile headpic_file = System.Web.HttpContext.Current.Request.Files["headpic"];
+                if (headpic_file.ContentLength == 0 || string.IsNullOrEmpty(headpic_file.FileName))
+                {
+                    return HttpNotFound();
+                }
+                #endregion
+
+                string FileEextension = Path.GetExtension(headpic_file.FileName);
+                string virtualPath = $"/Resource/HeadPic/{Guid.NewGuid().ToString()}{FileEextension}";
+                string fullFileName = base.Server.MapPath("~" + virtualPath);
+                string path = Path.GetDirectoryName(fullFileName);
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                headpic_file.SaveAs(fullFileName);
+                dm_UserEntity.headpic = virtualPath;
+
+                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                return Success("修改成功");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 身份证正反面上传专用
 
         string UpdateCardImage(HttpPostedFile cardInfo)
@@ -648,6 +700,55 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         public ActionResult ApplyPartners()
         {
             return View();
+        }
+        #endregion
+
+        #region 找回订单
+        public ActionResult BindOrder(int user_id, string OrderSn)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                if (user_id.IsEmpty())
+                {
+                    return Fail("用户id不能为空!");
+                }
+                dm_OrderIBLL.BindOrder(user_id, appid, OrderSn);
+                return Success("订单绑定成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 我的订单
+        public ActionResult GetMyOrder(int user_id,int PlaformType=1,int Status=0,int PageNo=1,int PageSize=20)
+        {
+            try
+            {
+                if (user_id.IsEmpty())
+                {
+                    return Fail("用户id不能为空!");
+                }
+
+                string cacheKey = Md5Helper.Hash("OrderList" + user_id + PlaformType + Status + PageNo + PageSize);
+                IEnumerable<dm_orderEntity> dm_OrderEntities = redisCache.Read<IEnumerable<dm_orderEntity>>(cacheKey, 7);
+                if (dm_OrderEntities == null) {
+                    dm_OrderEntities = dm_OrderIBLL.GetMyOrder(user_id, PlaformType, Status, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
+
+                    if (dm_OrderEntities.Count() > 0) {
+                        redisCache.Write(cacheKey, dm_OrderEntities, DateTime.Now.AddMinutes(10), 7);
+                    }
+                }
+
+                return SuccessList("获取成功!", dm_OrderEntities);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
         #endregion
 

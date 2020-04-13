@@ -21,6 +21,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private DM_Alipay_TemplateIBLL dM_Alipay_TemplateIBLL = new DM_Alipay_TemplateBLL();
         private DM_Alipay_RecordIBLL dM_Alipay_RecordIBLL = new DM_Alipay_RecordBLL();
 
+        #region 获取代理套餐
+        public ActionResult GetTemplateList()
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                return SuccessList("获取成功", dM_Alipay_TemplateIBLL.GetListByCache(appid));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
 
         #region 生成支付参数
         /// <summary>
@@ -168,7 +182,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
 
                 string resultContent = JsonConvert.SerializeObject(sArray);
-                log.Error(resultContent+ "\r\n");
+                log.Error(resultContent + "\r\n");
 
                 if (requestItem.Contains("trade_status"))
                     trade_status = sArray["trade_status"];//获取订单状态
