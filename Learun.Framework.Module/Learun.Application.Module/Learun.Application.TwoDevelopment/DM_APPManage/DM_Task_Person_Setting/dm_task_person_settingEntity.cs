@@ -86,8 +86,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("REWARDCOUNT")]
         public decimal? rewardcount { get; set; }
+        /// <summary>
+        /// 完成数量
+        /// </summary>
         [Column("FINISHCOUNT")]
         public int finishcount { get; set; }
+        /// <summary>
+        /// 完成状态 0未完成  1已完成待领取  2已领取
+        /// </summary>
+        [Column("FINISHSTATUS")]
+        public int finishstatus { get; set; }
         #endregion
 
         #region 扩展操作

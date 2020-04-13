@@ -155,6 +155,10 @@
     <Compile Include="DM_APPManage\DM_Task_Person_Setting\DM_Task_Person_SettingService.cs" />
     <Compile Include="DM_APPManage\DM_Task_Person_Setting\DM_Task_Person_SettingIBLL.cs" />
     <Compile Include="DM_APPManage\DM_Task_Person_Setting\DM_Task_Person_SettingBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Person_Record\dm_task_person_recordEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Person_Record\DM_Task_Person_RecordService.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Person_Record\DM_Task_Person_RecordIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Person_Record\DM_Task_Person_RecordBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

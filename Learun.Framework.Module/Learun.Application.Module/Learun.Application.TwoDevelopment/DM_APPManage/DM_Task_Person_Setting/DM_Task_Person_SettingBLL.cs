@@ -21,7 +21,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_task_person_settingEntity> GetList( string queryJson )
+        public IEnumerable<dm_task_person_settingEntity> GetList(string queryJson)
         {
             try
             {
@@ -142,5 +142,109 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 获取个人任务进度
+        /// <summary>
+        /// 获取个人任务进度
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        public IEnumerable<dm_task_person_settingEntity> GetPersonProcess(int user_id, string appid)
+        {
+            try
+            {
+                return dM_Task_Person_SettingService.GetPersonProcess(user_id, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 领取任务
+        /// <summary>
+        /// 领取任务
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="task_id"></param>
+        public void ReceiveAwards(int user_id, int? task_id)
+        {
+            try
+            {
+                dM_Task_Person_SettingService.ReceiveAwards(user_id, task_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 获取升级合伙人任务
+        /// <summary>
+        /// 获取合伙人任务
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        public IEnumerable<dm_task_person_settingEntity> GetPartnersProcess(int user_id, string appid)
+        {
+            try
+            {
+                return dM_Task_Person_SettingService.GetPartnersProcess(user_id, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 申请成为合伙人
+        /// <summary>
+        /// 申请成为合伙人
+        /// </summary>
+        /// <param name="user_id"></param>
+        public void ApplyPartners(int user_id, string appid)
+        {
+            try
+            {
+                dM_Task_Person_SettingService.ApplyPartners(user_id, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

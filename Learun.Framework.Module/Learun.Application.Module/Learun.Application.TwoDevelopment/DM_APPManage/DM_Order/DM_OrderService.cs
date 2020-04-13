@@ -367,7 +367,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #region 获取我的订单总数量
         public int GetMyOrderCount(int user_id) {
-            return int.Parse(BaseRepository("dm_data").FindObject("select * from dm_order where userid=" + user_id).ToString());
+            return int.Parse(BaseRepository("dm_data").FindObject("select count(id) from dm_order where userid=" + user_id).ToString());
         }
         #endregion
     }

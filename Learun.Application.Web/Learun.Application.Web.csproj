@@ -273,6 +273,7 @@
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Alipay_RecordController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Alipay_TemplateController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_Person_SettingController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_Person_RecordController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -2242,6 +2243,10 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Setting\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Setting\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Setting\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Record\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Record\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Record\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Record\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

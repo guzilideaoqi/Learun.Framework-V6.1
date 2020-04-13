@@ -24,6 +24,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         private DM_IntergralDetailService dm_IntergralDetailService = new DM_IntergralDetailService();
         private DM_UserRelationService dm_UserRelationService = new DM_UserRelationService();
         private DM_OrderService dm_OrderService = new DM_OrderService();
+        private DM_Task_Person_RecordService dm_Task_Person_RecordService = new DM_Task_Person_RecordService();
+        private DM_UserService dm_UserService = new DM_UserService();
+        private DM_APP_Partners_RecordService dm_APP_Partners_RecordService = new DM_APP_Partners_RecordService();
+
         #region 构造函数和属性
 
         private string fieldSql;
@@ -137,7 +141,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public dm_task_person_settingEntity GetEntity(int keyValue)
+        public dm_task_person_settingEntity GetEntity(int? keyValue)
         {
             try
             {
@@ -234,15 +238,173 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         //获取今日是否签到
                         dm_intergraldetailEntity dm_IntergraldetailEntity = dm_IntergralDetailService.GetLastSignData(user_id);
                         item.finishcount = dm_IntergraldetailEntity.createtime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") ? 1 : 0;
+                        item.finishstatus = item.finishcount == 1 ? 2 : 0;
                     }
                     else if (item.s_type == 2)
                     {//邀请粉丝任务
                         item.finishcount = dm_UserRelationService.GetMyChildCount(user_id);
+                        item.finishstatus = GetFinishStatus(item.finishcount, item.needcount, user_id, item.id);
                     }
                     else if (item.s_type == 4)
                     {//购物任务
                         item.finishcount = dm_OrderService.GetMyOrderCount(user_id);
+                        item.finishstatus = GetFinishStatus(item.finishcount, item.needcount, user_id, item.id);
                     }
+
+                }
+                return person_SettingEntities;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        int GetFinishStatus(int currentCount, int? needCount, int user_id, int? task_id)
+        {
+            if (currentCount < needCount)
+                return 0;
+            else
+            {
+                dm_task_person_recordEntity dm_Task_Person_RecordEntity = dm_Task_Person_RecordService.GetMyPersonRecord(user_id, task_id);
+                if (!dm_Task_Person_RecordEntity.IsEmpty())
+                {
+                    return dm_Task_Person_RecordEntity.status == 1 ? 2 : 1;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+        }
+        #endregion
+
+        #region 领取任务
+        public void ReceiveAwards(int user_id, int? task_id)
+        {
+            IRepository db = null;
+            try
+            {
+
+
+                #region 获取任务记录
+                dm_task_person_settingEntity dm_Task_Person_SettingEntity = GetEntity(task_id);
+                #endregion
+                if (dm_Task_Person_SettingEntity.s_type == 1)
+                {
+                    dm_UserService.SignIn(user_id);
+                }
+                else
+                {
+                    dm_task_person_recordEntity dm_Task_Person_RecordEntity = dm_Task_Person_RecordService.GetMyPersonRecord(user_id, task_id);
+                    if (dm_Task_Person_RecordEntity.IsEmpty())
+                    {
+                        #region 增加任务领取记录
+                        dm_Task_Person_RecordEntity = new dm_task_person_recordEntity();
+                        dm_Task_Person_RecordEntity.user_id = user_id;
+                        dm_Task_Person_RecordEntity.task_id = task_id;
+                        dm_Task_Person_RecordEntity.createtime = DateTime.Now;
+                        dm_Task_Person_RecordEntity.status = 1;
+                        #endregion
+
+
+
+                        dm_userEntity dm_UserEntity = dm_UserService.GetEntityByCache(user_id);
+
+                        db = BaseRepository("dm_data").BeginTrans();
+                        //积分任务
+                        if (dm_Task_Person_SettingEntity.rewardtype == 0)
+                        {
+                            #region 增加积分变更明细
+                            int stepvalue = int.Parse(dm_Task_Person_SettingEntity.rewardcount.ToString());//积分无小数
+                            dm_intergraldetailEntity dm_IntergraldetailEntity = new dm_intergraldetailEntity();
+                            dm_IntergraldetailEntity.type = 4;
+                            dm_IntergraldetailEntity.user_id = user_id;
+                            dm_IntergraldetailEntity.createtime = DateTime.Now;
+                            dm_IntergraldetailEntity.currentvalue = dm_UserEntity.integral + stepvalue;
+                            dm_IntergraldetailEntity.stepvalue = stepvalue;
+                            dm_IntergraldetailEntity.title = dm_Task_Person_SettingEntity.title;
+                            dm_IntergraldetailEntity.remark = dm_Task_Person_SettingEntity.remark;
+                            dm_IntergraldetailEntity.Create();
+
+                            dm_UserEntity.integral = dm_IntergraldetailEntity.currentvalue;
+                            #endregion
+                            db.Insert(dm_UserEntity);
+                        }
+                        else
+                        { //余额任务
+                            #region 增加余额变更明细
+                            dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity();
+                            dm_AccountdetailEntity.user_id = user_id;
+                            dm_AccountdetailEntity.type = 10;
+                            dm_AccountdetailEntity.createtime = DateTime.Now;
+                            dm_AccountdetailEntity.currentvalue = dm_UserEntity.accountprice + dm_Task_Person_SettingEntity.rewardcount;
+                            dm_AccountdetailEntity.stepvalue = dm_Task_Person_SettingEntity.rewardcount;
+                            dm_AccountdetailEntity.title = dm_Task_Person_SettingEntity.title;
+                            dm_AccountdetailEntity.remark = dm_Task_Person_SettingEntity.remark;
+                            dm_AccountdetailEntity.Create();
+                            #endregion
+
+                            dm_UserEntity.accountprice = dm_AccountdetailEntity.currentvalue;
+                            db.Insert(dm_AccountdetailEntity);
+                        }
+
+                        dm_UserEntity.Modify(user_id);
+                        db.Update(dm_UserEntity);
+                        db.Insert(dm_Task_Person_RecordEntity);
+
+                        db.Commit();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
+
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 获取升级合伙人任务
+        /// <summary>
+        /// 获取合伙人任务
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        public IEnumerable<dm_task_person_settingEntity> GetPartnersProcess(int user_id, string appid)
+        {
+            try
+            {
+                IEnumerable<dm_task_person_settingEntity> person_SettingEntities = GetListByCache(appid, 1);
+
+                foreach (var item in person_SettingEntities)
+                {
+                    if (item.s_type == 3)
+                    {//邀请粉丝任务
+                        item.finishcount = dm_UserRelationService.GetMyChildCount(user_id);
+                    }
+                    else if (item.s_type == 5)
+                    {//购物任务
+                        item.finishcount = dm_OrderService.GetMyOrderCount(user_id);
+                    }
+                    item.finishstatus = item.finishcount >= item.needcount ? 1 : 0;
                 }
                 return person_SettingEntities;
             }
@@ -260,17 +422,45 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
-        #region 领取任务
-
-        #endregion
-
-        #region 获取升级合伙人任务
-
-        #endregion
-
         #region 申请成为合伙人
+        /// <summary>
+        /// 申请成为合伙人
+        /// </summary>
+        /// <param name="user_id"></param>
+        public void ApplyPartners(int user_id, string appid)
+        {
+            IEnumerable<dm_task_person_settingEntity> person_SettingEntities = GetListByCache(appid, 1);
 
+            foreach (var item in person_SettingEntities)
+            {
+                if (item.s_type == 3)
+                {//邀请粉丝任务
+                    item.finishcount = dm_UserRelationService.GetMyChildCount(user_id);
+                    if (item.finishcount < item.needcount)
+                        throw new Exception("当前条件不满足!");
+                }
+                else if (item.s_type == 5)
+                {//购物任务
+                    item.finishcount = dm_OrderService.GetMyOrderCount(user_id);
+                    if (item.finishcount < item.needcount)
+                        throw new Exception("当前条件不满足!");
+                }
+            }
+
+            dm_apply_partners_recordEntity dm_Apply_Partners_RecordEntity = dm_APP_Partners_RecordService.GetEntityByUserID(user_id);
+            if (dm_Apply_Partners_RecordEntity.IsEmpty())
+            {
+                dm_Apply_Partners_RecordEntity = new dm_apply_partners_recordEntity();
+                dm_Apply_Partners_RecordEntity.user_id = user_id;
+                dm_Apply_Partners_RecordEntity.appid = appid;
+                dm_Apply_Partners_RecordEntity.createtime = DateTime.Now;
+
+                dm_APP_Partners_RecordService.SaveEntity(0, dm_Apply_Partners_RecordEntity);
+            }
+            else {
+                throw new Exception("当前申请记录正在审核中,请勿重复提交!");
+            }
+        }
         #endregion
-
     }
 }

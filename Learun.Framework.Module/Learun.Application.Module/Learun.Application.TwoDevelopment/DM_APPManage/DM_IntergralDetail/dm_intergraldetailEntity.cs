@@ -41,6 +41,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
+		/// <summary>
+		/// 类型  1新用户注册  2签到  3邀请好友奖励 4进度任务
+		/// </summary>
 		[Column("TYPE")]
 		public int? type
 		{
