@@ -1,5 +1,6 @@
 using Learun.Util;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -28,6 +29,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="user_id"></param>
         /// <returns></returns>
         IEnumerable<dm_user_relationEntity> GetChildRelation(int user_id);
+        #endregion
+
+        #region 获取直属粉丝详情
+        DataTable GetMyChildDetail(int user_id, int PageNo, int PageSize);
+        #endregion
+
+        #region 获取二级粉丝详情
+        DataTable GetMySonChildDetail(int user_id, int PageNo, int PageSize);
+        #endregion
+
+        #region 获取团队粉丝详情
+        DataTable GetPartnersChildDetail(int? partners_id, int PageNo, int PageSize);
         #endregion
     }
 }

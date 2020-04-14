@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 
 namespace Learun.Cache.Base
 {
@@ -38,6 +39,10 @@ namespace Learun.Cache.Base
         /// <param name="cacheKey">键</param>
         /// <param name="expireTime">到期时间</param>
         void Write<T>(string cacheKey, T value, TimeSpan timeSpan, long dbId = 0) where T : class;
+
+        void Write(string cacheKey, DataTable dataTable, DateTime expireTime, long dbId);
+
+        DataTable Read(string cacheKey, long dbId);
         /// <summary>
         /// 移除指定数据缓存
         /// </summary>

@@ -1,6 +1,7 @@
 using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -119,6 +120,58 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 return dM_UserRelationService.GetChildRelation(user_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
+
+        #region 获取直属粉丝详情
+        public DataTable GetMyChildDetail(int user_id, int PageNo, int PageSize) {
+            try
+            {
+                return dM_UserRelationService.GetMyChildDetail(user_id, PageNo, PageSize);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取二级粉丝详情
+        public DataTable GetMySonChildDetail(int user_id, int PageNo, int PageSize) {
+            try
+            {
+                return dM_UserRelationService.GetMySonChildDetail(user_id, PageNo, PageSize);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取团队粉丝详情
+        public DataTable GetPartnersChildDetail(int? partners_id, int PageNo, int PageSize) {
+            try
+            {
+                return dM_UserRelationService.GetPartnersChildDetail(partners_id, PageNo, PageSize);
             }
             catch (Exception ex)
             {

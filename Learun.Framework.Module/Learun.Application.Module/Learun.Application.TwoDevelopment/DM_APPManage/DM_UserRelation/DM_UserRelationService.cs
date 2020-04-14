@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -174,21 +175,99 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 获取直属下级
         public int GetMyChildCount(int user_id)
         {
-            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where parent_id="+user_id).ToString());
+            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where parent_id=" + user_id).ToString());
         }
         #endregion
 
         #region 获取二级粉丝
         public int GetMySonChildCount(int user_id)
         {
-            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where parent_id in(select user_id from dm_user_relation where parent_id="+user_id+")").ToString());
+            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where parent_id in(select user_id from dm_user_relation where parent_id=" + user_id + ")").ToString());
         }
         #endregion
 
         #region 获取团队粉丝
         public int GetPartnersChildCount(int partners_id)
         {
-            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where partners_id="+ partners_id).ToString());
+            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where partners_id=" + partners_id).ToString());
+        }
+        #endregion
+
+        #region 获取我的直属粉丝详情
+        /// <summary>
+        /// 获取我的直属粉丝详情
+        /// </summary>
+        /// <param name="user_id">用户ID</param>
+        /// <param name="PageNo">页码</param>
+        /// <param name="PageSize">每页显示数量</param>
+        /// <returns></returns>
+        public DataTable GetMyChildDetail(int user_id, int PageNo, int PageSize)
+        {
+            try
+            {
+                string queryChildSql = "select u.nickname,u.headpic,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.parent_id=" + user_id;
+                return BaseRepository("dm_data").FindTable(queryChildSql, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取我的二级粉丝详情
+        /// <summary>
+        /// 获取二级粉丝
+        /// </summary>
+        /// <param name="user_id">用户ID</param>
+        /// <param name="PageNo">页码</param>
+        /// <param name="PageSize">每页显示数量</param>
+        /// <returns></returns>
+        public DataTable GetMySonChildDetail(int user_id, int PageNo, int PageSize)
+        {
+            try
+            {
+                string querySonChildSql = "select u.nickname,u.headpic,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.parent_id in(select user_id from dm_user_relation where parent_id=" + user_id + ")";
+                return BaseRepository("dm_data").FindTable(querySonChildSql, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取我的团队粉丝详情
+        /// <summary>
+        /// 获取我的团队粉丝详情
+        /// </summary>
+        /// <param name="partners_id">合伙人ID</param>
+        /// <param name="PageNo">页码</param>
+        /// <param name="PageSize">每页显示数量</param>
+        /// <returns></returns>
+        public DataTable GetPartnersChildDetail(int? partners_id, int PageNo, int PageSize)
+        {
+            try
+            {
+                string queryPartnersChildSql = "select u.nickname,u.headpic,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.partners_id=" + partners_id;
+                return BaseRepository("dm_data").FindTable(queryPartnersChildSql, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
         }
         #endregion
     }

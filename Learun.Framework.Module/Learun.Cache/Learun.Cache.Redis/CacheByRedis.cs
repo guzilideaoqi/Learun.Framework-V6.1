@@ -1,6 +1,7 @@
 ﻿using Learun.Cache.Base;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Cache.Redis
 {
@@ -52,6 +53,26 @@ namespace Learun.Cache.Redis
         {
             RedisCache.Set(cacheKey, value, timeSpan, dbId);
         }
+
+        public void Write(string cacheKey, DataTable dataTable, DateTime expireTime, long dbId)
+        {
+            System.Runtime.Serialization.IFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();//定义BinaryFormatter以序列化DataSet对象   
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();//创建内存流对象   
+            formatter.Serialize(ms, dataTable);//把DataSet对象序列化到内存流   
+            byte[] buffer = ms.ToArray();//把内存流对象写入字节数组   
+            ms.Close();//关闭内存流对象   
+            ms.Dispose();//释放资源  
+
+            RedisCache.Set(cacheKey, SetBytesFormT(dataTable), expireTime, dbId);
+        }
+
+        public DataTable Read(string cacheKey, long dbId)
+        {
+            byte[] item = RedisCache.Get<byte[]>(cacheKey, dbId);
+            if (item == null)
+                return null;
+            return GetObjFromBytes(item) as DataTable;
+        }
         /// <summary>
         /// 移除指定数据缓存
         /// </summary>
@@ -66,6 +87,30 @@ namespace Learun.Cache.Redis
         public void RemoveAll(long dbId = 0)
         {
             RedisCache.RemoveAll(dbId);
+        }
+        #endregion
+
+        #region redis中处理DataTable
+        public static byte[] SetBytesFormT(DataTable t)
+        {
+            System.Runtime.Serialization.IFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();//定义BinaryFormatter以序列化DataSet对象   
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();//创建内存流对象   
+            formatter.Serialize(ms, t);//把DataSet对象序列化到内存流   
+            byte[] buffer = ms.ToArray();//把内存流对象写入字节数组   
+            ms.Close();//关闭内存流对象   
+            ms.Dispose();//释放资源   
+            return buffer;
+        }
+
+        private static object GetObjFromBytes(byte[] buffer)
+        {
+            using (System.IO.MemoryStream stream = new System.IO.MemoryStream(buffer))
+            {
+                stream.Position = 0;
+                System.Runtime.Serialization.IFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                Object reobj = bf.Deserialize(stream);
+                return reobj;
+            }
         }
         #endregion
     }

@@ -9,6 +9,7 @@ using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Linq;
+using System.Data;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -29,6 +30,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private DM_OrderIBLL dm_OrderIBLL = new DM_OrderBLL();
 
         private DM_Task_Person_SettingIBLL dm_Task_Person_SettingIBLL = new DM_Task_Person_SettingBLL();
+
+        private DM_UserRelationIBLL dm_UserRelationIBLL = new DM_UserRelationBLL();
+
 
 
         #region 用户名密码登陆
@@ -750,7 +754,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 dm_Task_Person_SettingIBLL.ApplyPartners(user_id, appid);
 
-                return Success("申请成为合伙人成功,我们会在7个工作日审核,请耐心等待!",new { });
+                return Success("申请成为合伙人成功,我们会在7个工作日审核,请耐心等待!", new { });
             }
             catch (Exception ex)
             {
@@ -802,6 +806,118 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
 
                 return SuccessList("获取成功!", dm_OrderEntities);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 我的推广
+        /// <summary>
+        /// 获取推广图片
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        public ActionResult GetShareImage(int user_id)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                return SuccessList("获取成功", dm_userIBLL.GetShareImage(user_id, appid));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取粉丝--直属粉丝
+        public ActionResult GetChildDetail(int user_id, int PageNo = 1, int PageSize = 20)
+        {
+            try
+            {
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+                if (dm_UserEntity.IsEmpty())
+                    return Fail("用户信息异常!");
+                else
+                {
+                    string cacheKey = Md5Helper.Hash("ChildDetail" + user_id + PageNo + PageSize);
+                    DataTable dataTable = redisCache.Read(cacheKey, 7);
+                    if (dataTable == null)
+                    {
+                        dataTable = dm_UserRelationIBLL.GetMyChildDetail(user_id, PageNo, PageSize);
+                        if (dataTable.Rows.Count >= PageSize)
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(3), 7);
+                        else
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(5), 7);
+                    }
+                    return SuccessList("获取成功!", dataTable);
+                }
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取粉丝--二级粉丝
+        public ActionResult GetSonChildDetail(int user_id, int PageNo = 1, int PageSize = 20)
+        {
+            try
+            {
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+                if (dm_UserEntity.IsEmpty())
+                    return Fail("用户信息异常!");
+                else
+                {
+                    string cacheKey = Md5Helper.Hash("SonChildDetail" + user_id + PageNo + PageSize);
+                    DataTable dataTable = redisCache.Read(cacheKey, 7);
+                    if (dataTable == null)
+                    {
+                        dataTable = dm_UserRelationIBLL.GetMySonChildDetail(user_id, PageNo, PageSize);
+                        if (dataTable.Rows.Count >= PageSize)
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(3), 7);
+                        else
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(5), 7);
+                    }
+                    return SuccessList("获取成功!", dataTable);
+                }
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取粉丝--团队粉丝
+        public ActionResult GetPartnersChildDetail(int user_id, int PageNo = 1, int PageSize = 20)
+        {
+            try
+            {
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+                if (dm_UserEntity.IsEmpty())
+                    return Fail("用户信息异常!");
+                if (dm_UserEntity.partnersstatus == 0)
+                    return Fail("当前非合伙人，无法看团队粉丝");
+                else
+                {
+                    string cacheKey = Md5Helper.Hash("PartnersChildDetail" + user_id + PageNo + PageSize);
+                    DataTable dataTable = redisCache.Read(cacheKey, 7);
+                    if (dataTable == null)
+                    {
+                        dataTable = dm_UserRelationIBLL.GetPartnersChildDetail(dm_UserEntity.partners, PageNo, PageSize);
+                        if (dataTable.Rows.Count >= PageSize)
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(3), 7);
+                        else
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(5), 7);
+                    }
+                    return SuccessList("获取成功!", dataTable);
+                }
             }
             catch (Exception ex)
             {

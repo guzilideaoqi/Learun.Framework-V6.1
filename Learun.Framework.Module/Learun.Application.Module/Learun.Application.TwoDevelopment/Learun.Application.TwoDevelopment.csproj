@@ -43,14 +43,22 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="zxing, Version=0.16.5.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ZXing.Net.0.16.5\lib\net45\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.5.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ZXing.Net.0.16.5\lib\net45\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\CommonConfig.cs" />
+    <Compile Include="Common\QRCodeHelper.cs" />
     <Compile Include="DM_APPManage\DM_Order\CalculateComissionEntity.cs" />
     <Compile Include="DM_APPManage\DM_Order\DM_OrderBLL.cs" />
     <Compile Include="DM_APPManage\DM_Order\dm_orderEntity.cs" />
@@ -159,6 +167,10 @@
     <Compile Include="DM_APPManage\DM_Task_Person_Record\DM_Task_Person_RecordService.cs" />
     <Compile Include="DM_APPManage\DM_Task_Person_Record\DM_Task_Person_RecordIBLL.cs" />
     <Compile Include="DM_APPManage\DM_Task_Person_Record\DM_Task_Person_RecordBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Apply_CashRecord\dm_apply_cashrecordEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Apply_CashRecord\DM_Apply_CashRecordService.cs" />
+    <Compile Include="DM_APPManage\DM_Apply_CashRecord\DM_Apply_CashRecordIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Apply_CashRecord\DM_Apply_CashRecordBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

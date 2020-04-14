@@ -28,6 +28,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		int? DecodeInviteCode(string InviteCode);
 
 		dynamic SignIn(int userid);
+        #region 获取推广图片
+        List<string> GetShareImage(int user_id, string appid);
+        #endregion
 
         #region 获取用户数据
         IEnumerable<dm_userEntity> GetParentUser(int user_id);
