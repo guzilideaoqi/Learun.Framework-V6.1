@@ -94,14 +94,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
-        #region 各大榜单(2个小时更新一次)
+        #region 各大榜单(4个小时更新一次)
         /// <summary>
         /// 各大榜单
         /// </summary>
         /// <param name="cateid">仅对实时榜单、全天榜单有效</param>
         /// <param name="RandType">1.实时榜 2.全天榜 3.热推榜 4.复购榜 5.热词飙升榜 6.热词排行榜 7.综合热搜榜</param>
         /// <returns></returns>
-        public ActionResult GetRankingList(int cateid = 1, int RandType = 1)
+        public ActionResult GetRankingList(int cateid = 1, int RandType = 1, int PageNo = 1, int PageSize = 20)
         {
             try
             {
@@ -115,16 +115,23 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Ranking_ListRequest dTK_Ranking_ListRequest = new DTK_Ranking_ListRequest();
                     dTK_Ranking_ListRequest.version = "v1.1.2";
                     dTK_Ranking_ListRequest.rankType = RandType;
-                    dTK_Ranking_ListRequest.cid = cateid;
+                    //dTK_Ranking_ListRequest.cid = cateid;
                     DTK_Ranking_ListResponse dTK_Ranking_ListResponse = dTK_ApiManage.GetRankingList(dTK_Ranking_ListRequest);
                     if (dTK_Ranking_ListResponse.code != 0)
                     {
                         return Fail(dTK_Ranking_ListResponse.msg);
                     }
                     RankingList = dTK_Ranking_ListResponse.data;
-                    redisCache.Write(cacheKey, RankingList, DateTime.Now.AddHours(2.0), 7L);
+                    redisCache.Write(cacheKey, RankingList, DateTime.Now.AddHours(4.0), 7L);
                 }
-                return SuccessList("获取成功!", RankingList);
+
+                IEnumerable<RankingItem> rankItemList = null;
+                if (RankingList != null)
+                {
+                    rankItemList = RankingList.Skip((PageNo - 1) * PageSize).Take(PageSize);
+                }
+
+                return SuccessList("获取成功!", rankItemList);
             }
             catch (Exception ex)
             {
