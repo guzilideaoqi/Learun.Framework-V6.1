@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "任务模板";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">id<font face="宋体">*</font></div>
+        <input id="id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">task_title<font face="宋体">*</font></div>
+        <input id="task_title" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">任务类型<font face="宋体">*</font></div>
+        <input id="task_type" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">任务描述<font face="宋体">*</font></div>
+        <input id="task_description" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">任务操作<font face="宋体">*</font></div>
+        <input id="task_operate" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">需求人数<font face="宋体">*</font></div>
+        <input id="needcount" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">总佣金<font face="宋体">*</font></div>
+        <input id="totalcommission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">createtime<font face="宋体">*</font></div>
+        <input id="createtime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">用户ID<font face="宋体">*</font></div>
+        <input id="user_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_Task_Template/Form.js")

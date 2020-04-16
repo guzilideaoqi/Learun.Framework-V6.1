@@ -275,6 +275,11 @@
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_Person_SettingController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_Person_RecordController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Apply_CashRecordController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_TaskController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_ReportController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_ReviceController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_TemplateController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_TypeController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -2252,6 +2257,26 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Apply_CashRecord\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Apply_CashRecord\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Apply_CashRecord\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Report\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Report\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Report\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Report\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Revice\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Revice\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Revice\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Revice\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Template\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Template\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Template\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Template\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

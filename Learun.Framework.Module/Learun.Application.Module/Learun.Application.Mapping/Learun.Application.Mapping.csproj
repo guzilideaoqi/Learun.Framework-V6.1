@@ -135,6 +135,11 @@
     <Compile Include="DM_APPManage\dm_task_person_settingMap.cs" />
     <Compile Include="DM_APPManage\dm_task_person_recordMap.cs" />
     <Compile Include="DM_APPManage\dm_apply_cashrecordMap.cs" />
+    <Compile Include="DM_APPManage\dm_taskMap.cs" />
+    <Compile Include="DM_APPManage\dm_task_reportMap.cs" />
+    <Compile Include="DM_APPManage\dm_task_reviceMap.cs" />
+    <Compile Include="DM_APPManage\dm_task_templateMap.cs" />
+    <Compile Include="DM_APPManage\dm_task_typeMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

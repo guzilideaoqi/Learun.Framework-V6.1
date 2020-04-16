@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "任务接受记录";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">id<font face="宋体">*</font></div>
+        <input id="id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">任务id<font face="宋体">*</font></div>
+        <input id="task_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">用户id<font face="宋体">*</font></div>
+        <input id="user_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">接受时间<font face="宋体">*</font></div>
+        <input id="revice_time" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">接收状态 1进行中  2待审核  3已完成  4取消任务<font face="宋体">*</font></div>
+        <input id="status" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">审核时间<font face="宋体">*</font></div>
+        <input id="check_time" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">提交时间<font face="宋体">*</font></div>
+        <input id="submit_time" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">提交数据<font face="宋体">*</font></div>
+        <input id="submit_data" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">创建时间<font face="宋体">*</font></div>
+        <input id="createtime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_Task_Revice/Form.js")

@@ -33,7 +33,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_UserRelationIBLL dm_UserRelationIBLL = new DM_UserRelationBLL();
 
-
+        private DM_Apply_CashRecordIBLL dm_Apply_CashRecordIBLL = new DM_Apply_CashRecordBLL();
 
         #region 用户名密码登陆
 
@@ -918,6 +918,25 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                     return SuccessList("获取成功!", dataTable);
                 }
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 申请提现
+        public ActionResult ApplyAccountCash(int user_id, decimal Price = 0, string Remark = "")
+        {
+            try
+            {
+                if (user_id <= 0)
+                    return Fail("用户信息异常!");
+                if (Price < 10)
+                    return Fail("提现金额不能小于10元!");
+                dm_Apply_CashRecordIBLL.ApplyAccountCash(user_id, Price, Remark);
+                return Success("提现成功!", new { });
             }
             catch (Exception ex)
             {

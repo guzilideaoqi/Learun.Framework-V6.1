@@ -171,6 +171,26 @@
     <Compile Include="DM_APPManage\DM_Apply_CashRecord\DM_Apply_CashRecordService.cs" />
     <Compile Include="DM_APPManage\DM_Apply_CashRecord\DM_Apply_CashRecordIBLL.cs" />
     <Compile Include="DM_APPManage\DM_Apply_CashRecord\DM_Apply_CashRecordBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task\dm_taskEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Task\DM_TaskService.cs" />
+    <Compile Include="DM_APPManage\DM_Task\DM_TaskIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task\DM_TaskBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Report\dm_task_reportEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Report\DM_Task_ReportService.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Report\DM_Task_ReportIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Report\DM_Task_ReportBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Revice\dm_task_reviceEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Revice\DM_Task_ReviceService.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Revice\DM_Task_ReviceIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Revice\DM_Task_ReviceBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Template\dm_task_templateEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Template\DM_Task_TemplateService.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Template\DM_Task_TemplateIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Template\DM_Task_TemplateBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Type\dm_task_typeEntity.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Type\DM_Task_TypeService.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Type\DM_Task_TypeIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_Task_Type\DM_Task_TypeBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">
