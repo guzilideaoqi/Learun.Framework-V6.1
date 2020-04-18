@@ -49,5 +49,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void SaveEntity(int keyValue, dm_taskEntity entity);
         #endregion
 
+
+        #region Method Extend
+        /// <summary>
+        /// 发布任务
+        /// </summary>
+        /// <param name="entity"></param>
+        void ReleaseTask(dm_taskEntity entity);
+        /// <summary>
+        /// 取消发布任务
+        /// </summary>
+        /// <param name="task_id"></param>
+        void CancelByReleasePerson(int task_id);
+        #endregion
     }
 }

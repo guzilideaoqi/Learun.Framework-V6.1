@@ -132,34 +132,58 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
-		[Column("TASK_DO")]
-		public int task_do
-		{
+        /// <summary>
+        /// 做任务佣金(高级)
+        /// </summary>
+		[Column("TASK_DO_SENIOR")]
+		public int task_do_senior
+        {
 			get;
 			set;
 		}
 
+        /// <summary>
+        /// 做任务佣金(初级)
+        /// </summary>
+        [Column("TASK_DO_JUNIOR")]
+        public int task_do_junior { get; set; }
+
+        /// <summary>
+        /// 做任务服务费
+        /// </summary>
+        [Column("TASK_SERVICEFEE")]
+        public int task_servicefee { get; set; }
+
+        /// <summary>
+        /// 做任务一级代理佣金
+        /// </summary>
 		[Column("TASK_ONE")]
 		public int task_one
 		{
 			get;
 			set;
 		}
-
+        /// <summary>
+        /// 做任务二级代理佣金
+        /// </summary>
 		[Column("TASK_TWO")]
 		public int task_two
 		{
 			get;
 			set;
 		}
-
+        /// <summary>
+        /// 做任务一级合伙人佣金
+        /// </summary>
 		[Column("TASK_ONE_PARTNERS")]
 		public int task_one_partners
 		{
 			get;
 			set;
 		}
-
+        /// <summary>
+        /// 做任务二级合伙人佣金
+        /// </summary>
 		[Column("TASK_TWO_PARTNERS")]
 		public int task_two_partners
 		{

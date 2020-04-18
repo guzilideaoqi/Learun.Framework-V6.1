@@ -129,13 +129,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 合伙人id
         /// </summary>
 		[Column("PARTNERS")]
-		public int? partners
+		public int partners
 		{
 			get;
 			set;
 		}
         /// <summary>
-        /// 合伙人状态
+        /// 合伙人状态(0非合伙人  1合伙人)
         /// </summary>
 		[Column("PARTNERSSTATUS")]
 		public int? partnersstatus

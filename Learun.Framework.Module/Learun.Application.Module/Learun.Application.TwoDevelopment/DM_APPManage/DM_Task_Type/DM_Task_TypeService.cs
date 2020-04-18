@@ -1,10 +1,13 @@
 ﻿using Dapper;
+using Learun.Cache.Base;
+using Learun.Cache.Factory;
 using Learun.DataBase.Repository;
 using Learun.Util;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Linq;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -17,6 +20,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// </summary>
     public class DM_Task_TypeService : RepositoryFactory
     {
+        private ICache redisCache = CacheFactory.CaChe();
+
         #region 构造函数和属性
 
         private string fieldSql;
@@ -43,16 +48,33 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                //参考写法
-                //var queryParam = queryJson.ToJObject();
-                // 虚拟参数
-                //var dp = new DynamicParameters(new { });
-                //dp.Add("startTime", queryParam["StartTime"].ToDate(), DbType.DateTime);
-                var strSql = new StringBuilder();
-                strSql.Append("SELECT ");
-                strSql.Append(fieldSql);
-                strSql.Append(" FROM dm_task_type t ");
-                return this.BaseRepository("dm_data").FindList<dm_task_typeEntity>(strSql.ToString());
+                string cacheKey = Md5Helper.Hash("TaskType" + queryJson);
+                IEnumerable<dm_task_typeEntity> dm_Task_TypeEntities = redisCache.Read<IEnumerable<dm_task_typeEntity>>(cacheKey, 7);
+
+                if (dm_Task_TypeEntities == null)
+                {
+                    //参考写法
+                    var queryParam = queryJson.ToJObject();
+                    // 虚拟参数
+                    //var dp = new DynamicParameters(new { });
+                    //dp.Add("startTime", queryParam["StartTime"].ToDate(), DbType.DateTime);
+                    var strSql = new StringBuilder();
+                    strSql.Append("SELECT ");
+                    strSql.Append(fieldSql);
+                    strSql.Append(" FROM dm_task_type t ");
+                    if (!queryParam["appid"].IsEmpty())
+                    {
+                        strSql.Append(" where t.appid='" + queryParam["appid"].ToString() + "'");
+                    }
+                    dm_Task_TypeEntities = this.BaseRepository("dm_data").FindList<dm_task_typeEntity>(strSql.ToString());
+
+                    if (dm_Task_TypeEntities.Count() > 0)
+                    {
+                        redisCache.Write<IEnumerable<dm_task_typeEntity>>(cacheKey, dm_Task_TypeEntities, 7);
+                    }
+                }
+
+                return dm_Task_TypeEntities;
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using Learun.Util;
+﻿using Learun.Cache.Factory;
+using Learun.Util;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Learun.Application.TwoDevelopment.DM_APPManage
@@ -11,27 +12,28 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 日 期：2020-04-16 16:03
     /// 描 述：任务接受记录
     /// </summary>
-    public class dm_task_reviceEntity 
+    public class dm_task_reviceEntity
     {
         #region 实体成员
         /// <summary>
         /// id
         /// </summary>
         /// <returns></returns>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("ID")]
         public int? id { get; set; }
         /// <summary>
         /// 任务id
         /// </summary>
         /// <returns></returns>
         [Column("TASK_ID")]
-        public int? task_id { get; set; }
+        public int task_id { get; set; }
         /// <summary>
         /// 用户id
         /// </summary>
         /// <returns></returns>
         [Column("USER_ID")]
-        public int? user_id { get; set; }
+        public int user_id { get; set; }
         /// <summary>
         /// 接受时间
         /// </summary>
@@ -68,6 +70,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("CREATETIME")]
         public DateTime? createtime { get; set; }
+
+        /// <summary>
+        /// 取消时间
+        /// </summary>
+        [Column("CANCELTIME")]
+        public DateTime? canceltime { get; set; }
         #endregion
 
         #region 扩展操作
@@ -76,6 +84,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         public void Create()
         {
+            this.createtime = DateTime.Now;
         }
         /// <summary>
         /// 编辑调用
@@ -84,6 +93,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public void Modify(int? keyValue)
         {
             this.id = keyValue;
+            string cacheKey = "ReviceTask" + keyValue.ToString();
+            CacheFactory.CaChe().Remove(cacheKey, 7L);
         }
         #endregion
     }

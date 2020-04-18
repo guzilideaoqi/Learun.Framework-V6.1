@@ -21,7 +21,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_task_reviceEntity> GetList( string queryJson )
+        public IEnumerable<dm_task_reviceEntity> GetList(string queryJson)
         {
             try
             {
@@ -142,5 +142,122 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region Method Extend
+        /// <summary>
+        /// 获取任务接受列表
+        /// </summary>
+        /// <param name="task_id"></param>
+        /// <returns></returns>
+        public IEnumerable<dm_task_reviceEntity> GetReviceListByTaskID(int task_id)
+        {
+            try
+            {
+                return dM_Task_ReviceService.GetReviceListByTaskID(task_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 接受任务
+        /// </summary>
+        /// <param name="dm_Task_ReviceEntity"></param>
+        public void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity)
+        {
+            try
+            {
+                dM_Task_ReviceService.ReviceTask(dm_Task_ReviceEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 提交资料
+        /// </summary>
+        /// <param name="dm_Task_ReviceEntity"></param>
+        public void SubmitMeans(dm_task_reviceEntity dm_Task_ReviceEntity)
+        {
+            try
+            {
+                dM_Task_ReviceService.SubmitMeans(dm_Task_ReviceEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 取消任务
+        /// </summary>
+        /// <param name="revice_id"></param>
+        public void CancelByRevicePerson(int revice_id)
+        {
+            try
+            {
+                dM_Task_ReviceService.CancelByRevicePerson(revice_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 审核任务
+        /// </summary>
+        /// <param name="revice_id"></param>
+        public void AuditTask(int revice_id)
+        {
+            try
+            {
+                dM_Task_ReviceService.AuditTask(revice_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

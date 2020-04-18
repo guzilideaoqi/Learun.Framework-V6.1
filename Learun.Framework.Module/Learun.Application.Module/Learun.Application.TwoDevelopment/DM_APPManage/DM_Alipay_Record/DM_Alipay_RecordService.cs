@@ -261,7 +261,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     currentUser.userlevel = 2;
                 }
-                currentUser.Modify(currentUser.id);//必须加上这句，不然不会清除缓存
                 calculateComissionEntities.Add(currentUser);
                 #endregion
 
@@ -325,11 +324,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     two_partners = dM_UserService.GetEntityByCache(dm_User_RelationEntity_one_partners.parent_id);
                     if (!two_partners.IsEmpty())
                     {
-                        two_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_two_partners * dm_Alipay_RecordEntity_old.total_amount);
-                        if (two_partners_commission > 0)
-                        {
-                            two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
-                            dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 9, "下级团队成员开通代理", "您的下级团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_partners_commission, two_partners.accountprice));
+                        if (two_partners.partnersstatus == 1)
+                        {//二级用户为合伙人时才进行返利
+                            two_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_two_partners * dm_Alipay_RecordEntity_old.total_amount);
+                            if (two_partners_commission > 0)
+                            {
+                                two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
+                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 9, "下级团队成员开通代理", "您的下级团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_partners_commission, two_partners.accountprice));
+                            }
                         }
                     }
                     #endregion

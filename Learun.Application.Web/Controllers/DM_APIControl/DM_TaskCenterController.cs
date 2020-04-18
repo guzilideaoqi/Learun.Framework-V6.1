@@ -16,55 +16,179 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
 
+        private DM_TaskIBLL dm_TaskIBLL = new DM_TaskBLL();
+
+        private DM_Task_ReviceIBLL dm_Task_ReviceIBLL = new DM_Task_ReviceBLL();
+
+        private DM_Task_TypeIBLL dm_Task_TypeIBLL = new DM_Task_TypeBLL();
+
+        #region 获取任务类型
         public ActionResult GetTaskType()
         {
-            return View();
+            try
+            {
+                string appid = CheckAPPID();
+                return SuccessList("获取成功!", dm_Task_TypeIBLL.GetList("{\"appid\":\"" + appid + "\"}"));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
+        #endregion
 
-        public ActionResult GetTaskList()
+        #region 获取任务列表
+        public ActionResult GetTaskList(int PageNo, int PageSize, string TaskType = "-1")
         {
-            return View();
-        }
+            try
+            {
+                string appid = CheckAPPID();
 
-        public ActionResult ReleaseTask()
+                string queryDiction = "";
+                if (TaskType == "-1")
+                {
+                    queryDiction = "{\"appid\":\"" + appid + "\"}";
+                }
+                else
+                {
+                    queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\"}";
+                }
+
+                return SuccessList("获取成功!", dm_TaskIBLL.GetPageList(new Pagination
+                {
+                    page = PageNo,
+                    rows = PageSize,
+                    sidx = "sort",
+                    sord = "desc"
+                }, queryDiction));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 发布任务
+        public ActionResult ReleaseTask(dm_taskEntity dm_TaskEntity)
         {
-            return View();
+            try
+            {
+                string appid = CheckAPPID();
+                dm_TaskEntity.appid = appid;
+                dm_TaskIBLL.ReleaseTask(dm_TaskEntity);
+                return Success("发布成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
+        #endregion
 
-        public ActionResult CancelBySendPerson()
+        #region 取消任务(发布方)
+        public ActionResult CancelByReleasePerson(int TaskID)
         {
-            return View();
+            try
+            {
+                dm_TaskIBLL.CancelByReleasePerson(TaskID);
+                return Success("取消成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
+        #endregion
 
-        public ActionResult CancelByRevicePerson()
+        #region 取消任务(接受方)
+        public ActionResult CancelByRevicePerson(int ReviceID)
         {
-            return View();
+            try
+            {
+                dm_Task_ReviceIBLL.CancelByRevicePerson(ReviceID);
+                return Success("取消成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
+        #endregion
 
-        public ActionResult ReviceTask()
+        #region 接受任务
+        public ActionResult ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity)
         {
-            return View();
+            try
+            {
+                dm_Task_ReviceIBLL.ReviceTask(dm_Task_ReviceEntity);
+                return Success("接受成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
+        #endregion
 
-        public ActionResult SubmitMeans()
+        #region 提交资料
+        public ActionResult SubmitMeans(dm_task_reviceEntity dm_Task_ReviceEntity)
         {
-            return View();
+            try
+            {
+                dm_Task_ReviceIBLL.ReviceTask(dm_Task_ReviceEntity);
+                return Success("资料提交成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
+        #endregion
 
-        public ActionResult AuditTask()
+        #region 任务审核
+        public ActionResult AuditTask(int ReviceID)
         {
-            return View();
+            try
+            {
+                dm_Task_ReviceIBLL.AuditTask(ReviceID);
+                return Success("审核成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
+        #endregion
 
+        #region 获取我的发布
         public ActionResult GetMyReleaseTask()
         {
             return View();
         }
+        #endregion
 
+        #region 获取我的接受
         public ActionResult GetMyReviceTask()
         {
             return View();
         }
+        #endregion
+
+        #region 获取任务详情
+        public ActionResult GetTaskDetail(int task_id, int user_id)
+        {
+            try
+            {
+                var obj= new {TaskInfo= dm_TaskIBLL };
+                return Success("审核成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
 
         #region 获取阅赚任务
         public ActionResult GetReadEarnTaskList(int PageNo, int PageSize)

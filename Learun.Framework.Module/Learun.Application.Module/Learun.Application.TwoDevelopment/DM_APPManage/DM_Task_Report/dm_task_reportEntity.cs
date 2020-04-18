@@ -58,6 +58,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         public void Create()
         {
+            this.report_time = DateTime.Now;
         }
         /// <summary>
         /// 编辑调用

@@ -288,7 +288,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     {
                         user_id = id,
                         parent_id = parent_id,
-                        partners_id = dm_Parent_User_RelationEntity.partners_id,
+                        partners_id = parent_user_entity.partnersstatus == 1 ? parent_user_entity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
                         createtime = DateTime.Now
                     };
                     db.Insert(dm_User_RelationEntity);
@@ -533,7 +533,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
 
-                if (File.Exists(basePath+newPath1) && File.Exists(basePath+newPath2) && File.Exists(basePath+newPath3))
+                if (File.Exists(basePath + newPath1) && File.Exists(basePath + newPath2) && File.Exists(basePath + newPath3))
                 {
                     shareList.Add(dm_BasesettingEntity.qianzhui_image + newPath1);
                     shareList.Add(dm_BasesettingEntity.qianzhui_image + newPath2);

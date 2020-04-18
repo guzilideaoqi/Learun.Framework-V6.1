@@ -18,7 +18,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        IEnumerable<dm_task_reviceEntity> GetList( string queryJson );
+        IEnumerable<dm_task_reviceEntity> GetList(string queryJson);
         /// <summary>
         /// 获取列表分页数据
         /// <param name="pagination">分页参数</param>
@@ -49,5 +49,37 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void SaveEntity(int keyValue, dm_task_reviceEntity entity);
         #endregion
 
+        #region Method Extend
+        /// <summary>
+        /// 获取任务接受列表
+        /// </summary>
+        /// <param name="task_id"></param>
+        /// <returns></returns>
+        IEnumerable<dm_task_reviceEntity> GetReviceListByTaskID(int task_id);
+
+        /// <summary>
+        /// 接受任务
+        /// </summary>
+        /// <param name="dm_Task_ReviceEntity"></param>
+        void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity);
+
+        /// <summary>
+        /// 提交资料
+        /// </summary>
+        /// <param name="dm_Task_ReviceEntity"></param>
+        void SubmitMeans(dm_task_reviceEntity dm_Task_ReviceEntity);
+
+        /// <summary>
+        /// 取消任务
+        /// </summary>
+        /// <param name="revice_id"></param>
+        void CancelByRevicePerson(int revice_id);
+
+        /// <summary>
+        /// 审核任务
+        /// </summary>
+        /// <param name="revice_id"></param>
+        void AuditTask(int revice_id);
+        #endregion
     }
 }

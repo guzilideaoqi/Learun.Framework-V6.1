@@ -11,14 +11,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 日 期：2020-04-16 16:01
     /// 描 述：任务中心
     /// </summary>
-    public class dm_taskEntity 
+    public class dm_taskEntity
     {
         #region 实体成员
         /// <summary>
         /// id
         /// </summary>
         /// <returns></returns>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("ID")]
         public int? id { get; set; }
         /// <summary>
         /// 任务编号
@@ -39,7 +40,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("TASK_TYPE")]
         public int? task_type { get; set; }
         /// <summary>
-        /// 任务状态 0未进行  1进行中  2已完成  3已取消
+        /// 任务状态 0进行中  1已完成  2已取消
         /// </summary>
         /// <returns></returns>
         [Column("TASK_STATUS")]
@@ -67,7 +68,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("SORT")]
-        public int? sort { get; set; }
+        public decimal sort { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>
@@ -79,43 +80,56 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("TOTALCOMMISSION")]
-        public decimal? totalcommission { get; set; }
+        public decimal totalcommission { get; set; }
+
+        /// <summary>
+        /// 每一单的佣金
+        /// </summary>
+        [Column("SINGLECOMMISSION")]
+        public decimal singlecommission { get; set; }
         /// <summary>
         /// 服务费(每一单的服务费)
         /// </summary>
         /// <returns></returns>
         [Column("SERVICEFEE")]
-        public string servicefee { get; set; }
+        public decimal servicefee { get; set; }
         /// <summary>
         /// 初级佣金(每一单的佣金)
         /// </summary>
         /// <returns></returns>
         [Column("JUNIORCOMMISSION")]
-        public decimal? juniorcommission { get; set; }
+        public decimal juniorcommission { get; set; }
         /// <summary>
         /// 高级佣金(每一单的佣金)
         /// </summary>
         /// <returns></returns>
         [Column("SENIORCOMMISSION")]
-        public decimal? seniorcommission { get; set; }
+        public decimal seniorcommission { get; set; }
         /// <summary>
         /// 需求人数
         /// </summary>
         /// <returns></returns>
         [Column("NEEDCOUNT")]
-        public int? needcount { get; set; }
+        public int needcount { get; set; }
+
+        /// <summary>
+        /// 接受人数
+        /// </summary>
+        [Column("REVICECOUNT")]
+        public int revicecount { get; set; }
+
         /// <summary>
         /// 完成人数
         /// </summary>
         /// <returns></returns>
         [Column("FINISHCOUNT")]
-        public int? finishcount { get; set; }
+        public int finishcount { get; set; }
         /// <summary>
         /// 用户ID
         /// </summary>
         /// <returns></returns>
         [Column("USER_ID")]
-        public int? user_id { get; set; }
+        public int user_id { get; set; }
         /// <summary>
         /// 平台ID
         /// </summary>
@@ -130,6 +144,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         public void Create()
         {
+            this.createtime = DateTime.Now;
+            this.finishcount = 0;
+            this.plaform = 1;
+            this.revicecount = 0;
+
         }
         /// <summary>
         /// 编辑调用

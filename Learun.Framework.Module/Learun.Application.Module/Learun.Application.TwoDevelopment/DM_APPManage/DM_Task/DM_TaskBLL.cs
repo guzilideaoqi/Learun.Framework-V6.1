@@ -21,7 +21,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_taskEntity> GetList( string queryJson )
+        public IEnumerable<dm_taskEntity> GetList(string queryJson)
         {
             try
             {
@@ -142,5 +142,50 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region Method Extend
+        /// <summary>
+        /// 发布任务
+        /// </summary>
+        /// <param name="entity"></param>
+        public void ReleaseTask(dm_taskEntity entity)
+        {
+            try
+            {
+                dM_TaskService.ReleaseTask(entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        /// <summary>
+        /// 取消发布任务
+        /// </summary>
+        /// <param name="task_id"></param>
+        public void CancelByReleasePerson(int task_id) {
+            try
+            {
+                dM_TaskService.CancelByReleasePerson(task_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

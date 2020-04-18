@@ -211,11 +211,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                     two_partners_user2 = userRelationEntities.Where((UserRelationEntity t) => t.user_id == one_partners_user.parent_id).FirstOrDefault();
                                     if (!two_partners_user2.IsEmpty())
                                     {
-                                        two_partners_comission2 = ConvertComission(pay_comission * (decimal)dm_BasesettingEntity.shopping_two_partners);
-                                        if (two_partners_comission2 > 0m)
-                                        {
-                                            calculateComissionEntity_two_partners2 = CalculateComission(two_partners_user2.user_id, two_partners_comission2, two_partners_user2.accountprice);
-                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners_user2.user_id, 5, "下级团队订单返佣", "您的下级团队有订单已结算,提成已到账,请查收!", two_partners_comission2, calculateComissionEntity_two_partners2.accountprice));
+                                        if (two_partners_user2.partnersstatus == 1)
+                                        {//必须上级为合伙人
+                                            two_partners_comission2 = ConvertComission(pay_comission * (decimal)dm_BasesettingEntity.shopping_two_partners);
+                                            if (two_partners_comission2 > 0m)
+                                            {
+                                                calculateComissionEntity_two_partners2 = CalculateComission(two_partners_user2.user_id, two_partners_comission2, two_partners_user2.accountprice);
+                                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners_user2.user_id, 5, "下级团队订单返佣", "您的下级团队有订单已结算,提成已到账,请查收!", two_partners_comission2, calculateComissionEntity_two_partners2.accountprice));
+                                            }
                                         }
                                     }
                                 }
@@ -366,7 +369,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 获取我的订单总数量
-        public int GetMyOrderCount(int user_id) {
+        public int GetMyOrderCount(int user_id)
+        {
             return int.Parse(BaseRepository("dm_data").FindObject("select count(id) from dm_order where userid=" + user_id).ToString());
         }
         #endregion
