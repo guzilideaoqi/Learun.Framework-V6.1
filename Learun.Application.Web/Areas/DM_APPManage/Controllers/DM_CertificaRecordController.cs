@@ -35,6 +35,15 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         {
              return View();
         }
+
+        /// <summary>
+        /// 实名审核页面
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult CheckCertificaRecord() {
+            return View();
+        }
         #endregion
 
         #region 获取数据
@@ -110,6 +119,21 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         {
             dM_CertificaRecordIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
+        }
+        #endregion
+
+        #region 实名信息审核
+        /// <summary>
+        /// 实名信息审核
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult CheckCertificaRecord(dm_certifica_recordEntity entity)
+        {
+            dM_CertificaRecordIBLL.CheckCertificationRecord(entity);
+            return Success("审核通过！");
         }
         #endregion
 

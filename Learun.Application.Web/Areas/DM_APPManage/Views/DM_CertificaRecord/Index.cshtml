@@ -2,20 +2,16 @@
     ViewBag.Title = "身份证实名";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
-<div class="lr-layout lr-layout-left-center" id="lr_layout">
-    <div class="lr-layout-left">
-        <div class="lr-layout-wrap">
-            <div class="lr-layout-title">树形目录</div>
-            <div id="tree" class="lr-layout-body"></div>
-        </div>
-    </div>
+<div class="lr-layout lr-layout-center" id="lr_layout">
     <div class="lr-layout-center">
         <div class="lr-layout-wrap">
-            <div class="lr-layout-title">标题</div>
+            <div class="lr-layout-title">实名认证审核列表</div>
             <div class="lr-layout-tool">
                 <div class="lr-layout-tool-left">
                     <div class="lr-layout-tool-item">
-                        <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" />
+                        <input id="txt_user_id" type="text" class="form-control" placeholder="请输入用户id" />
+                        <input id="txt_realname" type="text" class="form-control" placeholder="请输入真实姓名" />
+                        <input id="txt_cardno" type="text" class="form-control" placeholder="请输入身份证号" />
                     </div>
                     <div class="lr-layout-tool-item">
                         <a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</a>

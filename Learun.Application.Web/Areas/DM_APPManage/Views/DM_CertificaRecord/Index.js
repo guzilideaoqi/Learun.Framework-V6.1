@@ -6,6 +6,7 @@
  */
 var selectedRow;
 var refreshGirdData;
+var CheckCertifica;
 var bootstrap = function ($, learun) {
     "use strict";
     var page = {
@@ -17,7 +18,7 @@ var bootstrap = function ($, learun) {
             // 查询
             $('#btn_Search').on('click', function () {
                 var keyword = $('#txt_Keyword').val();
-                page.search({ keyword: keyword });
+                page.search();
             });
             // 刷新
             $('#lr_refresh').on('click', function () {
@@ -60,7 +61,7 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerConfirm('是否确认删除该项！', function (res) {
                         if (res) {
-                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_CertificaRecord/DeleteForm', { keyValue: keyValue}, function () {
+                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_CertificaRecord/DeleteForm', { keyValue: keyValue }, function () {
                             });
                         }
                     });
@@ -71,30 +72,55 @@ var bootstrap = function ($, learun) {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_CertificaRecord/GetPageList',
                 headData: [
-                        { label: '记录id', name: 'id', width: 200, align: "left" },
-                        { label: '用户id', name: 'user_id', width: 200, align: "left" },
-                        { label: '真实姓名', name: 'realname', width: 200, align: "left" },
-                        { label: '身份证号', name: 'cardno', width: 200, align: "left" },
-                        { label: '身份证正面', name: 'facecard', width: 200, align: "left" },
-                        { label: '身份证反面', name: 'frontcard', width: 200, align: "left" },
-                        { label: '创建时间', name: 'createtime', width: 200, align: "left" },
-                        { label: '修改时间', name: 'updatetime', width: 200, align: "left" },
-                        { label: '实名失败原因', name: 'remark', width: 200, align: "left" },
-                        { label: '记录审核状态  0未审核  1审核通过  2审核驳回', name: 'realstatus', width: 200, align: "left" },
+                    //{ label: '记录id', name: 'id', width: 200, align: "left" },
+                    { label: '用户id', name: 'user_id', width: 200, align: "left" },
+                    { label: '真实姓名', name: 'realname', width: 200, align: "left" },
+                    { label: '身份证号', name: 'cardno', width: 200, align: "left" },
+                    { label: '身份证正面', name: 'facecard', width: 200, align: "left" },
+                    { label: '身份证反面', name: 'frontcard', width: 200, align: "left" },
+                    { label: '创建时间', name: 'createtime', width: 200, align: "left" },
+                    { label: '修改时间', name: 'updatetime', width: 200, align: "left" },
+                    //{ label: '实名失败原因', name: 'remark', width: 200, align: "left" },
+                    {
+                        label: '审核状态', name: 'realstatus', width: 200, align: "left", formatter: function (cellvalue, rowData, options) {
+                            if (cellvalue == 2)
+                                return "审核驳回";
+                            else if (cellvalue == 1)
+                                return "审核通过";
+                            else {
+                                var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
+                                return "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"CheckCertifica(" + tempJsonStr + ");\"><i class=\"fa fa-plus\"></i>&nbsp;审核</a>";
+                            }
+                        }
+                    },
                 ],
-                mainId:'id',
+                mainId: 'id',
                 reloadSelected: true,
                 isPage: true
             });
             page.search();
         },
         search: function (param) {
-            param = param || {};
+            param = param || { txt_realname: $("#txt_realname").val(), txt_cardno: $("#txt_cardno").val(), txt_user_id: $("#txt_user_id").val() };
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
     };
     refreshGirdData = function () {
         page.search();
     };
+    CheckCertifica = function (rowData) {
+        selectedRow = rowData;
+        learun.layerForm({
+            id: 'form',
+            title: '实名信息审核',
+            url: top.$.rootUrl + '/DM_APPManage/DM_CertificaRecord/CheckCertificaRecord?keyValue=' + rowData.id,
+            width: 550,
+            height: 650,
+            btn:["审核通过","关闭"],
+            callBack: function (id) {
+                return top[id].acceptClick(refreshGirdData);
+            }
+        });
+    }
     page.init();
 }

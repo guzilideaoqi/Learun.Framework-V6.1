@@ -60,7 +60,7 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerConfirm('是否确认删除该项！', function (res) {
                         if (res) {
-                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Alipay_Record/DeleteForm', { keyValue: keyValue}, function () {
+                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Alipay_Record/DeleteForm', { keyValue: keyValue }, function () {
                             });
                         }
                     });
@@ -71,23 +71,34 @@ var bootstrap = function ($, learun) {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_Alipay_Record/GetPageList',
                 headData: [
-                        { label: '订单开通记录', name: 'id', width: 200, align: "left" },
-                        { label: '用户Id', name: 'out_trade_no', width: 200, align: "left" },
-                        { label: 'user_id', name: 'user_id', width: 200, align: "left" },
-                        { label: '支付宝交易订单号', name: 'alipay_trade_no', width: 200, align: "left" },
-                        { label: '生成支付的金额(此处做好保留，防止后期套餐金额修改)', name: 'total_amount', width: 200, align: "left" },
-                        { label: '支付宝交易状态', name: 'alipay_status', width: 200, align: "left" },
-                        { label: '1初级代理  2高级代理  3升级代理', name: 'templateid', width: 200, align: "left" },
-                        { label: '支付宝交易创建时间', name: 'gmt_create', width: 200, align: "left" },
-                        { label: '支付时间', name: 'gmt_payment', width: 200, align: "left" },
-                        { label: '回调时间', name: 'notify_time', width: 200, align: "left" },
-                        { label: '记录创建时间', name: 'createtime', width: 200, align: "left" },
-                        { label: '记录修改时间', name: 'updatetime', width: 200, align: "left" },
-                        { label: '支付宝账号id', name: 'seller_id', width: 200, align: "left" },
-                        { label: '支付宝回调所得', name: 'notify_id', width: 200, align: "left" },
-                        { label: '交易信息(套餐名称)', name: 'subject', width: 200, align: "left" },
+                    //{ label: '订单开通记录', name: 'id', width: 200, align: "left" },
+                    { label: '系统交易单号', name: 'out_trade_no', width: 200, align: "left" },
+                    { label: 'user_id', name: 'user_id', width: 200, align: "left" },
+                    { label: '支付宝交易订单号', name: 'alipay_trade_no', width: 200, align: "left" },
+                    { label: '实际支付金额', name: 'total_amount', width: 200, align: "left" },
+                    { label: '支付宝交易状态', name: 'alipay_status', width: 200, align: "left" },
+                    {
+                        label: '1初级代理  2高级代理  3升级代理', name: 'templateid', width: 200, align: "left", formatter: function (cellValue, rowData, options) {
+                            if (cellValue == 1)
+                                return "初级代理";
+                            else if (cellValue == 2)
+                                return "高级代理";
+                            else if (cellValue == 3)
+                                return "升级代理";
+                            else
+                                return "未知请求";
+                        }
+                    },
+                    { label: '支付宝交易创建时间', name: 'gmt_create', width: 200, align: "left" },
+                    { label: '支付时间', name: 'gmt_payment', width: 200, align: "left" },
+                    { label: '回调时间', name: 'notify_time', width: 200, align: "left" },
+                    { label: '记录创建时间', name: 'createtime', width: 200, align: "left" },
+                    { label: '记录修改时间', name: 'updatetime', width: 200, align: "left" },
+                    { label: '支付宝账号id', name: 'seller_id', width: 200, align: "left" },
+                    { label: '支付宝回调所得', name: 'notify_id', width: 200, align: "left" },
+                    { label: '交易信息(套餐名称)', name: 'subject', width: 200, align: "left" },
                 ],
-                mainId:'id',
+                mainId: 'id',
                 reloadSelected: true,
                 isPage: true
             });

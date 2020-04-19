@@ -113,11 +113,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public void Create()
 		{
+			this.createtime = DateTime.Now;
 		}
 
 		public void Modify(int? keyValue)
 		{
 			id = keyValue;
+			this.updatetime = DateTime.Now;
 		}
 	}
 }

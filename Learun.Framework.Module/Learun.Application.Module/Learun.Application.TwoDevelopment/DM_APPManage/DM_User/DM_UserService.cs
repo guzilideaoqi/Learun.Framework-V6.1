@@ -494,7 +494,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 根据合伙人编号获取用户信息
-        public dm_userEntity GetUserByPartnersID(int partnersid)
+        public dm_userEntity GetUserByPartnersID(int? partnersid)
         {
             try
             {

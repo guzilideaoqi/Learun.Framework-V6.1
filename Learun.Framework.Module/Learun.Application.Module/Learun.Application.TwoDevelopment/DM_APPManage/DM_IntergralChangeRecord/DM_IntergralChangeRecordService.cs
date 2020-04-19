@@ -39,10 +39,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		{
 			try
 			{
+				var queryParam = queryJson.ToJObject();
 				StringBuilder strSql = new StringBuilder();
 				strSql.Append("SELECT ");
 				strSql.Append(fieldSql);
-				strSql.Append(" FROM dm_intergralchangerecord t");
+				strSql.Append(" FROM dm_intergralchangerecord t where 1=1");
+
+				if (!queryParam["txt_phone"].IsEmpty())
+					strSql.Append(" and t.phone like '%" + queryParam["txt_phone"].ToString() + "%'");
+				if (!queryParam["txt_username"].IsEmpty())
+					strSql.Append(" and t.username like '%" + queryParam["txt_username"].ToString() + "%'");
+				if (!queryParam["txt_expresscode"].IsEmpty())
+					strSql.Append(" and t.expresscode like '%" + queryParam["txt_expresscode"].ToString() + "%'");
+
 				return BaseRepository("dm_data").FindList<dm_intergralchangerecordEntity>(strSql.ToString(), pagination);
 			}
 			catch (Exception ex)

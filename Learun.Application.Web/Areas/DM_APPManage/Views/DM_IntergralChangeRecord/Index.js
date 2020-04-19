@@ -6,6 +6,7 @@
  */
 var selectedRow;
 var refreshGirdData;
+var SendExpressNumber;
 var bootstrap = function ($, learun) {
     "use strict";
     var page = {
@@ -16,8 +17,7 @@ var bootstrap = function ($, learun) {
         bind: function () {
             // 查询
             $('#btn_Search').on('click', function () {
-                var keyword = $('#txt_Keyword').val();
-                page.search({ keyword: keyword });
+                page.search();
             });
             // 刷新
             $('#lr_refresh').on('click', function () {
@@ -71,24 +71,29 @@ var bootstrap = function ($, learun) {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_IntergralChangeRecord/GetPageList',
                 headData: [
-                    { label: 'id', name: 'id', width: 200, align: "left" },
+                    //{ label: 'id', name: 'id', width: 200, align: "left"},
                     //{ label: '用户id', name: 'user_id', width: 200, align: "left" },
                     { label: '收件人', name: 'username', width: 100, align: "left" },
                     { label: '手机号', name: 'phone', width: 100, align: "left" },
                     { label: '商品id', name: 'goodid', width: 100, align: "left" },
+                    { label: '快递单号', name: 'expresscode', width: 100, align: "left" },
+                    { label: '描述(平台描述)', name: 'remark', width: 200, align: "left" },
+                    { label: '省份', name: 'province', width: 100, align: "left" },
+                    { label: '城市', name: 'city', width: 100, align: "left" },
+                    { label: '区县', name: 'down', width: 100, align: "left" },
+                    { label: '详细地址', name: 'address', width: 100, align: "left" },
                     { label: '创建时间', name: 'createtime', width: 200, align: "left" },
                     { label: '修改时间', name: 'updatetime', width: 200, align: "left" },
                     {
-                        label: '发货状态', name: 'sendstatus', width: 100, align: "left", formatter: function (rowData, cellvalue, options) {
-                            if (cellvalue == 0)
+                        label: '发货状态', name: 'sendstatus', width: 100, align: "left", formatter: function (cellvalue, rowData, options) {
+                            if (cellvalue == 1)
                                 return "已发货";
                             else {
-                                return "未发货";
+                                var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
+                                return "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"SendExpressNumber(" + tempJsonStr + ");\"><i class=\"fa fa-plus\"></i>&nbsp;发货</a>";
                             }
                         }
                     },
-                    { label: '快递单号', name: 'expresscode', width: 100, align: "left" },
-                    { label: '描述(平台描述)', name: 'remark', width: 200, align: "left" },
                     //{ label: '平台ID', name: 'appid', width: 200, align: "left" },
                 ],
                 mainId: 'id',
@@ -98,12 +103,26 @@ var bootstrap = function ($, learun) {
             page.search();
         },
         search: function (param) {
-            param = param || {};
+            param = param || { txt_phone: $("#txt_phone").val(), txt_username: $("#txt_username").val(), txt_expresscode: $("#txt_expresscode").val() };
+            console.log(param);
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
     };
     refreshGirdData = function () {
         page.search();
+    };
+    SendExpressNumber = function (rowData) {
+        selectedRow = rowData;
+        learun.layerForm({
+            id: 'form',
+            title: '请输入发货单号',
+            url: top.$.rootUrl + '/DM_APPManage/DM_IntergralChangeRecord/SendExpressNumber?keyValue=' + rowData.id,
+            width: 350,
+            height: 140,
+            callBack: function (id) {
+                return top[id].acceptClick(refreshGirdData);
+            }
+        });
     };
     page.init();
 }

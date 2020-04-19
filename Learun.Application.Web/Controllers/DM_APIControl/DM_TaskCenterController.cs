@@ -38,7 +38,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取任务列表
-        public ActionResult GetTaskList(int PageNo, int PageSize, string TaskType = "-1")
+        public ActionResult GetTaskList(int PageNo=1, int PageSize=20, string TaskType = "-1")
         {
             try
             {

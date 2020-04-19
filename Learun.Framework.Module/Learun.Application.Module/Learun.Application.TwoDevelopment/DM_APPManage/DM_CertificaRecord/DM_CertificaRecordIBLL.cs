@@ -57,6 +57,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="user_id"></param>
         /// <returns></returns>
         dm_certifica_recordEntity GetCertificationRecord(int user_id);
+
+        /// <summary>
+        /// 实名信息审核
+        /// </summary>
+        /// <param name="entity"></param>
+        void CheckCertificationRecord(dm_certifica_recordEntity entity);
         #endregion
     }
 }

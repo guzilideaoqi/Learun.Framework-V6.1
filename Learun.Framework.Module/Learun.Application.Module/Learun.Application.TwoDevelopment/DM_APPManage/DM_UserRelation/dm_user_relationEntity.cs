@@ -28,7 +28,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
 
         [Column("PARTNERS_ID")]
-        public int partners_id
+        public int? partners_id
         {
             get;
             set;

@@ -161,6 +161,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
         }
+
+        public void CheckCertificationRecord(dm_certifica_recordEntity entity) {
+            try
+            {
+                dM_CertificaRecordService.CheckCertificationRecord(entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
     }
 }

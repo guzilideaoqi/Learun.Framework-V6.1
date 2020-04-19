@@ -88,10 +88,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
+                var queryParam = queryJson.ToJObject();
                 var strSql = new StringBuilder();
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
-                strSql.Append(" FROM dm_certifica_record t ");
+                strSql.Append(" FROM dm_certifica_record t where 1=1");
+                if (!queryParam["txt_user_id"].IsEmpty())
+                {
+                    strSql.Append(" and t.user_id = '" + queryParam["txt_user_id"].ToString() + "'");
+                }
+                if (!queryParam["txt_realname"].IsEmpty()) {
+                    strSql.Append(" and t.realname like '%" + queryParam["txt_realname"].ToString() + "%'");
+                }
+                if (!queryParam["txt_cardno"].IsEmpty()) {
+                    strSql.Append(" and t.cardno like '%" + queryParam["txt_cardno"].ToString() + "%'");
+                }
                 return this.BaseRepository("dm_data").FindList<dm_certifica_recordEntity>(strSql.ToString(), pagination);
             }
             catch (Exception ex)
@@ -112,7 +123,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public dm_certifica_recordEntity GetEntity(int keyValue)
+        public dm_certifica_recordEntity GetEntity(int? keyValue)
         {
             try
             {
@@ -241,15 +252,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 if (entity.realstatus == 1)
                 {
+                    dm_certifica_recordEntity dm_Certifica_RecordEntity=GetEntity(entity.id);
+
                     dm_userEntity dm_UserEntity = new dm_userEntity();
                     dm_UserEntity.isreal = 1;
-                    dm_UserEntity.id = entity.user_id;
-                    dm_UserEntity.realname = entity.realname;
-                    dm_UserEntity.frontcard = entity.frontcard;
-                    dm_UserEntity.facecard = entity.facecard;
+                    dm_UserEntity.id = dm_Certifica_RecordEntity.user_id;
+                    dm_UserEntity.realname = dm_Certifica_RecordEntity.realname;
+                    dm_UserEntity.frontcard = dm_Certifica_RecordEntity.frontcard;
+                    dm_UserEntity.facecard = dm_Certifica_RecordEntity.facecard;
 
                     db = this.BaseRepository("dm_data").BeginTrans();
                     db.Update(dm_UserEntity);
+                    entity.Modify(entity.id);
                     db.Update(entity);
 
                     db.Commit();

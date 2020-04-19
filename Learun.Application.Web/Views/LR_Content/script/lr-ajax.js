@@ -186,7 +186,24 @@
                 }
                 layer.close(layer.index);
             });
-        }
+        },
+        excuteOperate: function (url, param, callback) {
+            learun.loading(true, '正在执行操作...');
+            learun.httpAsyncPost(url, param, function (res) {
+                learun.loading(false);
+                if (res.code == learun.httpCode.success) {
+                    if (!!callback) {
+                        callback(res);
+                    }
+                    learun.alert.success(res.info);
+                }
+                else {
+                    learun.alert.error(res.info);
+                    learun.httpErrorLog(res.info);
+                }
+                layer.close(layer.index);
+            });
+        },
     });
 
 })(window.jQuery, top.learun);

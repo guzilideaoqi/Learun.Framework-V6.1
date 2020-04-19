@@ -129,7 +129,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// ∫œªÔ»Àid
         /// </summary>
 		[Column("PARTNERS")]
-		public int partners
+		public int? partners
 		{
 			get;
 			set;

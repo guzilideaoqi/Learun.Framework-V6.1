@@ -44,6 +44,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("APPID")]
         public string appid { get; set; }
+
+        /// <summary>
+        /// 合伙人审核状态
+        /// </summary>
+        [Column("STATUS")]
+        public int status { get; set; }
         #endregion
 
         #region 扩展操作
@@ -52,7 +58,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         public void Create()
         {
-
+            this.status = 0;
+            this.createtime = DateTime.Now;
         }
         /// <summary>
         /// 编辑调用
@@ -61,6 +68,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public void Modify(int? keyValue)
         {
             this.id = keyValue;
+            this.updatetime = DateTime.Now;
         }
         #endregion
     }

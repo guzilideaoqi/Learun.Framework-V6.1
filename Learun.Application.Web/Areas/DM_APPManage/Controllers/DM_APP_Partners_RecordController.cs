@@ -24,7 +24,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
         /// <summary>
         /// 表单页
@@ -33,7 +33,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-             return View();
+            return View();
         }
         #endregion
 
@@ -45,7 +45,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList( string queryJson )
+        public ActionResult GetList(string queryJson)
         {
             var data = dM_APP_Partners_RecordIBLL.GetList(queryJson);
             return Success(data);
@@ -60,7 +60,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         public ActionResult GetPageList(string pagination, string queryJson)
         {
             Pagination paginationobj = pagination.ToObject<Pagination>();
-            var data = dM_APP_Partners_RecordIBLL.GetPageList(paginationobj, queryJson);
+            var data = dM_APP_Partners_RecordIBLL.GetPageListByDataTable(paginationobj, queryJson);
             var jsonData = new
             {
                 rows = data,
@@ -106,12 +106,26 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(int keyValue,dm_apply_partners_recordEntity entity)
+        public ActionResult SaveForm(int keyValue, dm_apply_partners_recordEntity entity)
         {
             dM_APP_Partners_RecordIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
         }
         #endregion
 
+        #region 审核成为合伙人
+        /// <summary>
+        /// 审核成为合伙人
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult CheckAppPartnersRecord(dm_apply_partners_recordEntity entity)
+        {
+            dM_APP_Partners_RecordIBLL.CheckAppPartnersRecord(entity);
+            return Success("审核成功！");
+        }
+        #endregion
     }
 }

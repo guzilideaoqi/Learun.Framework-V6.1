@@ -288,7 +288,9 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Announcement\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Banner\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\Index.css" />
+    <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\CheckCertficaRecord.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeGood\Form.css" />
+    <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeRecord\SendExpressNumber.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_ReadTask\Form.css" />
     <Content Include="Areas\LR_AuthorizeModule\Views\Authorize\Form.css" />
     <Content Include="Areas\LR_AuthorizeModule\Views\Authorize\Form.js" />
@@ -495,6 +497,10 @@
     <Content Include="Areas\LR_WorkFlowModule\Views\WfScheme\WorkformForm.js" />
     <Content Include="Areas\LR_WorkFlowModule\Views\WfSystemDemo\DemoLeaveForm.js" />
     <Content Include="Areas\LR_WorkFlowModule\Views\WfSystemDemo\DemoLeaveIndex.js" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap\bootstrap.min.css" />
     <Content Include="Content\bootstrap\html5shiv.min.js" />
@@ -1193,6 +1199,7 @@
     <Content Include="Content\signet\jquery.zsign.css" />
     <Content Include="Content\signet\jquery.zsign.js" />
     <Content Include="Content\signet\signet.gif" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\ueditor\dialogs\anchor\anchor.html" />
     <Content Include="Content\ueditor\dialogs\attachment\attachment.css" />
     <Content Include="Content\ueditor\dialogs\attachment\attachment.html" />
@@ -1826,6 +1833,13 @@
     <Content Include="Content\webuploader\webuploader.withoutimage.min.js" />
     <Content Include="Areas\LR_WorkFlowModule\Views\WfScheme\Form.cshtml" />
     <Content Include="Areas\LR_WorkFlowModule\Views\WfScheme\HistoryForm.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\CheckCertificaRecord.cshtml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Views\Home\AdminAccordion\Index.css" />
     <Content Include="Views\Home\AdminAccordion\Index.js" />
     <Content Include="Views\Home\AdminDesktopTemp\Index.js" />
@@ -2113,6 +2127,12 @@
     <Content Include="Areas\Hyg_RobotModule\Views\Application_Setting\AuthorilizeForm.cshtml" />
     <Content Include="Areas\Hyg_RobotModule\Views\web.config" />
     <Content Include="Areas\DM_APPManage\Views\web.config" />
+    <Content Include="Areas\DM_APPManage\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeRecord\SendExpressNumber.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\learunadms6.1.pubxml" />
     <Content Include="Views\LR_Content\style\lr-layer.css" />
@@ -2277,6 +2297,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

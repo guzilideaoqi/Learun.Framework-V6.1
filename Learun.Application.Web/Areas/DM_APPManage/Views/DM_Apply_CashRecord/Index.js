@@ -60,7 +60,7 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerConfirm('是否确认删除该项！', function (res) {
                         if (res) {
-                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Apply_CashRecord/DeleteForm', { keyValue: keyValue}, function () {
+                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Apply_CashRecord/DeleteForm', { keyValue: keyValue }, function () {
                             });
                         }
                     });
@@ -71,15 +71,37 @@ var bootstrap = function ($, learun) {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_Apply_CashRecord/GetPageList',
                 headData: [
-                        { label: '记录id', name: 'id', width: 200, align: "left" },
-                        { label: '用户id', name: 'user_id', width: 200, align: "left" },
-                        { label: '提现金额', name: 'price', width: 200, align: "left" },
-                        { label: '提现状态  0未审核  1审核成功  2审核驳回', name: 'status', width: 200, align: "left" },
-                        { label: '打款方式  0未打款  1手动打款  2支付宝打款', name: 'paytype', width: 200, align: "left" },
-                        { label: '申请提现备注信息', name: 'remark', width: 200, align: "left" },
-                        { label: '创建时间', name: 'createtime', width: 200, align: "left" },
+                    { label: '记录id', name: 'id', width: 200, align: "left" },
+                    { label: '用户id', name: 'user_id', width: 200, align: "left" },
+                    { label: '提现金额', name: 'price', width: 200, align: "left" },
+                    {
+                        label: '提现状态', name: 'status', width: 200, align: "left", formatter: function (cellValue, rowData, options) {
+                            if (cellValue == 0)
+                                return "未审核";
+                            else if (cellValue == 1)
+                                return "审核成功";
+                            else if (cellValue == 2)
+                                return "审核驳回";
+                            else
+                                return "未知请求";
+                        }
+                    },
+                    {
+                        label: '打款方式', name: 'paytype', width: 200, align: "left", formatter: function (cellValue, rowData, options) {
+                            if (cellValue == 0)
+                                return "未打款";
+                            else if (cellValue == 1)
+                                return "手动打款";
+                            else if (cellValue == 2)
+                                return "支付宝打款";
+                            else
+                                return "未知请求";
+                        }
+                    },
+                    { label: '申请提现备注信息', name: 'remark', width: 200, align: "left" },
+                    { label: '创建时间', name: 'createtime', width: 200, align: "left" },
                 ],
-                mainId:'id',
+                mainId: 'id',
                 reloadSelected: true,
                 isPage: true
             });

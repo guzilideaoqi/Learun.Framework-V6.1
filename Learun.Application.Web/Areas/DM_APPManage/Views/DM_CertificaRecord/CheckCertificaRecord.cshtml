@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "身份证实名审核";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">真实姓名<font face="宋体">*</font></div>
+        <input id="realname" type="text" class="form-control" isvalid="yes" disabled="disabled" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">身份证号<font face="宋体">*</font></div>
+        <input id="cardno" type="text" class="form-control" isvalid="yes" disabled="disabled" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">身份证正面<font face="宋体">*</font></div>
+        <img id="facecard" style="max-width:370px;max-height:230px;" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">身份证反面<font face="宋体">*</font></div>
+        <img id="frontcard" style="max-width:370px;max-height:230px;" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_CertificaRecord/CheckCertficaRecord.js")

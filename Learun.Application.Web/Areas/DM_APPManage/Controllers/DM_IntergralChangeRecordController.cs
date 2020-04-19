@@ -22,6 +22,11 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
 		}
 
 		[HttpGet]
+		public ActionResult SendExpressNumber() {
+			return View();
+		}
+
+		[HttpGet]
 		[AjaxOnly(false)]
 		public ActionResult GetList(string queryJson)
 		{

@@ -1,6 +1,7 @@
 ﻿using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -50,6 +51,30 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 return dM_APP_Partners_RecordService.GetPageList(pagination, queryJson);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取分页数据DataTable
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="queryJson"></param>
+        /// <returns></returns>
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson) {
+            try
+            {
+                return dM_APP_Partners_RecordService.GetPageListByDataTable(pagination, queryJson);
             }
             catch (Exception ex)
             {
@@ -142,5 +167,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 审核成为合伙人
+        public void CheckAppPartnersRecord(dm_apply_partners_recordEntity entity) {
+            try
+            {
+                dM_APP_Partners_RecordService.CheckAppPartnersRecord(entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

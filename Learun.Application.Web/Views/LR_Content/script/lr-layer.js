@@ -12,7 +12,7 @@
         layerConfirm: function (msg, callback) {
             top.layer.confirm(msg, {
                 btn: ['确认', '取消'],
-                title: "力软提示",
+                title: "哆来米提示",
                 icon: 0,
                 skin:'lr-layer',
             }, function (index) {
