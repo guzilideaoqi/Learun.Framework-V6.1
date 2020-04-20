@@ -91,7 +91,7 @@ namespace Learun.Cache.Redis
         #endregion
 
         #region redis中处理DataTable
-        public static byte[] SetBytesFormT(DataTable t)
+        byte[] SetBytesFormT(DataTable t)
         {
             System.Runtime.Serialization.IFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();//定义BinaryFormatter以序列化DataSet对象   
             System.IO.MemoryStream ms = new System.IO.MemoryStream();//创建内存流对象   
@@ -102,7 +102,7 @@ namespace Learun.Cache.Redis
             return buffer;
         }
 
-        private static object GetObjFromBytes(byte[] buffer)
+        object GetObjFromBytes(byte[] buffer)
         {
             using (System.IO.MemoryStream stream = new System.IO.MemoryStream(buffer))
             {

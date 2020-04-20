@@ -23,9 +23,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         private ICache redisCache = CacheFactory.CaChe();
 
         private DM_TaskService dm_TaskService = new DM_TaskService();
-        DM_UserService dM_UserService = new DM_UserService();
-        DM_UserRelationService dM_UserRelationService = new DM_UserRelationService();
-        DM_BaseSettingService dM_BaseSettingService = new DM_BaseSettingService();
+        private DM_UserService dM_UserService = new DM_UserService();
+        private DM_UserRelationService dM_UserRelationService = new DM_UserRelationService();
+        private DM_BaseSettingService dM_BaseSettingService = new DM_BaseSettingService();
 
         #region 构造函数和属性
 
@@ -113,7 +113,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public dm_task_reviceEntity GetEntity(int keyValue)
+        public dm_task_reviceEntity GetEntity(int? keyValue)
         {
             try
             {
@@ -132,11 +132,44 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_task_reviceEntity GetReviceEntity(int user_id, int task_id)
+        /// <summary>
+        /// 获取用户接受记录
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="task_id"></param>
+        /// <returns></returns>
+        public dm_task_reviceEntity GetReviceEntity(int? user_id, int? task_id)
         {
             try
             {
                 return this.BaseRepository("dm_data").FindEntity<dm_task_reviceEntity>(t => t.user_id == user_id && t.task_id == task_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取我的接受任务
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        public DataTable GetMyReviceTask(int user_id, Pagination pagination)
+        {
+            try
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("select t.*,r.status ReviceStatus from dm_task_revice r left join dm_task t on r.task_id=t.id where r.user_id=" + user_id);
+
+                return this.BaseRepository("dm_data").FindTable(stringBuilder.ToString(), pagination);
             }
             catch (Exception ex)
             {
@@ -213,7 +246,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
-
         #region 获取任务接受列表
         public IEnumerable<dm_task_reviceEntity> GetReviceListByTaskID(int task_id)
         {
@@ -255,6 +287,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_task_reviceEntity reviceEntity = GetReviceEntity(dm_Task_ReviceEntity.user_id, dm_Task_ReviceEntity.task_id);
                 if (!reviceEntity.IsEmpty())
                     throw new Exception("请勿重复接受该任务!");
+
+                dm_userEntity dm_UserEntity = dM_UserService.GetEntity(dm_Task_ReviceEntity.user_id);
+                if (dm_UserEntity.userlevel != 1 && dm_UserEntity.userlevel != 3)
+                    throw new Exception("当前等级无法接受任务,请升级后重试!");
+
                 dm_Task_ReviceEntity.revice_time = DateTime.Now;
                 dm_Task_ReviceEntity.status = 1;
                 dm_Task_ReviceEntity.Create();
@@ -288,10 +325,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                dm_Task_ReviceEntity.status = 2;
-                dm_Task_ReviceEntity.submit_time = DateTime.Now;
-                dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity.id);
-                BaseRepository("dm_data").Update(dm_Task_ReviceEntity);
+                dm_task_reviceEntity dm_Task_ReviceEntity_New = GetEntity(dm_Task_ReviceEntity.id);
+                if (dm_Task_ReviceEntity_New.status == 2)
+                    throw new Exception("资料已提交,请勿重复提交,耐心等待审核!");
+                if (dm_Task_ReviceEntity_New.status == 4)
+                    throw new Exception("您已经取消该任务,无需再提交资料!");
+                dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity_New.task_id);
+                if (dm_TaskEntity.task_status == 2)
+                    throw new Exception("该任务已取消,资料提交失败!");
+                dm_Task_ReviceEntity_New.status = 2;
+                dm_Task_ReviceEntity_New.submit_time = DateTime.Now;
+                dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity_New.id);
+                dm_Task_ReviceEntity_New.submit_data = dm_Task_ReviceEntity.submit_data;
+                BaseRepository("dm_data").Update(dm_Task_ReviceEntity_New);
             }
             catch (Exception ex)
             {
@@ -398,7 +444,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_task_reviceEntity dm_Task_ReviceEntity = GetEntity(revice_id);
                 if (dm_Task_ReviceEntity.status == 4)
                     throw new Exception("该任务已取消,审核失败!");
-                if (dm_Task_ReviceEntity.status == 2)
+                if (dm_Task_ReviceEntity.status == 1)
                     throw new Exception("该任务未提交资料,审核失败!");
                 if (dm_Task_ReviceEntity.status == 3)
                     throw new Exception("该任务已审核通过,请勿重复审核!");
@@ -408,6 +454,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 #region 修改任务主表数据
                 dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
+                if (dm_TaskEntity.task_status == 2)
+                    throw new Exception("该任务已取消,审核失败!");
                 dm_TaskEntity.finishcount += 1;
                 if (dm_TaskEntity.finishcount >= dm_TaskEntity.needcount)
                     dm_TaskEntity.task_status = 1;

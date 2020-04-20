@@ -20,12 +20,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// </summary>
     public class DM_TaskService : RepositoryFactory
     {
-        private ICache redisCache = CacheFactory.CaChe();
-
         private DM_BaseSettingService dm_BaseSettingService = new DM_BaseSettingService();
         private DM_UserService dm_UserService = new DM_UserService();
         private DM_UserRelationService dm_UserRelationService = new DM_UserRelationService();
-        private DM_Task_ReviceService dm_Task_ReviceService = new DM_Task_ReviceService();
 
         #region 构造函数和属性
 
@@ -47,6 +44,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 t.servicefee,
                 t.juniorcommission,
                 t.seniorcommission,
+                t.singlecommission,
                 t.needcount,
                 t.finishcount,
                 t.user_id,
@@ -111,6 +109,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     strSql.Append(" where t.appid='" + queryParam["appid"].ToString() + "'");
                 }
+                if (!queryParam["user_id"].IsEmpty())
+                {
+                    strSql.Append(" where t.user_id='" + queryParam["user_id"].ToString() + "'");
+                }
                 return this.BaseRepository("dm_data").FindList<dm_taskEntity>(strSql.ToString(), pagination);
             }
             catch (Exception ex)
@@ -131,7 +133,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public dm_taskEntity GetEntity(int keyValue)
+        public dm_taskEntity GetEntity(int? keyValue)
         {
             try
             {
@@ -297,6 +299,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             IRepository db = null;
             try
             {
+                DM_Task_ReviceService dm_Task_ReviceService = new DM_Task_ReviceService();
+
                 IEnumerable<dm_task_reviceEntity> dm_Task_ReviceEntities = dm_Task_ReviceService.GetReviceListByTaskID(task_id);
                 if (dm_Task_ReviceEntities.Where(t => t.status == 2).Count() > 0)
                     throw new Exception("当前存在未审核的资料,任务无法取消,请审核之后重试!");

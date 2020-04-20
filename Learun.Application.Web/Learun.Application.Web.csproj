@@ -292,6 +292,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeGood\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeRecord\SendExpressNumber.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_ReadTask\Form.css" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.css" />
     <Content Include="Areas\LR_AuthorizeModule\Views\Authorize\Form.css" />
     <Content Include="Areas\LR_AuthorizeModule\Views\Authorize\Form.js" />
     <Content Include="Areas\LR_AuthorizeModule\Views\DataAuthorize\Form.css" />

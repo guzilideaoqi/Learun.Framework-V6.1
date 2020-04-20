@@ -104,7 +104,6 @@ var bootstrap = function ($, learun) {
         },
         search: function (param) {
             param = param || { txt_phone: $("#txt_phone").val(), txt_username: $("#txt_username").val(), txt_expresscode: $("#txt_expresscode").val() };
-            console.log(param);
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
     };

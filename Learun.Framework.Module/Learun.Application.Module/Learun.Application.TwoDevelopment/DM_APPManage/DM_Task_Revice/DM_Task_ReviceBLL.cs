@@ -1,6 +1,7 @@
 ﻿using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -245,6 +246,54 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 dM_Task_ReviceService.AuditTask(revice_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 我的接受任务
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="pagination"></param>
+        /// <returns></returns>
+        public DataTable GetMyReviceTask(int user_id, Pagination pagination) {
+            try
+            {
+               return dM_Task_ReviceService.GetMyReviceTask(user_id,pagination);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取任务接受记录详情
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="task_id"></param>
+        /// <returns></returns>
+        public dm_task_reviceEntity GetReviceEntity(int user_id, int task_id) {
+            try
+            {
+                return dM_Task_ReviceService.GetReviceEntity(user_id, task_id);
             }
             catch (Exception ex)
             {

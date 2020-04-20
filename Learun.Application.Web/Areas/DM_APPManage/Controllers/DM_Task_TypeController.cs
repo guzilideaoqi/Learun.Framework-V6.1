@@ -1,5 +1,8 @@
 ﻿using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Util;
+using System;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
@@ -113,5 +116,27 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         }
         #endregion
 
+        [HttpPost]
+        public ActionResult UploadFile(int keyValue, dm_task_typeEntity entity)
+        {
+            HttpFileCollection files = System.Web.HttpContext.Current.Request.Files;
+            if (files.Count > 0)
+            {
+                if (files[0].ContentLength == 0 || string.IsNullOrEmpty(files[0].FileName))
+                {
+                    return HttpNotFound();
+                }
+                UserInfo userInfo = LoginUserInfo.Get();
+                string FileEextension = Path.GetExtension(files[0].FileName);
+                string virtualPath = $"/Resource/TaskTypeImage/{Guid.NewGuid().ToString()}{FileEextension}";
+                string fullFileName = base.Server.MapPath("~" + virtualPath);
+                string path = Path.GetDirectoryName(fullFileName);
+                Directory.CreateDirectory(path);
+                files[0].SaveAs(fullFileName);
+                entity.image = virtualPath;
+            }
+            dM_Task_TypeIBLL.SaveEntity(keyValue, entity);
+            return Success("保存成功。");
+        }
     }
 }

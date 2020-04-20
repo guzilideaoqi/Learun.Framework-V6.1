@@ -27,13 +27,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("TASK_ID")]
-        public int task_id { get; set; }
+        public int? task_id { get; set; }
         /// <summary>
         /// 用户id
         /// </summary>
         /// <returns></returns>
         [Column("USER_ID")]
-        public int user_id { get; set; }
+        public int? user_id { get; set; }
         /// <summary>
         /// 接受时间
         /// </summary>

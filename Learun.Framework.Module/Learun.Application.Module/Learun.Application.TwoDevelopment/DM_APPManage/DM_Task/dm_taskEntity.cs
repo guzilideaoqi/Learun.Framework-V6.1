@@ -148,6 +148,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             this.finishcount = 0;
             this.plaform = 1;
             this.revicecount = 0;
+            this.task_status = 0;
 
         }
         /// <summary>

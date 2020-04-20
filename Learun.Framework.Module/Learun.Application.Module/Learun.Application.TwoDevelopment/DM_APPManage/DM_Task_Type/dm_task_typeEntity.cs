@@ -58,6 +58,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         public void Create()
         {
+            UserInfo userInfo = LoginUserInfo.Get();
+            createtime = DateTime.Now;
+            appid = userInfo.companyId;
         }
         /// <summary>
         /// 编辑调用

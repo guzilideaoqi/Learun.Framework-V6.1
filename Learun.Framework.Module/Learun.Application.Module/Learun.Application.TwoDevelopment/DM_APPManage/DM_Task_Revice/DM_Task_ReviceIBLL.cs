@@ -1,5 +1,6 @@
 ﻿using Learun.Util;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -80,6 +81,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="revice_id"></param>
         void AuditTask(int revice_id);
+
+        /// <summary>
+        /// 我的接受任务
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="pagination"></param>
+        /// <returns></returns>
+        DataTable GetMyReviceTask(int user_id, Pagination pagination);
+
+        /// <summary>
+        /// 获取任务接受记录详情
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="task_id"></param>
+        /// <returns></returns>
+        dm_task_reviceEntity GetReviceEntity(int user_id, int task_id);
         #endregion
     }
 }

@@ -3,7 +3,11 @@ using Learun.Application.Web.App_Start._01_Handler;
 using Learun.Cache.Base;
 using Learun.Cache.Factory;
 using Learun.Util;
+using OracleInternal.Secure.Network;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
@@ -38,7 +42,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取任务列表
-        public ActionResult GetTaskList(int PageNo=1, int PageSize=20, string TaskType = "-1")
+        public ActionResult GetTaskList(int PageNo = 1, int PageSize = 20, string TaskType = "-1")
         {
             try
             {
@@ -136,7 +140,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                dm_Task_ReviceIBLL.ReviceTask(dm_Task_ReviceEntity);
+                dm_Task_ReviceIBLL.SubmitMeans(dm_Task_ReviceEntity);
                 return Success("资料提交成功!");
             }
             catch (Exception ex)
@@ -162,16 +166,59 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取我的发布
-        public ActionResult GetMyReleaseTask()
+        public ActionResult GetMyReleaseTask(int user_id, int PageNo = 1, int PageSize = 20)
         {
-            return View();
+            try
+            {
+                string cacheKey = "MyReleaseTask" + Md5Helper.Hash(user_id + "" + PageNo + "" + PageSize);
+                IEnumerable<dm_taskEntity> dm_TaskEntities = redisCache.Read<IEnumerable<dm_taskEntity>>(cacheKey, 7);
+                if (dm_TaskEntities == null)
+                {
+                    dm_TaskEntities = dm_TaskIBLL.GetPageList(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + user_id + "\"}");
+
+                    if (dm_TaskEntities.Count() > 0)
+                    {
+                        if (dm_TaskEntities.Count() < PageSize)
+                            redisCache.Write<IEnumerable<dm_taskEntity>>(cacheKey, dm_TaskEntities, DateTime.Now.AddMinutes(5), 7);
+                        else
+                            redisCache.Write<IEnumerable<dm_taskEntity>>(cacheKey, dm_TaskEntities, DateTime.Now.AddHours(2), 7);
+                    }
+                }
+                return SuccessList("获取成功!", dm_TaskEntities);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
         #endregion
 
         #region 获取我的接受
-        public ActionResult GetMyReviceTask()
+        public ActionResult GetMyReviceTask(int user_id, int PageNo = 1, int PageSize = 20)
         {
-            return View();
+            try
+            {
+                string cacheKey = "MyReviceTask" + Md5Helper.Hash(user_id + "" + PageNo + "" + PageSize);
+                DataTable dataTable = redisCache.Read(cacheKey, 7);
+                if (dataTable == null) {
+                    dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(user_id, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
+                    int datarow = dataTable.Rows.Count;
+                    if (datarow > 0) {
+                        if (datarow < PageSize)
+                        {
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(5), 7);
+                        }
+                        else { 
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(2), 7);
+                        }
+                    }
+                }
+                return SuccessList("获取成功!", dataTable);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
         #endregion
 
@@ -180,8 +227,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                var obj= new {TaskInfo= dm_TaskIBLL };
-                return Success("审核成功!");
+                var obj = new { TaskInfo = dm_TaskIBLL.GetEntity(task_id), ReviceInfo = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id)};
+                return Success("获取成功!", obj);
             }
             catch (Exception ex)
             {

@@ -114,7 +114,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity GetEntity(int keyValue)
+        public dm_userEntity GetEntity(int? keyValue)
         {
             try
             {

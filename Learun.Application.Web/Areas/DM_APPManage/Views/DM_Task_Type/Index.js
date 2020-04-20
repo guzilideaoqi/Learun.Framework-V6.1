@@ -29,7 +29,7 @@ var bootstrap = function ($, learun) {
                 learun.layerForm({
                     id: 'form',
                     title: '新增',
-                    url: top.$.rootUrl + '/DM_APPManage/DM_Task_Type/Form',
+                    url: top.$.rootUrl + '/DM_APPManage/DM_Task_Type/Form?keyValue=0',
                     width: 700,
                     height: 400,
                     callBack: function (id) {
@@ -60,7 +60,8 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerConfirm('是否确认删除该项！', function (res) {
                         if (res) {
-                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Task_Type/DeleteForm', { keyValue: keyValue}, function () {
+                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Task_Type/DeleteForm', { keyValue: keyValue }, function () {
+                                location.reload();
                             });
                         }
                     });
@@ -71,14 +72,22 @@ var bootstrap = function ($, learun) {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_Task_Type/GetPageList',
                 headData: [
-                        { label: 'id', name: 'id', width: 200, align: "left" },
-                        { label: '类别名称', name: 'name', width: 200, align: "left" },
-                        { label: '类别图标', name: 'image', width: 200, align: "left" },
-                        { label: '可用状态  0不可用  1可用', name: 'status', width: 200, align: "left" },
-                        { label: '创建时间', name: 'createtime', width: 200, align: "left" },
-                        { label: '平台id', name: 'appid', width: 200, align: "left" },
+                    //{ label: 'id', name: 'id', width: 200, align: "left" },
+                    { label: '类别名称', name: 'name', width: 200, align: "left" },
+                    { label: '类别图标', name: 'image', width: 200, align: "left" },
+                    {
+                        label: '可用状态', name: 'status', width: 200, align: "left", formatter: function (cellvalue, rowData, options) {
+                            if (cellvalue == 1)
+                                return "可用";
+                            else {
+                                return "不可用";
+                            }
+                        }
+                    },
+                    { label: '创建时间', name: 'createtime', width: 200, align: "left" },
+                    //{ label: '平台id', name: 'appid', width: 200, align: "left" },
                 ],
-                mainId:'id',
+                mainId: 'id',
                 reloadSelected: true,
                 isPage: true
             });
