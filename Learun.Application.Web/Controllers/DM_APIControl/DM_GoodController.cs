@@ -15,6 +15,9 @@ using JDModel;
 using HYG.CommonHelper.JDModel;
 using HYG.CommonHelper.PDDModel;
 using System.Web;
+using Top.Api.Request;
+using Top.Api;
+using Top.Api.Response;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -31,6 +34,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private DM_PidIBLL dM_PidIBLL = new DM_PidBLL();
 
         private ICache redisCache = CacheFactory.CaChe();
+
+        string tb_url = "http://gw.api.taobao.com/router/rest";
 
         #region 获取商品类别(一个月更新一次)
         public ActionResult GetGoodType()
@@ -595,6 +600,58 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     redisCache.Write(cacheKey, ConvertLinkResult, DateTime.Now.AddHours(1.0), 7L);
                 }
                 return Success("转链成功!", ConvertLinkResult);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 私域备案
+        public ActionResult SavePublisherInfo(string SessionKey)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+
+                ITopClient client = new DefaultTopClient(tb_url, dm_BasesettingEntity.tb_appkey, dm_BasesettingEntity.tb_appsecret);
+                TbkScPublisherInfoSaveRequest req = new TbkScPublisherInfoSaveRequest();
+                req.RelationFrom = "1";
+                req.OfflineScene = "1";
+                req.OnlineScene = "1";
+                req.InviterCode = "￥IrKf1ls2e5R￥";
+                req.InfoType = 1L;
+                req.Note = "测试";
+                req.RegisterInfo = "{\"phoneNumber\":\"18801088599\",\"city\":\"江苏省\",\"province\":\"南京市\",\"location\":\"玄武区花园小区\",\"detailAddress\":\"5号楼3单元101室\"}";
+                TbkScPublisherInfoSaveResponse rsp = client.Execute(req, SessionKey);
+
+                return Success("备案成功!", rsp.Data);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+
+        }
+        #endregion
+
+        #region 备案查询
+        public ActionResult GetPublisherInfo(string SessionKey, TbkScPublisherInfoGetRequest req)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+
+                ITopClient client = new DefaultTopClient(tb_url, dm_BasesettingEntity.tb_appkey, dm_BasesettingEntity.tb_appsecret);
+                req.InfoType = 1L;
+                req.RelationApp = "common";
+                //req.SpecialId = "1212";
+                TbkScPublisherInfoGetResponse rsp = client.Execute(req, SessionKey);
+
+                return SuccessList("备案查询成功!", rsp.Data.RootPidChannelList);
             }
             catch (Exception ex)
             {
