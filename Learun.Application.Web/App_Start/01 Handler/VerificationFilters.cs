@@ -31,13 +31,14 @@ namespace Learun.Application.Web.App_Start._01_Handler
             }
             string ActionName = filterContext.RouteData.Values["action"].ToString().ToLower();
             //登录和注册不校验
-            if (ActionName == "dm_login" || ActionName == "dm_register"||ActionName== "paycallback") {
+            if (ActionName == "dm_login" || ActionName == "dm_register" || ActionName == "paycallback" || ActionName == "authorcallback" || ActionName == "callback")
+            {
                 return;
             }
             //return Content(new ResParameter { code = ResponseCode.success, info = info, data = new object { } }.ToJson());
             ResParameter modelResult = new ResParameter();
             //参数判断
-            if (filterContext.HttpContext.Request.Headers["appid"]==null)
+            if (filterContext.HttpContext.Request.Headers["appid"] == null)
             {
                 modelResult.code = ResponseCode.fail;
                 modelResult.info = "缺少appid参数!";

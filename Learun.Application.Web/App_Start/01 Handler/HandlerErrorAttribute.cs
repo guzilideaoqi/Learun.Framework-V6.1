@@ -34,12 +34,12 @@ namespace Learun.Application.Web
             base.OnException(context);
             context.ExceptionHandled = true;
             context.HttpContext.Response.StatusCode = 200;
-            string msg = "Learun敏捷框架提醒您：" + context.Exception.Message;
-            if (msg == "Learun敏捷框架提醒您：所需的防伪表单字段“__RequestVerificationToken”不存在。")
+            string msg = "哆来米异常提示：" + context.Exception.Message;
+            if (msg == "哆来米异常提示：所需的防伪表单字段“__RequestVerificationToken”不存在。")
             {
-                msg = "系统貌似出问题了，可联系力软官方敏捷框架售后人员。";
+                msg = "系统貌似出问题了，可联系哆来米售后人员。";
             }
-            context.Result = new ContentResult { Content = new ResParameter { code = ResponseCode.exception, info = msg }.ToJson() };
+            context.Result = new ContentResult { Content = new ResParameter { code = ResponseCode.exception, info = msg, data = "请检查您的请求参数类型" }.ToJson() };
         }
         /// <summary>
         /// 写入日志（log4net）
@@ -51,7 +51,7 @@ namespace Learun.Application.Web
                 return;
             var userInfo = LoginUserInfo.Get();
 
-           
+
             var log = LogFactory.GetLogger(context.Controller.ToString());
             Exception Error = context.Exception;
             LogMessage logMessage = new LogMessage();
@@ -65,7 +65,7 @@ namespace Learun.Application.Web
             {
                 logMessage.UserName = userInfo.account + "（" + userInfo.realName + "）";
             }
-            
+
             if (Error.InnerException == null)
             {
                 logMessage.ExceptionInfo = Error.Message;

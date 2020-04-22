@@ -1,13 +1,17 @@
 ﻿using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Application.TwoDevelopment.Hyg_RobotModule;
+using Learun.Application.Web.App_Start._01_Handler;
 using Learun.Loger;
 using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using Top.Api.Util;
+
 
 namespace Learun.Application.Web.Controllers
 {
@@ -18,11 +22,12 @@ namespace Learun.Application.Web.Controllers
     /// 日 期：2017.03.09
     /// 描 述：错误页控制器
     /// </summary>
-    [HandlerLogin(FilterMode.Ignore)]
-    public class TBUserInfoControllerController : MvcControllerBase
+    public class TBUserInfoControllerController : MvcAPIControllerBase
     {
         //private Application_SettingIBLL application_SettingIBLL = new Application_SettingBLL();
         private DM_BaseSettingIBLL dm_BaseSettingIBLL = new DM_BaseSettingBLL();
+        private DM_UserIBLL dm_userIBLL = new DM_UserBLL();
+
         [HttpGet]
         public ActionResult CallBack(string access_token, string token_type, string expires_in, string refresh_token, string state)
         {
@@ -64,18 +69,28 @@ namespace Learun.Application.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult AuthorCallBack(string code,string state)
+        public ActionResult AuthorCallBack(string code, string state)
         {
             try
             {
+                int user_id = int.Parse(state);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(dm_UserEntity.appid);
+
                 WebUtils webUtils = new WebUtils();
                 IDictionary<string, string> pout = new Dictionary<string, string>();
                 pout.Add("grant_type", "authorization_code");
-                pout.Add("client_id", "test");
-                pout.Add("client_secret", "test");
+                pout.Add("client_id", dm_BasesettingEntity.tb_appkey);
+                pout.Add("client_secret", dm_BasesettingEntity.tb_appsecret);
                 pout.Add("code", code);
-                pout.Add("redirect_uri", "http://www.test.com");
-                string output = webUtils.DoPost("https://oauth.taobao.com/token", pout);
+                pout.Add("redirect_uri", HttpUtility.UrlEncode("http://wx.sqgsq.cn/TBUserInfoController/AuthorCallBack"));
+                string output = webUtils.DoPost("http://oauth.taobao.com/token", pout);
+
+                #region 获取出来用户信息
+                Log log = LogFactory.GetLogger("workflowapi");
+                log.Error(output);
+                #endregion
 
                 return Success("授权成功", output);
             }

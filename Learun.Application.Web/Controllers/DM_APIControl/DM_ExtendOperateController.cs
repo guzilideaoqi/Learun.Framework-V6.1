@@ -55,7 +55,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取banner图列表
-        public ActionResult GetBannerList(int type)
+        public ActionResult GetBannerList(int type = 0)
         {
             try
             {

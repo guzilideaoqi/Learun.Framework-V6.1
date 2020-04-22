@@ -1,4 +1,5 @@
-﻿using Learun.Util;
+﻿using Learun.Application.TwoDevelopment.Common;
+using Learun.Util;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Learun.Application.TwoDevelopment.DM_APPManage

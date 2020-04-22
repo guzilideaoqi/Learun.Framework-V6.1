@@ -88,11 +88,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             if (dm_BasesettingEntity == null)
             {
                 dm_BasesettingEntity = GetEntity(appid);
-                if (dm_BasesettingEntity != null)
-                {
-                    redisCache.Write(cacheKey, dm_BasesettingEntity, 7L);
-                    CommonConfig.ImageQianZhui = dm_BasesettingEntity.qianzhui_image;
-                }
+                redisCache.Write(cacheKey, dm_BasesettingEntity, 7L);
+            }
+
+            if (dm_BasesettingEntity != null)
+            {
+                CommonConfig.ImageQianZhui = dm_BasesettingEntity.qianzhui_image;
             }
 
             return dm_BasesettingEntity;

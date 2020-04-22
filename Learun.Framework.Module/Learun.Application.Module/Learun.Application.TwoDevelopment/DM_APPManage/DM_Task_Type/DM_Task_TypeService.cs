@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Linq;
+using Learun.Application.TwoDevelopment.Common;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -65,6 +66,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     if (!queryParam["appid"].IsEmpty())
                     {
                         strSql.Append(" where t.appid='" + queryParam["appid"].ToString() + "'");
+
+                        if (CommonConfig.ImageQianZhui.IsEmpty())
+                            new DM_BaseSettingService().GetEntityByCache(queryParam["appid"].ToString());
                     }
                     dm_Task_TypeEntities = this.BaseRepository("dm_data").FindList<dm_task_typeEntity>(strSql.ToString());
 
@@ -74,7 +78,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     }
                 }
 
-                return dm_Task_TypeEntities;
+                return dm_Task_TypeEntities.Select(delegate (dm_task_typeEntity t)
+                {
+                    t.image = CommonConfig.ImageQianZhui + t.image;
+                    return t;
+                });
             }
             catch (Exception ex)
             {

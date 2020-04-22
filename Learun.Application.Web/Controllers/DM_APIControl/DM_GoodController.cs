@@ -621,12 +621,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 req.RelationFrom = "1";
                 req.OfflineScene = "1";
                 req.OnlineScene = "1";
-                req.InviterCode = "￥IrKf1ls2e5R￥";
+                req.InviterCode = "PCUMX2";
                 req.InfoType = 1L;
                 req.Note = "测试";
                 req.RegisterInfo = "{\"phoneNumber\":\"18801088599\",\"city\":\"江苏省\",\"province\":\"南京市\",\"location\":\"玄武区花园小区\",\"detailAddress\":\"5号楼3单元101室\"}";
                 TbkScPublisherInfoSaveResponse rsp = client.Execute(req, SessionKey);
-
+                if (rsp.Data == null)
+                    throw new Exception(rsp.SubErrMsg);
                 return Success("备案成功!", rsp.Data);
             }
             catch (Exception ex)
@@ -994,6 +995,24 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     break;
             }
             return userComission;
+        }
+        #endregion
+
+        #region 生成淘宝授权地址
+        public ActionResult Get_TB_Author_Address(int user_id)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                string authorAddress = "https://oauth.taobao.com/authorize?response_type=code&client_id=" + dm_BasesettingEntity.tb_appkey + "&redirect_uri=http://wx.sqgsq.cn/TBUserInfoController/AuthorCallBack&state=" + user_id + "&view=web";
+
+                return Success("获取成功!", authorAddress);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
         #endregion
 

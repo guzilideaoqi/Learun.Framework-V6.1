@@ -172,7 +172,7 @@ namespace Learun.Application.WorkFlowServer
             catch (Exception)
             {
             }
-            string msg = "Learun敏捷框架提醒您：" + ex.Message;
+            string msg = "哆来米异常提示：" + ex.Message;
             return Response.AsText(new ResParameter { code = ResponseCode.exception, info = msg }.ToJson()).WithContentType("application/json").WithStatusCode(HttpStatusCode.OK);
         }
         /// <summary>
