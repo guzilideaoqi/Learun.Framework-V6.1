@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "PubTask";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">任务标题<font face="宋体">*</font></div>
+        <input id="task_title" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">任务佣金<font face="宋体">*</font></div>
+        <input id="singlecommission" type="text" class="form-control" isvalid="yes" checkexpession="Double" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">任务类型<font face="宋体">*</font></div>
+        <div id="task_type"  isvalid="yes" checkexpession="NotNull"></div>
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">任务需求人数<font face="宋体">*</font></div>
+        <input id="needcount" type="text" class="form-control" isvalid="yes" checkexpession="Num" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">任务要求<font face="宋体">*</font></div>
+        <script id="editor" type="text/plain" style="height:400px;">
+        </script>
+    </div>
+
+    <div id="PubTask" class="col-xs-12 lr-form-item" style="  position: fixed;left: 0;bottom: 0;width: 80%;margin:0 10%;font-size:18px;color:white;text-align:center; height: 49px;line-height: 49px;z-index: 1010;border-radius:5px;background-color:forestgreen;">
+        立即发布
+    </div>
+</div>
+<script src="~/Content/ueditor/ueditor.config.js"></script>
+<script src="~/Content/ueditor/ueditor.all.js"></script>
+<script src="~/Content/ueditor/lang/zh-cn/zh-cn.js"></script>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_Task/PubTask.js")

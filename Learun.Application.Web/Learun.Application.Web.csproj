@@ -296,6 +296,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeGood\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeRecord\SendExpressNumber.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_ReadTask\Form.css" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\PubTask.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.css" />
     <Content Include="Areas\LR_AuthorizeModule\Views\Authorize\Form.css" />
     <Content Include="Areas\LR_AuthorizeModule\Views\Authorize\Form.js" />
@@ -1842,6 +1843,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\CheckCertificaRecord.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\PubTask.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

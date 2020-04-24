@@ -27,7 +27,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
         /// <summary>
         /// 表单页
@@ -36,7 +36,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-             return View();
+            return View();
         }
         #endregion
 
@@ -48,9 +48,18 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList( string queryJson )
+        public ActionResult GetList(string queryJson)
         {
             var data = dM_Task_TypeIBLL.GetList(queryJson);
+            return Success(data);
+        }
+
+        [HttpGet]
+        [AjaxOnly]
+        public ActionResult GetListByWeb()
+        {
+            UserInfo userInfo = LoginUserInfo.Get();
+            var data = dM_Task_TypeIBLL.GetList("{\"appid\":\"" + userInfo.companyId + "\"}");
             return Success(data);
         }
         /// <summary>
@@ -109,7 +118,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(int keyValue,dm_task_typeEntity entity)
+        public ActionResult SaveForm(int keyValue, dm_task_typeEntity entity)
         {
             dM_Task_TypeIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");

@@ -24,7 +24,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
         /// <summary>
         /// 表单页
@@ -33,7 +33,17 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-             return View();
+            return View();
+        }
+
+        /// <summary>
+        /// 发布任务
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult PubTask()
+        {
+            return View();
         }
         #endregion
 
@@ -45,7 +55,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList( string queryJson )
+        public ActionResult GetList(string queryJson)
         {
             var data = dM_TaskIBLL.GetList(queryJson);
             return Success(data);
@@ -106,9 +116,24 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(int keyValue,dm_taskEntity entity)
+        public ActionResult SaveForm(int keyValue, dm_taskEntity entity)
         {
             dM_TaskIBLL.SaveEntity(keyValue, entity);
+            return Success("保存成功！");
+        }
+
+        /// <summary>
+        /// 保存实体数据（新增、修改）
+        /// <param name="keyValue">主键</param>
+        /// <summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AjaxOnly(false)]
+        [ValidateInput(false)]
+        public ActionResult PubNewTask(int keyValue, dm_taskEntity entity)
+        {
+            dM_TaskIBLL.ReleaseTaskByWeb(entity);
             return Success("保存成功！");
         }
         #endregion

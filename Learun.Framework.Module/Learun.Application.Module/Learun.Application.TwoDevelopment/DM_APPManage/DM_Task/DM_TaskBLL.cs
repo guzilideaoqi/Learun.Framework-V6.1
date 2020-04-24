@@ -143,6 +143,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region Method Extend
+        public void ReleaseTaskByWeb(dm_taskEntity entity)
+        {
+            try
+            {
+                dM_TaskService.ReleaseTaskByWeb(entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         /// <summary>
         /// 发布任务
         /// </summary>
@@ -169,7 +187,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 取消发布任务
         /// </summary>
         /// <param name="task_id"></param>
-        public void CancelByReleasePerson(int task_id) {
+        public void CancelByReleasePerson(int task_id)
+        {
             try
             {
                 dM_TaskService.CancelByReleasePerson(task_id);

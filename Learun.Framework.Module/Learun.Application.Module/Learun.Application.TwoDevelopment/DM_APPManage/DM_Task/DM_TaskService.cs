@@ -217,6 +217,45 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #region 发布任务
         /// <summary>
+        /// web端发布任务不用扣除余额，直接发就好
+        /// </summary>
+        /// <param name="entity"></param>
+        public void ReleaseTaskByWeb(dm_taskEntity entity)
+        {
+            try
+            {
+                if (entity.singlecommission <= 0)
+                    throw new Exception("任务佣金不能小于0!");
+                if (entity.needcount <= 0)
+                    throw new Exception("任务参与数不能小于0!");
+                UserInfo userInfo = LoginUserInfo.Get();
+
+                entity.totalcommission = entity.singlecommission * entity.needcount;//需要从用户账户扣除的金额
+                dm_basesettingEntity dm_BaseSettingEntity = dm_BaseSettingService.GetEntityByCache(userInfo.companyId);
+                entity.seniorcommission = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_do_senior) / 100, 2);//高级代理佣金
+                entity.juniorcommission = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_do_junior) / 100, 2);//初级代理佣金
+                entity.servicefee = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_servicefee) / 100, 2);//任务服务费(奖励在服务费中分发)
+                entity.task_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + entity.user_id.ToString().PadLeft(6, '0');
+                entity.sort = GetSort(null, entity.totalcommission);
+                entity.appid = userInfo.companyId;
+                entity.Create();
+                entity.plaform = 0;
+
+                this.BaseRepository("dm_data").Insert(entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        /// <summary>
         /// 发布任务
         /// </summary>
         /// <param name="entity"></param>
@@ -289,7 +328,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public decimal GetSort(dm_user_relationEntity dm_User_RelationEntity, decimal totalCommission)
         {
             int days = Time.DiffDays(DateTime.Parse("2020-01-01 00:00:00"), DateTime.Now);
-            return Math.Round(days * 0.4M + totalCommission * 0.4M + dm_User_RelationEntity.taskcount * 0.2M - dm_User_RelationEntity.taskreportcount, 2);
+
+            if (dm_User_RelationEntity == null)
+                return Math.Round(days * 0.4M + totalCommission * 0.4M, 2);
+            else
+                return Math.Round(days * 0.4M + totalCommission * 0.4M + dm_User_RelationEntity.taskcount * 0.2M - dm_User_RelationEntity.taskreportcount, 2);
         }
         #endregion
 

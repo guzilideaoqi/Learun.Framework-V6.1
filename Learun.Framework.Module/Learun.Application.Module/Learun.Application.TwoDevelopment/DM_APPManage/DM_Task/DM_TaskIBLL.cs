@@ -52,6 +52,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #region Method Extend
         /// <summary>
+        /// 电脑端发布任务
+        /// </summary>
+        /// <param name="entity"></param>
+        void ReleaseTaskByWeb(dm_taskEntity entity);
+        /// <summary>
         /// 发布任务
         /// </summary>
         /// <param name="entity"></param>
