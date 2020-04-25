@@ -1852,6 +1852,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="UpdateRecord.txt" />
     <Content Include="Views\Home\AdminAccordion\Index.css" />
     <Content Include="Views\Home\AdminAccordion\Index.js" />
     <Content Include="Views\Home\AdminDesktopTemp\Index.js" />
