@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "会员信息";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+@Html.AppendCssFile("/Areas/DM_APPManage/Views/DM_User/LookUserDetail.css")
+<div class="step-pane" id="step-3">
+    <ul class="nav nav-tabs lr-form-tab" id="nav_tabs">
+        <li class="active"><a data-value="entityCodediv">基本信息</a></li>
+        <li><a data-value="mapCodediv">余额明细</a></li>
+        <li><a data-value="serviceCodediv">积分明细</a></li>
+        <li><a data-value="bllCodediv">我的下级</a></li>
+        @*<li><a data-value="ibllCodediv">订单数据</a></li>*@
+    </ul>
+    <div class="tab-content" id="tab_content">
+        <div id="entityCodediv" class="tab-pane active">
+            <div id="entityCode">
+                <div class="lr-form-wrap" id="form">
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">用户昵称：</div>
+                        <input id="nickname" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">手机号：</div>
+                        <input id="phone" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">余额：</div>
+                        <input id="accountprice" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">积分：</div>
+                        <input id="integral" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">真实姓名：</div>
+                        <input id="realname" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">身份证号：</div>
+                        <input id="identitycard" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">邀请码：</div>
+                        <input id="invitecode" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">所属团队：</div>
+                        <input id="partners_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">上级昵称：</div>
+                        <input id="parent_nickname" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">淘宝PID：</div>
+                        <input id="tb_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">渠道ID：</div>
+                        <input id="tb_relationid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">京东PID：</div>
+                        <input id="jd_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">拼多多PID：</div>
+                        <input id="pdd_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">省份：</div>
+                        <input id="pdd_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">城市：</div>
+                        <input id="pdd_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">区县：</div>
+                        <input id="pdd_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-12 lr-form-item">
+                        <div class="lr-form-item-title">详细地址：</div>
+                        <input id="pdd_pid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="mapCodediv" class="tab-pane"><div id="accountpriceRecord" class="lr-layout-body"></div></div>
+        <div id="serviceCodediv" class="tab-pane"><div id="integralRecord" class="lr-layout-body"></div></div>
+        <div id="bllCodediv" class="tab-pane"><div id="mysubuser"></div></div>
+        <div id="ibllCodediv" class="tab-pane"><div id="ibllCode"></div></div>
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_User/LookUserDetail.js")

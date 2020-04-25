@@ -1,5 +1,6 @@
 ﻿using Learun.Util;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -25,6 +26,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// <returns></returns>
         IEnumerable<dm_apply_cashrecordEntity> GetPageList(Pagination pagination, string queryJson);
+
+        DataTable GetPageListByDataTable(Pagination pagination, string queryJson);
         /// <summary>
         /// 获取实体数据
         /// <param name="keyValue">主键</param>

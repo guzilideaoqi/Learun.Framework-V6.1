@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "会员信息";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-8 lr-form-item">
+        <div class="lr-form-item-title">用户昵称<font face="宋体">*</font></div>
+        <input id="nickname" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+    </div>
+    <div class="col-xs-8 lr-form-item">
+        <div class="lr-form-item-title">当前账户<font face="宋体">*</font></div>
+        <input id="accountprice" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+    </div>
+    <div class="col-xs-8 lr-form-item">
+        <div class="lr-form-item-title">变更类型<font face="宋体">*</font></div>
+        <div id="UpdateType"><ul><li data-value="0">减少</li><li data-value="1">增加</li></ul></div>
+    </div>
+    <div class="col-xs-8 lr-form-item">
+        <div class="lr-form-item-title">变更金额<font face="宋体">*</font></div>
+        <input id="UpdatePrice" type="text" class="form-control" isvalid="yes" checkexpession="Double" />
+    </div>
+    <div class="col-xs-8 lr-form-item">
+        <div class="lr-form-item-title">备注信息<font face="宋体">*</font></div>
+        <input id="Remark" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_User/UpdateAccountPrice.js")

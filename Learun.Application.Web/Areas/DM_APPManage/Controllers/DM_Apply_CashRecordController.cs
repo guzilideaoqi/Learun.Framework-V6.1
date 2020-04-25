@@ -70,6 +70,22 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             };
             return Success(jsonData);
         }
+
+        [HttpGet]
+        [AjaxOnly]
+        public ActionResult GetPageListByDataTable(string pagination, string queryJson) {
+            Pagination paginationobj = pagination.ToObject<Pagination>();
+            var data = dM_Apply_CashRecordIBLL.GetPageListByDataTable(paginationobj, queryJson);
+            var jsonData = new
+            {
+                rows = data,
+                total = paginationobj.total,
+                page = paginationobj.page,
+                records = paginationobj.records
+            };
+            return Success(jsonData);
+        }
+
         /// <summary>
         /// 获取表单数据
         /// <param name="keyValue">主键</param>
@@ -113,5 +129,14 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         }
         #endregion
 
+        #region 审核提现记录
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult CheckApplyCashRecord(int id)
+        {
+            dM_Apply_CashRecordIBLL.CheckApplyCashRecord(id, 1);
+            return Success("确认打款成功！");
+        }
+        #endregion
     }
 }

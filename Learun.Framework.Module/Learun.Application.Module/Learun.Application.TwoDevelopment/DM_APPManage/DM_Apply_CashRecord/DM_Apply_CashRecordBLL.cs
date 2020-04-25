@@ -1,6 +1,7 @@
 ﻿using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -50,6 +51,31 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 return dM_Apply_CashRecordService.GetPageList(pagination, queryJson);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取提现记录
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="queryJson"></param>
+        /// <returns></returns>
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        {
+            try
+            {
+                return dM_Apply_CashRecordService.GetPageListByDataTable(pagination, queryJson);
             }
             catch (Exception ex)
             {

@@ -1,6 +1,7 @@
 using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -40,7 +41,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity GetEntity(int keyValue)
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson) {
+            try
+            {
+                return dM_UserService.GetPageListByDataTable(pagination, queryJson);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+
+        public dm_userEntity GetEntity(int? keyValue)
         {
             try
             {
@@ -199,6 +215,28 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 throw ExceptionEx.ThrowBusinessException(ex);
             }
         }
+
+        /// <summary>
+		/// 更改账户余额
+		/// </summary>
+		/// <param name="user_id">用户id</param>
+		/// <param name="updateprice">变更金额</param>
+		/// <param name="updatetype">变更类型 0减少  1增加</param>
+		/// <param name="remark">描述信息</param>
+        public void UpdateAccountPrice(int user_id, decimal updateprice, int updatetype, string remark) {
+            try
+            {
+                dM_UserService.UpdateAccountPrice(user_id, updateprice, updatetype,remark);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
         #region 获取推广图片
         public List<string> GetShareImage(int user_id,string appid)
         {
@@ -254,6 +292,68 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 return dM_UserService.GetUserByPartnersID(partnersid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取平台统计数据
+        public DataTable GetStaticData1() {
+            try
+            {
+               return dM_UserService.GetStaticData1();
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        public DataTable GetStaticData2()
+        {
+            try
+            {
+                return dM_UserService.GetStaticData2();
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        public DataTable GetStaticData3()
+        {
+            try
+            {
+                return dM_UserService.GetStaticData3();
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        public  DataTable GetStaticData4()
+        {
+            try
+            {
+                return dM_UserService.GetStaticData4();
             }
             catch (Exception ex)
             {

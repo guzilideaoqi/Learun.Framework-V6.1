@@ -6,6 +6,7 @@
  */
 var selectedRow;
 var refreshGirdData;
+var CheckCashRecord;
 var bootstrap = function ($, learun) {
     "use strict";
     var page = {
@@ -17,7 +18,7 @@ var bootstrap = function ($, learun) {
             // 查询
             $('#btn_Search').on('click', function () {
                 var keyword = $('#txt_Keyword').val();
-                page.search({ keyword: keyword });
+                page.search();
             });
             // 刷新
             $('#lr_refresh').on('click', function () {
@@ -69,23 +70,15 @@ var bootstrap = function ($, learun) {
         },
         initGird: function () {
             $('#girdtable').lrAuthorizeJfGrid({
-                url: top.$.rootUrl + '/DM_APPManage/DM_Apply_CashRecord/GetPageList',
+                url: top.$.rootUrl + '/DM_APPManage/DM_Apply_CashRecord/GetPageListByDataTable',
                 headData: [
-                    { label: '记录id', name: 'id', width: 200, align: "left" },
-                    { label: '用户id', name: 'user_id', width: 200, align: "left" },
+                    //{ label: '记录id', name: 'id', width: 200, align: "left" },
+                    //{ label: '用户id', name: 'user_id', width: 200, align: "left" },
+                    { label: '用户昵称', name: 'nickname', width: 100, align: "left" },
+                    { label: '真实姓名', name: 'realname', width: 100, align: "left" },
+                    { label: '手机号', name: 'phone', width: 150, align: "left" },
+                    { label: '支付宝', name: 'zfb', width: 200, align: "left" },
                     { label: '提现金额', name: 'price', width: 200, align: "left" },
-                    {
-                        label: '提现状态', name: 'status', width: 200, align: "left", formatter: function (cellValue, rowData, options) {
-                            if (cellValue == 0)
-                                return "未审核";
-                            else if (cellValue == 1)
-                                return "审核成功";
-                            else if (cellValue == 2)
-                                return "审核驳回";
-                            else
-                                return "未知请求";
-                        }
-                    },
                     {
                         label: '打款方式', name: 'paytype', width: 200, align: "left", formatter: function (cellValue, rowData, options) {
                             if (cellValue == 0)
@@ -100,6 +93,20 @@ var bootstrap = function ($, learun) {
                     },
                     { label: '申请提现备注信息', name: 'remark', width: 200, align: "left" },
                     { label: '创建时间', name: 'createtime', width: 200, align: "left" },
+                    { label: '审核时间', name: 'checktime', width: 200, align: "left" },
+                    {
+                        label: '提现状态', name: 'status', width: 200, align: "left", formatter: function (cellValue, rowData, options) {
+                            if (cellValue == 0) {
+                                var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
+                                return "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"CheckCashRecord(" + tempJsonStr + ");\"><i class=\"fa fa-plus\"></i>&nbsp;人工转账</a>";
+                            } else if (cellValue == 1)
+                                return "审核成功";
+                            else if (cellValue == 2)
+                                return "审核驳回";
+                            else
+                                return "未知请求";
+                        }
+                    },
                 ],
                 mainId: 'id',
                 reloadSelected: true,
@@ -108,12 +115,22 @@ var bootstrap = function ($, learun) {
             page.search();
         },
         search: function (param) {
-            param = param || {};
+            param = param || { txt_user_id: $("#txt_user_id").val(), txt_nickname: $("#txt_nickname").val(), txt_realname: $("#txt_realname").val(), txt_phone: $("#txt_phone").val() };
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
     };
     refreshGirdData = function () {
         page.search();
     };
+    CheckCashRecord = function (rowData) {
+        var tip = "请确认是否已经人工打款,一旦操作无法驳回,是否继续？"
+        learun.layerConfirm(tip, function (res) {
+            if (res) {
+                learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Apply_CashRecord/CheckApplyCashRecord', { id: rowData.id }, function () {
+                    location.reload();
+                });
+            }
+        });
+    }
     page.init();
 }

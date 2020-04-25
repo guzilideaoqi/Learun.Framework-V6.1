@@ -38,11 +38,11 @@
                             <i class="fa fa-pie-chart"></i>
                         </div>
                         <div class="details">
-                            <div class="number">
-                                128
+                            <div class="number" id="UserCount">
+                                0
                             </div>
                             <div class="desc">
-                                最新商机量
+                                平台总用户
                             </div>
                         </div>
                         <a class="more" style="background-color: #4884b8;" href="javascript:;" onclick="OpenNav('66f6301c-1789-4525-a7d2-2b83272aafa6')">
@@ -56,11 +56,11 @@
                             <i class="fa fa-bar-chart-o"></i>
                         </div>
                         <div class="details">
-                            <div class="number">
-                                266
+                            <div class="number" id="OrderCount">
+                                0
                             </div>
                             <div class="desc">
-                                最新客户量
+                                累计订单数量
                             </div>
                         </div>
                         <a class="more" style="background-color: #e04a49;" href="javascript:;" onclick="OpenNav('1d3797f6-5cd2-41bc-b769-27f2513d61a9')">
@@ -74,11 +74,11 @@
                             <i class="fa fa-windows"></i>
                         </div>
                         <div class="details">
-                            <div class="number">
+                            <div class="number" id="TaskCount">
                                 39
                             </div>
                             <div class="desc">
-                                新签订单量
+                                累计任务数量
                             </div>
                         </div>
                         <a class="more" style="background-color: #3ea7a0;" href="javascript:;" onclick="OpenNav('b352f049-4331-4b19-ac22-e379cb30bd55')">
@@ -92,11 +92,11 @@
                             <i class="fa fa-globe"></i>
                         </div>
                         <div class="details">
-                            <div class="number">
-                                29898.00
+                            <div class="number" id="TotalPayPrice">
+                                0.00
                             </div>
                             <div class="desc">
-                                本周付款额
+                                订单交易总金额
                             </div>
                         </div>
                         <a class="more" style="background-color: #7c699f;" href="javascript:;">
@@ -110,11 +110,11 @@
                             <i class="fa fa-globe"></i>
                         </div>
                         <div class="details">
-                            <div class="number">
-                                16897.00
+                            <div class="number" id="TotalCommission">
+                                0.00
                             </div>
                             <div class="desc">
-                                利润总额
+                                订单累计佣金
                             </div>
                         </div>
                         <a class="more" style="background-color: #258fd7;" href="javascript:;">
@@ -126,10 +126,10 @@
         </div>
         <div class="col-xs-6">
             <div class="portal-panel-title">
-                <i class="fa fa-coffee"></i>&nbsp;&nbsp;待办任务（Top 5）
+                <i class="fa fa-coffee"></i>&nbsp;&nbsp;交易订单（Top 5）
             </div>
-            <div class="portal-panel-content" style="overflow: hidden; padding-top: 20px; padding-left: 30px; padding-right: 50px;">
-                <div class="lr-msg-line">
+            <div class="portal-panel-content" id="OrderData" style="overflow: hidden; padding-top: 20px; padding-left: 30px; padding-right: 50px;">
+                @*<div class="lr-msg-line">
                     <a href="#" style="text-decoration: none;">[审批]&nbsp;&nbsp;&nbsp;老李的请假条</a>
                     <label>2016-05-25</label>
                 </div>
@@ -148,15 +148,15 @@
                 <div class="lr-msg-line">
                     <a href="#" style="text-decoration: none;">[审批]&nbsp;&nbsp;&nbsp;刘昊的借支申请单</a>
                     <label>2015-02-26</label>
-                </div>
+                </div>*@
             </div>
         </div>
         <div class="col-xs-6">
             <div class="portal-panel-title">
-                <i class="fa fa-bullhorn"></i>&nbsp;&nbsp;公告/通知（Top 5）
+                <i class="fa fa-bullhorn"></i>&nbsp;&nbsp;任务发布（Top 5）
             </div>
-            <div class="portal-panel-content" style="overflow: hidden; padding-top: 20px; padding-left: 30px; padding-right: 50px;">
-                <div class="lr-msg-line">
+            <div class="portal-panel-content" id="TaskData" style="overflow: hidden; padding-top: 20px; padding-left: 30px; padding-right: 50px;">
+                @*<div class="lr-msg-line">
                     <a href="#" style="text-decoration: none;">[公告]&nbsp;&nbsp;&nbsp;端午节放假安排</a>
                     <label>2016-06-01</label>
                 </div>
@@ -175,10 +175,10 @@
                 <div class="lr-msg-line">
                     <a href="#" style="text-decoration: none;">[通知]&nbsp;&nbsp;&nbsp;华东区营销总监任命书</a>
                     <label>2016-04-18</label>
-                </div>
+                </div>*@
             </div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-6" style="display:none;">
             <div class="portal-panel-title">
                 <i class="fa fa-bar-chart"></i>&nbsp;&nbsp;局站分类型总用电占比
             </div>
@@ -186,9 +186,9 @@
                 <div id="piecontainer" class="lr-chart-container"></div>
             </div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-12">
             <div class="portal-panel-title">
-                <i class="fa fa-bar-chart"></i>&nbsp;&nbsp;预算与实际用电量对比
+                <i class="fa fa-bar-chart"></i>&nbsp;&nbsp;订单交易额与累计佣金对比
             </div>
             <div class="portal-panel-content">
                 <div id="linecontainer" class="lr-chart-container"></div>
@@ -200,7 +200,7 @@
     <script src="~/Content/jquery/jquery-1.10.2.min.js"></script>
     <script src="~/Content/jquery/plugin/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/Content/echarts/echarts.min.js"></script>
-    @Html.AppendJsFile("/Views/Home/AdminDesktopTemp/index.js")
+    @Html.AppendJsFile("/Views/LR_Content/script/lr-ajax.js","/Views/Home/AdminDesktopTemp/index.js")
 </body>
 </html>
 

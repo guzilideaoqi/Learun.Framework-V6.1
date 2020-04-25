@@ -7,6 +7,7 @@ using Learun.Loger;
 using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -103,6 +104,56 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 strSql.Append(fieldSql);
                 strSql.Append(" FROM dm_user t ");
                 return BaseRepository("dm_data").FindList<dm_userEntity>(strSql.ToString(), pagination);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        {
+            try
+            {
+                var queryParam = queryJson.ToJObject();
+                StringBuilder strSql = new StringBuilder();
+                strSql.Append("select u.*,r.parent_id,r.partners_id,r.parent_nickname from dm_user u left join dm_user_relation r on u.id=r.user_id where 1=1 ");
+
+                if (!queryParam["txt_user_id"].IsEmpty())
+                {
+                    strSql.Append(" and u.id=" + queryParam["txt_user_id"].ToString());
+                }
+
+                if (!queryParam["txt_phone"].IsEmpty())
+                {
+                    strSql.Append(" and u.phone like '%" + queryParam["txt_phone"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_nickname"].IsEmpty())
+                {
+                    strSql.Append(" and u.nickname like '%" + queryParam["txt_nickname"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_realname"].IsEmpty())
+                {
+                    strSql.Append(" and u.realname like '%" + queryParam["txt_realname"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_invitecode"].IsEmpty())
+                {
+                    strSql.Append(" and u.invitecode like '%" + queryParam["txt_invitecode"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_partners"].IsEmpty())
+                {
+                    strSql.Append(" and r.partners_id = '" + queryParam["txt_partners"].ToString() + "'");
+                }
+
+                return BaseRepository("dm_data").FindTable(strSql.ToString(), pagination);
             }
             catch (Exception ex)
             {
@@ -233,7 +284,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             lock (lockObject)
             {
-                IRepository db = BaseRepository("dm_data").BeginTrans();
+                IRepository db = null;
                 int parent_id = 0;
                 int? id = 0;
                 try
@@ -263,6 +314,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     updateEntity.invitecode = EncodeInviteCode(updateEntity.id);
                     updateEntity.integral = dm_BasesettingEntity.new_people;
                     updateEntity.Create();
+                    db = BaseRepository("dm_data").BeginTrans();
                     db.Update(updateEntity);
                     db.Insert(new dm_intergraldetailEntity
                     {
@@ -288,6 +340,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     {
                         user_id = id,
                         parent_id = parent_id,
+                        parent_nickname = parent_user_entity.nickname,
                         partners_id = parent_user_entity.partnersstatus == 1 ? parent_user_entity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
                         createtime = DateTime.Now
                     };
@@ -480,10 +533,58 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                return BaseRepository("dm_data").FindList<dm_userEntity>("select * from dm_user where FIND_IN_SET(id,getChildList(" + user_id + "));");
+                return BaseRepository("dm_data").FindList<dm_userEntity>("select * from dm_user where FIND_IN_SET(id,getChildList(" + user_id + ",2)) and id<>" + user_id + ";");
             }
             catch (Exception ex)
             {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
+        #region 更改账户余额
+        public void UpdateAccountPrice(int user_id, decimal updateprice, int updatetype, string remark)
+        {
+            IRepository db = null;
+            try
+            {
+                dm_userEntity dm_UserEntity = GetEntity(user_id);
+                dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity();
+                dm_AccountdetailEntity.user_id = user_id;
+                if (updatetype == 0)
+                {
+                    if (dm_UserEntity.accountprice < updateprice)
+                        throw new Exception("当前账户余额不足!");
+
+                    dm_AccountdetailEntity.title = "余额扣除";
+                    dm_UserEntity.accountprice -= updateprice;
+                    dm_AccountdetailEntity.type = 20;
+                }
+                else
+                {
+                    dm_AccountdetailEntity.title = "余额返还";
+                    dm_UserEntity.accountprice += updateprice;
+                    dm_AccountdetailEntity.type = 19;
+                }
+                dm_AccountdetailEntity.remark = remark;
+                dm_AccountdetailEntity.stepvalue = updateprice;
+                dm_AccountdetailEntity.currentvalue = dm_UserEntity.accountprice;
+                dm_AccountdetailEntity.Create();
+
+                db = BaseRepository("dm_data").BeginTrans();
+
+                db.Insert(dm_AccountdetailEntity);
+                db.Update(dm_UserEntity);
+                db.Commit();
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
                 if (ex is ExceptionEx)
                 {
                     throw;
@@ -598,6 +699,83 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             imgSrc.Save(newPath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
             return newPath;
+        }
+        #endregion
+
+        #region 获取平台数据统计
+        ///获取用户数量、订单数量、任务数量、订单交易金额、订单总佣金
+        public DataTable GetStaticData1()
+        {
+            try
+            {
+                return BaseRepository("dm_data").FindTable("select (select count(id) from dm_user) usercount,(select count(id) from dm_order where order_type_new<>3) ordercount,(select count(id) from dm_task where task_status<>2) taskcount,(select sum(payment_price) from dm_order where order_type_new<>3) totalpayprice,(select sum(estimated_effect) from dm_order where order_type_new<>3) totalcommission");
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 获取前5条订单
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetStaticData2()
+        {
+            try
+            {
+                return BaseRepository("dm_data").FindTable("select type_big,title,order_createtime from dm_order ORDER BY order_createtime DESC limit 5");
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        /// <summary>
+        /// 获取前5条任务
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetStaticData3()
+        {
+            try
+            {
+                return BaseRepository("dm_data").FindTable("select plaform,task_title,createtime from dm_task ORDER BY createtime DESC limit 5");
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        /// <summary>
+        /// 获取近12个月数据
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetStaticData4()
+        {
+            try
+            {
+                return BaseRepository("dm_data").FindTable("select order_create_month,sum(payment_price) as month_pay,sum(estimated_effect) month_effect from dm_order where order_type_new<>3 GROUP BY order_create_month ORDER BY order_create_month DESC limit 12");
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
         }
         #endregion
     }

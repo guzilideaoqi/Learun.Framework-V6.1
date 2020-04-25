@@ -98,6 +98,53 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
 
         /// <summary>
+        /// 获取提现记录
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="queryJson"></param>
+        /// <returns></returns>
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        {
+            try
+            {
+                var queryParam = queryJson.ToJObject();
+                var strSql = new StringBuilder();
+                strSql.Append("select c.*,u.nickname,u.realname,u.phone,u.zfb from dm_apply_cashrecord c left join dm_user u on c.user_id=u.id where 1=1");
+                if (!queryParam["txt_user_id"].IsEmpty())
+                {
+                    strSql.Append(" and u.id='" + queryParam["txt_user_id"].ToString() + "'");
+                }
+                if (!queryParam["txt_phone"].IsEmpty())
+                {
+                    strSql.Append(" and u.phone like '%" + queryParam["txt_phone"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_nickname"].IsEmpty())
+                {
+                    strSql.Append(" and u.nickname like '%" + queryParam["txt_nickname"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_realname"].IsEmpty())
+                {
+                    strSql.Append(" and u.realname like '%" + queryParam["txt_realname"].ToString() + "%'");
+                }
+
+                return this.BaseRepository("dm_data").FindTable(strSql.ToString(), pagination);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        /// <summary>
         /// 获取实体数据
         /// <param name="keyValue">主键</param>
         /// <summary>
@@ -194,6 +241,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_userEntity dm_UserEntity = dm_UserIBLL.GetEntity(user_id);//不从缓存取，此处需要验证账户余额
                 if (dm_UserEntity.IsEmpty())
                     throw new Exception("用户信息异常!");
+                if (dm_UserEntity.isreal == 0)
+                    throw new Exception("您的账号未实名，禁止提现!");
+                if (dm_UserEntity.zfb.IsEmpty())
+                    throw new Exception("支付宝账号未绑定,禁止提现!");
                 if (price > dm_UserEntity.accountprice)
                 {
                     throw new Exception("账户余额不足!");
@@ -253,9 +304,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 dm_Apply_CashrecordEntity.paytype = paytype;
                 dm_Apply_CashrecordEntity.status = 1;
+                dm_Apply_CashrecordEntity.checktime = DateTime.Now;
 
                 dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity();
-                dm_AccountdetailEntity.currentvalue = dm_AccountdetailEntity.currentvalue;
+                dm_AccountdetailEntity.currentvalue = dm_Apply_CashrecordEntity.currentprice;
                 dm_AccountdetailEntity.stepvalue = dm_Apply_CashrecordEntity.price;
                 dm_AccountdetailEntity.type = 11;
                 dm_AccountdetailEntity.title = "提现";

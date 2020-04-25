@@ -43,6 +43,39 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
+                List<CategoryItem> categoryItems = GoodTypeByCache(appid);
+                return SuccessList("获取成功", categoryItems);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取商品二级分类
+        public ActionResult GetSubGoodType(int cid)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                List<CategoryItem> categoryItems = GoodTypeByCache(appid);
+                CategoryItem categoryItem = categoryItems.Where(t => t.cid == cid).FirstOrDefault();
+                if (categoryItem == null) throw new Exception("分类id错误!");
+                return SuccessList("获取成功", categoryItem.subcategories);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 商品分类处理
+        List<CategoryItem> GoodTypeByCache(string appid)
+        {
+            try
+            {
                 string cacheKey = "SuperCategory";
                 List<CategoryItem> categoryItems = redisCache.Read<List<CategoryItem>>(cacheKey, 7L);
                 if (categoryItems == null)
@@ -54,16 +87,16 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Super_CategoryResponse dTK_Super_CategoryResponse = dTK_ApiManage.GetSuperCategory(dTK_Super_CategoryRequest);
                     if (dTK_Super_CategoryResponse.code != 0)
                     {
-                        return Fail(dTK_Super_CategoryResponse.msg);
+                        throw new Exception(dTK_Super_CategoryResponse.msg);
                     }
                     categoryItems = dTK_Super_CategoryResponse.data;
                     redisCache.Write(cacheKey, categoryItems, DateTime.Now.AddMonths(1), 7L);
                 }
-                return SuccessList("获取成功", categoryItems);
+                return categoryItems;
             }
             catch (Exception ex)
             {
-                return FailException(ex);
+                throw new Exception(ex.Message);
             }
         }
         #endregion

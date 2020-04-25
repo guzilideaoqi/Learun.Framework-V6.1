@@ -19,12 +19,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             get;
             set;
         }
-
+        /// <summary>
+        /// 上级用户id
+        /// </summary>
         [Column("PARENT_ID")]
         public int parent_id
         {
             get;
             set;
+        }
+        /// <summary>
+        /// 上级用户昵称
+        /// </summary>
+        [Column("PARENT_NICKNAME")]
+        public string parent_nickname {
+            get;set;
         }
 
         [Column("PARTNERS_ID")]
