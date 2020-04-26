@@ -124,6 +124,22 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 帮助中心
+        public ActionResult GetHelpCenter()
+        {
+            try
+            {
+                string appid = CheckAPPID();
+
+                return SuccessList("获取成功", dm_ArticleIBLL.GetChildrenArticle(appid, 8));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         public string CheckAPPID()
         {
             if (base.Request.Headers["appid"].IsEmpty())

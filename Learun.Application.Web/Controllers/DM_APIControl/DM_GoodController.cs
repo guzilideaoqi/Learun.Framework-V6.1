@@ -308,6 +308,55 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 大淘客搜索商品(2个小时更新一次)
+        //public ActionResult GetDTKSearchGood(int user_id, int pageId = 1, int pageSize = 20, string cids = "", int subcid = -1, int juHuaSuan = -1, int taoQiangGou = -1, string keyWords = "", int tmall = -1, int tchaoshi = -1,int goldSeller=-1,int haitao=-1,int brand=-1,string brandIds="", string sort = "total_sales_des")
+        public ActionResult GetDTKSearchGood(int user_id, int pageId = 1, int pageSize = 20, string cids = "", int subcid = -1, string keyWords = "", string sort = "0")
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                string cacheKey = Md5Helper.Hash("DtkSerachGood" + pageId + pageSize + cids + subcid + keyWords + sort);
+                List<DTK_SearchGoodItem> superGoodItems = redisCache.Read<List<DTK_SearchGoodItem>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+
+                if (superGoodItems == null)
+                {
+                    DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
+                    DTK_Get_dtk_Search_GoodRequest dtk_Get_dtk_Search_GoodRequest = new DTK_Get_dtk_Search_GoodRequest();
+                    dtk_Get_dtk_Search_GoodRequest.version = "v2.1.2";
+                    dtk_Get_dtk_Search_GoodRequest.pageId = pageId.ToString();
+                    dtk_Get_dtk_Search_GoodRequest.pageSize = pageSize;
+                    if (subcid > -1)
+                    {
+                        dtk_Get_dtk_Search_GoodRequest.subcid = subcid;
+                    }
+                    else
+                    {
+                        if (cids != "")
+                            dtk_Get_dtk_Search_GoodRequest.cids = cids;
+                    }
+                    dtk_Get_dtk_Search_GoodRequest.keyWords = keyWords;
+                    dtk_Get_dtk_Search_GoodRequest.sort = sort;
+                    DTK_Get_dtk_Search_GoodResponse dTK_Get_dtk_Search_GoodResponse = dTK_ApiManage.GetDtkSearchGood(dtk_Get_dtk_Search_GoodRequest);
+                    if (dTK_Get_dtk_Search_GoodResponse.code != 0)
+                    {
+                        return Fail(dTK_Get_dtk_Search_GoodResponse.msg);
+                    }
+                    superGoodItems = dTK_Get_dtk_Search_GoodResponse.data.list;
+                    redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
+                }
+
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+
+                return SuccessList("获取成功!", superGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 9.9包邮精选(两个小时更新一次)
         /// <summary>
         /// 9.9包邮精选

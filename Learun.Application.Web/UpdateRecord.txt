@@ -8,3 +8,7 @@
 3、检查接口(文章类接口整理)
 4、增加根据分类查询商品接口
 5、发送验证码
+
+语音互动直播API(声网):https://www.agora.io/cn/audio-broadcasting/
+语音互动直播API(菊风云):http://cloud.juphoon.com/cn/price/price_interactivelive.html
+语音互动直播API(极光):
