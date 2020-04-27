@@ -1,5 +1,6 @@
 ﻿using Learun.Util;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -25,6 +26,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// <returns></returns>
         IEnumerable<dm_taskEntity> GetPageList(Pagination pagination, string queryJson);
+
+        /// <summary>
+        /// 获取列表分页数据
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="queryJson"></param>
+        /// <returns></returns>
+        DataTable GetPageListByDataTable(Pagination pagination, string queryJson);
         /// <summary>
         /// 获取实体数据
         /// <param name="keyValue">主键</param>

@@ -109,6 +109,44 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
 
         /// <summary>
+        /// 获取任务接受详情
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="queryJson"></param>
+        /// <returns></returns>
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        {
+            try
+            {
+                var queryParam = queryJson.ToJObject();
+                var strSql = new StringBuilder();
+                strSql.Append("select r.*,U.nickname,u.realname,u.phone from dm_task_revice r LEFT JOIN dm_user u on r.user_id=u.id where 1=1");
+                if (!queryParam["User_ID"].IsEmpty())
+                {
+                    strSql.Append(" and u.id=" + queryParam["User_ID"].ToString());
+                }
+
+                if (!queryParam["Task_ID"].IsEmpty())
+                {
+                    strSql.Append(" and r.task_id=" + queryParam["Task_ID"].ToString());
+                }
+
+                return BaseRepository("dm_data").FindTable(strSql.ToString(), pagination);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        /// <summary>
         /// 获取实体数据
         /// <param name="keyValue">主键</param>
         /// <summary>

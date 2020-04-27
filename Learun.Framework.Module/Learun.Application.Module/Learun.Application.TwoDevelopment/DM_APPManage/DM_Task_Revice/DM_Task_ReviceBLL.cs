@@ -65,6 +65,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson) {
+            try
+            {
+                return dM_Task_ReviceService.GetPageListByDataTable(pagination, queryJson);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
         /// <summary>
         /// 获取实体数据
         /// <param name="keyValue">主键</param>

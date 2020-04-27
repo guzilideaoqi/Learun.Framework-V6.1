@@ -140,6 +140,22 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 接口测试
+        public ActionResult TestApi(string jsonData)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+
+                return SuccessList("获取成功", jsonData);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         public string CheckAPPID()
         {
             if (base.Request.Headers["appid"].IsEmpty())

@@ -6,6 +6,7 @@
  */
 var selectedRow;
 var refreshGirdData;
+var LookReviceDetail;
 var bootstrap = function ($, learun) {
     "use strict";
     var page = {
@@ -60,49 +61,110 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerConfirm('是否确认删除该项！', function (res) {
                         if (res) {
-                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Task/DeleteForm', { keyValue: keyValue}, function () {
+                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Task/DeleteForm', { keyValue: keyValue }, function () {
                             });
                         }
                     });
                 }
             });
+
+            // 是否需要运费
+            $('#txt_status').lrselect({ width: 200, placeholder:"请选择状态"});
         },
         initGird: function () {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_Task/GetPageList',
                 headData: [
-                        { label: 'id', name: 'id', width: 200, align: "left" },
-                        { label: '任务编号', name: 'task_no', width: 200, align: "left" },
-                        { label: 'task_title', name: 'task_title', width: 200, align: "left" },
-                        { label: '任务类型', name: 'task_type', width: 200, align: "left" },
-                        { label: '任务状态 0未进行  1进行中  2已完成  3已取消', name: 'task_status', width: 200, align: "left" },
-                        { label: '任务描述', name: 'task_description', width: 200, align: "left" },
-                        { label: '任务操作', name: 'task_operate', width: 200, align: "left" },
-                        { label: '0pc  1移动', name: 'plaform', width: 200, align: "left" },
-                        { label: '排序值', name: 'sort', width: 200, align: "left" },
-                        { label: '创建时间', name: 'createtime', width: 200, align: "left" },
-                        { label: '总佣金(发布任务所需要的总金额)', name: 'totalcommission', width: 200, align: "left" },
-                        { label: '服务费(每一单的服务费)', name: 'servicefee', width: 200, align: "left" },
-                        { label: '初级佣金(每一单的佣金)', name: 'juniorcommission', width: 200, align: "left" },
-                        { label: '高级佣金(每一单的佣金)', name: 'seniorcommission', width: 200, align: "left" },
-                        { label: '需求人数', name: 'needcount', width: 200, align: "left" },
-                        { label: '完成人数', name: 'finishcount', width: 200, align: "left" },
-                        { label: '用户ID', name: 'user_id', width: 200, align: "left" },
-                        { label: '平台ID', name: 'appid', width: 200, align: "left" },
+                    //{ label: 'id', name: 'id', width: 200, align: "left" },
+                    { label: '任务编号', name: 'task_no', width: 200, align: "left" },
+                    { label: 'task_title', name: 'task_title', width: 200, align: "left" },
+                    //{ label: '任务类型', name: 'task_type', width: 200, align: "left" },
+                    {
+                        label: '任务状态', name: 'task_status', width: 80, align: "left", formatter: function (cellvalue, rowData, options) {
+                            var status = "";
+                            switch (cellvalue) {
+                                case 0:
+                                    status = "未进行";
+                                    break;
+                                case 1:
+                                    status = "进行中";
+                                    break;
+                                case 2:
+                                    status = "已完成";
+                                    break;
+                                case 3:
+                                    status = "已取消";
+                                    break;
+                            }
+
+                            return status;
+                        }
+                    },
+                    { label: '任务描述', name: 'task_description', width: 200, align: "left" },
+                    //{ label: '任务操作', name: 'task_operate', width: 200, align: "left" },
+                    {
+                        label: '任务来源', name: 'plaform', width: 80, align: "left", formatter: function (cellvalue, rowData, options) {
+                            var status = "";
+                            switch (cellvalue) {
+                                case 0:
+                                    status = "PC";
+                                    break;
+                                case 1:
+                                    status = "移动";
+                                    break;
+                            }
+                            return status;
+                        }
+                    },
+                    { label: '排序值', name: 'sort', width: 80, align: "left" },
+                    { label: '总佣金', name: 'totalcommission', width: 80, align: "left" },
+                    { label: '服务费', name: 'servicefee', width: 80, align: "left" },
+                    { label: '初级佣金', name: 'juniorcommission', width: 80, align: "left" },
+                    { label: '高级佣金', name: 'seniorcommission', width: 80, align: "left" },
+                    { label: '需求人数', name: 'needcount', width: 80, align: "left" },
+                    { label: '完成人数', name: 'finishcount', width: 80, align: "left" },
+                    { label: '创建时间', name: 'createtime', width: 150, align: "left" },
+                    {
+                        label: '操作', name: 'id', width: 200, align: "left", formatter: function (cellvalue, rowData, options) {
+                            var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
+                            var btnList = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"LookUserDetail(" + tempJsonStr + ");\"><i class=\"fa fa-search\"></i>&nbsp;任务详情</a>";
+                            btnList += "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;margin-left:8px;\" onclick=\"LookReviceDetail(" + tempJsonStr + ");\"><i class=\"fa fa-edit\"></i>&nbsp;接单人信息</a>";
+
+                            return btnList;
+                        }
+                    }
+                    //{ label: '用户ID', name: 'user_id', width: 200, align: "left" },
+                    //{ label: '平台ID', name: 'appid', width: 200, align: "left" },
                 ],
-                mainId:'id',
+                mainId: 'id',
                 reloadSelected: true,
-                isPage: true
+                isPage: true,
+                sidx: "createtime",
+                sord: "desc"
             });
             page.search();
         },
         search: function (param) {
-            param = param || {};
+            param = param || { txt_title: $("#txt_title").val(), txt_realname: $("#txt_realname").val(), txt_nickname: $("#txt_nickname").val(), txt_phone: $("#txt_phone").val(), txt_status: $("#txt_status").val()};
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
     };
     refreshGirdData = function () {
         page.search();
     };
+    LookReviceDetail = function (rowData) {
+        selectedRow = rowData;
+        learun.layerForm({
+            id: 'LookReviceDetail',
+            title: '接受详情',
+            url: top.$.rootUrl + '/DM_APPManage/DM_Task/LookReviceDetail',
+            width: 1000,
+            height: 550,
+            btn: ["关闭"],
+            callBack: function (id) {
+                return top[id].acceptClick(refreshGirdData);
+            }
+        });
+    }
     page.init();
 }

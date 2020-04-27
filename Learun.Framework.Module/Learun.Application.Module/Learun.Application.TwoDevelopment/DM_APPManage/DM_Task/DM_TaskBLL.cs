@@ -1,6 +1,7 @@
 ﻿using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -50,6 +51,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 return dM_TaskService.GetPageList(pagination, queryJson);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson) {
+            try
+            {
+                return dM_TaskService.GetPageListByDataTable(pagination, queryJson);
             }
             catch (Exception ex)
             {

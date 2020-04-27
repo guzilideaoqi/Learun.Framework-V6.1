@@ -209,11 +209,7 @@ var bootstrap = function ($, learun) {
                 mainId: 'id',
                 reloadSelected: true,
                 isPage: true,
-                isMultiselect: true,
-                onSelectRow: function (data, data1, data2) {
-                    var a = $('#girdtable').jfGridGet('rowdata');
-                    console.log(a);
-                }
+                isMultiselect: false
             });
             page.search();
         },

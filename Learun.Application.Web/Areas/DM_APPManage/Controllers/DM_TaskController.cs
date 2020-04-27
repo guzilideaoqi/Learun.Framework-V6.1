@@ -36,6 +36,12 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult LookReviceDetail()
+        {
+            return View();
+        }
+
         /// <summary>
         /// 发布任务
         /// </summary>
@@ -71,6 +77,27 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         {
             Pagination paginationobj = pagination.ToObject<Pagination>();
             var data = dM_TaskIBLL.GetPageList(paginationobj, queryJson);
+            var jsonData = new
+            {
+                rows = data,
+                total = paginationobj.total,
+                page = paginationobj.page,
+                records = paginationobj.records
+            };
+            return Success(jsonData);
+        }
+        /// <summary>
+        /// 获取列表分页数据
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="queryJson"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [AjaxOnly]
+        public ActionResult GetPageListByDataTable(string pagination, string queryJson)
+        {
+            Pagination paginationobj = pagination.ToObject<Pagination>();
+            var data = dM_TaskIBLL.GetPageListByDataTable(paginationobj, queryJson);
             var jsonData = new
             {
                 rows = data,

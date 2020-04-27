@@ -2,20 +2,18 @@
     ViewBag.Title = "任务中心";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
-<div class="lr-layout lr-layout-left-center" id="lr_layout">
-    <div class="lr-layout-left">
-        <div class="lr-layout-wrap">
-            <div class="lr-layout-title">树形目录</div>
-            <div id="tree" class="lr-layout-body"></div>
-        </div>
-    </div>
+<div class="lr-layout lr-layout-center" id="lr_layout">
     <div class="lr-layout-center">
         <div class="lr-layout-wrap">
-            <div class="lr-layout-title">标题</div>
+            <div class="lr-layout-title">任务中心</div>
             <div class="lr-layout-tool">
                 <div class="lr-layout-tool-left">
                     <div class="lr-layout-tool-item">
-                        <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" />
+                        <input id="txt_title" type="text" class="form-control" placeholder="请输入任务标题" />
+                        <input id="txt_realname" type="text" class="form-control" placeholder="请输入发布人姓名" />
+                        <input id="txt_nickname" type="text" class="form-control" placeholder="请输入发布人昵称" />
+                        <input id="txt_phone" type="text" class="form-control" placeholder="请输入发布人手机号" />
+                        <div id="txt_status" class="form-control"><ul><li data-value="0">未进行</li><li data-value="1">进行中</li><li data-value="2">已完成</li><li data-value="3">已取消</li></ul></div>
                     </div>
                     <div class="lr-layout-tool-item">
                         <a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</a>
@@ -26,8 +24,8 @@
                         <a id="lr_refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>
                     </div>
                     <div class=" btn-group btn-group-sm" learun-authorize="yes">
-                        <a id="lr_add"   class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;新增</a>
-                        <a id="lr_edit"  class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+                        <a id="lr_add" class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;新增</a>
+                        <a id="lr_edit" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
                         <a id="lr_delete" class="btn btn-default"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
                     </div>
                 </div>

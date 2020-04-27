@@ -128,6 +128,53 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        {
+            try
+            {
+                var queryParam = queryJson.ToJObject();
+
+                var strSql = new StringBuilder();
+                strSql.Append("select t.*,u.nickname,u.realname,u.phone from dm_task t left join dm_user u on t.user_id=u.id where 1=1 ");
+                if (!queryParam["txt_phone"].IsEmpty())
+                {
+                    strSql.Append(" and u.phone like '%" + queryParam["txt_phone"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_nickname"].IsEmpty())
+                {
+                    strSql.Append(" and u.nickname like '%" + queryParam["txt_nickname"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_realname"].IsEmpty())
+                {
+                    strSql.Append(" and u.realname like '%" + queryParam["txt_realname"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_status"].IsEmpty())
+                {
+                    strSql.Append(" and t.task_status like '%" + queryParam["txt_status"].ToString() + "%'");
+                }
+
+                if (!queryParam["txt_title"].IsEmpty())
+                {
+                    strSql.Append(" and t.task_title like '%" + queryParam["txt_title"].ToString() + "%'");
+                }
+                return this.BaseRepository("dm_data").FindTable(strSql.ToString(), pagination);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
         /// <summary>
         /// 获取实体数据
         /// <param name="keyValue">主键</param>
