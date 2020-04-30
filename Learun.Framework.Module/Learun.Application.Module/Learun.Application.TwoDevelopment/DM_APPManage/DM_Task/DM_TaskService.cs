@@ -153,7 +153,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 if (!queryParam["txt_status"].IsEmpty())
                 {
-                    strSql.Append(" and t.task_status like '%" + queryParam["txt_status"].ToString() + "%'");
+                    strSql.Append(" and t.task_status = '" + queryParam["txt_status"].ToString() + "'");
                 }
 
                 if (!queryParam["txt_title"].IsEmpty())
