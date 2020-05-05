@@ -216,6 +216,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public void SetUserLevel(string userids, int user_level) {
+            try
+            {
+                dM_UserService.SetUserLevel(userids, user_level);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+
         /// <summary>
 		/// ¸ü¸ÄÕË»§Óà¶î
 		/// </summary>

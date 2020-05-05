@@ -68,6 +68,26 @@ var bootstrap = function ($, learun) {
                     });
                 }
             });
+
+            //设置会员等级
+            $("#lr_setlevel").on('click', function () {
+                selectedRow = $('#girdtable').jfGridGet('rowdata');
+                if (typeof(selectedRow) != "undefined") {
+                    learun.layerForm({
+                        id: 'form',
+                        title: '设置等级',
+                        url: top.$.rootUrl + '/DM_APPManage/DM_User/SetLevel?keyValue=0',
+                        width: 500,
+                        height: 300,
+                        callBack: function (id) {
+                            return top[id].acceptClick(refreshGirdData);
+                        }
+                    });
+                }
+                else {
+                    learun.alert.error('请选择需要修改等级的用户！');
+                }
+            });
         },
         initGird: function () {
             $('#girdtable').lrAuthorizeJfGrid({
@@ -152,7 +172,8 @@ var bootstrap = function ($, learun) {
                 ],
                 mainId: 'id',
                 reloadSelected: true,
-                isPage: true
+                isPage: true,
+                isMultiselect: true
             });
             page.search();
         },
@@ -185,7 +206,7 @@ var bootstrap = function ($, learun) {
             url: top.$.rootUrl + '/DM_APPManage/DM_User/LookUserDetail',
             width: 600,
             height: 550,
-            btn:["关闭"],
+            btn: ["关闭"],
             callBack: function (id) {
                 return top[id].acceptClick(refreshGirdData);
             }

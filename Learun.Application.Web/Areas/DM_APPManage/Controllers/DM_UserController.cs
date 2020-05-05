@@ -35,6 +35,12 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         }
 
         [HttpGet]
+        public ActionResult SetLevel()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [AjaxOnly(false)]
         public ActionResult GetList(string queryJson)
         {
@@ -119,6 +125,15 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         public ActionResult UpdateAccountPrice(int User_ID, decimal UpdatePrice, int UpdateType, string Remark)
         {
             dM_UserIBLL.UpdateAccountPrice(User_ID, UpdatePrice, UpdateType, Remark);
+            return Success("修改成功！");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AjaxOnly(false)]
+        public ActionResult SetUserLevel(string userids, int user_level)
+        {
+            dM_UserIBLL.SetUserLevel(userids, user_level);
             return Success("修改成功！");
         }
 

@@ -38,6 +38,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		/// <param name="updatetype">变更类型 0减少  1增加</param>
 		/// <param name="remark">描述信息</param>
 		void UpdateAccountPrice(int user_id, decimal updateprice, int updatetype, string remark);
+		/// <summary>
+		/// 设置用户等级
+		/// </summary>
+		/// <param name="userids"></param>
+		/// <param name="user_level"></param>
+		void SetUserLevel(string userids, int user_level);
 		#region 获取推广图片
 		List<string> GetShareImage(int user_id, string appid);
         #endregion

@@ -302,6 +302,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\LookUserDetail.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\LookUserDetail.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_User\SetLevel.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\UpdateAccountPrice.js" />
     <Content Include="Areas\LR_AuthorizeModule\Views\Authorize\Form.css" />
     <Content Include="Areas\LR_AuthorizeModule\Views\Authorize\Form.js" />
@@ -1853,6 +1854,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_User\UpdateAccountPrice.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Order\Index.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookReviceDetail.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_User\SetLevel.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

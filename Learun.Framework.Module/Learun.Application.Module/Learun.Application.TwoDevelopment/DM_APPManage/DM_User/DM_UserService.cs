@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
@@ -699,6 +700,53 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             imgSrc.Save(newPath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
             return newPath;
+        }
+        #endregion
+
+        #region 设置用户等级
+        public void SetUserLevel(string userids, int user_level)
+        {
+            IRepository db = null;
+            try
+            {
+                List<dm_userEntity> dm_UserEntity_UpdateList = new List<dm_userEntity>();
+                List<string> user_ids = userids.Split(',').ToList();
+                IEnumerable<dm_userEntity> dm_UserEntities = BaseRepository("dm_data").FindList<dm_userEntity>(t => user_ids.Contains(t.id.ToString()));
+                if (dm_UserEntities.Count() > 0)
+                {
+                    foreach (dm_userEntity item in dm_UserEntities)
+                    {
+                        if (user_level == 3)
+                        { //等级为合伙人  并且等级为初级代理
+                            item.userlevel = 1;
+                            item.partners = 20000 + item.id;
+                            item.partnersstatus = 1;
+                        }
+                        else
+                        {
+                            item.userlevel = user_level;
+                        }
+                        item.Modify(item.id);
+                        dm_UserEntity_UpdateList.Add(item);
+                    }
+
+                    BaseRepository("dm_data").Update(dm_UserEntity_UpdateList);
+                }
+                else
+                {
+                    throw new Exception("用户信息异常!");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
         }
         #endregion
 
