@@ -725,6 +725,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         }
                         else
                         {
+                            if (user_level == 0 && item.partnersstatus == 2)
+                                throw new Exception("合伙人无法降级到普通会员!");
                             item.userlevel = user_level;
                         }
                         item.Modify(item.id);

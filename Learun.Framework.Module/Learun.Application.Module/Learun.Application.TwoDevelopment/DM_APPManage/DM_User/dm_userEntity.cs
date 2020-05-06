@@ -275,12 +275,32 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
+		/// <summary>
+		/// 是否有开通语音直播间权限  0无权限  1有权限
+		/// </summary>
+		[Column("ISVOICE")]
+		public int? isvoice { get; set; }
+
+		/// <summary>
+		/// 用户启用状态  0异常用户 1正常用户
+		/// </summary>
+		[Column("ISENABLE")]
+		public int? isenable { get; set; }
+
+		/// <summary>
+		/// 导师微信
+		/// </summary>
+		[Column("MYWECHAT")]
+		public string mywechat { get; set; }
+
 		public void Create()
 		{
 			userlevel = 0;
 			createtime = DateTime.Now;
 			isreal = 0;
 			accountprice = default(decimal);
+			isenable = 1;
+			isvoice = 0;
 		}
 
 		public void Modify(int? keyValue)

@@ -60,7 +60,8 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerConfirm('是否确认删除该项！', function (res) {
                         if (res) {
-                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Announcement/DeleteForm', { keyValue: keyValue}, function () {
+                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Announcement/DeleteForm', { keyValue: keyValue }, function () {
+                                refreshGirdData();
                             });
                         }
                     });

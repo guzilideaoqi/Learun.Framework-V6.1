@@ -8,6 +8,10 @@ var selectedRow;
 var refreshGirdData;
 var LookUserDetail;
 var UpdateAccountPrice;
+var enableUser;
+var disableUser;
+var enableVoice;
+var disableVoice;
 var bootstrap = function ($, learun) {
     "use strict";
     var page = {
@@ -72,7 +76,7 @@ var bootstrap = function ($, learun) {
             //设置会员等级
             $("#lr_setlevel").on('click', function () {
                 selectedRow = $('#girdtable').jfGridGet('rowdata');
-                if (typeof(selectedRow) != "undefined") {
+                if (typeof (selectedRow) != "undefined") {
                     learun.layerForm({
                         id: 'form',
                         title: '设置等级',
@@ -100,6 +104,15 @@ var bootstrap = function ($, learun) {
                     { label: '账户积分', name: 'integral', width: 80, align: "left" },
                     { label: '邀请码', name: 'invitecode', width: 100, align: "left" },
                     { label: '真是姓名', name: 'realname', width: 100, align: "left" },
+                    {
+                        label: '用户状态', name: 'isenable', width: 60, align: "center", formatter: function (cellvalue, rows, option) {
+                            if (cellvalue == 1) {
+                                return "<span class=\"label label-success\" style=\"cursor: pointer;\" onclick=\"disableUser('" + rows.id + "')\">启用</span>";
+                            } else {
+                                return "<span class=\"label label-default\" style=\"cursor: pointer;\" onclick=\"enableUser('" + rows.id + "')\">禁用</span>";
+                            }
+                        }
+                    },
                     //{ label: '身份证号', name: 'identitycard', width: 100, align: "left" },
                     {
                         label: '实名状态', name: 'isreal', width: 100, align: "left", formatter: function (cellvalue, rows, option) {
@@ -148,8 +161,17 @@ var bootstrap = function ($, learun) {
                             }
                         }
                     },
+                    {
+                        label: '聊天室', name: 'isvoice', width: 60, align: "center", formatter: function (cellvalue, rows, option) {
+                            if (cellvalue == 1) {
+                                return "<span class=\"label label-success\" style=\"cursor: pointer;\" onclick=\"disableVoice('" + rows.id + "')\">开通</span>";
+                            } else {
+                                return "<span class=\"label label-default\" style=\"cursor: pointer;\"  onclick=\"enableVoice('" + rows.id + "')\">关闭</span>";
+                            }
+                        }
+                    },
                     { label: '创建时间', name: 'createtime', width: 135, align: "left" },
-                    { label: '修改时间', name: 'updatetime', width: 100, align: "left" },
+                    { label: '修改时间', name: 'updatetime', width: 135, align: "left" },
                     {
                         label: '操作', name: 'id', width: 300, align: "left", formatter: function (cellvalue, rowData, option) {
                             var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
@@ -209,6 +231,46 @@ var bootstrap = function ($, learun) {
             btn: ["关闭"],
             callBack: function (id) {
                 return top[id].acceptClick(refreshGirdData);
+            }
+        });
+    }
+    //启用
+    enableUser = function (userid) {
+        learun.layerConfirm('是否确认要【启用】账号！', function (res) {
+            if (res) {
+                learun.postForm(top.$.rootUrl + '/DM_APPManage/DM_User/UpdateUserInfo', { keyValue: userid, isenable: 1 }, function () {
+                    refreshGirdData();
+                });
+            }
+        });
+    }
+    //禁用
+    disableUser = function (userid) {
+        learun.layerConfirm('是否确认要【禁用】账号！', function (res) {
+            if (res) {
+                learun.postForm(top.$.rootUrl + '/DM_APPManage/DM_User/UpdateUserInfo', { keyValue: userid, isenable: 0 }, function () {
+                    refreshGirdData();
+                });
+            }
+        });
+    }
+    //开启直播
+    enableVoice = function (userid) {
+        learun.layerConfirm('是否确认要为此账号【开启】直播间权限！', function (res) {
+            if (res) {
+                learun.postForm(top.$.rootUrl + '/DM_APPManage/DM_User/UpdateUserInfo', { keyValue: userid, isvoice: 1 }, function () {
+                    refreshGirdData();
+                });
+            }
+        });
+    }
+    //禁用直播
+    disableVoice = function (userid) {
+        learun.layerConfirm('是否确认要【关闭】此账号直播间权限！', function (res) {
+            if (res) {
+                learun.postForm(top.$.rootUrl + '/DM_APPManage/DM_User/UpdateUserInfo', { keyValue: userid, isvoice: 0 }, function () {
+                    refreshGirdData();
+                });
             }
         });
     }

@@ -105,6 +105,13 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             return Success("保存成功！");
         }
 
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult UpdateUserInfo(int keyValue, dm_userEntity entity) {
+            dM_UserIBLL.SaveEntity(keyValue, entity);
+            return Success("修改成功！");
+        }
+
         [HttpGet]
         [AjaxOnly(false)]
         public ActionResult GetChildUser(int userid)

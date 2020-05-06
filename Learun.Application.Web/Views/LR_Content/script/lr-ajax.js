@@ -167,7 +167,7 @@
                     learun.alert.error(res.info);
                     learun.httpErrorLog(res.info);
                 }
-                layer.close(layer.index);
+                top.layer.close(top.layer.index);
             });
         },
         postForm:function (url, param, callback) {
@@ -184,7 +184,7 @@
                     learun.alert.error(res.info);
                     learun.httpErrorLog(res.info);
                 }
-                layer.close(layer.index);
+                top.layer.close(top.layer.index);
             });
         },
         excuteOperate: function (url, param, callback) {
@@ -201,7 +201,7 @@
                     learun.alert.error(res.info);
                     learun.httpErrorLog(res.info);
                 }
-                layer.close(layer.index);
+                top.layer.close(top.layer.index);
             });
         },
     });
