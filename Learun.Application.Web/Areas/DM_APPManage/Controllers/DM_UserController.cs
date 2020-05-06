@@ -133,8 +133,16 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [AjaxOnly(false)]
         public ActionResult SetUserLevel(string userids, int user_level)
         {
-            dM_UserIBLL.SetUserLevel(userids, user_level);
-            return Success("修改成功！");
+            try
+            {
+                dM_UserIBLL.SetUserLevel(userids, user_level);
+                return Success("修改成功！");
+            }
+            catch (System.Exception ex)
+            {
+                return Fail(ex.InnerException.Message);
+            }
+
         }
 
         /// <summary>

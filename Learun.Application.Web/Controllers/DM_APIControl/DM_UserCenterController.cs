@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Linq;
 using System.Data;
+using Learun.Application.TwoDevelopment.Common;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -58,7 +59,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         #region 用户注册
 
-        public ActionResult DM_Register(dm_userEntity dm_UserEntity, string ParentInviteCode, string VerifiCode)
+        public ActionResult DM_Register(dm_userEntity dm_UserEntity, string ParentInviteCode, string VerifiCode, string SmsMessageID)
         {
             try
             {
@@ -83,6 +84,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     return Fail("验证码不能为空!");
                 }
+                if (!CommonSMSHelper.IsPassVerification(SmsMessageID, VerifiCode, appid))
+                {
+                    return Fail("验证码错误!");
+                }
                 dm_UserEntity.appid = appid;
                 return Success("注册成功!", dm_userIBLL.Register(dm_UserEntity, ParentInviteCode, appid));
             }
@@ -103,7 +108,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="IsNewUser">是否是新用户  true:新用户  false:老用户</param>
         /// <returns></returns>
 
-        public ActionResult DM_LoginByPhone(dm_userEntity dm_UserEntity, string ParentInviteCode, string VerifiCode, bool IsNewUser)
+        public ActionResult DM_LoginByPhone(dm_userEntity dm_UserEntity, string ParentInviteCode, string VerifiCode, bool IsNewUser, string SmsMessageID)
         {
             try
             {
@@ -116,6 +121,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (VerifiCode.IsEmpty())
                 {
                     return Fail("验证码不能为空!");
+                }
+
+                if (!CommonSMSHelper.IsPassVerification(SmsMessageID, VerifiCode, appid))
+                {
+                    return Fail("验证码错误!");
                 }
 
                 //如果是新用户则重新注册
@@ -172,27 +182,30 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                             return Fail("该手机号未注册!");
                         }
                         break;
-                    default:
-                        return Fail("获取验证码类型不合法!");
                     case 3:
                         break;
+                    default:
+                        return Fail("获取验证码类型不合法!");
                 }
-                Random random = new Random();
-                int ranCode = random.Next(1111, 9999);
+                //Random random = new Random();
+                //int ranCode = random.Next(1111, 9999);
+                string msgid = CommonSMSHelper.SendSms(Phone, appid);
 
                 if (Type != 3)
                 {
                     return Success("验证码获取成功!", new
                     {
-                        VerifiCode = ranCode
+                        //VerifiCode = ranCode,
+                        msgid = msgid
                     });
                 }
                 else
                 {///返回给前端是否为新用户  新用户需要输入邀请码
                     return Success("验证码获取成功!", new
                     {
-                        VerifiCode = ranCode,
-                        IsNewUser = dm_UserEntity == null
+                        //VerifiCode = ranCode,
+                        IsNewUser = dm_UserEntity == null,
+                        msgid = msgid
                     });
                 }
             }
@@ -212,7 +225,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="VerifiCode">验证码</param>
         /// <returns></returns>
 
-        public ActionResult ResetPwd(string Phone, string Pwd, string VerifiCode)
+        public ActionResult ResetPwd(string Phone, string Pwd, string VerifiCode, string SmsMessageID)
         {
             try
             {
@@ -229,12 +242,19 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     return Fail("验证码不能为空!");
                 }
                 string appid = CheckAPPID();
+
+                if (!CommonSMSHelper.IsPassVerification(SmsMessageID, VerifiCode, appid))
+                {
+                    return Fail("验证码错误!");
+                }
+
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByPhone(Phone, appid);
 
                 if (dm_UserEntity == null)
                 {
                     return Fail("该手机号未注册!");
                 }
+
                 dm_UserEntity.pwd = Md5Helper.Encrypt(Pwd, 16);
                 dm_userIBLL.SaveEntity(dm_UserEntity.id.ToInt(), dm_UserEntity);
                 return Success("密码修改成功,请重新登录!");

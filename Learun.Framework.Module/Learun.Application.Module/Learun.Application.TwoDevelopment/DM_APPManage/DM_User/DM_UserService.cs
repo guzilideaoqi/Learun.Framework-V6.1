@@ -706,7 +706,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 设置用户等级
         public void SetUserLevel(string userids, int user_level)
         {
-            IRepository db = null;
             try
             {
                 List<dm_userEntity> dm_UserEntity_UpdateList = new List<dm_userEntity>();
@@ -718,9 +717,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     {
                         if (user_level == 3)
                         { //等级为合伙人  并且等级为初级代理
-                            item.userlevel = 1;
+                            //item.userlevel = 1;
+                            if (item.userlevel == 0)
+                                throw new Exception("普通用户无法直接晋升为合伙人!");
                             item.partners = 20000 + item.id;
-                            item.partnersstatus = 1;
+                            item.partnersstatus = 2;
                         }
                         else
                         {
@@ -739,8 +740,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
             catch (Exception ex)
             {
-                if (db != null)
-                    db.Rollback();
                 if (ex is ExceptionEx)
                 {
                     throw;
