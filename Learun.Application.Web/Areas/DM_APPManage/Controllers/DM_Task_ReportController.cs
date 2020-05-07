@@ -70,6 +70,22 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             };
             return Success(jsonData);
         }
+
+        [HttpGet]
+        [AjaxOnly]
+        public ActionResult GetPageListByDataTable(string pagination, string queryJson)
+        {
+            Pagination paginationobj = pagination.ToObject<Pagination>();
+            var data = dM_Task_ReportIBLL.GetPageListByDataTable(paginationobj, queryJson);
+            var jsonData = new
+            {
+                rows = data,
+                total = paginationobj.total,
+                page = paginationobj.page,
+                records = paginationobj.records
+            };
+            return Success(jsonData);
+        }
         /// <summary>
         /// 获取表单数据
         /// <param name="keyValue">主键</param>

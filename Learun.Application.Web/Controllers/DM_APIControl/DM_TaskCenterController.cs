@@ -16,15 +16,19 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
     {
         private ICache redisCache = CacheFactory.CaChe();
 
-        private DM_ReadTaskIBLL dM_ReadTaskIBLL = new DM_ReadTaskBLL();
+        private DM_ReadTaskIBLL dM_ReadTaskIBLL = new DM_ReadTaskBLL();//阅赚任务模块
 
-        private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
+        private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();//基础配置信息
 
-        private DM_TaskIBLL dm_TaskIBLL = new DM_TaskBLL();
+        private DM_TaskIBLL dm_TaskIBLL = new DM_TaskBLL();//任务模块
 
-        private DM_Task_ReviceIBLL dm_Task_ReviceIBLL = new DM_Task_ReviceBLL();
+        private DM_Task_ReviceIBLL dm_Task_ReviceIBLL = new DM_Task_ReviceBLL();//任务接受记录
 
-        private DM_Task_TypeIBLL dm_Task_TypeIBLL = new DM_Task_TypeBLL();
+        private DM_Task_TypeIBLL dm_Task_TypeIBLL = new DM_Task_TypeBLL();//任务类型
+
+        private DM_Task_ReportIBLL dm_Task_ReportIBLL = new DM_Task_ReportBLL();//任务举报
+
+        private DM_Task_TemplateIBLL dm_Task_TemplateIBLL = new DM_Task_TemplateBLL();//任务模板
 
         #region 获取任务类型
         public ActionResult GetTaskType()
@@ -200,15 +204,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string cacheKey = "MyReviceTask" + Md5Helper.Hash(user_id + "" + PageNo + "" + PageSize);
                 DataTable dataTable = redisCache.Read(cacheKey, 7);
-                if (dataTable == null) {
+                if (dataTable == null)
+                {
                     dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(user_id, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
                     int datarow = dataTable.Rows.Count;
-                    if (datarow > 0) {
+                    if (datarow > 0)
+                    {
                         if (datarow < PageSize)
                         {
                             redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(5), 7);
                         }
-                        else { 
+                        else
+                        {
                             redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(2), 7);
                         }
                     }
@@ -227,8 +234,114 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                var obj = new { TaskInfo = dm_TaskIBLL.GetEntity(task_id), ReviceInfo = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id)};
+                var obj = new { TaskInfo = dm_TaskIBLL.GetEntity(task_id), ReviceInfo = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id) };
                 return Success("获取成功!", obj);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 任务举报
+        public ActionResult SubmitTaskReport(dm_task_reportEntity dm_Task_ReportEntity)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                dm_Task_ReportEntity.appid = appid;
+                dm_Task_ReportIBLL.SubmitTaskReport(dm_Task_ReportEntity);
+                return Success("提交成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 新增任务模板
+        public ActionResult CreateTaskTemplate(dm_task_templateEntity dm_Task_TemplateEntity)
+        {
+            try
+            {
+                dm_Task_TemplateIBLL.SaveEntity(0, dm_Task_TemplateEntity);
+
+                #region 清除任务模板的缓存
+                string cacheKey = "TaskTemplate" + dm_Task_TemplateEntity.user_id;
+                redisCache.Remove(cacheKey, 7);
+                #endregion
+
+                return Success("保存成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 修改任务模板
+        public ActionResult UpdateTaskTemplate(int TemplateID, dm_task_templateEntity dm_Task_TemplateEntity)
+        {
+            try
+            {
+                dm_Task_TemplateIBLL.SaveEntity(TemplateID, dm_Task_TemplateEntity);
+
+                #region 清除任务模板的缓存
+                string cacheKey = "TaskTemplate" + dm_Task_TemplateEntity.user_id;
+                redisCache.Remove(cacheKey, 7);
+                #endregion
+
+                return Success("修改成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取任务模板
+        public ActionResult GetTaskTemplate(int User_ID)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                string cacheKey = "TaskTemplate" + User_ID;
+                IEnumerable<dm_task_templateEntity> dm_Task_TemplateEntities = redisCache.Read<IEnumerable<dm_task_templateEntity>>(cacheKey, 7);
+                if (dm_Task_TemplateEntities == null)
+                {
+                    dm_Task_TemplateEntities = dm_Task_TemplateIBLL.GetList("{\"User_ID\":\"" + User_ID + "\"}");
+                    if (dm_Task_TemplateEntities.Count() > 0)
+                    {
+                        redisCache.Write<IEnumerable<dm_task_templateEntity>>(cacheKey, dm_Task_TemplateEntities, 7);
+                    }
+                }
+
+                return SuccessList("获取成功!", dm_Task_TemplateEntities);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 删除任务模板
+        public ActionResult DeleteTaskTemplate(int TemplateID,int User_ID)
+        {
+            try
+            {
+                dm_Task_TemplateIBLL.DeleteEntity(TemplateID);
+
+                #region 清除任务模板的缓存
+                string cacheKey = "TaskTemplate" + User_ID;
+                redisCache.Remove(cacheKey, 7);
+                #endregion
+
+                return Success("删除成功!");
             }
             catch (Exception ex)
             {

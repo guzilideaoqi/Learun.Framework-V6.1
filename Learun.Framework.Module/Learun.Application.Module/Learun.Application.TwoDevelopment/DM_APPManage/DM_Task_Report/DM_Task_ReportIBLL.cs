@@ -1,5 +1,6 @@
 ﻿using Learun.Util;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -25,6 +26,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// <returns></returns>
         IEnumerable<dm_task_reportEntity> GetPageList(Pagination pagination, string queryJson);
+
+        /// <summary>
+        /// 获取分页数据
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="queryJson"></param>
+        /// <returns></returns>
+        DataTable GetPageListByDataTable(Pagination pagination, string queryJson);
         /// <summary>
         /// 获取实体数据
         /// <param name="keyValue">主键</param>
@@ -47,6 +56,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// <returns></returns>
         void SaveEntity(int keyValue, dm_task_reportEntity entity);
+        /// <summary>
+        /// 提交举报信息
+        /// </summary>
+        /// <param name="entity"></param>
+        void SubmitTaskReport(dm_task_reportEntity entity);
         #endregion
 
     }

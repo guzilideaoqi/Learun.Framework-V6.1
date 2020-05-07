@@ -11,14 +11,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 日 期：2020-04-16 16:06
     /// 描 述：任务模板
     /// </summary>
-    public class dm_task_templateEntity 
+    public class dm_task_templateEntity
     {
         #region 实体成员
         /// <summary>
         /// id
         /// </summary>
         /// <returns></returns>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("ID")]
         public int? id { get; set; }
         /// <summary>
         /// task_title
@@ -76,6 +77,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         public void Create()
         {
+            this.createtime = DateTime.Now;
         }
         /// <summary>
         /// 编辑调用

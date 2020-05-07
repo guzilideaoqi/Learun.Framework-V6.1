@@ -1,6 +1,7 @@
 ﻿using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -50,6 +51,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 return dM_Task_ReportService.GetPageList(pagination, queryJson);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson) {
+            try
+            {
+                return dM_Task_ReportService.GetPageListByDataTable(pagination, queryJson);
             }
             catch (Exception ex)
             {
@@ -140,6 +159,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        /// <summary>
+        /// 提交举报信息
+        /// </summary>
+        /// <param name="entity"></param>
+        public void SubmitTaskReport(dm_task_reportEntity entity) {
+            try
+            {
+                dM_Task_ReportService.SubmitTaskReport(entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
 
     }

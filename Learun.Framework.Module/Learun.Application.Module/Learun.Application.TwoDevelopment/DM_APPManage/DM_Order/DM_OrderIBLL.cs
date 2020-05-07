@@ -31,5 +31,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <returns></returns>
         IEnumerable<dm_orderEntity> GetMyOrder(int user_id, int plaformType, int status, Pagination pagination);
+
+        /// <summary>
+        /// 执行返利(上个月结算的订单)
+        /// </summary>
+        /// <param name="appid"></param>
+        void ExcuteSubCommission(string appid);
     }
 }

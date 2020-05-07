@@ -140,6 +140,26 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 执行返利
+        /// <summary>
+        /// 执行返利
+        /// </summary>
+        /// <param name="AppID">appid</param>
+        /// <returns></returns>
+        public ActionResult ExcuteSubCommission(string AppID)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                return Success("返利执行成功");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 接口测试
         public ActionResult TestApi(string jsonData)
         {

@@ -2,20 +2,17 @@
     ViewBag.Title = "任务举报记录";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
-<div class="lr-layout lr-layout-left-center" id="lr_layout">
-    <div class="lr-layout-left">
-        <div class="lr-layout-wrap">
-            <div class="lr-layout-title">树形目录</div>
-            <div id="tree" class="lr-layout-body"></div>
-        </div>
-    </div>
+<div class="lr-layout lr-layout-center" id="lr_layout">
     <div class="lr-layout-center">
         <div class="lr-layout-wrap">
-            <div class="lr-layout-title">标题</div>
+            <div class="lr-layout-title">举报记录</div>
             <div class="lr-layout-tool">
                 <div class="lr-layout-tool-left">
                     <div class="lr-layout-tool-item">
-                        <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" />
+                        <input id="txt_phone" type="text" class="form-control" placeholder="请输入手机号" />
+                        <input id="txt_nickname" type="text" class="form-control" placeholder="请输入用户昵称" />
+                        <input id="txt_realname" type="text" class="form-control" placeholder="请输入真实姓名" />
+                        <input id="txt_task_no" type="text" class="form-control" placeholder="请输入任务编号" />
                     </div>
                     <div class="lr-layout-tool-item">
                         <a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</a>

@@ -47,14 +47,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 //参考写法
-                //var queryParam = queryJson.ToJObject();
+                var queryParam = queryJson.ToJObject();
                 // 虚拟参数
                 //var dp = new DynamicParameters(new { });
                 //dp.Add("startTime", queryParam["StartTime"].ToDate(), DbType.DateTime);
                 var strSql = new StringBuilder();
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
-                strSql.Append(" FROM dm_task_template t ");
+                strSql.Append(" FROM dm_task_template t where 1=1");
+
+                if (!queryParam["User_ID"].IsEmpty()) {
+                    strSql.Append(" and t.user_id='" + queryParam["User_ID"].ToString() + "'");
+                }
+
                 return this.BaseRepository("dm_data").FindList<dm_task_templateEntity>(strSql.ToString());
             }
             catch (Exception ex)

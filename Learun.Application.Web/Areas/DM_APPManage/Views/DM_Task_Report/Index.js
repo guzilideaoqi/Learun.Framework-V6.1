@@ -17,7 +17,7 @@ var bootstrap = function ($, learun) {
             // 查询
             $('#btn_Search').on('click', function () {
                 var keyword = $('#txt_Keyword').val();
-                page.search({ keyword: keyword });
+                page.search();
             });
             // 刷新
             $('#lr_refresh').on('click', function () {
@@ -60,7 +60,7 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerConfirm('是否确认删除该项！', function (res) {
                         if (res) {
-                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Task_Report/DeleteForm', { keyValue: keyValue}, function () {
+                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Task_Report/DeleteForm', { keyValue: keyValue }, function () {
                             });
                         }
                     });
@@ -69,23 +69,27 @@ var bootstrap = function ($, learun) {
         },
         initGird: function () {
             $('#girdtable').lrAuthorizeJfGrid({
-                url: top.$.rootUrl + '/DM_APPManage/DM_Task_Report/GetPageList',
+                url: top.$.rootUrl + '/DM_APPManage/DM_Task_Report/GetPageListByDataTable',
                 headData: [
-                        { label: 'id', name: 'id', width: 200, align: "left" },
-                        { label: '举报用户', name: 'user_id', width: 200, align: "left" },
-                        { label: '举报任务id', name: 'task_id', width: 200, align: "left" },
-                        { label: '举报内容', name: 'report_content', width: 200, align: "left" },
-                        { label: '举报时间', name: 'report_time', width: 200, align: "left" },
-                        { label: '平台id', name: 'appid', width: 200, align: "left" },
+                    //{ label: 'id', name: 'id', width: 200, align: "left" },
+                    //{ label: '举报用户', name: 'user_id', width: 200, align: "left" },
+                    { label: '举报人手机号', name: 'phone', width: 120, align: "left" },
+                    { label: '昵称', name: 'nickname', width: 100, align: "left" },
+                    { label: '真实姓名', name: 'realname', width: 100, align: "left" },
+                    { label: '任务编号', name: 'task_no', width: 200, align: "left" },
+                    { label: '任务标题', name: 'task_title', width: 200, align: "left" },
+                    { label: '举报内容', name: 'report_content', width: 200, align: "left" },
+                    { label: '举报时间', name: 'report_time', width: 135, align: "left" },
+                    //{ label: '平台id', name: 'appid', width: 200, align: "left" },
                 ],
-                mainId:'id',
+                mainId: 'id',
                 reloadSelected: true,
                 isPage: true
             });
             page.search();
         },
         search: function (param) {
-            param = param || {};
+            param = param || { txt_phone: $("#txt_phone").val(), txt_nickname: $("#txt_nickname").val(), txt_realname: $("#txt_realname").val(), txt_task_no: $("#txt_task_no").val() };
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
     };

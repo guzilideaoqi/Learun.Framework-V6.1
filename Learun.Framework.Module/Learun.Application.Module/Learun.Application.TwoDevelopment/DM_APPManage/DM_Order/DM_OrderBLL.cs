@@ -132,5 +132,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 throw ExceptionEx.ThrowBusinessException(ex);
             }
         }
+
+        /// <summary>
+        /// 执行返利
+        /// </summary>
+        /// <param name="appid">应用id</param>
+        public void ExcuteSubCommission(string appid) {
+            try
+            {
+                dM_OrderService.ExcuteSubCommission(appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
     }
 }
