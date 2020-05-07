@@ -310,7 +310,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         #region 大淘客搜索商品(2个小时更新一次)
         //public ActionResult GetDTKSearchGood(int user_id, int pageId = 1, int pageSize = 20, string cids = "", int subcid = -1, int juHuaSuan = -1, int taoQiangGou = -1, string keyWords = "", int tmall = -1, int tchaoshi = -1,int goldSeller=-1,int haitao=-1,int brand=-1,string brandIds="", string sort = "total_sales_des")
-        /*public ActionResult GetDTKSearchGood(int user_id, int pageId = 1, int pageSize = 20, string cids = "", int subcid = -1, string keyWords = "", string sort = "0")
+        public ActionResult GetDTKSearchGood(int user_id, int pageId = 1, int pageSize = 20, string cids = "", int subcid = -1, string keyWords = "", string sort = "0")
         {
             try
             {
@@ -354,7 +354,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 return FailException(ex);
             }
-        }*/
+        }
         #endregion
 
         #region 9.9包邮精选(两个小时更新一次)

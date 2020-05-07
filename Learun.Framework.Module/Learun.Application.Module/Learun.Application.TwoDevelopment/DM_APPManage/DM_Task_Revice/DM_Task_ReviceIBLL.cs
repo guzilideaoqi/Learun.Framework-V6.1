@@ -70,7 +70,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 接受任务
         /// </summary>
         /// <param name="dm_Task_ReviceEntity"></param>
-        void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity);
+        void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity,string appid);
 
         /// <summary>
         /// 提交资料

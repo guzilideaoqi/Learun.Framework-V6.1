@@ -190,11 +190,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 接受任务
         /// </summary>
         /// <param name="dm_Task_ReviceEntity"></param>
-        public void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity)
+        public void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity,string appid)
         {
             try
             {
-                dM_Task_ReviceService.ReviceTask(dm_Task_ReviceEntity);
+                dM_Task_ReviceService.ReviceTask(dm_Task_ReviceEntity, appid);
             }
             catch (Exception ex)
             {

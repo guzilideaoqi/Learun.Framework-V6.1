@@ -129,7 +129,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                dm_Task_ReviceIBLL.ReviceTask(dm_Task_ReviceEntity);
+                string appid = CheckAPPID();
+
+                dm_Task_ReviceIBLL.ReviceTask(dm_Task_ReviceEntity, appid);
                 return Success("接受成功!");
             }
             catch (Exception ex)

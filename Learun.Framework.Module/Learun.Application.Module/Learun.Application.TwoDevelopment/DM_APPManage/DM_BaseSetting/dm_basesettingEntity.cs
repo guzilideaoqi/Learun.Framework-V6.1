@@ -365,6 +365,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("SMS_TEMPLATE_ID")]
         public string sms_template_id { get; set; }
 
+        /// <summary>
+        /// 接受任务数量限制
+        /// </summary>
+        [Column("REVICETASKCOUNTLIMIT")]
+        public int revicetaskcountlimit { get; set; }
+
 
         public void Create()
         {

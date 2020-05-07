@@ -314,11 +314,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 接受任务
-        public void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity)
+        public void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity,string appid)
         {
             IRepository db = null;
             try
             {
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(appid);
+                if (dm_BasesettingEntity.IsEmpty())
+                    throw new Exception("配置信息获取错误!");
+
                 dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
                 if (dm_TaskEntity.IsEmpty())
                     throw new Exception("任务id错误!");
@@ -329,6 +333,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_userEntity dm_UserEntity = dM_UserService.GetEntity(dm_Task_ReviceEntity.user_id);
                 if (dm_UserEntity.userlevel != 1 && dm_UserEntity.userlevel != 3)
                     throw new Exception("当前等级无法接受任务,请升级后重试!");
+
+                //判断当前未在审核状态的任务数量
+                int noFinishCount = BaseRepository("dm_data").IQueryable<dm_task_reviceEntity>(t => t.status == 1 || t.status == 2).Count();
+                if (noFinishCount >= dm_BasesettingEntity.revicetaskcountlimit)
+                    throw new Exception("同时接单任务数已达到上限,请先完成其他任务后再来接单!");
+
 
                 dm_Task_ReviceEntity.revice_time = DateTime.Now;
                 dm_Task_ReviceEntity.status = 1;
