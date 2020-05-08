@@ -162,7 +162,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		}
 
 		[Column("SUBSIDY_TYPE")]
-		public int? subsidy_type
+		public string subsidy_type
 		{
 			get;
 			set;

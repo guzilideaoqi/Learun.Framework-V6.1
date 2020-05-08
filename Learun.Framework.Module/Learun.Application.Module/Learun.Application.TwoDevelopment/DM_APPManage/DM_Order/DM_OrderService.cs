@@ -48,10 +48,52 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 //ExcuteSubCommission("e2b3ec3a-310b-4ab8-aa81-b563ac8f3006");
+                var queryParam = queryJson.ToJObject();
                 StringBuilder strSql = new StringBuilder();
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
                 strSql.Append(" FROM dm_order t ");
+
+                if (!queryParam["AppID"].IsEmpty())
+                {
+                    strSql.Append(" where t.appid='" + queryParam["AppID"].ToString() + "'");
+                }
+                else
+                {
+                    UserInfo userInfo = LoginUserInfo.Get();
+                    strSql.Append(" where t.appid='" + userInfo.companyId + "'");
+                }
+
+                if (!queryParam["txt_OrderSN"].IsEmpty())
+                {
+                    strSql.Append(" and (t.order_sn like '%" + queryParam["txt_OrderSN"].ToString() + "%' or t.sub_order_sn like '%" + queryParam["txt_OrderSN"].ToString() + "%')");
+                }
+
+                if (!queryParam["txt_UserID"].IsEmpty())
+                {
+                    strSql.Append(" and t.userid='" + queryParam["txt_UserID"].ToString() + "'");
+                }
+
+                if (!queryParam["txt_status"].IsEmpty())
+                {
+                    strSql.Append(" and t.order_type_new='" + queryParam["txt_status"].ToString() + "'");
+                }
+
+                if (!queryParam["txt_type_big"].IsEmpty())
+                {
+                    strSql.Append(" and t.type_big='" + queryParam["txt_type_big"].ToString() + "'");
+                }
+
+                if (!queryParam["StartTime"].IsEmpty())
+                {
+                    strSql.Append(" and t.order_pay_time>'" + queryParam["StartTime"].ToString() + "'");
+                }
+
+                if (!queryParam["EndTime"].IsEmpty())
+                {
+                    strSql.Append(" and t.order_pay_time<'" + queryParam["EndTime"].ToString() + "'");
+                }
+
                 return BaseRepository("dm_data").FindList<dm_orderEntity>(strSql.ToString(), pagination);
             }
             catch (Exception ex)

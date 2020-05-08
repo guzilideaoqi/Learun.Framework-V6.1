@@ -9,16 +9,54 @@ var refreshGirdData;
 var SelectRowIndx = 0;
 var bootstrap = function ($, learun) {
     "use strict";
+    var startTime, endTime;
     var page = {
         init: function () {
-            page.initGird();
             page.bind();
+
+            page.initGird();
         },
         bind: function () {
+            // 时间搜索框
+            $('#datesearch').lrdate({
+                dfdata: [
+                    { name: '今天', begin: function () { return learun.getDate('yyyy-MM-dd 00:00:00') }, end: function () { return learun.getDate('yyyy-MM-dd 23:59:59') } },
+                    { name: '近7天', begin: function () { return learun.getDate('yyyy-MM-dd 00:00:00', 'd', -6) }, end: function () { return learun.getDate('yyyy-MM-dd 23:59:59') } },
+                    { name: '近1个月', begin: function () { return learun.getDate('yyyy-MM-dd 00:00:00', 'm', -1) }, end: function () { return learun.getDate('yyyy-MM-dd 23:59:59') } },
+                    { name: '近3个月', begin: function () { return learun.getDate('yyyy-MM-dd 00:00:00', 'm', -3) }, end: function () { return learun.getDate('yyyy-MM-dd 23:59:59') } }
+                ],
+                // 月
+                mShow: false,
+                premShow: false,
+                // 季度
+                jShow: false,
+                prejShow: false,
+                // 年
+                ysShow: false,
+                yxShow: false,
+                preyShow: false,
+                yShow: false,
+                // 默认
+                dfvalue: '1',
+                selectfn: function (begin, end) {
+                    startTime = begin;
+                    endTime = end;
+                }
+            });
+            $('#multiple_condition_query').lrMultipleQuery(function (queryJson) {
+                // 调用后台查询
+                // queryJson 查询条件
+                page.search();
+            }, 220);
+
+            //平台类型下拉框初始化
+            $('#txt_type_big').lrselect({ placeholder: "请选择平台类型" });
+
+            $('#txt_status').lrselect({ placeholder: "请选择订单状态" });
+
             // 查询
             $('#btn_Search').on('click', function () {
-                var keyword = $('#txt_Keyword').val();
-                page.search({ keyword: keyword });
+                page.search();
             });
             // 刷新
             $('#lr_refresh').on('click', function () {
@@ -98,7 +136,7 @@ var bootstrap = function ($, learun) {
                     //    }
                     //},
                     {
-                        label: '平台类型', name: 'type', width: 60, align: "left", formatter: function (cellValue, rowData, options) {
+                        label: '平台类型', name: 'type_big', width: 60, align: "left", formatter: function (cellValue, rowData, options) {
                             var statusStr = "";
                             switch (cellValue) {
                                 case 1:
@@ -185,13 +223,13 @@ var bootstrap = function ($, learun) {
                                     statusStr = "未处理";
                                     break;
                                 case 1:
-                                    statusStr = "付款";
+                                    statusStr = "订单付款";
                                     break;
                                 case 2:
                                     statusStr = "收货未结";
                                     break;
                                 case 3:
-                                    statusStr = "失效";
+                                    statusStr = "订单失效";
                                     break;
                                 case 4:
                                     statusStr = "结算至余额";
@@ -214,7 +252,7 @@ var bootstrap = function ($, learun) {
             page.search();
         },
         search: function (param) {
-            param = param || {};
+            param = param || { StartTime: startTime, EndTime: endTime, txt_OrderSN: $("#txt_OrderSN").val(), txt_UserID: $("#txt_UserID").val(), txt_status: $("#txt_status").lrselectGet(), txt_type_big: $("#txt_type_big").lrselectGet() };
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
     };

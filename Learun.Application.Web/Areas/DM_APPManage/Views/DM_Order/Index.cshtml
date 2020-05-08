@@ -9,10 +9,29 @@
             <div class="lr-layout-tool">
                 <div class="lr-layout-tool-left">
                     <div class="lr-layout-tool-item">
-                        <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" />
+                        <div id="datesearch"></div>
                     </div>
                     <div class="lr-layout-tool-item">
-                        <a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> 查询</a>
+                        <div id="multiple_condition_query">
+                            <div class="lr-query-formcontent">
+                                <div class="col-xs-12 lr-form-item">
+                                    <div class="lr-form-item-title">订单编号</div>
+                                    <input id="txt_OrderSN" type="text" class="form-control" />
+                                </div>
+                                <div class="col-xs-12 lr-form-item">
+                                    <div class="lr-form-item-title">用户ID</div>
+                                    <input id="txt_UserID" type="text" class="form-control" />
+                                </div>
+                                <div class="col-xs-12 lr-form-item">
+                                    <div class="lr-form-item-title">平台类型</div>
+                                    <div id="txt_type_big" class="form-control"><ul><li data-value="1">淘宝</li><li data-value="3">京东</li><li data-value="4">拼多多</li></ul></div>
+                                </div>
+                                <div class="col-xs-12 lr-form-item">
+                                    <div class="lr-form-item-title">订单状态</div>
+                                    <div id="txt_status" class="form-control"><ul><li data-value="0">未处理</li><li data-value="1">订单付款</li><li data-value="2">收货未结</li><li data-value="3">订单失效</li><li data-value="4">结算至余额</li></ul></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="lr-layout-tool-right">
