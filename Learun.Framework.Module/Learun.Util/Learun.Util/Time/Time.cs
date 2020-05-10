@@ -547,5 +547,16 @@ namespace Learun.Util
             dateTime = dateTime + time;
             return dateTime;
         }
+
+        #region 获取当前时间戳
+        public static string GetTimeStamp(bool IsMillSecond = false)
+        {
+            TimeSpan ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            if (IsMillSecond)
+                return Convert.ToInt64(ts.TotalMilliseconds).ToString();
+            else
+                return Convert.ToInt64(ts.TotalSeconds).ToString();
+        }
+        #endregion
     }
 }

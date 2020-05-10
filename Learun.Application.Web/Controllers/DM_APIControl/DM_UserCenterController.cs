@@ -64,10 +64,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                if (dm_UserEntity.nickname.IsEmpty())
+                /*if (dm_UserEntity.nickname.IsEmpty())
                 {
                     return Fail("用户名不能为空!");
-                }
+                }*/
                 if (dm_UserEntity.phone.IsEmpty() || dm_UserEntity.phone.Length != 11)
                 {
                     return Fail("手机号不能为空或格式错误!");
@@ -76,10 +76,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     return Fail("邀请码不能为空!");
                 }
-                if (dm_UserEntity.pwd.IsEmpty())
+                /*if (dm_UserEntity.pwd.IsEmpty())
                 {
                     return Fail("密码不能为空!");
-                }
+                }*/
                 if (VerifiCode.IsEmpty())
                 {
                     return Fail("验证码不能为空!");
@@ -89,6 +89,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     return Fail("验证码错误!");
                 }
                 dm_UserEntity.appid = appid;
+                dm_UserEntity.nickname = "dlm_" + Time.GetTimeStamp();
+                dm_UserEntity.pwd = "123456";
                 return Success("注册成功!", dm_userIBLL.Register(dm_UserEntity, ParentInviteCode, appid));
             }
             catch (Exception ex)
@@ -136,7 +138,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         return Fail("邀请码不能为空!");
                     }
 
-                    dm_UserEntity.nickname = "昵称";
+                    dm_UserEntity.nickname = "dlm_" + Time.GetTimeStamp();
                     dm_UserEntity.pwd = "123456";
 
                     return Success("登录成功!", dm_userIBLL.Register(dm_UserEntity, ParentInviteCode, appid));
@@ -331,10 +333,21 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
+
+                int? UserID = dm_userIBLL.DecodeInviteCode(InviteCode);
+
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(Convert.ToInt32(UserID));
+                if (dm_UserEntity.IsEmpty())
+                    return Fail("邀请码错误!");
+
                 return Success("获取成功!", new
                 {
-                    UserID = dm_userIBLL.DecodeInviteCode(InviteCode)
-                });
+                    UserID = dm_UserEntity.id,
+                    NickName = dm_UserEntity.nickname,
+                    HeadPic = CommonConfig.ImageQianZhui + dm_UserEntity.headpic,
+                    RealName = dm_UserEntity.realname,
+                    Phone = dm_UserEntity.phone
+                }); ;
             }
             catch (Exception ex)
             {
