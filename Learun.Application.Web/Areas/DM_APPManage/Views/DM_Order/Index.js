@@ -105,6 +105,20 @@ var bootstrap = function ($, learun) {
                     });
                 }
             });
+
+            //手动同步订单
+            $("#lr_syncorder").on('click', function () {
+                learun.layerForm({
+                    id: 'form',
+                    title: '手动同步订单',
+                    url: top.$.rootUrl + '/DM_APPManage/DM_Order/SyncOrder',
+                    width: 700,
+                    height: 400,
+                    callBack: function (id) {
+                        return top[id].acceptClick(refreshGirdData);
+                    }
+                });
+            });
         },
         initGird: function () {
             $('#girdtable').lrAuthorizeJfGrid({
@@ -261,4 +275,3 @@ var bootstrap = function ($, learun) {
     };
     page.init();
 }
- 

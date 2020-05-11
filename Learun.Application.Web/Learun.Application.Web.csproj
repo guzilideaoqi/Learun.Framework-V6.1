@@ -296,6 +296,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeGood\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeRecord\SendExpressNumber.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Order\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Order\SyncOrder.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_ReadTask\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookReviceDetail.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\PubTask.js" />
@@ -1855,6 +1856,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Order\Index.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookReviceDetail.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\SetLevel.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Order\SyncOrder.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
