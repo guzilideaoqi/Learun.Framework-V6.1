@@ -32,8 +32,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 上级用户昵称
         /// </summary>
         [Column("PARENT_NICKNAME")]
-        public string parent_nickname {
-            get;set;
+        public string parent_nickname
+        {
+            get; set;
         }
 
         [Column("PARTNERS_ID")]
@@ -210,6 +211,32 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         public void Create()
         {
+            createtime = DateTime.Now;
+            ordercount = 0;
+            taskcount = 0;
+            taskreportcount = 0;
+            CurrentMonthEffect = 0;
+            CurrentMonthReceiveEffect = 0;
+            UpMonthReceiveEffect = 0;
+            TodayReviceEffect = 0;
+            YesTodayReviceEffect = 0;
+            CurrentMonthPayMentPrice = 0;
+            UpMonthPayMentPrice = 0;
+            TodayPayMentPrice = 0;
+            YesTodayPayMentPrice = 0;
+            CurrentMonthOrderCount = 0;
+            UpMonthOrderCount = 0;
+            TodayOrderCount = 0;
+            YesTodayOrderCount = 0;
+            CurrentMonthReviceTaskPrice = 0;
+            UpMonthReviceTaskPrice = 0;
+            TodayReviceTaskPrice = 0;
+            YesTodayReviceTaskPrice = 0;
+            CurrentMonthReviceTaskCount = 0;
+            UpMonthReviceTaskCount = 0;
+            TodayReviceTaskCount = 0;
+            YesTodayReviceTaskCount = 0;
+            ReviceTaskCount = 0;
         }
 
         public void Modify(int? keyValue)

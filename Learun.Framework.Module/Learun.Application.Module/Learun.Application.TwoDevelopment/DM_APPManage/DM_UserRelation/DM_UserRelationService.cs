@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Data;
+using Learun.Cache.Base;
+using Learun.Cache.Factory;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
     public class DM_UserRelationService : RepositoryFactory
     {
         private string fieldSql;
+        private ICache redisCache = CacheFactory.CaChe();
 
         public DM_UserRelationService()
         {
@@ -77,7 +80,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                return BaseRepository("dm_data").FindEntity((dm_user_relationEntity t) => t.user_id == id);
+                string cacheKey = "UserRelation_" + id;
+                dm_user_relationEntity dm_User_RelationEntity = redisCache.Read<dm_user_relationEntity>(cacheKey, 7L);
+                if (dm_User_RelationEntity.IsEmpty())
+                {
+                    dm_User_RelationEntity = BaseRepository("dm_data").FindEntity((dm_user_relationEntity t) => t.user_id == id);
+                    if (!dm_User_RelationEntity.IsEmpty())
+                    {
+                        redisCache.Write(cacheKey, dm_User_RelationEntity, DateTime.Now.AddMinutes(10), 7L);
+                    }
+                }
+                return dm_User_RelationEntity;
             }
             catch (Exception ex)
             {
@@ -267,6 +280,26 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw;
                 }
                 throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取效果收益
+        /// <summary>
+        /// 获取效果收益报表
+        /// </summary>
+        /// <param name="User_ID">用户ID</param>
+        /// <returns></returns>
+        public dm_user_relationEntity GetIncomeReport(int User_ID)
+        {
+            try
+            {
+                return GetEntityByUserID(User_ID);
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
         #endregion

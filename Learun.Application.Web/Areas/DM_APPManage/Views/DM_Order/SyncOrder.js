@@ -31,7 +31,7 @@ var bootstrap = function ($, learun) {
         postData["timetype"] = $("input[name='timetype']:checked").val();
         postData["status"] = $("input[name='status']:checked").val();
         console.log(postData);
-        $.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Order/SyncOrder', postData, function (res) {
+        learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Order/SyncOrder', postData, function (res) {
             // 保存成功后才回调
             if (!!callBack) {
                 callBack();

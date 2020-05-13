@@ -204,14 +204,25 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 string cacheKey = "UserInfo" + id.ToString();
                 dm_userEntity dm_UserEntity = redisCache.Read<dm_userEntity>(cacheKey, 7L);
-                if (dm_UserEntity == null)
+                if (dm_UserEntity.IsEmpty())
                 {
                     dm_UserEntity = GetEntity(id);
-                    if (dm_UserEntity != null)
+
+                    if (!dm_UserEntity.IsEmpty())
                     {
-                        redisCache.Write(cacheKey, dm_UserEntity, 7L);
+                        dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(id);
+
+                        if (!dm_User_RelationEntity.IsEmpty())
+                        {
+                            dm_UserEntity.currentmontheffect = dm_User_RelationEntity.CurrentMonthEffect;
+                            dm_UserEntity.currentmonthreceiveeffect = dm_User_RelationEntity.CurrentMonthReceiveEffect;
+                            dm_UserEntity.upmonthreceiveeffect = dm_User_RelationEntity.UpMonthReceiveEffect;
+                        }
+
+                        redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddMinutes(10), 7L);
                     }
                 }
+
                 return dm_UserEntity;
             }
             catch (Exception ex)
@@ -343,8 +354,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         parent_id = parent_id,
                         parent_nickname = parent_user_entity.nickname,
                         partners_id = parent_user_entity.partnersstatus == 1 ? parent_user_entity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
-                        createtime = DateTime.Now
                     };
+                    dm_User_RelationEntity.Create();
                     db.Insert(dm_User_RelationEntity);
                     db.Commit();
                     return GetEntity(id.ToInt());

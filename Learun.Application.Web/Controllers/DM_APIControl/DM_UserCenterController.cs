@@ -288,6 +288,25 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 获取效果收益报表
+        /// <summary>
+        /// 获取效果收益报表
+        /// </summary>
+        /// <param name="User_ID">用户ID</param>
+        /// <returns></returns>
+        public ActionResult GetIncomeReport(int User_ID)
+        {
+            try
+            {
+                return Success("获取成功", dm_UserRelationIBLL.GetIncomeReport(User_ID));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 签到
         /// <summary>
         /// 签到
@@ -506,6 +525,23 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 if (dm_UserEntity.nickname.IsEmpty())
                     return Fail("用户昵称不能为空!");
+
+                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                return Success("修改成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 修改微信号
+        public ActionResult UpdateWeChatID(int user_id, dm_userEntity dm_UserEntity) {
+            try
+            {
+                if (dm_UserEntity.mywechat.IsEmpty())
+                    return Fail("微信号不能为空!");
 
                 dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
                 return Success("修改成功!");

@@ -42,5 +42,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 获取团队粉丝详情
         DataTable GetPartnersChildDetail(int? partners_id, int PageNo, int PageSize);
         #endregion
+
+        #region 获取效果收益报表
+        dm_user_relationEntity GetIncomeReport(int User_ID);
+        #endregion
     }
 }
