@@ -208,6 +208,7 @@ var bootstrap = function ($, learun) {
                     { label: '结算预估佣金', name: 'estimated_effect', width: 80, align: "left" },
                     //{ label: '收入比率', name: 'income_ratio', width: 80, align: "left" },
                     { label: '付款预估佣金', name: 'estimated_income', width: 80, align: "left" },
+                    { label: '实际结算佣金', name: 'commission_amount', width: 80, align: "left" },
                     //{ label: '佣金比例', name: 'commission_rate', width: 60, align: "left" },
                     //{ label: '实结佣金金额', name: 'commission_amount', width: 80, align: "left" },
                     //{ label: '补贴比率', name: 'subsidy_ratio', width: 60, align: "left" },

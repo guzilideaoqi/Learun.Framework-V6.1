@@ -1,9 +1,16 @@
+using Common;
+using HYG.CommonHelper.ShoppingAPI;
+using JDModel;
 using Learun.DataBase.Repository;
 using Learun.Util;
+using PDDModel;
+using ShoppingAPI;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
+using TBModel;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -194,17 +201,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     pay_user = userRelationEntities.Where((UserRelationEntity t) => t.user_id == item.userid).FirstOrDefault();
                     if (!pay_user.IsEmpty())
                     {
+                        /*2020-05-13  订单实际返利的佣金计算放到触发器中进行*/
                         if (pay_user.userlevel == 0)
                         {
-                            pay_comission = ConvertComission(item.estimated_effect * (decimal)dm_BasesettingEntity.shopping_pay_junior);
+                            //pay_comission = ConvertComission(Convert.ToDecimal(item.estimated_effect) * (decimal)dm_BasesettingEntity.shopping_pay_junior);
+                            pay_comission = ConvertComission(Convert.ToDecimal(item.commission_amount));
                         }
                         else if (pay_user.userlevel == 1)
                         {
-                            pay_comission = ConvertComission(item.estimated_effect * (decimal)dm_BasesettingEntity.shopping_pay_middle);
+                            //pay_comission = ConvertComission(Convert.ToDecimal(item.estimated_effect) * (decimal)dm_BasesettingEntity.shopping_pay_middle);
+                            pay_comission = ConvertComission(Convert.ToDecimal(item.commission_amount));
                         }
                         else if (pay_user.userlevel == 2)
                         {
-                            pay_comission = ConvertComission(item.estimated_effect * (decimal)dm_BasesettingEntity.shopping_pay_senior);
+                            //pay_comission = ConvertComission(Convert.ToDecimal(item.estimated_effect) * (decimal)dm_BasesettingEntity.shopping_pay_senior);
+                            pay_comission = ConvertComission(Convert.ToDecimal(item.commission_amount));
                         }
                         if (pay_comission > 0m)
                         {
@@ -416,5 +427,599 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             return int.Parse(BaseRepository("dm_data").FindObject("select count(id) from dm_order where userid=" + user_id).ToString());
         }
         #endregion
+
+        #region 手动同步订单
+        TBApi tbApi = null;
+        JDApi jDApi = null;
+        PDDApi pDDApi = null;
+        string tb_tool_appkey = "25552805", tb_tool_appsecret = "7341a330d97862f21447f34c0fc326c9", appid = "";
+        List<dm_orderEntity> commonOrderList = new List<dm_orderEntity>();
+        public void SyncOrder(int plaform, int timetype, int status, string startTime, string endTime)
+        {
+            UserInfo userInfo = LoginUserInfo.Get();
+            dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(userInfo.companyId);
+
+            appid = userInfo.companyId;
+
+            if (plaform == 1)
+            {
+                endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddHours(3));
+                synd_tb_order(timetype == 1 ? 2 : 3, 1, 20, "", startTime, endTime, dm_BasesettingEntity);
+            }
+            else if (plaform == 3)
+            {
+                endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddHours(1));
+                synd_jd_order(1, 20, timetype, startTime, endTime, dm_BasesettingEntity);
+            }
+            else if (plaform == 4)
+            {
+                endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddDays(1));
+                synd_pdd_order(1, 20, startTime, endTime, dm_BasesettingEntity);
+            }
+            else
+            {
+                throw new Exception("请选择平台!");
+            }
+        }
+
+        #region 同步淘宝订单
+        void synd_tb_order(int queryType, int pageNo, int pageSize, string postion_index, string startTime, string endTime, dm_basesettingEntity baseSettingEntity)
+        {
+            try
+            {
+                tbApi = new TBApi(tb_tool_appkey, tb_tool_appsecret, baseSettingEntity.tb_sessionkey);
+                if (tbApi != null)
+                {
+                    #region 淘宝订单处理
+                    OrderData orderData = tbApi.GetOrder(queryType.ToString(), postion_index, pageSize.ToString(), "", startTime, endTime, "1", pageNo.ToString(), "2");
+
+                    if (orderData != null)
+                    {
+                        if (orderData.results.publisher_order_dto != null)
+                        {
+                            foreach (tb_order item in orderData.results.publisher_order_dto)
+                            {
+                                dm_orderEntity commonOrderEntity = new dm_orderEntity();
+                                commonOrderEntity.order_sn = item.trade_parent_id;//订单id
+                                commonOrderEntity.sub_order_sn = item.trade_id;//子订单id
+                                commonOrderEntity.origin_id = item.item_id;//商品id
+                                commonOrderEntity.id = Md5Helper.Hash(commonOrderEntity.order_sn + commonOrderEntity.sub_order_sn + commonOrderEntity.origin_id);//id通过
+                                commonOrderEntity.type_big = 1;
+                                commonOrderEntity.order_type = getordertype(item.order_type);
+                                commonOrderEntity.type = commonOrderEntity.order_type;
+                                commonOrderEntity.title = item.item_title;
+                                commonOrderEntity.order_status = item.tk_status;
+                                commonOrderEntity.order_type_new = gettbstatus(commonOrderEntity.order_status);
+                                commonOrderEntity.rebate_status = 0;
+                                commonOrderEntity.image = item.item_img;
+                                commonOrderEntity.product_num = item.item_num;
+                                commonOrderEntity.product_price = item.item_price;
+                                commonOrderEntity.payment_price = item.pay_price;
+                                commonOrderEntity.estimated_effect = item.pub_share_fee;//结算预估收入(包含补贴金额)
+                                commonOrderEntity.estimated_income = item.pub_share_pre_fee;//付款的预估佣金金额
+                                commonOrderEntity.commission_rate = item.total_commission_rate;//佣金比例
+                                commonOrderEntity.income_ratio = item.pub_share_rate;
+                                commonOrderEntity.commission_amount = 0;//保存返利成功的金额
+                                commonOrderEntity.subsidy_ratio = item.subsidy_rate;
+                                commonOrderEntity.subsidy_amount = item.subsidy_fee;
+                                commonOrderEntity.subsidy_type = item.subsidy_type;
+                                commonOrderEntity.order_createtime = Extensions.ToDateOrNull(item.tk_create_time);
+                                commonOrderEntity.order_settlement_at = Extensions.ToDateOrNull(item.tk_earning_time);
+                                commonOrderEntity.order_pay_time = Extensions.ToDateOrNull(item.tb_paid_time);
+                                commonOrderEntity.createtime = DateTime.Now;
+                                commonOrderEntity.updatetime = DateTime.Now;
+                                commonOrderEntity.shopname = item.seller_shop_title;
+                                commonOrderEntity.category_name = item.item_category_name;
+                                commonOrderEntity.media_id = item.site_id;
+                                commonOrderEntity.media_name = item.site_name;
+                                commonOrderEntity.pid = item.adzone_id;
+                                commonOrderEntity.pid_name = item.adzone_name;
+                                commonOrderEntity.relation_id = item.relation_id.ToString();
+                                commonOrderEntity.special_id = item.special_id.ToString();
+                                commonOrderEntity.protection_status = item.refund_tag;
+                                commonOrderEntity.insert_type = 1;
+                                commonOrderEntity.order_create_date = ConvertDate(commonOrderEntity.order_createtime);
+                                commonOrderEntity.order_create_month = ConvertMonth(commonOrderEntity.order_createtime);
+                                commonOrderEntity.order_receive_date = ConvertDate(commonOrderEntity.order_settlement_at);
+                                commonOrderEntity.order_receive_month = ConvertMonth(commonOrderEntity.order_settlement_at);
+
+                                commonOrderList.Add(commonOrderEntity);
+                            }
+                        }
+                    }
+
+                    if (orderData.has_next)
+                    {
+                        tbApi.GetOrder("2", orderData.position_index, pageSize.ToString(), "", startTime, endTime, "1", pageNo.ToString(), "2");
+                    }
+                    else
+                    {
+                        InsertCommonOrder(commonOrderList);
+                    }
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("订单同步异常", ex);
+            }
+        }
+        #endregion
+
+        #region 同步京东订单
+        void synd_jd_order(int pageNo, int pageSize, int type, string startTime, string endTime, dm_basesettingEntity baseSettingEntity)
+        {
+            try
+            {
+                jDApi = new JDApi(baseSettingEntity.jd_appkey, baseSettingEntity.jd_appsecret, baseSettingEntity.jd_sessionkey);
+                if (jDApi != null)
+                {
+                    #region 京东订单处理
+                    jd_union_open_order_row_query_response jdRowOrder = jDApi.GetRowOrder(1, 20, type, startTime, endTime);
+                    if (jdRowOrder != null)
+                    {
+                        if (jdRowOrder.data != null)
+                        {
+                            foreach (JDRowOrder item in jdRowOrder.data)
+                            {
+                                dm_orderEntity commonOrderEntity = new dm_orderEntity();
+                                commonOrderEntity.order_sn = item.parentId.ToString();//订单id
+                                commonOrderEntity.sub_order_sn = item.orderId.ToString();//子订单id
+                                commonOrderEntity.origin_id = item.skuId.ToString();//商品id
+                                commonOrderEntity.id = item.id;//id通过
+                                commonOrderEntity.type_big = 3;
+                                commonOrderEntity.order_type = 0;
+                                commonOrderEntity.type = commonOrderEntity.order_type;
+                                commonOrderEntity.title = item.skuName;
+                                commonOrderEntity.order_status = item.validCode;
+                                commonOrderEntity.order_type_new = getjdstatus(commonOrderEntity.order_status);
+                                commonOrderEntity.rebate_status = 0;
+                                JDGoodDetailEntity jDGoodDetailEntity = jDApi.GetGoodDetail(commonOrderEntity.origin_id);
+                                commonOrderEntity.image = jDGoodDetailEntity == null ? "" : jDGoodDetailEntity.imgUrl;
+                                commonOrderEntity.product_num = item.skuNum;
+                                commonOrderEntity.product_price = item.price;
+                                commonOrderEntity.payment_price = item.estimateCosPrice;
+                                commonOrderEntity.estimated_effect = item.actualFee;//结算预估收入(包含补贴金额)
+                                commonOrderEntity.estimated_income = item.estimateFee;//付款的预估佣金金额
+                                commonOrderEntity.commission_rate = item.commissionRate;//佣金比例
+                                commonOrderEntity.income_ratio = item.finalRate;
+                                commonOrderEntity.commission_amount = 0;//保存返利成功的金额
+                                commonOrderEntity.subsidy_ratio = item.subSideRate.ToString();
+                                commonOrderEntity.subsidy_amount = item.subsidyRate;
+                                commonOrderEntity.subsidy_type = "0";
+                                commonOrderEntity.order_createtime = Extensions.ToDateOrNull(item.orderTime);
+                                commonOrderEntity.order_settlement_at = Extensions.ToDateOrNull(item.finishTime);
+                                commonOrderEntity.order_pay_time = Extensions.ToDateOrNull(item.orderTime);
+                                commonOrderEntity.createtime = DateTime.Now;
+                                commonOrderEntity.updatetime = DateTime.Now;
+                                commonOrderEntity.shopname = item.popId.ToString();
+                                commonOrderEntity.category_name = item.cid1.ToString();
+                                commonOrderEntity.media_id = item.pid;
+                                commonOrderEntity.media_name = "jd";
+                                commonOrderEntity.pid = item.positionId.ToString();
+                                commonOrderEntity.pid_name = "";
+                                commonOrderEntity.relation_id = "";
+                                commonOrderEntity.special_id = "";
+                                commonOrderEntity.protection_status = 0;
+                                commonOrderEntity.insert_type = 1;
+                                commonOrderEntity.order_create_date = ConvertDate(commonOrderEntity.order_createtime);
+                                commonOrderEntity.order_create_month = ConvertMonth(commonOrderEntity.order_createtime);
+                                commonOrderEntity.order_receive_date = ConvertDate(commonOrderEntity.order_settlement_at);
+                                commonOrderEntity.order_receive_month = ConvertMonth(commonOrderEntity.order_settlement_at);
+
+                                commonOrderList.Add(commonOrderEntity);
+                            }
+
+                            if (jdRowOrder.hasMore)
+                            {
+                                synd_jd_order(pageNo + 1, pageSize, type, startTime, endTime, baseSettingEntity);
+                            }
+                            else
+                            {
+                                InsertCommonOrder(commonOrderList);
+                            }
+                        }
+                    }
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("订单同步异常", ex);
+            }
+        }
+        #endregion
+
+        #region 同步拼多多订单
+        void synd_pdd_order(int pageNo, int pageSize, string startTime, string endTime, dm_basesettingEntity baseSettingEntity)
+        {
+            try
+            {
+                pDDApi = new PDDApi(baseSettingEntity.pdd_clientid, baseSettingEntity.pdd_clientsecret, "");
+
+                if (pDDApi != null)
+                {
+                    #region 拼多多订单处理
+                    List<pdd_order> orderList = pDDApi.GetOrderList(startTime, endTime, pageNo, pageSize, false);
+                    if (orderList != null)
+                    {
+                        foreach (pdd_order item in orderList)
+                        {
+                            dm_orderEntity commonOrderEntity = new dm_orderEntity();
+                            commonOrderEntity.order_sn = item.order_sn;//订单id
+                            commonOrderEntity.sub_order_sn = item.order_sn;//子订单id
+                            commonOrderEntity.origin_id = item.goods_id;//商品id
+                            commonOrderEntity.id = Md5Helper.Hash(commonOrderEntity.order_sn + commonOrderEntity.sub_order_sn + commonOrderEntity.origin_id);//id通过
+                            commonOrderEntity.type_big = 4;
+                            commonOrderEntity.order_type = 0;
+                            commonOrderEntity.type = commonOrderEntity.order_type;
+                            commonOrderEntity.title = item.goods_name;
+                            commonOrderEntity.order_status = item.order_status;
+                            commonOrderEntity.order_type_new = getpddstatus(commonOrderEntity.order_status);
+                            commonOrderEntity.rebate_status = 0;
+                            commonOrderEntity.image = item.goods_thumbnail_url;
+                            commonOrderEntity.product_num = item.goods_quantity;
+                            commonOrderEntity.product_price = Math.Round(decimal.Parse(item.goods_price) / 100, 2);
+                            commonOrderEntity.payment_price = Math.Round(decimal.Parse(item.order_amount) / 100, 2);
+                            commonOrderEntity.estimated_effect = Math.Round(decimal.Parse(item.promotion_amount) / 100, 2);//结算预估收入(包含补贴金额)
+                            commonOrderEntity.estimated_income = commonOrderEntity.estimated_effect;//付款的预估佣金金额
+                            commonOrderEntity.commission_rate = Math.Round((decimal.Parse(item.promotion_rate) / 10), 2);//佣金比例
+                            commonOrderEntity.income_ratio = commonOrderEntity.commission_rate;
+                            commonOrderEntity.commission_amount = 0;//保存返利成功的金额
+                            commonOrderEntity.subsidy_ratio = "0";
+                            commonOrderEntity.subsidy_amount = 0;
+                            commonOrderEntity.subsidy_type = "0";
+                            commonOrderEntity.order_createtime = TimeSpanConvert.TimeSpanToDateTime(long.Parse(item.order_create_time));
+                            commonOrderEntity.order_settlement_at = TimeSpanConvert.TimeSpanToDateTime(long.Parse(item.order_settle_time));
+                            commonOrderEntity.order_pay_time = TimeSpanConvert.TimeSpanToDateTime(long.Parse(item.order_pay_time));
+                            commonOrderEntity.order_group_success_time = TimeSpanConvert.TimeSpanToDateTime(long.Parse(item.order_group_success_time));
+                            commonOrderEntity.createtime = DateTime.Now;
+                            commonOrderEntity.updatetime = DateTime.Now;
+                            commonOrderEntity.shopname = "";
+                            commonOrderEntity.category_name = "";
+                            commonOrderEntity.media_id = "";
+                            commonOrderEntity.media_name = "";
+                            commonOrderEntity.pid = item.p_id;
+                            commonOrderEntity.pid_name = "pdd";
+                            commonOrderEntity.relation_id = "";
+                            commonOrderEntity.special_id = "";
+                            commonOrderEntity.protection_status = 0;
+                            commonOrderEntity.insert_type = 1;
+                            commonOrderEntity.order_create_date = ConvertDate(commonOrderEntity.order_createtime);
+                            commonOrderEntity.order_create_month = ConvertMonth(commonOrderEntity.order_createtime);
+                            commonOrderEntity.order_receive_date = ConvertDate(commonOrderEntity.order_settlement_at);
+                            commonOrderEntity.order_receive_month = ConvertMonth(commonOrderEntity.order_settlement_at);
+
+                            commonOrderList.Add(commonOrderEntity);
+                        }
+                        if (orderList.Count >= 20)
+                        {
+                            synd_pdd_order(pageNo + 1, pageSize, startTime, endTime, baseSettingEntity);
+                        }
+                        else
+                        {
+                            InsertCommonOrder(commonOrderList);
+                        }
+                    }
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("订单同步异常", ex);
+            }
+        }
+        #endregion
+
+        #region 订单统一化管理
+        public void InsertCommonOrder(List<dm_orderEntity> commonOrderList)
+        {
+            if (commonOrderList.Count <= 0)
+                return;
+            IEnumerable<string> hashids = commonOrderList.Select(t => t.id);
+
+            IEnumerable<dm_orderEntity> orderList = BaseRepository("dm_data").IQueryable<dm_orderEntity>(t => hashids.Contains(t.id));
+
+            foreach (dm_orderEntity commonOrderEntity in commonOrderList)
+            {
+                dm_orderEntity dm_OrderEntity = orderList.Where(t => t.id == commonOrderEntity.id).FirstOrDefault();
+                try
+                {
+                    dm_OrderEntity.appid = appid;
+                    if (dm_OrderEntity.IsEmpty())
+                    {
+                        BaseRepository("dm_data").Insert(commonOrderEntity);
+                    }
+                    else
+                    {
+                        if (dm_OrderEntity.order_type_new != commonOrderEntity.order_type_new)
+                        {
+                            BaseRepository("dm_data").Update(commonOrderEntity);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+            commonOrderList.Clear();
+        }
+        #endregion
+
+        int getordertype(string ordertype)
+        {
+            int order_type = 0;
+            switch (ordertype)
+            {
+                case "天猫":
+                    order_type = 1;
+                    break;
+                case "淘宝":
+                    order_type = 2;
+                    break;
+                case "聚划算":
+                    order_type = 3;
+                    break;
+            }
+
+            return order_type;
+        }
+
+        int gettbstatus(int? status)
+        {
+            if (new int?[] { 3, 14 }.Contains(status))
+            {
+                return 2;
+            }
+            else if (new int?[] { 12 }.Contains(status))
+            {
+                return 1;
+            }
+            else if (new int?[] { 13 }.Contains(status))
+            {
+                return 3;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        int getjdstatus(int? status)
+        {
+            if (new int?[] { 17 }.Contains(status))
+            {
+                return 2;
+            }
+            else if (new int?[] { 16 }.Contains(status))
+            {
+                return 1;
+            }
+            else if (new int?[] { 3 }.Contains(status))
+            {
+                return 3;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取拼多多订单状态
+        /// </summary>
+        /// <param name="status"></param>
+        int getpddstatus(int? status)
+        {
+            if (new int?[] { 5 }.Contains(status))
+            {
+                return 2;
+            }
+            else if (new int?[] { 0, 1 }.Contains(status))
+            {
+                return 1;
+            }
+            else if (new int?[] { 4 }.Contains(status))
+            {
+                return 3;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        #endregion
+
+        #region 时间转换
+        int ConvertDate(DateTime? time)
+        {
+            return time == null ? 0 : int.Parse(time.Value.ToString("yyyyMMdd"));
+        }
+
+        int ConvertMonth(DateTime? time)
+        {
+            return time == null ? 0 : int.Parse(time.Value.ToString("yyyyMM"));
+        }
+        #endregion
+    }
+    public class CommonOrderEntity
+    {
+        /// <summary>
+        /// 记录ID
+        /// </summary>
+        public string id { get; set; }
+        /// <summary>
+        /// appid
+        /// </summary>
+        public string appid { get; set; }
+        /// <summary>
+        /// 订单编号(父订单编号)
+        /// </summary>
+        public string order_sn { get; set; }
+        /// <summary>
+        /// 子订单编号
+        /// </summary>
+        public string sub_order_sn { get; set; }
+        /// <summary>
+        /// 商品ID
+        /// </summary>
+        public string origin_id { get; set; }
+        /// <summary>
+        /// 大平台类型:1=淘宝和天猫,3=京东,4=拼多多
+        /// </summary>
+        public int type_big { get; set; }
+        /// <summary>
+        /// 详细平台类型:1=淘宝,2=天猫,3=京东,4=拼多多
+        /// </summary>
+        public int type { get; set; }
+        /// <summary>
+        /// 订单类型1=天猫2=淘宝3=聚划算
+        /// </summary>
+        public int order_type { get; set; }
+        /// <summary>
+        /// 商品标题
+        /// </summary>
+        public string title { get; set; }
+        /// <summary>
+        /// 订单原始状态
+        /// </summary>
+        public int? order_status { get; set; }
+        /// <summary>
+        /// 返佣状态:0=未返,1=已返
+        /// </summary>
+        public int rebate_status { get; set; }
+        /// <summary>
+        /// 图片地址
+        /// </summary>
+        public string image { get; set; }
+        /// <summary>
+        /// 商品数量
+        /// </summary>
+        public int? product_num { get; set; }
+        /// <summary>
+        /// 商品价格
+        /// </summary>
+        public decimal? product_price { get; set; }
+        /// <summary>
+        /// 商品实付金额
+        /// </summary>
+        public decimal? payment_price { get; set; }
+        /// <summary>
+        /// 结算预估佣金
+        /// </summary>
+        public decimal? estimated_effect { get; set; }
+        /// <summary>
+        /// 收入比率
+        /// </summary>
+        public decimal? income_ratio { get; set; }
+        /// <summary>
+        /// 付款预估佣金
+        /// </summary>
+        public decimal? estimated_income { get; set; }
+        /// <summary>
+        /// 佣金比例
+        /// </summary>
+        public decimal? commission_rate { get; set; }
+        /// <summary>
+        /// 实际结算佣金金额
+        /// </summary>
+        public decimal? commission_amount { get; set; }
+        /// <summary>
+        /// 补贴比例
+        /// </summary>
+        public string subsidy_ratio { get; set; }
+        /// <summary>
+        /// 补贴金额
+        /// </summary>
+        public decimal? subsidy_amount { get; set; }
+        /// <summary>
+        /// 补贴类型
+        /// </summary>
+        public string subsidy_type { get; set; }
+        /// <summary>
+        /// 订单创建时间
+        /// </summary>
+        public string order_createtime { get; set; }
+        /// <summary>
+        /// 订单结算时间
+        /// </summary>
+        public string order_settlement_at { get; set; }
+        /// <summary>
+        /// 订单付款时间
+        /// </summary>
+        public string order_pay_time { get; set; }
+        /// <summary>
+        /// 订单成团时间
+        /// </summary>
+        public string order_group_success_time { get; set; }
+        /// <summary>
+        /// 记录创建时间
+        /// </summary>
+        public DateTime createtime { get; set; }
+        /// <summary>
+        /// 订单修改时间
+        /// </summary>
+        public DateTime updatetime { get; set; }
+        /// <summary>
+        /// 店铺名称
+        /// </summary>
+        public string shopname { get; set; }
+        /// <summary>
+        /// 类目名称
+        /// </summary>
+        public string category_name { get; set; }
+        /// <summary>
+        /// 来源媒体名称
+        /// </summary>
+        public string media_name { get; set; }
+        /// <summary>
+        /// 媒体ID
+        /// </summary>
+        public string media_id { get; set; }
+        /// <summary>
+        /// 广告位名称
+        /// </summary>
+        public string pid_name { get; set; }
+        /// <summary>
+        /// 广告位ID
+        /// </summary>
+        public string pid { get; set; }
+        /// <summary>
+        /// 渠道ID
+        /// </summary>
+        public string relation_id { get; set; }
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string special_id { get; set; }
+        /// <summary>
+        /// 维权状态
+        /// </summary>
+        public int? protection_status { get; set; }
+        /// <summary>
+        /// 订单来源  1同步服务  2后台
+        /// </summary>
+        public int insert_type { get; set; }
+        /// <summary>
+        /// 本站订单归类状态: 0=未处理,1=付款,2=订单结算,3=失效,4=订单已返利
+        /// </summary>
+        public int order_type_new { get; set; }
+        /// <summary>
+        /// 订单创建日期
+        /// </summary>
+        public int order_create_date { get; set; }
+        /// <summary>
+        /// 订单创建月份
+        /// </summary>
+        public int order_create_month { get; set; }
+        /// <summary>
+        /// 订单确认收货日期
+        /// </summary>
+        public int order_receive_date { get; set; }
+        /// <summary>
+        /// 订单确认收货月份
+        /// </summary>
+        public int order_receive_month { get; set; }
     }
 }

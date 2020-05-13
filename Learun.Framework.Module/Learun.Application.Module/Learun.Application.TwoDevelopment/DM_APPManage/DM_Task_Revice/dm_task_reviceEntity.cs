@@ -69,13 +69,31 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("CREATETIME")]
-        public DateTime? createtime { get; set; }
+        public DateTime createtime { get; set; }
 
         /// <summary>
         /// 取消时间
         /// </summary>
         [Column("CANCELTIME")]
         public DateTime? canceltime { get; set; }
+
+        /// <summary>
+        /// 创建月份
+        /// </summary>
+        [Column("CREATEMONTH")]
+        public int createmonth { get; set; }
+
+        /// <summary>
+        /// 创建日期
+        /// </summary>
+        [Column("CREATEDATE")]
+        public int createdate { get; set; }
+
+        /// <summary>
+        /// 佣金金额
+        /// </summary>
+        [Column("COMISSIONAMOUNT")]
+        public decimal? comissionamount { get; set; }
         #endregion
 
         #region 扩展操作
@@ -85,6 +103,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public void Create()
         {
             this.createtime = DateTime.Now;
+            this.createmonth = int.Parse(this.createtime.ToString("yyyyMM"));
+            this.createdate = int.Parse(this.createtime.ToString("yyyyMMdd"));
         }
         /// <summary>
         /// 编辑调用

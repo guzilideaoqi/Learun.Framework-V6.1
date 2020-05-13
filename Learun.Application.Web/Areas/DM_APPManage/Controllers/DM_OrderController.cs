@@ -75,5 +75,13 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             dM_OrderIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
         }
+
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult SyncOrder(int plaform, int timetype, int status, string startTime, string endTime)
+        {
+            dM_OrderIBLL.SyncOrder(plaform, timetype, status, startTime, endTime);
+            return Success("同步成功！");
+        }
     }
 }

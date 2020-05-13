@@ -151,5 +151,25 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 throw ExceptionEx.ThrowBusinessException(ex);
             }
         }
+
+        /// <summary>
+        /// 手动同步订单
+        /// </summary>
+        /// <param name="plaform">平台</param>
+        /// <param name="timetype">时间类型</param>
+        /// <param name="status">订单状态</param>
+        /// <param name="startTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        public void SyncOrder(int plaform, int timetype, int status, string startTime, string endTime) {
+            try
+            {
+                dM_OrderService.SyncOrder(plaform, timetype, status, startTime, endTime);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

@@ -37,5 +37,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="appid"></param>
         void ExcuteSubCommission(string appid);
+
+        /// <summary>
+        /// 手动同步订单
+        /// </summary>
+        /// <param name="plaform">平台</param>
+        /// <param name="timetype">时间类型</param>
+        /// <param name="status">状态</param>
+        /// <param name="startTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        void SyncOrder(int plaform, int timetype, int status, string startTime, string endTime);
     }
 }

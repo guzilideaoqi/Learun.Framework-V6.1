@@ -113,7 +113,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		}
 
 		[Column("ESTIMATED_EFFECT")]
-		public decimal estimated_effect
+		public decimal? estimated_effect
 		{
 			get;
 			set;
@@ -148,7 +148,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		}
 
 		[Column("SUBSIDY_RATIO")]
-		public decimal? subsidy_ratio
+		public string subsidy_ratio
 		{
 			get;
 			set;

@@ -74,7 +74,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("CREATETIME")]
-        public DateTime? createtime { get; set; }
+        public DateTime createtime { get; set; }
         /// <summary>
         /// 总佣金(发布任务所需要的总金额)
         /// </summary>
@@ -136,6 +136,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("APPID")]
         public string appid { get; set; }
+
+        /// <summary>
+        /// 创建月份
+        /// </summary>
+        [Column("CREATEMONTH")]
+        public int createmonth { get; set; }
+
+        /// <summary>
+        /// 创建日期
+        /// </summary>
+        [Column("CREATEDATE")]
+        public int createdate { get; set; }
         #endregion
 
         #region 扩展操作
@@ -149,7 +161,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             this.plaform = 1;
             this.revicecount = 0;
             this.task_status = 0;
-
+            this.createmonth = int.Parse(this.createtime.ToString("yyyyMM"));
+            this.createdate = int.Parse(this.createtime.ToString("yyyyMMdd"));
         }
         /// <summary>
         /// 编辑调用

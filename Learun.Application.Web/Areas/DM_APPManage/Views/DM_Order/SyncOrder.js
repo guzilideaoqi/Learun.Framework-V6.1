@@ -8,39 +8,12 @@ var acceptClick;
 var keyValue = request('keyValue');
 var bootstrap = function ($, learun) {
     "use strict";
-    var selectedRow = learun.frameTab.currentIframe().selectedRow;
-    var startTime, endTime;
     var page = {
         init: function () {
-            alert('ok')
             page.bind();
         },
         bind: function () {
-            $('#datesearch').lrdate({
-                dfdata: [
-                    { name: '今天', begin: function () { return learun.getDate('yyyy-MM-dd 00:00:00') }, end: function () { return learun.getDate('yyyy-MM-dd 23:59:59') } },
-                    { name: '近7天', begin: function () { return learun.getDate('yyyy-MM-dd 00:00:00', 'd', -6) }, end: function () { return learun.getDate('yyyy-MM-dd 23:59:59') } },
-                    { name: '近1个月', begin: function () { return learun.getDate('yyyy-MM-dd 00:00:00', 'm', -1) }, end: function () { return learun.getDate('yyyy-MM-dd 23:59:59') } },
-                    { name: '近3个月', begin: function () { return learun.getDate('yyyy-MM-dd 00:00:00', 'm', -3) }, end: function () { return learun.getDate('yyyy-MM-dd 23:59:59') } }
-                ],
-                // 月
-                mShow: false,
-                premShow: false,
-                // 季度
-                jShow: false,
-                prejShow: false,
-                // 年
-                ysShow: false,
-                yxShow: false,
-                preyShow: false,
-                yShow: false,
-                // 默认
-                dfvalue: '1',
-                selectfn: function (begin, end) {
-                    startTime = begin;
-                    endTime = end;
-                }
-            });
+
         },
         initData: function () {
             if (!!selectedRow) {
@@ -54,7 +27,11 @@ var bootstrap = function ($, learun) {
             return false;
         }
         var postData = $('#form').lrGetFormData();
-        $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_MessageRecord/SaveForm?keyValue=' + keyValue, postData, function (res) {
+        postData["plaform"] = $("input[name='plaform']:checked").val();
+        postData["timetype"] = $("input[name='timetype']:checked").val();
+        postData["status"] = $("input[name='status']:checked").val();
+        console.log(postData);
+        $.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Order/SyncOrder', postData, function (res) {
             // 保存成功后才回调
             if (!!callBack) {
                 callBack();

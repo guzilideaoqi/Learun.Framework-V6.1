@@ -314,7 +314,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 接受任务
-        public void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity,string appid)
+        public void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity, string appid)
         {
             IRepository db = null;
             try
@@ -498,7 +498,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw new Exception("该任务已审核通过,请勿重复审核!");
                 dm_Task_ReviceEntity.status = 3;
                 dm_Task_ReviceEntity.check_time = DateTime.Now;
-                dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity.id);
 
                 #region 修改任务主表数据
                 dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
@@ -545,10 +544,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw new Exception("用户无等级,返佣失败!");
                 if (do_task_commission > 0)
                 {
+                    dm_Task_ReviceEntity.comissionamount = do_task_commission;
                     currentUser = CalculateComission(currentUser.id, do_task_commission, currentUser.accountprice);
                     dm_AccountdetailEntities.Add(GeneralAccountDetail(currentUser.id, 14, "做任务返佣", "您接受的任务编号" + dm_TaskEntity.task_no + "已返佣到账,请及时查收!", do_task_commission, currentUser.accountprice));
                 }
                 #endregion
+                dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity.id);//由于需要修改任务所得佣金  故修改放到此处
+
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(currentUser.appid);
 
                 #region 更改一级账户余额及明细

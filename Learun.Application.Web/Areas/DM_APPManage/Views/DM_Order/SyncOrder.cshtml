@@ -3,25 +3,40 @@
     ViewBag.Title = "SyncOrder";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-
 <div class="lr-form-wrap" id="form">
-    <div class="col-xs-12 lr-form-item">
+    <div class="col-xs-12 lr-form-item" style="vertical-align:middle;">
         <div class="lr-form-item-title">平台<font face="宋体">*</font></div>
-        <input id="id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+        <div class="radio">
+            <label style="margin:0px 20px;"><input name="plaform" id="id" type="radio" value="1" checked="checked" />淘宝</label>
+            <label style="margin:0px 20px;"><input name="plaform" id="id" type="radio" value="3" />京东</label>
+            <label style="margin:0px 20px;"><input name="plaform" id="id" type="radio" value="4" />拼多多</label>
+        </div>
     </div>
     <div class="col-xs-12 lr-form-item">
         <div class="lr-form-item-title">时间类型:<font face="宋体">*</font></div>
-        <input id="id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-12 lr-form-item">
-        <div class="lr-form-item-title">时间周期:<font face="宋体">*</font></div>
-        <div id="datesearch"></div>
+        <div class="radio">
+            <label style="margin:0px 20px;"><input name="timetype" id="id" type="radio" value="1" checked="checked" />付款时间</label>
+            <label style="margin:0px 20px;"><input name="timetype" id="id" type="radio" value="2" />收货时间</label>
+        </div>
     </div>
     <div class="col-xs-12 lr-form-item">
         <div class="lr-form-item-title">订单状态:<font face="宋体">*</font></div>
-        <input id="id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+        <div class="radio">
+            <label style="margin:0px 20px;"><input name="status" id="id" type="radio" value="1" checked="checked" />所有</label>
+            <label style="margin:0px 20px;"><input name="status" id="id" type="radio" value="3" />付款</label>
+            <label style="margin:0px 20px;"><input name="status" id="id" type="radio" value="4" />收货</label>
+            <label style="margin:0px 20px;"><input name="status" id="id" type="radio" value="4" />失效</label>
+        </div>
     </div>
     <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">开始时间:<font face="宋体">*</font></div>
+        <input id="starttime" type="text" class="form-control lr-input-wdatepicker" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
+    </div>
+    @*<div class="col-xs-12 lr-form-item">
+            <div class="lr-form-item-title">结束时间:<font face="宋体">*</font></div>
+            <input id="endtime" type="text" class="form-control lr-input-wdatepicker" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
+        </div>*@
+    <div class="col-xs-12 lr-form-item" style="display:none;">
         <div class="lr-form-item">时间间隔最大为三个小时</div>
     </div>
 </div>
