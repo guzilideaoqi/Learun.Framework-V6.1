@@ -240,6 +240,7 @@
     <Compile Include="Controllers\DM_APIControl\DM_TaskCenterController.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_UserCenterController.cs" />
     <Compile Include="Controllers\DM_APIControl\JDEliteIDInfo.cs" />
+    <Compile Include="Controllers\DM_APIControl\PDDCatInfo.cs" />
     <Compile Include="Controllers\DM_APIControl\SmallCate.cs" />
     <Compile Include="Controllers\RobotApiController.cs" />
     <Compile Include="Controllers\TBUserInfoControllerController.cs" />

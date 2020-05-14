@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 using Learun.Cache.Base;
 using Learun.Cache.Factory;
+using Learun.Application.TwoDevelopment.Common;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -231,7 +232,11 @@ t.a_image
                         redisCache.Write("ArticleList", dm_ArticleEntities, 7);
                 }
 
-                return dm_ArticleEntities.Where(t => t.parentid == ModeType);
+                return dm_ArticleEntities.Where(t => t.parentid == ModeType).Select(delegate (dm_articleEntity t)
+                {
+                    t.a_image = CommonConfig.ImageQianZhui + t.a_image;
+                    return t;
+                });
             }
             catch (Exception ex)
             {
@@ -266,6 +271,7 @@ t.a_image
                     if (dm_ArticleEntities != null)
                         redisCache.Write("ArticleList", dm_ArticleEntities, 7);
                 }
+
 
                 return dm_ArticleEntities.Where(t => t.id == id).FirstOrDefault();
             }

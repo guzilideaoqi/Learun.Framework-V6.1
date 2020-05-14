@@ -558,22 +558,28 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                #region 头像上传
-                HttpPostedFile headpic_file = System.Web.HttpContext.Current.Request.Files["headpic"];
-                if (headpic_file.ContentLength == 0 || string.IsNullOrEmpty(headpic_file.FileName))
+                if (System.Web.HttpContext.Current.Request.Files.Count > 0)
                 {
-                    return HttpNotFound();
-                }
-                #endregion
+                    #region 头像上传
+                    HttpPostedFile headpic_file = System.Web.HttpContext.Current.Request.Files["headpic"];
+                    if (headpic_file.ContentLength == 0 || string.IsNullOrEmpty(headpic_file.FileName))
+                    {
+                        return HttpNotFound();
+                    }
+                    #endregion
 
-                string FileEextension = Path.GetExtension(headpic_file.FileName);
-                string virtualPath = $"/Resource/HeadPic/{Guid.NewGuid().ToString()}{FileEextension}";
-                string fullFileName = base.Server.MapPath("~" + virtualPath);
-                string path = Path.GetDirectoryName(fullFileName);
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-                headpic_file.SaveAs(fullFileName);
-                dm_UserEntity.headpic = virtualPath;
+                    string FileEextension = Path.GetExtension(headpic_file.FileName);
+                    string virtualPath = $"/Resource/HeadPic/{Guid.NewGuid().ToString()}{FileEextension}";
+                    string fullFileName = base.Server.MapPath("~" + virtualPath);
+                    string path = Path.GetDirectoryName(fullFileName);
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+                    headpic_file.SaveAs(fullFileName);
+                    dm_UserEntity.headpic = virtualPath;
+                }
+                else {
+                    dm_UserEntity.headpic = dm_UserEntity.headpic.Replace(CommonConfig.ImageQianZhui, "");
+                }
 
                 dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
                 return Success("修改成功");

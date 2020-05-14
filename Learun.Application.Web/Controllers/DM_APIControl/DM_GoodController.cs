@@ -882,6 +882,45 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             return View();
         }
 
+        #region 获取拼多多商品类目
+        public ActionResult Get_PDD_CatList()
+        {
+            try
+            {
+                List<PDDCatInfo> jDEliteIDInfos = redisCache.Read<List<PDDCatInfo>>("PDD_CatList", 7);
+                if (jDEliteIDInfos == null)
+                {
+                    jDEliteIDInfos = new List<PDDCatInfo>();
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 15, name = "百货" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 4, name = "母婴" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 1, name = "食品" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 14, name = "女装" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 18, name = "电器" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 1281, name = "鞋包" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 1282, name = "内衣" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 16, name = "美妆" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 743, name = "男装" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 13, name = "水果" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 818, name = "家纺" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 2478, name = "文具" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 1451, name = "运动" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 590, name = "虚拟" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 2048, name = "汽车" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 1917, name = "家装" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 2974, name = "家具" });
+                    jDEliteIDInfos.Add(new PDDCatInfo { id = 3279, name = "医药" });
+
+                    redisCache.Write<List<PDDCatInfo>>("PDD_CatList", jDEliteIDInfos, 7);
+                }
+
+                return SuccessList("拼多多类目获取成功!", jDEliteIDInfos);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
 
         #region 获取拼多多商品列表
         /// <summary>

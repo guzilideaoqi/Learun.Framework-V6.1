@@ -1,9 +1,13 @@
+using Learun.Application.TwoDevelopment.Common;
 using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Application.Web.App_Start._01_Handler;
 using Learun.Cache.Base;
 using Learun.Cache.Factory;
 using Learun.Util;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
@@ -152,6 +156,81 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string appid = CheckAPPID();
                 return Success("返利执行成功");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 上传单张图片
+        public ActionResult UploadImageBySingle()
+        {
+            try
+            {
+                if (System.Web.HttpContext.Current.Request.Files.Count != 1)
+                    return Fail("请上传一张图片!");
+                #region 头像上传
+                HttpPostedFile pic_file = System.Web.HttpContext.Current.Request.Files[0];
+                if (pic_file.ContentLength == 0 || string.IsNullOrEmpty(pic_file.FileName))
+                {
+                    return HttpNotFound();
+                }
+                #endregion
+
+                string FileEextension = Path.GetExtension(pic_file.FileName);
+                string virtualPath = $"/Resource/CommonImage/{Guid.NewGuid().ToString()}{FileEextension}";
+                string fullFileName = base.Server.MapPath("~" + virtualPath);
+                string path = Path.GetDirectoryName(fullFileName);
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                pic_file.SaveAs(fullFileName);
+
+
+                return Success("上传成功", new { ImageUrl = CommonConfig.ImageQianZhui + virtualPath });
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 上传多张图片
+        public ActionResult UploadImageByMutiple()
+        {
+            List<string> images = new List<string>();
+            try
+            {
+                if (System.Web.HttpContext.Current.Request.Files.Count <= 1)
+                    return Fail("请上传至少一张图片!");
+
+                HttpFileCollection httpFileCollection = System.Web.HttpContext.Current.Request.Files;
+                for (int i = 0; i < httpFileCollection.Count; i++)
+                {
+                    HttpPostedFile pic_file = httpFileCollection[i];
+
+                    #region 头像上传
+                    if (pic_file.ContentLength == 0 || string.IsNullOrEmpty(pic_file.FileName))
+                    {
+                        return HttpNotFound();
+                    }
+                    #endregion
+
+                    string FileEextension = Path.GetExtension(pic_file.FileName);
+                    string virtualPath = $"/Resource/CommonImage/{Guid.NewGuid().ToString()}{FileEextension}";
+                    string fullFileName = base.Server.MapPath("~" + virtualPath);
+                    string path = Path.GetDirectoryName(fullFileName);
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+                    pic_file.SaveAs(fullFileName);
+
+
+                    images.Add(CommonConfig.ImageQianZhui + virtualPath);
+                }
+
+                return Success("上传成功", new { ImageUrls = images });
             }
             catch (Exception ex)
             {

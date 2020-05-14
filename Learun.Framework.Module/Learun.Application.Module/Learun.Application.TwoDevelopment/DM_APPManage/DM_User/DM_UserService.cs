@@ -654,17 +654,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
                 else
                 {
-                    Bitmap qrCode = QRCodeHelper.Generate3(dm_UserEntity.invitecode, 200, 200, basePath + dm_UserEntity.headpic);
+                    //Bitmap qrCode = QRCodeHelper.Generate3(dm_UserEntity.invitecode, 380, 380, basePath + dm_UserEntity.headpic);
+                    Bitmap qrCode = QRCodeHelper.GenerateQRCode(dm_UserEntity.invitecode, 280, 280);
 
                     //背景图片，海报背景
                     string path1 = basePath + @"/Resource/ShareImage/1.jpg";
                     string path2 = basePath + @"/Resource/ShareImage/2.jpg";
                     string path3 = basePath + @"/Resource/ShareImage/3.jpg";
-                    GeneralShareImage(basePath + newPath1, path1, qrCode);
+                    GeneralShareImage(basePath + newPath1, path1, qrCode, dm_UserEntity.invitecode);
                     shareList.Add(dm_BasesettingEntity.qianzhui_image + newPath1);
-                    GeneralShareImage(basePath + newPath2, path2, qrCode);
+                    GeneralShareImage(basePath + newPath2, path2, qrCode, dm_UserEntity.invitecode);
                     shareList.Add(dm_BasesettingEntity.qianzhui_image + newPath2);
-                    GeneralShareImage(basePath + newPath3, path3, qrCode);
+                    GeneralShareImage(basePath + newPath3, path3, qrCode, dm_UserEntity.invitecode);
                     shareList.Add(dm_BasesettingEntity.qianzhui_image + newPath3);
                 }
 
@@ -688,15 +689,20 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="qrCode">二维码</param>
         /// <param name="index">图片索引</param>
         /// <returns></returns>
-        string GeneralShareImage(string newPath, string bj_image_path, Bitmap qrCode)
+        string GeneralShareImage(string newPath, string bj_image_path, Bitmap qrCode, string InviteCode)
         {
             System.Drawing.Image imgSrc = System.Drawing.Image.FromFile(bj_image_path);
 
             using (Graphics g = Graphics.FromImage(imgSrc))
             {
                 //画专属推广二维码
-                g.DrawImage(qrCode, new Rectangle(imgSrc.Width - qrCode.Width - 450,//-450这个数，越小越靠左，可以调整二维码在背景图的位置
-                imgSrc.Height - qrCode.Height - 650,//同理-650越小越靠上
+                /*g.DrawImage(qrCode, new Rectangle(imgSrc.Width - qrCode.Width - 420,//-450这个数，越小越靠左，可以调整二维码在背景图的位置
+                imgSrc.Height - qrCode.Height - 400,//同理-650越小越靠上
+                qrCode.Width,
+                qrCode.Height),
+                0, 0, qrCode.Width, qrCode.Height, GraphicsUnit.Pixel);*/
+                g.DrawImage(qrCode, new Rectangle(260,//-450这个数，越小越靠左，可以调整二维码在背景图的位置
+                1080,//同理-650越小越靠上
                 qrCode.Width,
                 qrCode.Height),
                 0, 0, qrCode.Width, qrCode.Height, GraphicsUnit.Pixel);
@@ -704,9 +710,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 //画头像
                 //g.DrawImage(titleImage, 8, 8, titleImage.Width, titleImage.Height);
 
-                Font font = new Font("宋体", 30, FontStyle.Bold);
+                Font font = new Font("宋体", 24, FontStyle.Bold);
 
-                g.DrawString("这里输入文字", font, new SolidBrush(Color.Red), 500, 800);
+                g.DrawString("邀请码:" + InviteCode, font, new SolidBrush(Color.Black), 290, 1010);
             }
             imgSrc.Save(newPath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
