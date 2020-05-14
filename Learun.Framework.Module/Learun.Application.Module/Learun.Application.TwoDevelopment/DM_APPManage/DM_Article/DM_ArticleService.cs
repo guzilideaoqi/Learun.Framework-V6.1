@@ -35,7 +35,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 t.parentid,
                 t.createtime,
                 t.updatetime,
-                t.sort
+                t.sort,
+t.a_image
             ";
 
             childSql = @"                t.id,

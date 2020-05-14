@@ -843,7 +843,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = Md5Helper.Hash(user_id.ToString() + skuid + "2");
+                string cacheKey = Md5Helper.Hash(user_id.ToString() + skuid + couponlink + "2");
                 JDLinkInfo jDLinkInfo = redisCache.Read<JDLinkInfo>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                 if (jDLinkInfo == null)

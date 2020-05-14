@@ -290,6 +290,7 @@
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.js" />
     <Content Include="Areas\AppManager\Views\FunctionManager\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Announcement\Form.css" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Article\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Banner\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\Index.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\CheckCertficaRecord.js" />

@@ -46,6 +46,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="status">状态</param>
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">结束时间</param>
-        void SyncOrder(int plaform, int timetype, int status, string startTime, string endTime);
+        int SyncOrder(int plaform, int timetype, int status, string startTime, string endTime);
     }
 }

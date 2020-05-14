@@ -80,8 +80,8 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [AjaxOnly(false)]
         public ActionResult SyncOrder(int plaform, int timetype, int status, string startTime, string endTime)
         {
-            dM_OrderIBLL.SyncOrder(plaform, timetype, status, startTime, endTime);
-            return Success("同步成功！");
+            int effectCount = dM_OrderIBLL.SyncOrder(plaform, timetype, status, startTime, endTime);
+            return Success("本次执行完成,共同步" + effectCount + "条数据!");
         }
     }
 }

@@ -8,6 +8,8 @@
 
 var keyValue = request('keyValue');
 var acceptClick;
+var loaddfimg;
+var headimg;
 var bootstrap = function ($, learun) {
     "use strict";
     var selectedRow = learun.frameTab.currentIframe().selectedRow;
@@ -18,6 +20,16 @@ var bootstrap = function ($, learun) {
             page.initData();
         },
         bind: function () {
+            ue = UE.getEditor('editor');
+
+            function uploadImg() {
+                var f = document.getElementById('uploadFile').files[0]
+                var src = window.URL.createObjectURL(f);
+                document.getElementById('uploadPreview').src = src;
+            };
+
+            $('#uploadFile').on('change', uploadImg);
+
             // 上级
             $('#parentid').lrselect({
                 url: top.$.rootUrl + '/DM_APPManage/DM_Article/GetClassifyTree',
@@ -26,16 +38,28 @@ var bootstrap = function ($, learun) {
                 maxHeight: 225
             });
 
-            ue = UE.getEditor('editor');
         },
         initData: function () {
+            console.log(selectedRow);
             if (!!selectedRow) {
                 keyValue = selectedRow.id || '';
                 $('#form').lrSetFormData(selectedRow);
-                console.log(selectedRow.content);
-
                 setTimeout(function () {
                     ue.setContent(selectedRow.content);
+
+                    headimg = selectedRow.a_image;
+
+                    $('.file').prepend('<img src="' + top.$.rootUrl + headimg + '" id="uploadPreview" onerror="loaddfimg()" >');
+                    if (true) {
+                        headimg = top.$.rootUrl + '/Content/images/head/on-boy.jpg';
+                    }
+                    else {
+                        headimg = top.$.rootUrl + '/Content/images/head/on-girl.jpg';
+                    }
+
+                    loaddfimg = function () {
+                        document.getElementById('uploadPreview').src = headimg;
+                    }
                 }, 300);
             }
         }
@@ -53,13 +77,41 @@ var bootstrap = function ($, learun) {
             learun.alert.error('上级不能是自己本身');
             return false;
         }
-        postData["content"] = ue.getContent(null, null, true);
-        $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Article/SaveForm?keyValue=' + keyValue, postData, function (res) {
-            // 保存成功后才回调
-            if (!!callBack) {
-                callBack();
-            }
-        });
+
+        var f = document.getElementById('uploadFile').files[0];
+
+        debugger;
+        if (!!f) {
+            postData["content"] = encodeURIComponent(ue.getContent(null, null, true));
+
+            learun.loading(true, '正在保存...');
+            $.ajaxFileUpload({
+                url: "/DM_APPManage/DM_Article/UploadFile?keyValue=" + keyValue,
+                secureuri: false,
+                fileElementId: 'uploadFile',
+                dataType: 'json',
+                data: postData,
+                success: function (data) {
+                    learun.loading(false);
+                    if (data.code == 200) {
+                        learun.alert.success('保存成功');
+                        learun.layerClose('form');
+                        if (!!callBack) {
+                            callBack();
+                        }
+                    }
+                }
+            });
+        } else {
+            postData["content"] = ue.getContent(null, null, true);
+
+            $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Article/SaveForm?keyValue=' + keyValue, postData, function (res) {
+                // 保存成功后才回调
+                if (!!callBack) {
+                    callBack();
+                }
+            });
+        }
     };
 
     page.init();

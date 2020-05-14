@@ -1,5 +1,8 @@
 ﻿using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Util;
+using System;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
@@ -24,7 +27,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
         /// <summary>
         /// 表单页
@@ -33,7 +36,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-             return View();
+            return View();
         }
         #endregion
 
@@ -45,7 +48,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList( string queryJson )
+        public ActionResult GetList(string queryJson)
         {
             var data = dM_ArticleIBLL.GetList(queryJson);
             return Success(data);
@@ -107,10 +110,35 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [ValidateAntiForgeryToken]
         [AjaxOnly(false)]
         [ValidateInput(false)]
-        public ActionResult SaveForm(int keyValue,dm_articleEntity entity)
+        public ActionResult SaveForm(int keyValue, dm_articleEntity entity)
         {
             dM_ArticleIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult UploadFile(int keyValue, dm_articleEntity entity)
+        {
+            entity.content = HttpUtility.UrlDecode(entity.content);
+            HttpFileCollection files = System.Web.HttpContext.Current.Request.Files;
+            if (files.Count > 0)
+            {
+                if (files[0].ContentLength == 0 || string.IsNullOrEmpty(files[0].FileName))
+                {
+                    return HttpNotFound();
+                }
+                UserInfo userInfo = LoginUserInfo.Get();
+                string FileEextension = Path.GetExtension(files[0].FileName);
+                string virtualPath = $"/Resource/GoodImage/{Guid.NewGuid().ToString()}{FileEextension}";
+                string fullFileName = base.Server.MapPath("~" + virtualPath);
+                string path = Path.GetDirectoryName(fullFileName);
+                Directory.CreateDirectory(path);
+                files[0].SaveAs(fullFileName);
+                entity.a_image = virtualPath;
+            }
+            dM_ArticleIBLL.SaveEntity(keyValue, entity);
+            return Success("保存成功。");
         }
         #endregion
 

@@ -75,7 +75,8 @@ var bootstrap = function ($, learun) {
                 headData: [
                     { label: '名称', name: 'title', width: 200, align: 'left' },
                     { label: '编号', name: 'id', width: 200, align: 'left' },
-                    { label: '排序', name: 'sort', width: 50, align: 'center' }
+                    { label: '排序', name: 'sort', width: 50, align: 'center' },
+                    { label: 'a_image', name: 'a_image', width: 50, align: 'center' }
                 ],
                 isTree: true,
                 mainId: 'id',

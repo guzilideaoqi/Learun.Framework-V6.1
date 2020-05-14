@@ -434,37 +434,47 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         PDDApi pDDApi = null;
         string tb_tool_appkey = "25552805", tb_tool_appsecret = "7341a330d97862f21447f34c0fc326c9", appid = "";
         List<dm_orderEntity> commonOrderList = new List<dm_orderEntity>();
-        public void SyncOrder(int plaform, int timetype, int status, string startTime, string endTime)
+        public int SyncOrder(int plaform, int timetype, int status, string startTime, string endTime)
         {
-            UserInfo userInfo = LoginUserInfo.Get();
-            dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(userInfo.companyId);
+            int effectCount = 0;
+            try
+            {
+                UserInfo userInfo = LoginUserInfo.Get();
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(userInfo.companyId);
 
-            appid = userInfo.companyId;
+                appid = userInfo.companyId;
 
-            if (plaform == 1)
-            {
-                endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddHours(3));
-                synd_tb_order(timetype == 1 ? 2 : 3, 1, 20, "", startTime, endTime, dm_BasesettingEntity);
+                if (plaform == 1)
+                {
+                    endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddHours(3));
+                    effectCount = synd_tb_order(timetype == 1 ? 2 : 3, 1, 20, "", startTime, endTime, dm_BasesettingEntity);
+                }
+                else if (plaform == 3)
+                {
+                    endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddHours(1));
+                    effectCount = synd_jd_order(1, 20, timetype, startTime, endTime, dm_BasesettingEntity);
+                }
+                else if (plaform == 4)
+                {
+                    effectCount = synd_pdd_order(1, 20, TimeSpanConvert.ConvertDateTimeToInt(DateTime.Parse(startTime)), TimeSpanConvert.ConvertDateTimeToInt(DateTime.Parse(startTime).AddDays(1)), dm_BasesettingEntity);
+                }
+                else
+                {
+                    throw new Exception("请选择平台!");
+                }
             }
-            else if (plaform == 3)
+            catch (Exception ex)
             {
-                endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddHours(1));
-                synd_jd_order(1, 20, timetype, startTime, endTime, dm_BasesettingEntity);
+                throw new Exception(ex.Message);
             }
-            else if (plaform == 4)
-            {
-                endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddDays(1));
-                synd_pdd_order(1, 20, startTime, endTime, dm_BasesettingEntity);
-            }
-            else
-            {
-                throw new Exception("请选择平台!");
-            }
+
+            return effectCount;
         }
 
         #region 同步淘宝订单
-        void synd_tb_order(int queryType, int pageNo, int pageSize, string postion_index, string startTime, string endTime, dm_basesettingEntity baseSettingEntity)
+        int synd_tb_order(int queryType, int pageNo, int pageSize, string postion_index, string startTime, string endTime, dm_basesettingEntity baseSettingEntity)
         {
+            int effectCount = 0;
             try
             {
                 tbApi = new TBApi(tb_tool_appkey, tb_tool_appsecret, baseSettingEntity.tb_sessionkey);
@@ -534,7 +544,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     }
                     else
                     {
-                        InsertCommonOrder(commonOrderList);
+                        effectCount = InsertCommonOrder(commonOrderList);
                     }
                     #endregion
                 }
@@ -543,12 +553,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 throw new Exception("订单同步异常", ex);
             }
+
+            return effectCount;
         }
         #endregion
 
         #region 同步京东订单
-        void synd_jd_order(int pageNo, int pageSize, int type, string startTime, string endTime, dm_basesettingEntity baseSettingEntity)
+        int synd_jd_order(int pageNo, int pageSize, int type, string startTime, string endTime, dm_basesettingEntity baseSettingEntity)
         {
+            int effectCount = 0;
             try
             {
                 jDApi = new JDApi(baseSettingEntity.jd_appkey, baseSettingEntity.jd_appsecret, baseSettingEntity.jd_sessionkey);
@@ -616,7 +629,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             }
                             else
                             {
-                                InsertCommonOrder(commonOrderList);
+                                effectCount = InsertCommonOrder(commonOrderList);
                             }
                         }
                     }
@@ -627,12 +640,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 throw new Exception("订单同步异常", ex);
             }
+            return effectCount;
         }
         #endregion
 
         #region 同步拼多多订单
-        void synd_pdd_order(int pageNo, int pageSize, string startTime, string endTime, dm_basesettingEntity baseSettingEntity)
+        int synd_pdd_order(int pageNo, int pageSize, string startTime, string endTime, dm_basesettingEntity baseSettingEntity)
         {
+            int effectCount = 0;
             try
             {
                 pDDApi = new PDDApi(baseSettingEntity.pdd_clientid, baseSettingEntity.pdd_clientsecret, "");
@@ -698,7 +713,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         }
                         else
                         {
-                            InsertCommonOrder(commonOrderList);
+                            effectCount = InsertCommonOrder(commonOrderList);
                         }
                     }
                     #endregion
@@ -708,14 +723,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 throw new Exception("订单同步异常", ex);
             }
+
+            return effectCount;
         }
         #endregion
 
         #region 订单统一化管理
-        public void InsertCommonOrder(List<dm_orderEntity> commonOrderList)
+        public int InsertCommonOrder(List<dm_orderEntity> commonOrderList)
         {
+            int effetcCount = commonOrderList.Count;
+
             if (commonOrderList.Count <= 0)
-                return;
+                return 0;
             IEnumerable<string> hashids = commonOrderList.Select(t => t.id);
 
             IEnumerable<dm_orderEntity> orderList = BaseRepository("dm_data").IQueryable<dm_orderEntity>(t => hashids.Contains(t.id));
@@ -744,6 +763,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
             commonOrderList.Clear();
+
+            return effetcCount;
         }
         #endregion
 

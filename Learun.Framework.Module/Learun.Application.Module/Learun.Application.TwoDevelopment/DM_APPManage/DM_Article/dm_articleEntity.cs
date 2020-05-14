@@ -59,6 +59,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         [Column("APPID")]
         public string appid { get; set; }
+
+        /// <summary>
+        /// 图片
+        /// </summary>
+        [Column("A_IMAGE")]
+        public string a_image { get; set; }
         #endregion
 
         #region 扩展操作
