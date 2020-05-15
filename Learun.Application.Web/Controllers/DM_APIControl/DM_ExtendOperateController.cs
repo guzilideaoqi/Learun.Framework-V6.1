@@ -1,3 +1,5 @@
+using Aliyun.OSS;
+using Aliyun.OSS.Common;
 using Learun.Application.TwoDevelopment.Common;
 using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Application.Web.App_Start._01_Handler;
@@ -169,6 +171,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                return Fail("该接口已停用,请查看新的接口!");
                 if (System.Web.HttpContext.Current.Request.Files.Count != 1)
                     return Fail("请上传一张图片!");
                 #region 头像上传
@@ -178,7 +181,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     return HttpNotFound();
                 }
                 #endregion
-
                 string FileEextension = Path.GetExtension(pic_file.FileName);
                 string virtualPath = $"/Resource/CommonImage/{Guid.NewGuid().ToString()}{FileEextension}";
                 string fullFileName = base.Server.MapPath("~" + virtualPath);
@@ -186,7 +188,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
                 pic_file.SaveAs(fullFileName);
-
 
                 return Success("上传成功", new { ImageUrl = CommonConfig.ImageQianZhui + virtualPath });
             }
@@ -200,6 +201,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #region 上传多张图片
         public ActionResult UploadImageByMutiple()
         {
+            return Fail("该接口已停用,请查看新的接口!");
             List<string> images = new List<string>();
             try
             {
@@ -238,6 +240,134 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
         #endregion
+
+        #region 上传单张图片(阿里云上传)
+        public ActionResult UploadImageByAliSingle()
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+
+                if (System.Web.HttpContext.Current.Request.Files.Count != 1)
+                    return Fail("请上传一张图片!");
+
+                HttpPostedFile pic_file = System.Web.HttpContext.Current.Request.Files[0];
+                if (pic_file.ContentLength == 0 || string.IsNullOrEmpty(pic_file.FileName))
+                {
+                    return HttpNotFound();
+                }
+
+                string key = DateTime.Now.ToString("yyyyMMdd") + "/" + Guid.NewGuid().ToString() + Path.GetExtension(pic_file.FileName);
+
+                string putUrl = PutObject(dm_BasesettingEntity.oss_accesskeyid, dm_BasesettingEntity.oss_accesskeysecret, dm_BasesettingEntity.oss_endpoint, dm_BasesettingEntity.oss_buketname, key, pic_file.InputStream);
+
+                return Success("上传成功", new { ImageUrl = putUrl });
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 上传多张图片(阿里云上传)
+        public ActionResult UploadImageByAliMutiple()
+        {
+            List<string> images = new List<string>();
+            try
+            {
+                string appid = CheckAPPID();
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+
+                if (System.Web.HttpContext.Current.Request.Files.Count <= 1)
+                    return Fail("请上传至少一张图片!");
+
+                HttpFileCollection httpFileCollection = System.Web.HttpContext.Current.Request.Files;
+                for (int i = 0; i < httpFileCollection.Count; i++)
+                {
+                    HttpPostedFile pic_file = httpFileCollection[i];
+
+                    #region 头像上传
+                    if (pic_file.ContentLength == 0 || string.IsNullOrEmpty(pic_file.FileName))
+                    {
+                        return HttpNotFound();
+                    }
+                    #endregion
+                    string key = DateTime.Now.ToString("yyyyMMdd") + "/" + Guid.NewGuid().ToString() + Path.GetExtension(pic_file.FileName);
+
+                    string putUrl = PutObject(dm_BasesettingEntity.oss_accesskeyid, dm_BasesettingEntity.oss_accesskeysecret, dm_BasesettingEntity.oss_endpoint, dm_BasesettingEntity.oss_buketname, key, pic_file.InputStream);
+
+                    images.Add(putUrl);
+                }
+
+                return Success("上传成功", new { ImageUrls = images });
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <param name="accessKeyId">开发者秘钥对，通过阿里云控制台的秘钥管理页面创建与管理</param>
+        /// <param name="accessKeySecret">开发者秘钥对，通过阿里云控制台的秘钥管理页面创建与管理</param>
+        /// <param name="endpoint">Endpoint，创建Bucket时对应的Endpoint</param>
+        /// <param name="bucketName">Bucket名称，创建Bucket时对应的Bucket名称</param>
+        /// <param name="key">文件标识</param>
+        /// <param name="file">需要上传文件的文件路径</param>
+        public static string PutObject(string accessKeyId, string accessKeySecret, string endpoint, string bucketName, string key, Stream stream)
+        {
+            var client = new OssClient(endpoint, accessKeyId, accessKeySecret);
+            try
+            {
+                PutObjectResult putObjectResult = client.PutObject(bucketName, key, stream);
+                //var uri = client.GeneratePresignedUri(bucketName, key);
+                //return uri.ToString();
+                return string.Format("http://{0}.{2}/{1}", bucketName, key, endpoint);
+            }
+            catch (OssException ex)
+            {
+                throw new Exception("阿里云请求异常", ex);
+                //LogHelper.LogException<OssException>($"Msg:{ex.Message};Code:{ex.ErrorCode};RequestID:{ex.RequestId};HostID:{ex.HostId}");
+            }
+        }
+
+        /// <summary>
+        /// 获取图片地址
+        /// </summary>
+        /// <param name="accessKeyId">开发者秘钥对，通过阿里云控制台的秘钥管理页面创建与管理</param>
+        /// <param name="accessKeySecret">开发者秘钥对，通过阿里云控制台的秘钥管理页面创建与管理</param>
+        /// <param name="endpoint">Endpoint，创建Bucket时对应的Endpoint</param>
+        /// <param name="bucketName">Bucket名称，创建Bucket时对应的Bucket名称</param>
+        /// <param name="key">文件标识</param>
+        /// <param name="width">设置图片的宽度</param>
+        /// <param name="height">设置图片的高度</param>
+        /// <returns></returns>
+        public static string GetIamgeUri(string accessKeyId, string accessKeySecret, string endpoint, string bucketName, string key, float width = 100, float height = 100)
+        {
+            var client = new OssClient(endpoint, accessKeyId, accessKeySecret);
+            try
+            {
+                var process = $"image/resize,m_fixed,w_{width},h_{height}";
+                var req = new GeneratePresignedUriRequest(bucketName, key, SignHttpMethod.Get)
+                {
+                    Expiration = DateTime.Now.AddHours(1),
+                    Process = process
+                };
+                var uri = client.GeneratePresignedUri(req);
+                return uri.ToString();
+            }
+            catch (OssException ex)
+            {
+                throw new Exception("阿里云请求异常", ex);
+                //LogHelper.LogException<OssException>($"Msg:{ex.Message};Code:{ex.ErrorCode};RequestID:{ex.RequestId};HostID:{ex.HostId}");
+            }
+        }
 
         #region 接口测试
         public ActionResult TestApi(string jsonData)

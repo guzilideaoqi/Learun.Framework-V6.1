@@ -371,6 +371,30 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("REVICETASKCOUNTLIMIT")]
         public int revicetaskcountlimit { get; set; }
 
+        /// <summary>
+        /// OSS访问ID
+        /// </summary>
+        [Column("OSS_ACCESSKEYID")]
+        public string oss_accesskeyid { get; set; }
+
+        /// <summary>
+        /// OSS访问Secret
+        /// </summary>
+        [Column("OSS_ACCESSKEYSECRET")]
+        public string oss_accesskeysecret { get; set; }
+
+        /// <summary>
+        /// OSS地域节点
+        /// </summary>
+        [Column("OSS_ENDPOINT")]
+        public string oss_endpoint { get; set; }
+
+        /// <summary>
+        /// Bucket名称
+        /// </summary>
+        [Column("OSS_BUKETNAME")]
+        public string oss_buketname { get; set; }
+
 
         public void Create()
         {

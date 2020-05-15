@@ -537,7 +537,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 修改微信号
-        public ActionResult UpdateWeChatID(int user_id, dm_userEntity dm_UserEntity) {
+        public ActionResult UpdateWeChatID(int user_id, dm_userEntity dm_UserEntity)
+        {
             try
             {
                 if (dm_UserEntity.mywechat.IsEmpty())
@@ -576,9 +577,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         Directory.CreateDirectory(path);
                     headpic_file.SaveAs(fullFileName);
                     dm_UserEntity.headpic = virtualPath;
-                }
-                else {
-                    dm_UserEntity.headpic = dm_UserEntity.headpic.Replace(CommonConfig.ImageQianZhui, "");
                 }
 
                 dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
