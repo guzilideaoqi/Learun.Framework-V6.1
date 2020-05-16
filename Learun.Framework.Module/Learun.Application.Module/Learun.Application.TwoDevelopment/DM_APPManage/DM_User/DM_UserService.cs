@@ -844,5 +844,39 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
         #endregion
+
+        #region 粉丝数据统计
+        public FansStaticInfoEntity GetFansStaticInfo(int User_ID)
+        {
+            try
+            {
+                dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(User_ID);
+                if (dm_User_RelationEntity.IsEmpty())
+                    throw new Exception("未检测到您的上级信息!");
+
+                dm_userEntity dm_UserEntity = GetEntityByCache(dm_User_RelationEntity.parent_id);
+                if (dm_UserEntity.IsEmpty())
+                    throw new Exception("用户信息异常!");
+
+                return new FansStaticInfoEntity
+                {
+                    Parent_WX = dm_UserEntity.mywechat,
+                    Parent_NickName = dm_UserEntity.nickname,
+                    MyChildCount = dm_UserEntity.mychildcount,
+                    MySonChildCount = dm_UserEntity.mysonchildcount,
+                    MyPartnersCount = dm_UserEntity.mypartnerscount,
+                    HeadPic = dm_UserEntity.headpic
+                };
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
     }
 }

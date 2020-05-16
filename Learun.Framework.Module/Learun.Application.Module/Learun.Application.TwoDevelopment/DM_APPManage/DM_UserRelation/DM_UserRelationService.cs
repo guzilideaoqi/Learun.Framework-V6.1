@@ -218,7 +218,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                string queryChildSql = "select u.nickname,u.headpic,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.parent_id=" + user_id;
+                string queryChildSql = "select u.nickname,u.headpic,u.phone,u.userlevel,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.parent_id=" + user_id;
                 return BaseRepository("dm_data").FindTable(queryChildSql, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
             }
             catch (Exception ex)
@@ -244,7 +244,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                string querySonChildSql = "select u.nickname,u.headpic,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.parent_id in(select user_id from dm_user_relation where parent_id=" + user_id + ")";
+                string querySonChildSql = "select u.nickname,u.headpic,u.phone,u.userlevel,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.parent_id in(select user_id from dm_user_relation where parent_id=" + user_id + ")";
                 return BaseRepository("dm_data").FindTable(querySonChildSql, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
             }
             catch (Exception ex)
@@ -270,7 +270,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                string queryPartnersChildSql = "select u.nickname,u.headpic,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.partners_id=" + partners_id;
+                string queryPartnersChildSql = "select u.nickname,u.headpic,u.phone,u.userlevel,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.partners_id=" + partners_id;
                 return BaseRepository("dm_data").FindTable(queryPartnersChildSql, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
             }
             catch (Exception ex)

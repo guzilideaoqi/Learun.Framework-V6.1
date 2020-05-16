@@ -41,7 +41,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson) {
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        {
             try
             {
                 return dM_UserService.GetPageListByDataTable(pagination, queryJson);
@@ -216,7 +217,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public void SetUserLevel(string userids, int user_level) {
+        public void SetUserLevel(string userids, int user_level)
+        {
             try
             {
                 dM_UserService.SetUserLevel(userids, user_level);
@@ -238,10 +240,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		/// <param name="updateprice">变更金额</param>
 		/// <param name="updatetype">变更类型 0减少  1增加</param>
 		/// <param name="remark">描述信息</param>
-        public void UpdateAccountPrice(int user_id, decimal updateprice, int updatetype, string remark) {
+        public void UpdateAccountPrice(int user_id, decimal updateprice, int updatetype, string remark)
+        {
             try
             {
-                dM_UserService.UpdateAccountPrice(user_id, updateprice, updatetype,remark);
+                dM_UserService.UpdateAccountPrice(user_id, updateprice, updatetype, remark);
             }
             catch (Exception ex)
             {
@@ -253,11 +256,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
         #region 获取推广图片
-        public List<string> GetShareImage(int user_id,string appid)
+        public List<string> GetShareImage(int user_id, string appid)
         {
             try
             {
-                return dM_UserService.GetShareImage(user_id,appid);
+                return dM_UserService.GetShareImage(user_id, appid);
             }
             catch (Exception ex)
             {
@@ -320,10 +323,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 获取平台统计数据
-        public DataTable GetStaticData1() {
+        public DataTable GetStaticData1()
+        {
             try
             {
-               return dM_UserService.GetStaticData1();
+                return dM_UserService.GetStaticData1();
             }
             catch (Exception ex)
             {
@@ -364,11 +368,29 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 throw ExceptionEx.ThrowBusinessException(ex);
             }
         }
-        public  DataTable GetStaticData4()
+        public DataTable GetStaticData4()
         {
             try
             {
                 return dM_UserService.GetStaticData4();
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取粉丝数据统计
+        public FansStaticInfoEntity GetFansStaticInfo(int User_ID)
+        {
+            try
+            {
+                return dM_UserService.GetFansStaticInfo(User_ID);
             }
             catch (Exception ex)
             {

@@ -907,6 +907,27 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 获取粉丝数据统计
+        public ActionResult GetFansStaticInfo(int user_id)
+        {
+            try
+            {
+                string cacheKey = Md5Helper.Hash("FansStaticInfo" + user_id);
+                FansStaticInfoEntity fansStaticInfo = redisCache.Read<FansStaticInfoEntity>(cacheKey, 7);
+                if (fansStaticInfo == null)
+                {
+                    fansStaticInfo = dm_userIBLL.GetFansStaticInfo(user_id);
+                    redisCache.Write<FansStaticInfoEntity>(cacheKey, fansStaticInfo, DateTime.Now.AddMinutes(5), 7);
+                }
+                return Success("获取成功!", fansStaticInfo);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 获取粉丝--直属粉丝
         public ActionResult GetChildDetail(int user_id, int PageNo = 1, int PageSize = 20)
         {

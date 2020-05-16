@@ -321,6 +321,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             get; set;
         }
 
+        /// <summary>
+        /// 我的下级数量
+        /// </summary>
+        [Column("MYCHILDCOUNT")]
+        public int? mychildcount { get; set; }
+
+        /// <summary>
+        /// 我的二级数量
+        /// </summary>
+        [Column("MYSONCHILDCOUNT")]
+        public int? mysonchildcount { get; set; }
+
+        /// <summary>
+        /// 我的团队数量
+        /// </summary>
+        [Column("MYPARTNERSCOUNT")]
+        public int? mypartnerscount { get; set; }
+
 
         public void Create()
         {
@@ -333,6 +351,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             currentmontheffect = 0;
             currentmonthreceiveeffect = 0;
             upmonthreceiveeffect = 0;
+            mychildcount = 0;
+            mysonchildcount = 0;
+            mypartnerscount = 0;
         }
 
         public void Modify(int? keyValue)
