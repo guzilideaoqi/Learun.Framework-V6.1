@@ -18,6 +18,7 @@ using System.Web;
 using Top.Api.Request;
 using Top.Api;
 using Top.Api.Response;
+using System.Data;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -1047,6 +1048,42 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
 
                 });
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取我的积分兑换记录
+        public ActionResult GetMyIntegralGoodRecord(int user_id, int PageNo=1, int PageSize=10)
+        {
+            try
+            {
+                string cacheKey = "MyIntegralGoodRecord" + user_id + PageNo.ToString() + PageSize;
+                DataTable dataTable = redisCache.Read(cacheKey, 7);
+                if (dataTable == null)
+                {
+                    dataTable = dM_IntergralChangeRecordIBLL.GetMyIntegralGoodRecord(user_id, new Pagination
+                    {
+                        page = PageNo,
+                        rows = PageSize,
+                        sidx = "createtime",
+                        sord = "desc"
+                    });
+
+                    if (dataTable.Rows.Count >= PageSize)
+                    {
+                        redisCache.Write(cacheKey, dataTable, DateTime.Now.AddDays(1), 7);
+                    }
+                    else
+                    {
+                        redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(2), 7);
+                    }
+                }
+
+                return SuccessList("获取成功!", dataTable);
             }
             catch (Exception ex)
             {

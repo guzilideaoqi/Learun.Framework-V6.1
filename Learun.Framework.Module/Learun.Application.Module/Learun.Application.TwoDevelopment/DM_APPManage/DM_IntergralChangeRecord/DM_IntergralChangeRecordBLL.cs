@@ -1,6 +1,7 @@
 using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -93,6 +94,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			try
 			{
 				dM_IntergralChangeRecordService.ApplyChangeGood(dm_IntergralchangerecordEntity, dm_UserEntity);
+			}
+			catch (Exception ex)
+			{
+				if (ex is ExceptionEx)
+				{
+					throw;
+				}
+				throw ExceptionEx.ThrowBusinessException(ex);
+			}
+		}
+
+		/// <summary>
+		/// »ý·Ö¶Ò»»¼ÇÂ¼
+		/// </summary>
+		/// <param name="UserID"></param>
+		/// <param name="pagination"></param>
+		/// <returns></returns>
+		public DataTable GetMyIntegralGoodRecord(int UserID, Pagination pagination) {
+			try
+			{
+				return dM_IntergralChangeRecordService.GetMyIntegralGoodRecord(UserID, pagination);
 			}
 			catch (Exception ex)
 			{

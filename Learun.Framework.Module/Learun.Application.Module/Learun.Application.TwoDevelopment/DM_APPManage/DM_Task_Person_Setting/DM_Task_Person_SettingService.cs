@@ -45,7 +45,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 t.updatetime,
                 t.appid,
                 t.rewardtype,
-                t.rewardcount
+                t.rewardcount,
+                t.finishcount,
+                t.finishstatus,
+                t.typeimage,
+                t.btntext
             ";
         }
         #endregion
@@ -174,6 +178,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 this.BaseRepository("dm_data").Delete<dm_task_person_settingEntity>(t => t.id == keyValue);
+
+                #region 清除缓存
+                UserInfo userInfo = LoginUserInfo.Get();
+                string cacheKey = "PersonSetting" + userInfo.companyId;
+
+                redisCache.Remove(cacheKey, 7);
+                #endregion
             }
             catch (Exception ex)
             {
@@ -197,6 +208,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
+                UserInfo userInfo = LoginUserInfo.Get();
+
                 if (keyValue > 0)
                 {
                     entity.Modify(keyValue);
@@ -204,9 +217,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
                 else
                 {
+                    entity.appid = userInfo.companyId;
                     entity.Create();
                     this.BaseRepository("dm_data").Insert(entity);
                 }
+
+                #region 清除缓存
+                string cacheKey = "PersonSetting" + userInfo.companyId;
+
+                redisCache.Remove(cacheKey, 7);
+                #endregion
             }
             catch (Exception ex)
             {
@@ -239,16 +259,33 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         dm_intergraldetailEntity dm_IntergraldetailEntity = dm_IntergralDetailService.GetLastSignData(user_id);
                         item.finishcount = dm_IntergraldetailEntity.createtime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") ? 1 : 0;
                         item.finishstatus = item.finishcount == 1 ? 2 : 0;
+                        item.btntext = item.finishstatus == 0 ? "签到" : "已完成";
                     }
                     else if (item.s_type == 2)
                     {//邀请粉丝任务
-                        item.finishcount = dm_UserRelationService.GetMyChildCount(user_id);
+                        dm_userEntity dm_UserEntity = dm_UserService.GetEntityByCache(user_id);
+                        item.finishcount = (int)dm_UserEntity.mychildcount;
                         item.finishstatus = GetFinishStatus(item.finishcount, item.needcount, user_id, item.id);
+                        item.remark += string.Format("({0}/{1})", item.finishcount, item.needcount);
+
+                        item.btntext = getBtnText(item.finishstatus);
                     }
                     else if (item.s_type == 4)
                     {//购物任务
-                        item.finishcount = dm_OrderService.GetMyOrderCount(user_id);
+                        dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(user_id);
+                        item.finishcount = dm_User_RelationEntity.ordercount;
                         item.finishstatus = GetFinishStatus(item.finishcount, item.needcount, user_id, item.id);
+
+                        item.remark += string.Format("({0}/{1})", item.finishcount, item.needcount);
+
+                        item.btntext = getBtnText(item.finishstatus);
+                    }
+                    else if (item.s_type == 6)
+                    {
+                        item.finishstatus = GetFinishStatus(item.finishcount, item.needcount, user_id, item.id);
+                        item.finishcount = 0;//浏览任务此字段无意义
+
+                        item.btntext = item.finishstatus == 2 ? "已完成" : "去浏览";
                     }
 
                 }
@@ -283,6 +320,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     return 1;
                 }
             }
+        }
+
+        string getBtnText(int finishstatus)
+        {
+            string btnText = "未完成";
+            switch (finishstatus)
+            {
+                case 0:
+                    btnText = "未完成";
+                    break;
+                case 1:
+                    btnText = "领取";
+                    break;
+                case 2:
+                    btnText = "已完成";
+                    break;
+            }
+            return btnText;
         }
         #endregion
 
@@ -457,7 +512,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 dm_APP_Partners_RecordService.SaveEntity(0, dm_Apply_Partners_RecordEntity);
             }
-            else {
+            else
+            {
                 throw new Exception("当前申请记录正在审核中,请勿重复提交!");
             }
         }

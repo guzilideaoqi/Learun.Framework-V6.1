@@ -18,7 +18,7 @@ namespace Learun.Application.Base.SystemModule
         /// </summary>
         /// <param name="parentId">父节点主键（0表示顶层）</param>
         /// <returns></returns>
-        List<AreaEntity> GetList(string parentId);
+        List<AreaEntity> GetList(string parentId, bool isApi = false);
         /// <summary>
         /// 获取区域列表数据
         /// </summary>

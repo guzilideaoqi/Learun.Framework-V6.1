@@ -1,5 +1,6 @@
 using Aliyun.OSS;
 using Aliyun.OSS.Common;
+using Learun.Application.Base.SystemModule;
 using Learun.Application.TwoDevelopment.Common;
 using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Application.Web.App_Start._01_Handler;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -25,6 +27,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private DM_BaseSettingIBLL dm_BaseSettingIBLL = new DM_BaseSettingBLL();
 
         private DM_ArticleIBLL dm_ArticleIBLL = new DM_ArticleBLL();
+
+        private AreaIBLL areaIBLL = new AreaBLL();
 
         #region 获取平台设置
         public ActionResult GetPlaformSetting()
@@ -260,7 +264,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 string key = DateTime.Now.ToString("yyyyMMdd") + "/" + Guid.NewGuid().ToString() + Path.GetExtension(pic_file.FileName);
 
-                string putUrl = PutObject(dm_BasesettingEntity.oss_accesskeyid, dm_BasesettingEntity.oss_accesskeysecret, dm_BasesettingEntity.oss_endpoint, dm_BasesettingEntity.oss_buketname, key, pic_file.InputStream);
+                string putUrl = OSSHelper.PutObject(dm_BasesettingEntity, "", pic_file);
+                //string putUrl = PutObject(dm_BasesettingEntity.oss_accesskeyid, dm_BasesettingEntity.oss_accesskeysecret, dm_BasesettingEntity.oss_endpoint, dm_BasesettingEntity.oss_buketname, key, pic_file.InputStream);
 
                 return Success("上传成功", new { ImageUrl = putUrl });
             }
@@ -294,9 +299,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         return HttpNotFound();
                     }
                     #endregion
-                    string key = DateTime.Now.ToString("yyyyMMdd") + "/" + Guid.NewGuid().ToString() + Path.GetExtension(pic_file.FileName);
 
-                    string putUrl = PutObject(dm_BasesettingEntity.oss_accesskeyid, dm_BasesettingEntity.oss_accesskeysecret, dm_BasesettingEntity.oss_endpoint, dm_BasesettingEntity.oss_buketname, key, pic_file.InputStream);
+
+                    //string putUrl = PutObject(dm_BasesettingEntity.oss_accesskeyid, dm_BasesettingEntity.oss_accesskeysecret, dm_BasesettingEntity.oss_endpoint, dm_BasesettingEntity.oss_buketname, key, pic_file.InputStream);
+                    string putUrl = OSSHelper.PutObject(dm_BasesettingEntity, "", pic_file);
 
                     images.Add(putUrl);
                 }
@@ -368,6 +374,36 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 //LogHelper.LogException<OssException>($"Msg:{ex.Message};Code:{ex.ErrorCode};RequestID:{ex.RequestId};HostID:{ex.HostId}");
             }
         }
+
+        #region 获取省份/城市/区域
+        /// <summary>
+        /// 0获取默认省份  其他数据传入相应编号
+        /// </summary>
+        /// <param name="parentID"></param>
+        /// <returns></returns>
+        public ActionResult GetArea(string parentID)
+        {
+            try
+            {
+;                string cacheKey = "AreaInfo" + parentID;
+                List<AreaEntity> areaEntities = redisCache.Read<List<AreaEntity>>(cacheKey, 7);
+
+                if (areaEntities == null) {
+                    areaEntities = areaIBLL.GetList(parentID,true);
+                    if (areaEntities.Count > 0) {
+                        redisCache.Write<List<AreaEntity>>(cacheKey, areaEntities, 7);
+                    }
+                }
+
+                return SuccessList("获取成功!", areaEntities);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        #endregion
 
         #region 接口测试
         public ActionResult TestApi(string jsonData)

@@ -49,13 +49,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                string cacheKey = Md5Helper.Hash("TaskType" + queryJson);
+                var queryParam = queryJson.ToJObject();
+
+                string appid = queryParam["appid"].ToString();
+                string cacheKey = "TaskType" + appid;
+
                 IEnumerable<dm_task_typeEntity> dm_Task_TypeEntities = redisCache.Read<IEnumerable<dm_task_typeEntity>>(cacheKey, 7);
 
                 if (dm_Task_TypeEntities == null)
                 {
                     //参考写法
-                    var queryParam = queryJson.ToJObject();
                     // 虚拟参数
                     //var dp = new DynamicParameters(new { });
                     //dp.Add("startTime", queryParam["StartTime"].ToDate(), DbType.DateTime);
@@ -63,12 +66,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     strSql.Append("SELECT ");
                     strSql.Append(fieldSql);
                     strSql.Append(" FROM dm_task_type t ");
-                    if (!queryParam["appid"].IsEmpty())
-                    {
-                        strSql.Append(" where t.appid='" + queryParam["appid"].ToString() + "'");
 
-                        if (CommonConfig.ImageQianZhui.IsEmpty())
-                            new DM_BaseSettingService().GetEntityByCache(queryParam["appid"].ToString());
+                    if (!appid.IsEmpty())
+                    {
+                        strSql.Append(" where t.appid='" + appid + "'");
                     }
                     dm_Task_TypeEntities = this.BaseRepository("dm_data").FindList<dm_task_typeEntity>(strSql.ToString());
 
@@ -78,11 +79,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     }
                 }
 
-                return dm_Task_TypeEntities.Select(delegate (dm_task_typeEntity t)
-                {
-                    t.image = CommonConfig.ImageQianZhui + t.image;
-                    return t;
-                });
+                return dm_Task_TypeEntities;
             }
             catch (Exception ex)
             {
@@ -163,6 +160,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 this.BaseRepository("dm_data").Delete<dm_task_typeEntity>(t => t.id == keyValue);
+
+                #region 清除缓存
+                UserInfo userInfo = LoginUserInfo.Get();
+                string cacheKey = "TaskType" + userInfo.companyId;
+                redisCache.Read(cacheKey, 7);
+                #endregion
             }
             catch (Exception ex)
             {
@@ -196,6 +199,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     entity.Create();
                     this.BaseRepository("dm_data").Insert(entity);
                 }
+
+                #region 清除缓存
+                UserInfo userInfo = LoginUserInfo.Get();
+                string cacheKey = "TaskType" + userInfo.companyId;
+                redisCache.Read(cacheKey, 7);
+                #endregion
             }
             catch (Exception ex)
             {

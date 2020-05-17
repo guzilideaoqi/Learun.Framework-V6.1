@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aliyun.OSS, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Aliyun.OSS.SDK.2.8.0\lib\Aliyun.OSS.dll</HintPath>
+    </Reference>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
@@ -48,6 +51,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,6 +72,7 @@
     <Compile Include="Common\Model\SignModel.cs" />
     <Compile Include="Common\Model\TemplateMessage.cs" />
     <Compile Include="Common\Model\VoiceCode.cs" />
+    <Compile Include="Common\OSSHelper.cs" />
     <Compile Include="Common\QRCodeHelper.cs" />
     <Compile Include="DM_APPManage\DM_Order\CalculateComissionEntity.cs" />
     <Compile Include="DM_APPManage\DM_Order\DM_OrderBLL.cs" />

@@ -29,9 +29,9 @@ var bootstrap = function ($, learun) {
                 learun.layerForm({
                     id: 'form',
                     title: '新增',
-                    url: top.$.rootUrl + '/DM_APPManage/DM_Task_Person_Setting/Form',
+                    url: top.$.rootUrl + '/DM_APPManage/DM_Task_Person_Setting/Form?keyValue=0',
                     width: 700,
-                    height: 400,
+                    height: 500,
                     callBack: function (id) {
                         return top[id].acceptClick(refreshGirdData);
                     }
@@ -47,7 +47,7 @@ var bootstrap = function ($, learun) {
                         title: '编辑',
                         url: top.$.rootUrl + '/DM_APPManage/DM_Task_Person_Setting/Form?keyValue=' + keyValue,
                         width: 700,
-                        height: 400,
+                        height: 500,
                         callBack: function (id) {
                             return top[id].acceptClick(refreshGirdData);
                         }
@@ -60,7 +60,7 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerConfirm('是否确认删除该项！', function (res) {
                         if (res) {
-                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Task_Person_Setting/DeleteForm', { keyValue: keyValue}, function () {
+                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_Task_Person_Setting/DeleteForm', { keyValue: keyValue }, function () {
                             });
                         }
                     });
@@ -71,20 +71,90 @@ var bootstrap = function ($, learun) {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_Task_Person_Setting/GetPageList',
                 headData: [
-                        { label: 'id', name: 'id', width: 200, align: "left" },
-                        { label: '任务标题', name: 'title', width: 200, align: "left" },
-                        { label: '任务描述', name: 'remark', width: 200, align: "left" },
-                        { label: '任务类型  1每日签到任务  2邀请粉丝任务 3团队粉丝任务  4购物任务  5团队购物任务', name: 's_type', width: 200, align: "left" },
-                        { label: '所需人数', name: 'needcount', width: 200, align: "left" },
-                        { label: '是否为合伙人任务  0非合伙人   1合伙人', name: 'ispartners', width: 200, align: "left" },
-                        { label: 'isenabled', name: 'isenabled', width: 200, align: "left" },
-                        { label: '创建时间', name: 'createtime', width: 200, align: "left" },
-                        { label: '修改时间', name: 'updatetime', width: 200, align: "left" },
-                        { label: '平台id', name: 'appid', width: 200, align: "left" },
-                        { label: '奖励类型  0积分奖励  1余额奖励 ', name: 'rewardtype', width: 200, align: "left" },
-                        { label: '奖励数量  积分/余额', name: 'rewardcount', width: 200, align: "left" },
+                    //{ label: 'id', name: 'id', width: 200, align: "left" },
+                    { label: '任务标题', name: 'title', width: 200, align: "left" },
+                    { label: '任务描述', name: 'remark', width: 200, align: "left" },
+                    {
+                        label: '任务类型', name: 's_type', width: 80, align: "left", formatter: function (cellvalue, options, rowData) {
+                            //1每日签到任务  2邀请粉丝任务 3团队粉丝任务  4购物任务  5团队购物任务
+                            var typeName = "未知";
+                            switch (cellvalue) {
+
+                                case 1:
+                                    typeName = "每日签到任务";
+                                    break;
+                                case 2:
+                                    typeName = "邀请粉丝任务";
+                                    break;
+                                case 3:
+                                    typeName = "团队粉丝任务";
+                                    break;
+                                case 4:
+                                    typeName = "购物任务";
+                                    break;
+                                case 5:
+                                    typeName = "团队购物任务";
+                                    break;
+                                case 6:
+                                    typeName = "浏览商品";
+                                    break;
+                            }
+
+                            return typeName;
+                        }
+                    },
+                    { label: '所需人数', name: 'needcount', width: 80, align: "left" },
+                    {
+                        label: '是否为合伙人任务', name: 'ispartners', width: 200, align: "left", formatter: function (cellvalue, options, rowData) {
+                            var typeName = "未知";
+                            switch (cellvalue) {
+                                case 0:
+                                    typeName = "否";
+                                    break;
+                                case 1:
+                                    typeName = "是";
+                                    break;
+                            }
+
+                            return typeName;
+                        }
+                    },
+                    {
+                        label: '启用状态', name: 'isenabled', width: 80, align: "left", formatter: function (cellvalue, options, rowData) {
+                            var typeName = "未知";
+                            switch (cellvalue) {
+                                case 0:
+                                    typeName = "禁用";
+                                    break;
+                                case 1:
+                                    typeName = "启用";
+                                    break;
+                            }
+
+                            return typeName;
+                        }
+                    },
+                    { label: '创建时间', name: 'createtime', width: 150, align: "left" },
+                    { label: '修改时间', name: 'updatetime', width: 150, align: "left" },
+                    //{ label: '平台id', name: 'appid', width: 200, align: "left" },
+                    {
+                        label: '奖励类型', name: 'rewardtype', width: 80, align: "left", formatter: function (cellvalue, options, rowData) {
+                            var typeName = "未知";
+                            switch (cellvalue) {
+                                case 0:
+                                    typeName = "积分奖励";
+                                    break;
+                                case 1:
+                                    typeName = "余额奖励";
+                                    break;
+                            }
+
+                            return typeName;
+                        }
+                    },
+                    { label: '奖励值', name: 'rewardcount', width: 80, align: "left" },
                 ],
-                mainId:'id',
+                mainId: 'id',
                 reloadSelected: true,
                 isPage: true
             });

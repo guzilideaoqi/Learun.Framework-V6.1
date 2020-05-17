@@ -30,7 +30,7 @@ namespace Learun.Application.Base.SystemModule
         /// </summary>
         /// <param name="parentId">父节点主键（0表示顶层）</param>
         /// <returns></returns>
-        public List<AreaEntity> GetList(string parentId)
+        public List<AreaEntity> GetList(string parentId, bool isApi = false)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Learun.Application.Base.SystemModule
                 List<AreaEntity> list = cache.Read<List<AreaEntity>>(cacheKey + parentId, CacheId.area);
                 if (list == null)
                 {
-                    list = (List<AreaEntity>)areaService.GetList(parentId);
+                    list = (List<AreaEntity>)areaService.GetList(parentId, isApi);
                     cache.Write<List<AreaEntity>>(cacheKey + parentId, list, CacheId.area);
                 }
                 return list;
@@ -166,7 +166,7 @@ namespace Learun.Application.Base.SystemModule
             try
             {
                 AreaEntity entity = areaService.GetEntity(keyValue);
-                cache.Remove(cacheKey + entity.F_ParentId,CacheId.area);
+                cache.Remove(cacheKey + entity.F_ParentId, CacheId.area);
                 areaService.VirtualDelete(keyValue);
             }
             catch (Exception ex)

@@ -11,14 +11,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 日 期：2020-04-10 13:55
     /// 描 述：进度任务设置
     /// </summary>
-    public class dm_task_person_settingEntity 
+    public class dm_task_person_settingEntity
     {
         #region 实体成员
         /// <summary>
         /// id
         /// </summary>
         /// <returns></returns>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("ID")]
         public int? id { get; set; }
         /// <summary>
         /// 任务标题
@@ -33,7 +34,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("REMARK")]
         public string remark { get; set; }
         /// <summary>
-        /// 任务类型  1每日签到任务  2邀请粉丝任务 3团队粉丝任务  4购物任务  5团队购物任务
+        /// 任务类型  1每日签到任务  2邀请粉丝任务 3团队粉丝任务  4购物任务  5团队购物任务 6浏览商品
         /// </summary>
         /// <returns></returns>
         [Column("S_TYPE")]
@@ -96,6 +97,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("FINISHSTATUS")]
         public int finishstatus { get; set; }
+
+        /// <summary>
+        /// 类别图片
+        /// </summary>
+        [Column("TYPEIMAGE")]
+        public string typeimage { get; set; }
+
+        /// <summary>
+        /// 按钮文本
+        /// </summary>
+        [Column("BTNTEXT")]
+        public string btntext { get; set; }
         #endregion
 
         #region 扩展操作
@@ -104,6 +117,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         public void Create()
         {
+            this.createtime = DateTime.Now;
         }
         /// <summary>
         /// 编辑调用
@@ -112,6 +126,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public void Modify(int? keyValue)
         {
             this.id = keyValue;
+            this.updatetime = DateTime.Now;
         }
         #endregion
     }

@@ -780,7 +780,26 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                return SuccessList("获取成功!", dm_Task_Person_SettingIBLL.GetPersonProcess(user_id, appid));
+
+                string cacheKey = "MyPersonTask_" + user_id;
+
+                IEnumerable<dm_task_person_settingEntity> totalTask = redisCache.Read<IEnumerable<dm_task_person_settingEntity>>(cacheKey, 7);
+                if (totalTask == null)
+                {
+                    totalTask = dm_Task_Person_SettingIBLL.GetPersonProcess(user_id, appid);
+
+                    redisCache.Write<IEnumerable<dm_task_person_settingEntity>>(cacheKey, totalTask, DateTime.Now.AddMinutes(10), 7); 
+                }
+
+                List<int?> today_ids = new int?[] { 1, 6 }.ToList();
+
+                var taskDetail = new
+                {
+                    Today_Task = totalTask.Where(t => today_ids.Contains(t.s_type)),
+                    DLM_Task = totalTask.Where(t => !today_ids.Contains(t.s_type)),
+                };
+
+                return Success("获取成功!", taskDetail);
             }
             catch (Exception ex)
             {

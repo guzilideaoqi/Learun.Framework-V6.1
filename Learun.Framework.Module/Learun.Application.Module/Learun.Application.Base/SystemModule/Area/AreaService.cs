@@ -17,7 +17,9 @@ namespace Learun.Application.Base.SystemModule
     {
         #region 构造函数和属性
         private string fieldSql;
-        public AreaService() {
+        private string filedSqlApi;
+        public AreaService()
+        {
             fieldSql = @"
                         t.F_AreaId,
                         t.F_ParentId,
@@ -36,6 +38,11 @@ namespace Learun.Application.Base.SystemModule
                         t.F_ModifyDate,
                         t.F_ModifyUserId,
                         t.F_ModifyUserName ";
+            filedSqlApi = @"
+                        t.F_AreaId,
+                        t.F_ParentId,
+                        t.F_AreaCode,
+                        t.F_AreaName";
         }
         #endregion
 
@@ -45,13 +52,16 @@ namespace Learun.Application.Base.SystemModule
         /// </summary>
         /// <param name="parentId">父节点Id</param>
         /// <returns></returns>
-        public IEnumerable<AreaEntity> GetList(string parentId)
+        public IEnumerable<AreaEntity> GetList(string parentId, bool isApi = false)
         {
             try
             {
                 var strSql = new StringBuilder();
                 strSql.Append("SELECT ");
-                strSql.Append(fieldSql);
+                if (isApi)
+                    strSql.Append(filedSqlApi);
+                else
+                    strSql.Append(fieldSql);
                 strSql.Append(" FROM LR_Base_Area t WHERE t.F_EnabledMark = 1 AND t.F_DeleteMark = 0  ");
                 if (!string.IsNullOrEmpty(parentId))
                 {
@@ -157,7 +167,7 @@ namespace Learun.Application.Base.SystemModule
                     throw ExceptionEx.ThrowServiceException(ex);
                 }
             }
-           
+
         }
         #endregion
     }
