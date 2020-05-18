@@ -275,11 +275,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="id">用户id</param>
         /// <returns></returns>
 
-        public ActionResult GetPersonInfo(int id)
+        public ActionResult GetPersonInfo(int User_ID)
         {
             try
             {
-                return Success("获取成功", dm_userIBLL.GetEntityByCache(id));
+                return Success("获取成功", dm_userIBLL.GetEntityByCache(User_ID));
             }
             catch (Exception ex)
             {
@@ -313,11 +313,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// </summary>
         /// <param name="userid">用户id</param>
         /// <returns></returns>
-        public ActionResult SignIn(int userid)
+        public ActionResult SignIn(int User_ID)
         {
             try
             {
-                return this.Success("签到成功", (dynamic)dm_userIBLL.SignIn(userid));
+                return this.Success("签到成功", (dynamic)dm_userIBLL.SignIn(User_ID));
             }
             catch (Exception ex)
             {
