@@ -47,7 +47,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("FACECARD")]
-        public string facecard { get { if (!string.IsNullOrEmpty(_facecard)) return CommonConfig.ImageQianZhui + _facecard; return _facecard; } set { _facecard = value; } }
+        public string facecard { get; set; }
 
         private string _frontcard;
         /// <summary>
@@ -55,7 +55,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("FRONTCARD")]
-        public string frontcard { get { if (!string.IsNullOrEmpty(_frontcard)) return CommonConfig.ImageQianZhui + _frontcard; return _frontcard; } set { _frontcard = value; } }
+        public string frontcard { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>

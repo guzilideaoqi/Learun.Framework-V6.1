@@ -36,6 +36,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_Apply_CashRecordIBLL dm_Apply_CashRecordIBLL = new DM_Apply_CashRecordBLL();
 
+        private DM_BaseSettingIBLL dm_BaseSettingIBLL = new DM_BaseSettingBLL();
+
         #region 用户名密码登陆
 
         public ActionResult DM_Login(dm_userEntity dm_UserEntity)
@@ -385,7 +387,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="CertificaRecordID"></param>
         /// <returns></returns>
 
-        public ActionResult Certification(int user_id, string name, string cardno, int CertificaRecordID = 0)
+        public ActionResult Certification(int user_id, string name, string cardno, string facecard = "", string frontcard = "")
         {
             try
             {
@@ -399,28 +401,46 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     return Fail("真实姓名不能为空!");
                 }
+                //dm_certifica_recordEntity dm_Certifica_RecordEntity = new dm_certifica_recordEntity();
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+
+                dm_certifica_recordEntity dm_Certifica_RecordEntity = dm_CertificaRecordIBLL.GetCertificationRecord(user_id);
+                if (dm_Certifica_RecordEntity.IsEmpty())
+                    dm_Certifica_RecordEntity = new dm_certifica_recordEntity();
 
                 #region 身份证正面上传
-                HttpPostedFile facecard_file = System.Web.HttpContext.Current.Request.Files["facecard"];
-                if (facecard_file.ContentLength == 0 || string.IsNullOrEmpty(facecard_file.FileName))
+                if (facecard.IsEmpty())
                 {
-                    return HttpNotFound();
+                    HttpPostedFile facecard_file = System.Web.HttpContext.Current.Request.Files["facecard"];
+                    if (facecard_file.ContentLength == 0 || string.IsNullOrEmpty(facecard_file.FileName))
+                    {
+                        return Fail("请上传身份证正面照片!");
+                    }
+                    dm_Certifica_RecordEntity.facecard = OSSHelper.PutObject(dm_BasesettingEntity, "", facecard_file); ;
+
+                }
+                else
+                {
+                    dm_Certifica_RecordEntity.facecard = facecard;
                 }
                 #endregion
+
 
                 #region 身份证反面上传
-                HttpPostedFile frontcard_file = System.Web.HttpContext.Current.Request.Files["frontcard"];
-                if (frontcard_file.ContentLength == 0 || string.IsNullOrEmpty(frontcard_file.FileName))
+                if (frontcard.IsEmpty())
                 {
-                    return HttpNotFound();
+                    HttpPostedFile frontcard_file = System.Web.HttpContext.Current.Request.Files["frontcard"];
+                    if (frontcard_file.ContentLength == 0 || string.IsNullOrEmpty(frontcard_file.FileName))
+                    {
+                        return Fail("请上传身份证反面照片!");
+                    }
+
+                    dm_Certifica_RecordEntity.frontcard = OSSHelper.PutObject(dm_BasesettingEntity, "", frontcard_file);
                 }
-                #endregion
-
-                dm_certifica_recordEntity dm_Certifica_RecordEntity = new dm_certifica_recordEntity();
-
-                #region 开始执行上传图片
-                dm_Certifica_RecordEntity.facecard = UpdateCardImage(facecard_file);
-                dm_Certifica_RecordEntity.frontcard = UpdateCardImage(frontcard_file);
+                else
+                {
+                    dm_Certifica_RecordEntity.frontcard = frontcard;
+                }
                 #endregion
 
                 #region 构造其他信息
@@ -431,7 +451,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 dm_Certifica_RecordEntity.appid = appid;
                 #endregion
 
-                dm_CertificaRecordIBLL.SaveEntity(CertificaRecordID, dm_Certifica_RecordEntity);
+                dm_CertificaRecordIBLL.SaveEntity((int)dm_Certifica_RecordEntity.id, dm_Certifica_RecordEntity);
 
                 return Success("提交成功!");
             }
@@ -788,7 +808,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     totalTask = dm_Task_Person_SettingIBLL.GetPersonProcess(user_id, appid);
 
-                    redisCache.Write<IEnumerable<dm_task_person_settingEntity>>(cacheKey, totalTask, DateTime.Now.AddMinutes(10), 7); 
+                    redisCache.Write<IEnumerable<dm_task_person_settingEntity>>(cacheKey, totalTask, DateTime.Now.AddMinutes(10), 7);
                 }
 
                 List<int?> today_ids = new int?[] { 1, 6 }.ToList();
