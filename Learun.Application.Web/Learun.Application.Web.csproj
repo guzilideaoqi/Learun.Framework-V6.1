@@ -306,6 +306,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_ReadTask\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookReviceDetail.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\PubTask.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Setting\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\LookUserDetail.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\LookUserDetail.js" />

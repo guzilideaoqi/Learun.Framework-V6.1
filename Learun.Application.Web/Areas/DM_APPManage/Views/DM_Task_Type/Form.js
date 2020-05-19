@@ -33,7 +33,7 @@ var bootstrap = function ($, learun) {
                 $('#form').lrSetFormData(selectedRow);
                 headimg = selectedRow.image;
             }
-            $('.file').prepend('<img src="' + top.$.rootUrl + headimg + '" id="uploadPreview" onerror="loaddfimg()" >');
+            $('.file').prepend('<img src="' + headimg + '" id="uploadPreview" onerror="loaddfimg()" >');
             if (true) {
                 headimg = top.$.rootUrl + '/Content/images/head/on-boy.jpg';
             }

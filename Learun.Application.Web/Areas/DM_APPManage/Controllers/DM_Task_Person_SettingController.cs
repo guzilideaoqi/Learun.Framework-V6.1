@@ -1,5 +1,9 @@
-﻿using Learun.Application.TwoDevelopment.DM_APPManage;
+﻿using Learun.Application.TwoDevelopment.Common;
+using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Util;
+using System;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
@@ -15,6 +19,8 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
     {
         private DM_Task_Person_SettingIBLL dM_Task_Person_SettingIBLL = new DM_Task_Person_SettingBLL();
 
+        private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
+
         #region 视图功能
 
         /// <summary>
@@ -24,7 +30,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
         /// <summary>
         /// 表单页
@@ -33,7 +39,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-             return View();
+            return View();
         }
         #endregion
 
@@ -45,7 +51,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList( string queryJson )
+        public ActionResult GetList(string queryJson)
         {
             var data = dM_Task_Person_SettingIBLL.GetList(queryJson);
             return Success(data);
@@ -104,10 +110,27 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <summary>
         /// <returns></returns>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AjaxOnly]
-        public ActionResult SaveForm(int keyValue,dm_task_person_settingEntity entity)
+        //[ValidateAntiForgeryToken]
+        //[AjaxOnly]
+        public ActionResult SaveForm(int keyValue, dm_task_person_settingEntity entity)
         {
+            HttpFileCollection files = System.Web.HttpContext.Current.Request.Files;
+            if (files.Count > 0)
+            {
+                HttpPostedFile pic_file = files[0];
+                if (pic_file.ContentLength != 0 && !string.IsNullOrEmpty(pic_file.FileName))
+                {
+                    UserInfo userInfo = LoginUserInfo.Get();
+
+                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(userInfo.companyId);
+
+                    if (dm_BasesettingEntity.IsEmpty())
+                        return Fail("获取配置信息错误,请检查账号是否正确!");
+
+                    entity.typeimage = OSSHelper.PutObject(dm_BasesettingEntity, "TaskCenterIcon/" + Guid.NewGuid().ToString() + Path.GetExtension(pic_file.FileName), pic_file);
+                }
+            }
+
             dM_Task_Person_SettingIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
         }
