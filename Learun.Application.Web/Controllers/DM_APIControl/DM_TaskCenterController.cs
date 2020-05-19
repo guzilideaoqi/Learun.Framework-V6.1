@@ -172,15 +172,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取我的发布
-        public ActionResult GetMyReleaseTask(int user_id, int PageNo = 1, int PageSize = 20)
+        public ActionResult GetMyReleaseTask(int user_id, int PageNo = 1, int PageSize = 20, int TaskStatus = -1)
         {
             try
             {
-                string cacheKey = "MyReleaseTask" + Md5Helper.Hash(user_id + "" + PageNo + "" + PageSize);
+                string cacheKey = "MyReleaseTask" + Md5Helper.Hash(user_id + "" + PageNo + "" + PageSize + "" + TaskStatus);
                 IEnumerable<dm_taskEntity> dm_TaskEntities = redisCache.Read<IEnumerable<dm_taskEntity>>(cacheKey, 7);
                 if (dm_TaskEntities == null)
                 {
-                    dm_TaskEntities = dm_TaskIBLL.GetPageList(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + user_id + "\"}");
+                    if (TaskStatus == -1)
+                        dm_TaskEntities = dm_TaskIBLL.GetPageList(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + user_id + "\"}");
+                    else
+                        dm_TaskEntities = dm_TaskIBLL.GetPageList(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + user_id + "\",\"taskstatus\":\"" + TaskStatus + "\"}");
 
                     if (dm_TaskEntities.Count() > 0)
                     {
@@ -200,15 +203,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取我的接受
-        public ActionResult GetMyReviceTask(int user_id, int PageNo = 1, int PageSize = 20)
+        public ActionResult GetMyReviceTask(int user_id, int PageNo = 1, int PageSize = 20, int TaskStatus = -1)
         {
             try
             {
-                string cacheKey = "MyReviceTask" + Md5Helper.Hash(user_id + "" + PageNo + "" + PageSize);
+                string cacheKey = "MyReviceTask" + Md5Helper.Hash(user_id + "" + PageNo + "" + PageSize + "" + TaskStatus);
                 DataTable dataTable = redisCache.Read(cacheKey, 7);
                 if (dataTable == null)
                 {
-                    dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(user_id, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
+                    dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(user_id, TaskStatus, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
                     int datarow = dataTable.Rows.Count;
                     if (datarow > 0)
                     {
@@ -332,7 +335,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 删除任务模板
-        public ActionResult DeleteTaskTemplate(int TemplateID,int User_ID)
+        public ActionResult DeleteTaskTemplate(int TemplateID, int User_ID)
         {
             try
             {

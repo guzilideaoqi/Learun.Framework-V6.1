@@ -104,14 +104,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 var strSql = new StringBuilder();
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
-                strSql.Append(" FROM dm_task t ");
+                strSql.Append(" FROM dm_task t where 1=1");
                 if (!queryParam["appid"].IsEmpty())
                 {
-                    strSql.Append(" where t.appid='" + queryParam["appid"].ToString() + "'");
+                    strSql.Append(" and t.appid='" + queryParam["appid"].ToString() + "'");
                 }
                 if (!queryParam["user_id"].IsEmpty())
                 {
-                    strSql.Append(" where t.user_id='" + queryParam["user_id"].ToString() + "'");
+                    strSql.Append(" and t.user_id='" + queryParam["user_id"].ToString() + "'");
+                }
+                if (!queryParam["taskstatus"].IsEmpty()) {
+                    strSql.Append(" and t.task_status='" + queryParam["taskstatus"].ToString() + "'");
                 }
                 return this.BaseRepository("dm_data").FindList<dm_taskEntity>(strSql.ToString(), pagination);
             }

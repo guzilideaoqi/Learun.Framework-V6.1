@@ -96,7 +96,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="user_id"></param>
         /// <param name="pagination"></param>
         /// <returns></returns>
-        DataTable GetMyReviceTask(int user_id, Pagination pagination);
+        DataTable GetMyReviceTask(int user_id, int TaskStatus, Pagination pagination);
 
         /// <summary>
         /// 获取任务接受记录详情

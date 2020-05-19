@@ -280,7 +280,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
 
-                if (System.Web.HttpContext.Current.Request.Files.Count <= 1)
+                if (System.Web.HttpContext.Current.Request.Files.Count <= 0)
                     return Fail("请上传至少一张图片!");
 
                 HttpFileCollection httpFileCollection = System.Web.HttpContext.Current.Request.Files;

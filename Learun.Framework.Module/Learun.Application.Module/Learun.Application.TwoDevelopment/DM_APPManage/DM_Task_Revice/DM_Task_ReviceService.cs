@@ -200,12 +200,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="user_id"></param>
         /// <returns></returns>
-        public DataTable GetMyReviceTask(int user_id, Pagination pagination)
+        public DataTable GetMyReviceTask(int user_id,int TaskStatus, Pagination pagination)
         {
             try
             {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append("select t.*,r.status ReviceStatus from dm_task_revice r left join dm_task t on r.task_id=t.id where r.user_id=" + user_id);
+
+                if (TaskStatus != -1)
+                    stringBuilder.Append(" and r.status=" + TaskStatus);
 
                 return this.BaseRepository("dm_data").FindTable(stringBuilder.ToString(), pagination);
             }

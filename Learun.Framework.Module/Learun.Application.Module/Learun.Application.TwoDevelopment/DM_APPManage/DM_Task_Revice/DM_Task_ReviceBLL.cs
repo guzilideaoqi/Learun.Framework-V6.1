@@ -284,10 +284,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="user_id"></param>
         /// <param name="pagination"></param>
         /// <returns></returns>
-        public DataTable GetMyReviceTask(int user_id, Pagination pagination) {
+        public DataTable GetMyReviceTask(int user_id, int TaskStatus, Pagination pagination) {
             try
             {
-               return dM_Task_ReviceService.GetMyReviceTask(user_id,pagination);
+               return dM_Task_ReviceService.GetMyReviceTask(user_id, TaskStatus, pagination);
             }
             catch (Exception ex)
             {
