@@ -65,6 +65,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取banner图列表
+        /// <summary>
+        /// 获取banner图列表
+        /// </summary>
+        /// <param name="type">0首页导航  1京东导航  2拼多多导航</param>
+        /// <returns></returns>
         public ActionResult GetBannerList(int type = 0)
         {
             try

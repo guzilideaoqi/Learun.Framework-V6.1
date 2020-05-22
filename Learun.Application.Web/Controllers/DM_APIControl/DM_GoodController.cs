@@ -744,11 +744,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
-        public ActionResult Get_TB_Order()
-        {
-            return View();
-        }
-
         #region 获取京东频道列表
         /// <summary>
         /// 获取京东频道列表
@@ -758,6 +753,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                return Fail("该接口已废弃,请使用获取Banner图接口");
                 List<JDEliteIDInfo> jDEliteIDInfos = redisCache.Read<List<JDEliteIDInfo>>("JDEliteIDList", 7);
                 if (jDEliteIDInfos == null)
                 {
@@ -932,18 +928,61 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="pageSize">每页显示数量</param>
         /// <param name="sort">排序方式:0-综合排序;1-按佣金比率升序;2-按佣金比例降序;3-按价格升序;4-按价格降序;5-按销量升序;6-按销量降序;7-优惠券金额排序升序;8-优惠券金额排序降序;9-券后价升序排序;10-券后价降序排序;11-按照加入多多进宝时间升序;12-按照加入多多进宝时间降序;13-按佣金金额升序排序;14-按佣金金额降序排序;15-店铺描述评分升序;16-店铺描述评分降序;17-店铺物流评分升序;18-店铺物流评分降序;19-店铺服务评分升序;20-店铺服务评分降序;27-描述评分击败同类店铺百分比升序，28-描述评分击败同类店铺百分比降序，29-物流评分击败同类店铺百分比升序，30-物流评分击败同类店铺百分比降序，31-服务评分击败同类店铺百分比升序，32-服务评分击败同类店铺百分比降序</param>
         /// <returns></returns>
-        public ActionResult Get_PDD_GoodList(int user_id, string keyWord = "女装", int pageIndex = 1, int pageSize = 20, int sort = 0, bool with_coupon = false)
+        public ActionResult Get_PDD_GoodList(int user_id, string keyWord = "女装", int pageIndex = 1, int pageSize = 20, int sort = 0, bool with_coupon = false, int cat_id = 1)
         {
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = Md5Helper.Hash("PDDGoodList" + keyWord + pageIndex + pageSize + sort + with_coupon);
+                string cacheKey = Md5Helper.Hash("PDDGoodList" + keyWord + pageIndex + pageSize + sort + with_coupon + cat_id);
                 List<GoodItem> goodItems = redisCache.Read<List<GoodItem>>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                 if (goodItems == null)
                 {
                     PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
-                    goodItems = pDDApi.SearchGood(keyWord, pageIndex, pageSize, sort, with_coupon);
+                    goodItems = pDDApi.SearchGood(keyWord, pageIndex, pageSize, sort, with_coupon, cat_id);
+
+                    if (goodItems.Count > 0)
+                    {
+                        redisCache.Write(cacheKey, goodItems, DateTime.Now.AddHours(2.0), 7L);
+                    }
+                    else
+                    {
+                        return Fail("没有更多数据了");
+                    }
+                }
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+
+                return SuccessList("获取成功!", goodItems.Select(t => { t.LevelCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, 2, dm_BasesettingEntity); return t; }));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 多多进宝频道推广商品
+        /// <summary>
+        /// 多多进宝频道推广商品
+        /// </summary>
+        /// <param name="user_id">用户ID</param>
+        /// <param name="channel_type">0-1.9包邮, 1-今日爆款, 2-品牌清仓,3-相似商品推荐,4-猜你喜欢,5-实时热销,6-实时收益,7-今日畅销,8-高佣榜单，默认1</param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="cat_id"></param>
+        /// <returns></returns>
+        public ActionResult GetRecommendGoodByPDD(int user_id, int channel_type = 0, int pageIndex = 1, int pageSize = 20, long cat_id = 0)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                string cacheKey = Md5Helper.Hash("PDDRecommendGoodList" + channel_type + "" + pageIndex + "" + pageSize + "" + cat_id);
+                List<GoodItem> goodItems = redisCache.Read<List<GoodItem>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                if (goodItems == null)
+                {
+                    PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
+                    goodItems = pDDApi.GetRecommendGood(channel_type, "", pageSize, "", pageSize * pageIndex, "", cat_id);
 
                     if (goodItems.Count > 0)
                     {
@@ -1057,7 +1096,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取我的积分兑换记录
-        public ActionResult GetMyIntegralGoodRecord(int user_id, int PageNo=1, int PageSize=10)
+        public ActionResult GetMyIntegralGoodRecord(int user_id, int PageNo = 1, int PageSize = 10)
         {
             try
             {

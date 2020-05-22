@@ -72,7 +72,24 @@ var bootstrap = function ($, learun) {
                 url: top.$.rootUrl + '/DM_APPManage/DM_Banner/GetPageList',
                 headData: [
                     { label: '导航图id', name: 'id', width: 200, align: "left" },
-                    { label: '导航图类型', name: 'b_type', width: 200, align: "left" },
+                    {
+                        label: '导航图类型', name: 'b_type', width: 200, align: "left", formatter: function (cellvalue, rowdata, options) {
+                            var returnValue = "";
+                            switch (cellvalue) {
+
+                                case 0:
+                                    returnValue= "首页导航";
+                                    break;
+                                case 1:
+                                    returnValue = "京东导航";
+                                    break;
+                                case 2:
+                                    returnValue = "拼多多导航";
+                                    break;
+                            }
+                            return returnValue;
+                        }
+                    },
                     { label: '导航图标题', name: 'b_title', width: 200, align: "left" },
                     { label: '导航图图片地址', name: 'b_image', width: 200, align: "left" },
                     { label: '导航图参数', name: 'b_param', width: 200, align: "left" },
