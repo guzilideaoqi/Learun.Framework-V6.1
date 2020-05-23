@@ -1,4 +1,5 @@
-﻿using Learun.Application.TwoDevelopment.DM_APPManage;
+﻿using Learun.Application.TwoDevelopment.Common;
+using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Util;
 using System;
 using System.IO;
@@ -17,6 +18,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
     public class DM_ArticleController : MvcControllerBase
     {
         private DM_ArticleIBLL dM_ArticleIBLL = new DM_ArticleBLL();
+        private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
 
         #region 视图功能
 
@@ -129,13 +131,14 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
                     return HttpNotFound();
                 }
                 UserInfo userInfo = LoginUserInfo.Get();
-                string FileEextension = Path.GetExtension(files[0].FileName);
+                /*string FileEextension = Path.GetExtension(files[0].FileName);
                 string virtualPath = $"/Resource/GoodImage/{Guid.NewGuid().ToString()}{FileEextension}";
                 string fullFileName = base.Server.MapPath("~" + virtualPath);
                 string path = Path.GetDirectoryName(fullFileName);
                 Directory.CreateDirectory(path);
                 files[0].SaveAs(fullFileName);
-                entity.a_image = virtualPath;
+                entity.a_image = virtualPath;*/
+                entity.a_image = OSSHelper.PutObject(dM_BaseSettingIBLL.GetEntityByCache(userInfo.companyId), "", files[0]);
             }
             dM_ArticleIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功。");
