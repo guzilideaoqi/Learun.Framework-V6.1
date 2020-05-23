@@ -108,6 +108,20 @@ namespace Learun.Application.Web.App_Start._01_Handler
             }.ToJson());
         }
 
+        protected virtual ActionResult SuccessList(string info, object data, object Extend)
+        {
+            return Content(new ResParameter
+            {
+                code = ResponseCode.success,
+                info = info,
+                data = new
+                {
+                    list = data,
+                    Extend = Extend
+                }
+            }.ToJson());
+        }
+
         protected virtual ActionResult NoRelationID(string info)
         {
             return Content(new ResParameter

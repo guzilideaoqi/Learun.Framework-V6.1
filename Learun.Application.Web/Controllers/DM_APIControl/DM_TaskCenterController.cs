@@ -365,7 +365,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     page = PageNo,
                     rows = PageSize
-                }, appid));
+                }, appid), new { HeadImage = "http://dlm-appmanage.oss-cn-beijing.aliyuncs.com/20200523/81ce199c-a046-494f-8101-57a9da4e0724.png" });
             }
             catch (Exception ex)
             {

@@ -939,7 +939,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (goodItems == null)
                 {
                     PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
-                    //goodItems = pDDApi.SearchGood(keyWord, pageIndex, pageSize, sort, with_coupon, cat_id);
+                    goodItems = pDDApi.SearchGood(keyWord, pageIndex, pageSize, sort, with_coupon, cat_id);
 
                     if (goodItems.Count > 0)
                     {
@@ -982,7 +982,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (goodItems == null)
                 {
                     PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
-                    //goodItems = pDDApi.GetRecommendGood(channel_type, "", pageSize, "", pageSize * pageIndex, "", cat_id);
+                    goodItems = pDDApi.GetRecommendGood(channel_type, "", pageSize, "", pageSize * pageIndex, "", cat_id);
 
                     if (goodItems.Count > 0)
                     {
