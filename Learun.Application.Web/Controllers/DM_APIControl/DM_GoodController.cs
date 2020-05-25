@@ -300,7 +300,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                return SuccessList("获取成功!", superGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
+                return SuccessList("获取成功!", superGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
             }
             catch (Exception ex)
             {
@@ -349,7 +349,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                return SuccessList("获取成功!", superGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
+                return SuccessList("获取成功!", superGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
             }
             catch (Exception ex)
             {
@@ -394,7 +394,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                return SuccessList("获取成功!", oPGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
+                return SuccessList("获取成功!", oPGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
             }
             catch (Exception ex)
             {
@@ -505,7 +505,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     redisCache.Write(cacheKey, activityGoodItems, DateTime.Now.AddHours(2.0), 7L);
                 }
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-                return SuccessList("获取成功!", activityGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
+                return SuccessList("获取成功!", activityGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
             }
             catch (Exception ex)
             {
@@ -590,7 +590,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                return SuccessList("获取成功!", topicGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
+                return SuccessList("获取成功!", topicGoodItems.Select(t => { t.LevelCommission = GetCommissionRate(t.actualPrice, t.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetCommissionRate(t.actualPrice, t.commissionRate, 2, dm_BasesettingEntity); return t; }));
             }
             catch (Exception ex)
             {
@@ -706,7 +706,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 req.OnlineScene = "1";
                 req.InviterCode = "PCUMX2";
                 req.InfoType = 1L;
-                req.Note = "测试";
+                req.Note = "哆来米代理申请";
                 req.RegisterInfo = "{\"phoneNumber\":\"18801088599\",\"city\":\"江苏省\",\"province\":\"南京市\",\"location\":\"玄武区花园小区\",\"detailAddress\":\"5号楼3单元101室\"}";
                 TbkScPublisherInfoSaveResponse rsp = client.Execute(req, SessionKey);
                 if (rsp.Data == null)
@@ -825,7 +825,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                return SuccessList("获取成功!", jFGoodsRespRows.Select(t => { t.LevelCommission = GetJDCommissionRate(t.couponCommission, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetJDCommissionRate(t.couponCommission, 2, dm_BasesettingEntity); return t; }));
+                return SuccessList("获取成功!", jFGoodsRespRows.Select(t => { t.LevelCommission = GetJDCommissionRate(t.couponCommission, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetJDCommissionRate(t.couponCommission, 2, dm_BasesettingEntity); return t; }));
             }
             catch (Exception ex)
             {
@@ -952,7 +952,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                return SuccessList("获取成功!", goodItems.Select(t => { t.LevelCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, 2, dm_BasesettingEntity); return t; }));
+                return SuccessList("获取成功!", goodItems.Select(t => { t.LevelCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, 2, dm_BasesettingEntity); return t; }));
             }
             catch (Exception ex)
             {
@@ -995,7 +995,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                return SuccessList("获取成功!", goodItems.Select(t => { t.LevelCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, 2, dm_BasesettingEntity); return t; }));
+                return SuccessList("获取成功!", goodItems.Select(t => { t.LevelCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetPDDCommissionRate(t.min_group_price - t.coupon_discount, t.promotion_rate, 2, dm_BasesettingEntity); return t; }));
             }
             catch (Exception ex)
             {
