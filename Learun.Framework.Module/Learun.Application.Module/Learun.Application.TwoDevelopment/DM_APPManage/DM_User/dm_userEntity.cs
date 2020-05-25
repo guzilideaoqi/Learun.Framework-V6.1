@@ -157,7 +157,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// ÇþµÀid
         /// </summary>
 		[Column("TB_RELATIONID")]
-        public int? tb_relationid
+        public string tb_relationid
         {
             get;
             set;
@@ -166,7 +166,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// ¸úµ¥ÇþµÀid
         /// </summary>
 		[Column("TB_ORDERRELATIONID")]
-        public int? tb_orderrelationid
+        public string tb_orderrelationid
         {
             get;
             set;

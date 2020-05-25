@@ -405,7 +405,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 strSql.Append(fieldSql);
                 strSql.Append(" FROM dm_order t where userid=" + user_id);
                 strSql.Append(" and type_big=" + plaformType);
-                strSql.Append(" and order_type_new=" + status);
+                if (status != 0)
+                    strSql.Append(" and order_type_new=" + status);
                 IEnumerable<dm_orderEntity> dm_OrderEntities = BaseRepository("dm_data").FindList<dm_orderEntity>(strSql.ToString(), pagination);
 
                 return dm_OrderEntities;
