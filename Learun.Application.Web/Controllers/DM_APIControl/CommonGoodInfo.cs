@@ -18,19 +18,21 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <summary>
         /// 优惠券金额
         /// </summary>
-        public decimal coupon_price { get; set; }
+        public string coupon_price { get; set; }
         /// <summary>
         /// 商品原件
         /// </summary>
-        public decimal origin_price { get; set; }
+        public string origin_price { get; set; }
         /// <summary>
         /// 券后价
         /// </summary>
-        public decimal coupon_after_price { get; set; }
+        public string coupon_after_price { get; set; }
         /// <summary>
         /// 平台  1淘宝 2京东  3拼多多
         /// </summary>
         public int plaform { get; set; }
+
+        public string image { get; set; }
 
         public string[] images { get; set; }
         /// <summary>
@@ -56,7 +58,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <summary>
         /// 月销量
         /// </summary>
-        public int month_sales { get; set; }
+        public long month_sales { get; set; }
 
         /// <summary>
         /// 初级佣金金额

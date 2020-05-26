@@ -202,26 +202,31 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                string cacheKey = "UserInfo" + id.ToString();
-                dm_userEntity dm_UserEntity = redisCache.Read<dm_userEntity>(cacheKey, 7L);
-                if (dm_UserEntity.IsEmpty())
+                dm_userEntity dm_UserEntity = null;
+                if (id > 0)
                 {
-                    dm_UserEntity = GetEntity(id);
-
-                    if (!dm_UserEntity.IsEmpty())
+                    string cacheKey = "UserInfo" + id.ToString();
+                    dm_UserEntity = redisCache.Read<dm_userEntity>(cacheKey, 7L);
+                    if (dm_UserEntity.IsEmpty())
                     {
-                        dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(id);
+                        dm_UserEntity = GetEntity(id);
 
-                        if (!dm_User_RelationEntity.IsEmpty())
+                        if (!dm_UserEntity.IsEmpty())
                         {
-                            dm_UserEntity.currentmontheffect = dm_User_RelationEntity.CurrentMonthEffect;
-                            dm_UserEntity.currentmonthreceiveeffect = dm_User_RelationEntity.CurrentMonthReceiveEffect;
-                            dm_UserEntity.upmonthreceiveeffect = dm_User_RelationEntity.UpMonthReceiveEffect;
-                        }
+                            dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(id);
 
-                        redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddMinutes(10), 7L);
+                            if (!dm_User_RelationEntity.IsEmpty())
+                            {
+                                dm_UserEntity.currentmontheffect = dm_User_RelationEntity.CurrentMonthEffect;
+                                dm_UserEntity.currentmonthreceiveeffect = dm_User_RelationEntity.CurrentMonthReceiveEffect;
+                                dm_UserEntity.upmonthreceiveeffect = dm_User_RelationEntity.UpMonthReceiveEffect;
+                            }
+
+                            redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddMinutes(10), 7L);
+                        }
                     }
                 }
+
 
                 return dm_UserEntity;
             }
