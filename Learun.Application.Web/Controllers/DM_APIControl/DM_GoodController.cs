@@ -825,7 +825,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                return SuccessList("获取成功!", jFGoodsRespRows.Select(t => { t.LevelCommission = GetJDCommissionRate(t.couponCommission, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetJDCommissionRate(t.couponCommission, 2, dm_BasesettingEntity); return t; }));
+                IEnumerable<JFGoodsRespRow> jFGoodsRespRows1 = jFGoodsRespRows.Select(t => { t.LevelCommission = GetJDCommissionRate(t.couponCommission, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity); t.SuperCommission = GetJDCommissionRate(t.couponCommission, 2, dm_BasesettingEntity); return t; });
+
+                return SuccessList("获取成功!", jFGoodsRespRows1);
             }
             catch (Exception ex)
             {
@@ -872,6 +874,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 return FailException(ex);
             }
         }
+        #endregion
+
+        #region 京东商品搜索查询
+        //public ActionResult Get_JD_SearchGoodList(int User_ID,)
         #endregion
 
         public ActionResult Get_JD_Order()
@@ -1221,5 +1227,16 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             return base.Request.Headers["appid"].ToString();
         }
+
+
+
+        #region 商品数据转公用类
+        void ConvertCommonGoodEntityByJF(IEnumerable<JFGoodsRespRow> jFGoodsRespRows) {
+            foreach (var item in jFGoodsRespRows)
+            {
+
+            }
+        }
+        #endregion
     }
 }

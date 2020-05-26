@@ -238,6 +238,7 @@
     <Compile Include="Areas\LR_WorkFlowModule\LR_WorkFlowModuleAreaRegistration.cs" />
     <Compile Include="Controllers\DM_APIControl\A_PayController.cs" />
     <Compile Include="Controllers\DM_APIControl\BannerInfo.cs" />
+    <Compile Include="Controllers\DM_APIControl\CommonGoodInfo.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_ExtendOperateController.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_GoodController.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_TaskCenterController.cs" />
