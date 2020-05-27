@@ -40,6 +40,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// </summary>
         public string coupon_start_time { get; set; }
         /// <summary>
+        /// 优惠券链接
+        /// </summary>
+        public string coupon_link { get; set; }
+        /// <summary>
         /// 优惠券结束时间
         /// </summary>
         public string coupon_end_time { get; set; }
@@ -68,5 +72,26 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// 高级佣金金额
         /// </summary>
         public decimal SuperCommission { get; set; }
+        /// <summary>
+        /// 商品描述
+        /// </summary>
+        public string remark { get; set; }
+        /// <summary>
+        /// 服务态度
+        /// </summary>
+        public string afterServiceScore { get; set; }
+        /// <summary>
+        /// 描述相符
+        /// </summary>
+        public string userEvaluateScore { get; set; }
+        /// <summary>
+        /// 物流服务
+        /// </summary>
+        public string logisticsLvyueScore { get; set; }
+
+        /// <summary>
+        /// 所属缓存表的key值
+        /// </summary>
+        public string cacheKey { get; set; }
     }
 }
