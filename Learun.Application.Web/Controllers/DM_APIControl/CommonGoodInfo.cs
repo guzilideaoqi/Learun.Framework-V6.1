@@ -30,7 +30,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <summary>
         /// 平台  1淘宝 2京东  3拼多多
         /// </summary>
-        public int plaform { get; set; }
+        public int PlaformType { get; set; }
 
         public string image { get; set; }
 

@@ -215,7 +215,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     {
                         Title = "实惠",
                         SubTitle = "品质生活",
-                        SmallType = 6
+                        SmallType = 7
                     });
                     redisCache.Write(cacheKey, smallCateList, 7L);
                 }
@@ -263,18 +263,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 三合一超级搜索接口
-        public ActionResult CommonSearchGood(int user_id = 0, int plaform = 1, int PageNo = 1, int PageSize = 10, string KeyWords = "", int sort = 0)
+        public ActionResult CommonSearchGood(int user_id = 0, int PlaformType = 1, int PageNo = 1, int PageSize = 10, string KeyWords = "", int sort = 0)
         {
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = Md5Helper.Hash("CommonSearchGood" + plaform + PageNo + PageSize + KeyWords + sort);
+                string cacheKey = Md5Helper.Hash("CommonSearchGood" + PlaformType + PageNo + PageSize + KeyWords + sort);
                 List<CommonGoodInfo> superGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
                 if (superGoodItems == null)
                 {
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-                    if (plaform == 1)
+                    if (PlaformType == 1)
                     {
                         DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                         DTK_Super_GoodRequest dTK_Super_GoodRequest = new DTK_Super_GoodRequest();
@@ -285,7 +285,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         dTK_Super_GoodRequest.keyWords = KeyWords;
                         dTK_Super_GoodRequest.tmall = 0;
                         dTK_Super_GoodRequest.haitao = 0;
-                        dTK_Super_GoodRequest.sort = GetSort(plaform, sort);
+                        dTK_Super_GoodRequest.sort = GetSort(PlaformType, sort);
                         DTK_Super_GoodResponse dTK_Super_GoodResponse = dTK_ApiManage.GetSuperGood(dTK_Super_GoodRequest);
                         if (dTK_Super_GoodResponse.code != 0)
                         {
@@ -293,15 +293,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         }
                         superGoodItems = ConvertCommonGoodEntityBySuperGood(dTK_Super_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
-                    else if (plaform == 2)
+                    else if (PlaformType == 3)
                     {
                         JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
-                        superGoodItems = ConvertCommonGoodEntityByJTT(jDApi.GetJTT_GoodItemInfoList(KeyWords, PageNo, PageSize, 0, 0, 0, GetSort(plaform, sort)), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                        superGoodItems = ConvertCommonGoodEntityByJTT(jDApi.GetJTT_GoodItemInfoList(KeyWords, PageNo, PageSize, 0, 0, 0, GetSort(PlaformType, sort)), dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
-                    else if (plaform == 3)
+                    else if (PlaformType == 4)
                     {
                         PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
-                        superGoodItems = ConvertCommonGoodEntityByPDD(pDDApi.SearchGood(KeyWords, PageNo, PageSize, int.Parse(GetSort(plaform, sort)), false, -1), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                        superGoodItems = ConvertCommonGoodEntityByPDD(pDDApi.SearchGood(KeyWords, PageNo, PageSize, int.Parse(GetSort(PlaformType, sort)), false, -1), dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
                     if (superGoodItems.Count > 0)
                         redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -336,7 +336,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         break;
                 }
             }
-            else if (plaform == 2)
+            else if (plaform == 3)
             {
                 switch (sort)
                 {
@@ -354,7 +354,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         break;
                 }
             }
-            else if (plaform == 3)
+            else if (plaform == 4)
             {
                 switch (sort)
                 {
@@ -945,7 +945,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
 
                     JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
-                    jFGoodsRespRows = ConvertCommonGoodEntityByJF(jDApi.GetGoodList(eliteId, pageIndex, pageSize, sortname, sort), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    //jFGoodsRespRows = ConvertCommonGoodEntityByJF(jDApi.GetGoodList(eliteId, pageIndex, pageSize, sortname, sort), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    jFGoodsRespRows= ConvertCommonGoodEntityByJTT(jDApi.GetJTT_GoodItemInfoList("女装", 1, 20, 0, 0, -1, ""), dm_UserEntity, dm_BasesettingEntity, cacheKey);
 
                     if (jFGoodsRespRows.Count > 0)
                     {
@@ -1444,7 +1445,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     month_sales = item.inOrderCount30Days,
                     LevelCommission = GetJDCommissionRate(item.couponCommission, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetJDCommissionRate(item.couponCommission, 2, dm_BasesettingEntity),
-                    plaform = 2,
+                    PlaformType = 3,
                     afterServiceScore = "4.9",
                     logisticsLvyueScore = "4.85",
                     userEvaluateScore = "4.8",
@@ -1490,7 +1491,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     month_sales = item.inOrderCount30Days,
                     LevelCommission = GetJDCommissionRate(Math.Round((double)(item.coupon_price * item.commission / 100), 2), dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetJDCommissionRate(Math.Round((double)(item.coupon_price * item.commission / 100), 2), 2, dm_BasesettingEntity),
-                    plaform = 2,
+                    PlaformType = 3,
                     afterServiceScore = score == null ? "-" : score.afterServiceScore,
                     logisticsLvyueScore = score == null ? "-" : score.logisticsLvyueScore,
                     userEvaluateScore = score == null ? "-" : score.userEvaluateScore,
@@ -1523,7 +1524,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_after_price = Math.Round((item.min_group_price - item.coupon_discount) / 100, 2).ToString(),
                     coupon_price = Math.Round(item.coupon_discount / 100, 2).ToString(),
                     origin_price = Math.Round(item.min_group_price / 100, 2).ToString(),
-                    coupon_end_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    coupon_end_time = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss"),
                     coupon_start_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     detail_images = images,
                     images = images,
@@ -1531,7 +1532,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     month_sales = item.coupon_total_quantity,
                     LevelCommission = GetPDDCommissionRate(item.min_group_price - item.coupon_discount, item.promotion_rate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetPDDCommissionRate(item.min_group_price - item.coupon_discount, item.promotion_rate, 2, dm_BasesettingEntity),
-                    plaform = 3,
+                    PlaformType = 4,
                     afterServiceScore = item.serv_txt,
                     logisticsLvyueScore = item.lgst_txt,
                     userEvaluateScore = item.desc_txt,
@@ -1564,15 +1565,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
                     origin_price = item.originalPrice.ToString(),
-                    coupon_end_time = item.couponStartTime,
-                    coupon_start_time = item.couponEndTime,
+                    coupon_end_time = item.couponEndTime,
+                    coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
                     image = item.mainPic,
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
-                    plaform = 1,
+                    PlaformType = 1,
                     afterServiceScore = "-",
                     logisticsLvyueScore = "-",
                     userEvaluateScore = "-",
@@ -1605,15 +1606,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
                     origin_price = item.originalPrice.ToString(),
-                    coupon_end_time = item.couponStartTime,
-                    coupon_start_time = item.couponEndTime,
+                    coupon_end_time = item.couponEndTime,
+                    coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
                     image = item.mainPic,
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
-                    plaform = 1,
+                    PlaformType = 1,
                     afterServiceScore = item.serviceScore.ToString(),
                     logisticsLvyueScore = item.serviceScore.ToString(),
                     userEvaluateScore = item.descScore.ToString(),
@@ -1645,15 +1646,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
                     origin_price = item.originalPrice.ToString(),
-                    coupon_end_time = item.couponStartTime,
-                    coupon_start_time = item.couponEndTime,
+                    coupon_end_time = item.couponEndTime,
+                    coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
                     image = item.mainPic,
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
-                    plaform = 1,
+                    PlaformType = 1,
                     afterServiceScore = item.serviceScore.ToString(),
                     logisticsLvyueScore = item.serviceScore.ToString(),
                     userEvaluateScore = item.descScore.ToString(),
@@ -1686,15 +1687,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
                     origin_price = item.originalPrice.ToString(),
-                    coupon_end_time = item.couponStartTime,
-                    coupon_start_time = item.couponEndTime,
+                    coupon_end_time = item.couponEndTime,
+                    coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
                     image = item.mainPic,
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
-                    plaform = 1,
+                    PlaformType = 1,
                     afterServiceScore = item.serviceScore.ToString(),
                     logisticsLvyueScore = item.serviceScore.ToString(),
                     userEvaluateScore = item.descScore.ToString(),
@@ -1727,15 +1728,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
                     origin_price = item.originalPrice.ToString(),
-                    coupon_end_time = item.couponStartTime,
-                    coupon_start_time = item.couponEndTime,
+                    coupon_end_time = item.couponEndTime,
+                    coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
                     image = item.mainPic,
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
-                    plaform = 1,
+                    PlaformType = 1,
                     afterServiceScore = item.serviceScore.ToString(),
                     logisticsLvyueScore = item.serviceScore.ToString(),
                     userEvaluateScore = item.descScore.ToString(),
@@ -1770,15 +1771,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
                     origin_price = item.originalPrice.ToString(),
-                    coupon_end_time = item.couponStartTime,
-                    coupon_start_time = item.couponEndTime,
+                    coupon_end_time = item.couponEndTime,
+                    coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
                     image = item.mainPic,
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
-                    plaform = 1,
+                    PlaformType = 1,
                     afterServiceScore = item.serviceScore.ToString(),
                     logisticsLvyueScore = item.serviceScore.ToString(),
                     userEvaluateScore = item.descScore.ToString(),
