@@ -296,7 +296,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     else if (PlaformType == 3)
                     {
                         JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
-                        superGoodItems = ConvertCommonGoodEntityByJTT(jDApi.GetJTT_GoodItemInfoList(KeyWords, PageNo, PageSize, 0, 0, 0, GetSort(PlaformType, sort)), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                        superGoodItems = ConvertCommonGoodEntityByJF(jDApi.GetJTT_SearchGoodItemList(KeyWords, PageNo, PageSize, 0, 0, GetSort(PlaformType, sort)), dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
                     else if (PlaformType == 4)
                     {
@@ -341,16 +341,16 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 switch (sort)
                 {
                     case 1:
-                        sortName = "finally";
+                        sortName = "1";
                         break;
                     case 2:
-                        sortName = "finally_desc";
+                        sortName = "2";
                         break;
                     case 3:
-                        sortName = "sale_asc";
+                        sortName = "3";
                         break;
                     case 4:
-                        sortName = "sale";
+                        sortName = "4";
                         break;
                 }
             }
@@ -945,8 +945,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
 
                     JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
-                    //jFGoodsRespRows = ConvertCommonGoodEntityByJF(jDApi.GetGoodList(eliteId, pageIndex, pageSize, sortname, sort), dm_UserEntity, dm_BasesettingEntity, cacheKey);
-                    jFGoodsRespRows= ConvertCommonGoodEntityByJTT(jDApi.GetJTT_GoodItemInfoList("女装", 1, 20, 0, 0, -1, ""), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    jFGoodsRespRows = ConvertCommonGoodEntityByJF(jDApi.GetGoodList(eliteId, pageIndex, pageSize, sortname, sort), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    //jFGoodsRespRows= ConvertCommonGoodEntityByJTT(jDApi.GetJTT_GoodItemInfoList("女装", 1, 20, 0, 0, -1, ""), dm_UserEntity, dm_BasesettingEntity, cacheKey);
 
                     if (jFGoodsRespRows.Count > 0)
                     {
@@ -1449,8 +1449,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     afterServiceScore = "4.9",
                     logisticsLvyueScore = "4.85",
                     userEvaluateScore = "4.8",
-                    remark = "",
-                    coupon_link = "",
+                    remark = item.brandName,
+                    coupon_link = item.link,
                     cacheKey = cacheKey
                 });
             }
@@ -1492,9 +1492,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     LevelCommission = GetJDCommissionRate(Math.Round((double)(item.coupon_price * item.commission / 100), 2), dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetJDCommissionRate(Math.Round((double)(item.coupon_price * item.commission / 100), 2), 2, dm_BasesettingEntity),
                     PlaformType = 3,
-                    afterServiceScore = score == null ? "-" : score.afterServiceScore,
-                    logisticsLvyueScore = score == null ? "-" : score.logisticsLvyueScore,
-                    userEvaluateScore = score == null ? "-" : score.userEvaluateScore,
+                    afterServiceScore = score == null ? "-" : GetScore(score.afterServiceScore),
+                    logisticsLvyueScore = score == null ? "-" : GetScore(score.logisticsLvyueScore),
+                    userEvaluateScore = score == null ? "-" : GetScore(score.userEvaluateScore),
                     remark = item.goods_content,
                     coupon_link = item.discount_link,
                     cacheKey = cacheKey
@@ -1533,9 +1533,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     LevelCommission = GetPDDCommissionRate(item.min_group_price - item.coupon_discount, item.promotion_rate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetPDDCommissionRate(item.min_group_price - item.coupon_discount, item.promotion_rate, 2, dm_BasesettingEntity),
                     PlaformType = 4,
-                    afterServiceScore = item.serv_txt,
-                    logisticsLvyueScore = item.lgst_txt,
-                    userEvaluateScore = item.desc_txt,
+                    afterServiceScore = GetScore(item.serv_txt),
+                    logisticsLvyueScore = GetScore(item.lgst_txt),
+                    userEvaluateScore = GetScore(item.desc_txt),
                     remark = item.goods_desc,
                     coupon_link = item.mall_coupon_id,
                     cacheKey = cacheKey
@@ -1574,9 +1574,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
                     PlaformType = 1,
-                    afterServiceScore = "-",
-                    logisticsLvyueScore = "-",
-                    userEvaluateScore = "-",
+                    afterServiceScore = GetScore(null),
+                    logisticsLvyueScore = GetScore(null),
+                    userEvaluateScore = GetScore(null),
                     remark = item.desc,
                     coupon_link = item.couponLink,
                     cacheKey = cacheKey
@@ -1615,9 +1615,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
                     PlaformType = 1,
-                    afterServiceScore = item.serviceScore.ToString(),
-                    logisticsLvyueScore = item.serviceScore.ToString(),
-                    userEvaluateScore = item.descScore.ToString(),
+                    afterServiceScore = GetScore(item.serviceScore.ToString()),
+                    logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
+                    userEvaluateScore = GetScore(item.descScore.ToString()),
                     remark = item.desc,
                     coupon_link = item.couponLink,
                     cacheKey = cacheKey
@@ -1655,9 +1655,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
                     PlaformType = 1,
-                    afterServiceScore = item.serviceScore.ToString(),
-                    logisticsLvyueScore = item.serviceScore.ToString(),
-                    userEvaluateScore = item.descScore.ToString(),
+                    afterServiceScore = GetScore(item.serviceScore.ToString()),
+                    logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
+                    userEvaluateScore = GetScore(item.descScore.ToString()),
                     remark = item.desc,
                     coupon_link = item.couponLink,
                     cacheKey = cacheKey
@@ -1696,9 +1696,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
                     PlaformType = 1,
-                    afterServiceScore = item.serviceScore.ToString(),
-                    logisticsLvyueScore = item.serviceScore.ToString(),
-                    userEvaluateScore = item.descScore.ToString(),
+                    afterServiceScore = GetScore(item.serviceScore.ToString()),
+                    logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
+                    userEvaluateScore = GetScore(item.descScore.ToString()),
                     remark = item.desc,
                     coupon_link = item.couponLink,
                     cacheKey = cacheKey
@@ -1737,9 +1737,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
                     PlaformType = 1,
-                    afterServiceScore = item.serviceScore.ToString(),
-                    logisticsLvyueScore = item.serviceScore.ToString(),
-                    userEvaluateScore = item.descScore.ToString(),
+                    afterServiceScore = GetScore(item.serviceScore.ToString()),
+                    logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
+                    userEvaluateScore = GetScore(item.descScore.ToString()),
                     remark = item.desc,
                     coupon_link = item.couponLink,
                     cacheKey = cacheKey
@@ -1780,9 +1780,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
                     PlaformType = 1,
-                    afterServiceScore = item.serviceScore.ToString(),
-                    logisticsLvyueScore = item.serviceScore.ToString(),
-                    userEvaluateScore = item.descScore.ToString(),
+                    afterServiceScore = GetScore(item.serviceScore.ToString()),
+                    logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
+                    userEvaluateScore = GetScore(item.descScore.ToString()),
                     remark = item.desc,
                     coupon_link = item.couponLink,
                     cacheKey = cacheKey
@@ -1790,6 +1790,30 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
 
             return commonGoodInfoList;
+        }
+
+        string GetScore(string score)
+        {
+            if (score == null)
+                return "-";
+            else
+            {
+                decimal scoreValue = 0;
+
+                if (decimal.TryParse(score, out scoreValue))
+                {
+                    if (scoreValue <= 0)
+                        return "低";
+                    else if (scoreValue >= 10)
+                        return "高";
+                    else
+                        return score;
+                }
+                else
+                {
+                    return score;
+                }
+            }
         }
         #endregion
     }
