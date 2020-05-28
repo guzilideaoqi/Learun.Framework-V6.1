@@ -828,7 +828,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string appid = CheckAPPID();
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-
+                //dm_BasesettingEntity.tb_appkey = "29236073";
+                //dm_BasesettingEntity.tb_appsecret = "29de7a8560d773736ef5bf568a7961bd";
                 ITopClient client = new DefaultTopClient(tb_url, dm_BasesettingEntity.tb_appkey, dm_BasesettingEntity.tb_appsecret);
                 TbkScPublisherInfoSaveRequest req = new TbkScPublisherInfoSaveRequest();
                 req.RelationFrom = "1";
@@ -841,6 +842,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 TbkScPublisherInfoSaveResponse rsp = client.Execute(req, SessionKey);
                 if (rsp.Data == null)
                     throw new Exception(rsp.SubErrMsg);
+
                 return Success("备案成功!", rsp.Data);
             }
             catch (Exception ex)
@@ -1395,9 +1397,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string appid = CheckAPPID();
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                string authorAddress = "https://oauth.taobao.com/authorize?response_type=code&client_id=" + dm_BasesettingEntity.tb_appkey + "&redirect_uri=http://wx.sqgsq.cn/TBUserInfoController/AuthorCallBack&state=" + user_id + "&view=web";
 
-                return Success("获取成功!", authorAddress);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+
+                string authorAddress = "https://oauth.taobao.com/authorize?response_type=code&client_id=" + dm_BasesettingEntity.tb_appkey + "&redirect_uri=http://wx.sqgsq.cn/TBUserInfoController/AuthorCallBack&state=" + user_id + "&view=wap";
+
+                return Success("获取成功!", new { authoraddress = authorAddress, isbeian = dm_UserEntity.isrelation_beian, tb_nickname = dm_UserEntity.tb_nickname });
             }
             catch (Exception ex)
             {

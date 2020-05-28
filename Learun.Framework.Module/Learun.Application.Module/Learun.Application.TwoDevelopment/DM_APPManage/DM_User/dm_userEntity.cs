@@ -339,6 +339,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("MYPARTNERSCOUNT")]
         public int? mypartnerscount { get; set; }
 
+        [Column("TB_NICKNAME")]
+        public string tb_nickname { get; set; }
+
+        [Column("ISRELATION_BEIAN")]
+        public int isrelation_beian { get; set; }
+
 
         public void Create()
         {
@@ -354,6 +360,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             mychildcount = 0;
             mysonchildcount = 0;
             mypartnerscount = 0;
+            isrelation_beian = 0;
         }
 
         public void Modify(int? keyValue)

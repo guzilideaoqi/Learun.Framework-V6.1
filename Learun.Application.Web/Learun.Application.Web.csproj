@@ -618,6 +618,7 @@
     <Content Include="Content\images\404.png" />
     <Content Include="Content\images\adminDefault.png" />
     <Content Include="Content\images\arrow1.png" />
+    <Content Include="Content\images\bg.png" />
     <Content Include="Content\images\codeGenerator\lc.png" />
     <Content Include="Content\images\codeGenerator\multitable.png" />
     <Content Include="Content\images\codeGenerator\multitable0.png" />
@@ -2327,6 +2328,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\TBUserInfoController\AuthorResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />
