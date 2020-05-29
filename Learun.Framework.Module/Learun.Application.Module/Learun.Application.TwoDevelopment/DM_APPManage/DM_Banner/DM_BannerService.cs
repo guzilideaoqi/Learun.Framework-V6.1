@@ -21,7 +21,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         public DM_BannerService()
         {
-            fieldSql = "    t.id,    t.b_type,    t.b_title,    t.b_image,    t.b_param,    t.appid,    t.createtime,    t.createcode";
+            fieldSql = "    t.id,    t.b_type,    t.b_title,    t.b_image,    t.b_param,    t.appid,    t.createtime,    t.createcode,t.isenable";
         }
 
         public IEnumerable<dm_bannerEntity> GetList(string queryJson)
@@ -32,10 +32,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 StringBuilder strSql = new StringBuilder();
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
-                strSql.Append(" FROM dm_banner t ");
+                strSql.Append(" FROM dm_banner t where t.isenable=1");
                 if (!queryParam["appid"].IsEmpty())
                 {
-                    strSql.Append(" where t.appid='" + queryParam["appid"].ToString() + "'");
+                    strSql.Append(" and t.appid='" + queryParam["appid"].ToString() + "'");
                 }
                 return BaseRepository("dm_data").FindList<dm_bannerEntity>(strSql.ToString());
             }
@@ -57,6 +57,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
                 strSql.Append(" FROM dm_banner t ");
+
+                UserInfo userInfo = LoginUserInfo.Get();
+                if (!userInfo.IsEmpty()) {
+                    strSql.Append(" where t.appid='" + userInfo.companyId + "'");
+                }
+
                 return BaseRepository("dm_data").FindList<dm_bannerEntity>(strSql.ToString(), pagination);
             }
             catch (Exception ex)

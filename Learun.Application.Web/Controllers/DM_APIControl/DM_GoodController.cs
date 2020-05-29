@@ -267,6 +267,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                KeyWords = KeyWords == "" ? "潮流" : KeyWords;
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("CommonSearchGood" + PlaformType + PageNo + PageSize + KeyWords + sort);
                 List<CommonGoodInfo> superGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);

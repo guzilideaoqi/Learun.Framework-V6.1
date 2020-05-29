@@ -61,6 +61,8 @@ var bootstrap = function ($, learun) {
                     $('#lr_layout_item' + _type).addClass('active');
                 }
             });
+
+            $("#openchecked").lrselect();
         },
     };
     page.init();

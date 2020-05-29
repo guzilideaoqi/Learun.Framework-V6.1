@@ -24,8 +24,9 @@ var bootstrap = function ($, learun) {
 
             $('#uploadFile').on('change', uploadImg);
 
-            // 是否需要运费
+            // 初始化下拉框
             $('#b_type').lrselect();
+            $("#isenable").lrselect();
         },
         initData: function () {
             var headimg;

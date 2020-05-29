@@ -5,9 +5,13 @@
 <link href="~/Content/webuploader/webuploader.css" rel="stylesheet" />
 @Html.AppendCssFile("/Areas/DM_APPManage/Views/DM_Banner/Form.css")
 <div class="lr-form-wrap" id="form">
-    <div class="col-xs-12 lr-form-item">
+    <div class="col-xs-6 lr-form-item">
         <div class="lr-form-item-title">导航图标题<font face="宋体">*</font></div>
         <input id="b_title" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">状态<font face="宋体">*</font></div>
+        <div id="isenable"><ul><li data-value="1">启用</li><li data-value="0">禁用</li></ul></div>
     </div>
     <div class="col-xs-6 lr-form-item">
         <div class="lr-form-item-title">导航图类型<font face="宋体">*</font></div>

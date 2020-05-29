@@ -395,7 +395,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("OSS_BUKETNAME")]
         public string oss_buketname { get; set; }
 
-
+        /// <summary>
+        /// 审核模式  1开启  0关闭
+        /// </summary>
+        [Column("OPENCHECKED")]
+        public string openchecked { get; set; }
         public void Create()
         {
             UserInfo userInfo = LoginUserInfo.Get();

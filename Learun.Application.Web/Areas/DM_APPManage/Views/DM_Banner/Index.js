@@ -78,7 +78,7 @@ var bootstrap = function ($, learun) {
                             switch (cellvalue) {
 
                                 case 0:
-                                    returnValue= "首页导航";
+                                    returnValue = "首页导航";
                                     break;
                                 case 1:
                                     returnValue = "京东导航";
@@ -93,6 +93,15 @@ var bootstrap = function ($, learun) {
                     { label: '导航图标题', name: 'b_title', width: 200, align: "left" },
                     { label: '导航图图片地址', name: 'b_image', width: 200, align: "left" },
                     { label: '导航图参数', name: 'b_param', width: 200, align: "left" },
+                    {
+                        label: '状态', name: 'isenable', width: 100, align: "left", formatter: function (cellvalue, rowdata, options) {
+                            if (cellvalue == 1) {
+                                return '<span class=\"label label-success\" style=\"cursor: pointer;\">启用</span>';
+                            } else if (cellvalue == 0) {
+                                return '<span class=\"label label-default\" style=\"cursor: pointer;\">禁用</span>';
+                            }
+                        }
+                    },
                     { label: 'appid', name: 'appid', width: 200, align: "left" },
                     { label: 'createtime', name: 'createtime', width: 200, align: "left" },
                     { label: 'createcode', name: 'createcode', width: 200, align: "left" },

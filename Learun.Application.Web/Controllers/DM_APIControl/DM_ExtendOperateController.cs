@@ -97,7 +97,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
                 return Success("获取成功", new
                 {
-                    isAppStorePreview = ((base.Request.Headers["version"].ToString() == dm_BasesettingEntity.previewversion) ? 1 : 0)
+                    //isAppStorePreview = ((base.Request.Headers["version"].ToString() == dm_BasesettingEntity.previewversion) ? 1 : 0)
+                    previewversion = dm_BasesettingEntity.previewversion,
+                    ischecked = dm_BasesettingEntity.openchecked
                 });
             }
             catch (Exception ex)
@@ -390,12 +392,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-;                string cacheKey = "AreaInfo" + parentID;
+                ; string cacheKey = "AreaInfo" + parentID;
                 List<AreaEntity> areaEntities = redisCache.Read<List<AreaEntity>>(cacheKey, 7);
 
-                if (areaEntities == null) {
-                    areaEntities = areaIBLL.GetList(parentID,true);
-                    if (areaEntities.Count > 0) {
+                if (areaEntities == null)
+                {
+                    areaEntities = areaIBLL.GetList(parentID, true);
+                    if (areaEntities.Count > 0)
+                    {
                         redisCache.Write<List<AreaEntity>>(cacheKey, areaEntities, 7);
                     }
                 }

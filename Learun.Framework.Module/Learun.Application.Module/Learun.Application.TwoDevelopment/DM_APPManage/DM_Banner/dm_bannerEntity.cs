@@ -63,13 +63,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
+        /// <summary>
+        /// ÆôÓÃ×´Ì¬
+        /// </summary>
+        [Column("ISENABLE")]
+        public int? isenable { get; set; }
+
 		public void Create()
 		{
 			UserInfo userInfo = LoginUserInfo.Get();
 			createtime = DateTime.Now;
 			createcode = userInfo.userId;
 			appid = userInfo.companyId;
-		}
+            isenable = 0;
+
+        }
 
 		public void Modify(int? keyValue)
 		{
