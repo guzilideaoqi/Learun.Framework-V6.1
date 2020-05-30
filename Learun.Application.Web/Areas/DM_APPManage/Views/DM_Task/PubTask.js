@@ -28,7 +28,7 @@ var bootstrap = function ($, learun) {
                     return false;
                 }
                 var postData = $('#form').lrGetFormData();
-                postData["task_description"] = ue.getContent(null, null, true);
+                postData["task_operate"] = ue.getContent(null, null, true);
                 keyValue = (keyValue == null || keyValue == "") ? 0 : keyValue;
                 $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Task/PubNewTask?keyValue=' + keyValue, postData, function (res) {
                     // 保存成功后才回调

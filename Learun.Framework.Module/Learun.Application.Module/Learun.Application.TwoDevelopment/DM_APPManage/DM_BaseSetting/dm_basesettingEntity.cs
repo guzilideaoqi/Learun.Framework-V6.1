@@ -400,6 +400,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("OPENCHECKED")]
         public string openchecked { get; set; }
+
+        /// <summary>
+        /// 任务规则
+        /// </summary>
+        [Column("TASK_RULE")]
+        public string task_rule { get; set; }
+
         public void Create()
         {
             UserInfo userInfo = LoginUserInfo.Get();

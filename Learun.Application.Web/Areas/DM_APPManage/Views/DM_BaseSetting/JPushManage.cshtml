@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "jp";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">推送对象<font face="宋体">*</font></div>
+        <div class="form-control">
+            <label>
+                <input type="radio"   name="jpush_object" value="0" />
+                全部
+            </label>
+            <label>
+                <input type="radio" name="jpush_object" value="1" />
+                ios
+            </label>
+            <label>
+                <input type="radio" name="jpush_object" value="2" />
+                android
+            </label>
+        </div>
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">通知内容<font face="宋体">*</font></div>
+        <div>
+            <input id="ALERT"  class="form-control" type="text" value=""  isvalid="yes" checkexpession="NotNull" />
+        </div>
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">推送标题<font face="宋体">*</font></div>
+        <div>
+            <input id="TITLE"  class="form-control" type="text" value=""  isvalid="no" checkexpession="NotNull" />
+        </div>
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">推送内容<font face="宋体">*</font></div>
+        <div>
+            <input id="MSG_CONTENT"  class="form-control" type="text" value=""  isvalid="no" checkexpession="NotNull" />
+        </div>
+    </div>
+    <div id="PubTask" class="col-xs-6 lr-form-item" >
+        <div class="lr-form-item-title"></div>
+        <div style="max-width:200px; font-size:18px;color:white;text-align:center; height: 49px;line-height: 49px;z-index: 1010;border-radius:5px;background-color:forestgreen;">
+            立即推送
+        </div>
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_BaseSetting/JPushManage.js")

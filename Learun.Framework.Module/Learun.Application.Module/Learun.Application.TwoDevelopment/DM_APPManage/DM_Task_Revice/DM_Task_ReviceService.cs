@@ -180,6 +180,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
+                if (user_id <= 0)
+                    return null;
                 return this.BaseRepository("dm_data").FindEntity<dm_task_reviceEntity>(t => t.user_id == user_id && t.task_id == task_id);
             }
             catch (Exception ex)
@@ -200,7 +202,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="user_id"></param>
         /// <returns></returns>
-        public DataTable GetMyReviceTask(int user_id,int TaskStatus, Pagination pagination)
+        public DataTable GetMyReviceTask(int user_id, int TaskStatus, Pagination pagination)
         {
             try
             {

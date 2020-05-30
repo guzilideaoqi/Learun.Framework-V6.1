@@ -65,7 +65,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson) {
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        {
             try
             {
                 return dM_TaskService.GetPageListByDataTable(pagination, queryJson);
@@ -107,6 +108,28 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        /// <summary>
+        /// 增加任务详情拓展方法(解决实体中不包含发单人信息)
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, object> GetTaskDetail(int? id)
+        {
+            try
+            {
+                return dM_TaskService.GetTaskDetail(id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
 
         #region 提交数据

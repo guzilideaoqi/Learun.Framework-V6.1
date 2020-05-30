@@ -46,11 +46,27 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取任务列表
-        public ActionResult GetTaskList(int PageNo = 1, int PageSize = 20, string TaskType = "-1")
+        public ActionResult GetTaskList(int PageNo = 1, int PageSize = 20, string TaskType = "-1", int sort = 0)
         {
             try
             {
                 string appid = CheckAPPID();
+
+                #region 排序字段更新
+                string sidx = "sort", sord = "desc";
+                switch (sort)
+                {
+                    case 1:
+                        sidx = "plaform";
+                        break;
+                    case 2:
+                        sidx = "createtime";
+                        break;
+                    case 3:
+                        sidx = "singlecommission";
+                        break;
+                }
+                #endregion
 
                 string queryDiction = "";
                 if (TaskType == "-1")
@@ -61,13 +77,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\"}";
                 }
-
-                return SuccessList("获取成功!", dm_TaskIBLL.GetPageList(new Pagination
+                return SuccessList("获取成功!", dm_TaskIBLL.GetPageListByDataTable(new Pagination
                 {
                     page = PageNo,
                     rows = PageSize,
-                    sidx = "sort",
-                    sord = "desc"
+                    sidx = sidx,
+                    sord = sord
                 }, queryDiction));
             }
             catch (Exception ex)
@@ -235,11 +250,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取任务详情
-        public ActionResult GetTaskDetail(int task_id, int user_id)
+        public ActionResult GetTaskDetail(int task_id, int user_id = 0)
         {
             try
             {
-                var obj = new { TaskInfo = dm_TaskIBLL.GetEntity(task_id), ReviceInfo = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id) };
+                string appid = CheckAPPID();
+
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+
+                var obj = new { TaskInfo = dm_TaskIBLL.GetTaskDetail(task_id), ReviceInfo = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id),Extend=new {Task_Rule= dm_BasesettingEntity.task_rule } };
                 return Success("获取成功!", obj);
             }
             catch (Exception ex)

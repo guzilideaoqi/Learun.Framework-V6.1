@@ -113,7 +113,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     strSql.Append(" and t.user_id='" + queryParam["user_id"].ToString() + "'");
                 }
-                if (!queryParam["taskstatus"].IsEmpty()) {
+                if (!queryParam["taskstatus"].IsEmpty())
+                {
                     strSql.Append(" and t.task_status='" + queryParam["taskstatus"].ToString() + "'");
                 }
                 return this.BaseRepository("dm_data").FindList<dm_taskEntity>(strSql.ToString(), pagination);
@@ -138,7 +139,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 var queryParam = queryJson.ToJObject();
 
                 var strSql = new StringBuilder();
-                strSql.Append("select t.*,u.nickname,u.realname,u.phone from dm_task t left join dm_user u on t.user_id=u.id where 1=1 ");
+                strSql.Append("select t.*,u.nickname,u.realname,u.phone,u.headpic as task_image from dm_task t left join dm_user u on t.user_id=u.id where 1=1 ");
                 if (!queryParam["txt_phone"].IsEmpty())
                 {
                     strSql.Append(" and u.phone like '%" + queryParam["txt_phone"].ToString() + "%'");
@@ -159,9 +160,20 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     strSql.Append(" and t.task_status = '" + queryParam["txt_status"].ToString() + "'");
                 }
 
+                if (!queryParam["task_type"].IsEmpty())
+                {
+                    strSql.Append(" and t.task_type = '" + queryParam["task_type"].ToString() + "'");
+                }
+
                 if (!queryParam["txt_title"].IsEmpty())
                 {
                     strSql.Append(" and t.task_title like '%" + queryParam["txt_title"].ToString() + "%'");
+                }
+
+
+                if (!queryParam["appid"].IsEmpty())
+                {
+                    strSql.Append(" and t.appid='" + queryParam["appid"].ToString() + "'");
                 }
                 return this.BaseRepository("dm_data").FindTable(strSql.ToString(), pagination);
             }
@@ -202,6 +214,47 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        /// <summary>
+        /// 增加任务详情拓展方法(解决实体中不包含发单人信息)
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, object> GetTaskDetail(int? id)
+        {
+            try
+            {
+                var strSql = new StringBuilder();
+                strSql.Append("select t.*,u.nickname,u.realname,u.phone,u.headpic as task_image from dm_task t left join dm_user u on t.user_id=u.id where t.id=");
+                strSql.Append(id.ToString());
+
+                DataTable dataTable = this.BaseRepository("dm_data").FindTable(strSql.ToString());
+
+                if (dataTable.Rows.Count > 0)
+                {
+                    DataRow dr = dataTable.Rows[0];
+                    System.Collections.Generic.Dictionary<string, object> drow = new System.Collections.Generic.Dictionary<string, object>();
+                    foreach (DataColumn dc in dataTable.Columns)
+                    {
+                        drow.Add(dc.ColumnName, dr[dc.ColumnName]);
+                    }
+                    return drow;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
         #endregion
 
         #region 提交数据

@@ -148,6 +148,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("CREATEDATE")]
         public int createdate { get; set; }
+
+        [Column("SUBMIT_DATA")]
+        public string submit_data { get; set; }
+
+        /// <summary>
+        /// 任务取消时间限制
+        /// </summary>
+        [Column("TASK_TIME_LIMIT")]
+        public int task_time_limit { get; set; }
         #endregion
 
         #region 扩展操作

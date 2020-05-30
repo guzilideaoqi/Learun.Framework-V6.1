@@ -21,6 +21,7 @@ using Top.Api.Response;
 using System.Data;
 using Newtonsoft.Json;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -783,16 +784,25 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="originid">商品id</param>
         /// <param name="couponid">优惠券id</param>
         /// <returns></returns>
-        public ActionResult ConvertLinkByTB(int userid, string originid, string couponid)
+        public ActionResult ConvertLinkByTB(int user_id, string originid, string couponid)
         {
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = Md5Helper.Hash(userid.ToString() + originid + couponid);
+
+                #region 解析出来优惠券ID
+                if (couponid.Contains("activityId="))
+                {
+                    Regex reg = new Regex("(?<=(activityId=)).*?(?=(\n|$))");
+                    couponid = reg.Match(couponid).Value;
+                }
+                #endregion
+
+                string cacheKey = Md5Helper.Hash(user_id.ToString() + originid + couponid);
                 PrivilegeLinkResult ConvertLinkResult = redisCache.Read<PrivilegeLinkResult>(cacheKey, 7L);
                 if (ConvertLinkResult == null)
                 {
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(userid);
+                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
                     if (dm_UserEntity.tb_relationid.IsEmpty())
                     {
                         return NoRelationID("渠道未备案!");

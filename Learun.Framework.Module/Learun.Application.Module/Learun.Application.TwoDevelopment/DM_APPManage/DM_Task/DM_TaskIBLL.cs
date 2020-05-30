@@ -40,6 +40,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// <returns></returns>
         dm_taskEntity GetEntity(int keyValue);
+
+        /// <summary>
+        /// 增加任务详情拓展方法(解决实体中不包含发单人信息)
+        /// </summary>
+        /// <returns></returns>
+        Dictionary<string, object> GetTaskDetail(int? id);
         #endregion
 
         #region 提交数据
