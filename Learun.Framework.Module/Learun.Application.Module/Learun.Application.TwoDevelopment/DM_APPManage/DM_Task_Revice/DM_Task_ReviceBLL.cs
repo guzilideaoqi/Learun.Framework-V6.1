@@ -190,11 +190,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 接受任务
         /// </summary>
         /// <param name="dm_Task_ReviceEntity"></param>
-        public void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity,string appid)
+        public dm_task_reviceEntity ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity,string appid)
         {
             try
             {
-                dM_Task_ReviceService.ReviceTask(dm_Task_ReviceEntity, appid);
+                return dM_Task_ReviceService.ReviceTask(dm_Task_ReviceEntity, appid);
             }
             catch (Exception ex)
             {
@@ -213,11 +213,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 提交资料
         /// </summary>
         /// <param name="dm_Task_ReviceEntity"></param>
-        public void SubmitMeans(dm_task_reviceEntity dm_Task_ReviceEntity)
+        public dm_task_reviceEntity SubmitMeans(dm_task_reviceEntity dm_Task_ReviceEntity)
         {
             try
             {
-                dM_Task_ReviceService.SubmitMeans(dm_Task_ReviceEntity);
+                return dM_Task_ReviceService.SubmitMeans(dm_Task_ReviceEntity);
             }
             catch (Exception ex)
             {
@@ -236,11 +236,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 取消任务
         /// </summary>
         /// <param name="revice_id"></param>
-        public void CancelByRevicePerson(int revice_id)
+        /// <param name="IsPubCancel">是否为发布者取消  0否  1是</param>
+        public dm_task_reviceEntity CancelByRevicePerson(int revice_id, int IsPubCancel = 0)
         {
             try
             {
-                dM_Task_ReviceService.CancelByRevicePerson(revice_id);
+               return dM_Task_ReviceService.CancelByRevicePerson(revice_id, IsPubCancel);
             }
             catch (Exception ex)
             {
@@ -259,11 +260,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 审核任务
         /// </summary>
         /// <param name="revice_id"></param>
-        public void AuditTask(int revice_id)
+        public dm_task_reviceEntity AuditTask(int revice_id)
         {
             try
             {
-                dM_Task_ReviceService.AuditTask(revice_id);
+                return dM_Task_ReviceService.AuditTask(revice_id);
             }
             catch (Exception ex)
             {

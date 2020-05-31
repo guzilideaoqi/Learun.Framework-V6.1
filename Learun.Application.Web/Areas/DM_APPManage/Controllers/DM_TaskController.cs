@@ -163,6 +163,20 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             dM_TaskIBLL.ReleaseTaskByWeb(entity);
             return Success("保存成功！");
         }
+
+        /// <summary>
+        /// 后台审核发布任务
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult CheckTaskByWeb(int keyValue)
+        {
+            dM_TaskIBLL.CheckTaskByWeb(keyValue);
+            return Success("审核成功！");
+        }
         #endregion
 
     }

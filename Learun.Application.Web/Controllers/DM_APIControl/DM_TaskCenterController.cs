@@ -83,7 +83,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     rows = PageSize,
                     sidx = sidx,
                     sord = sord
-                }, queryDiction));
+                }, queryDiction, true));
             }
             catch (Exception ex)
             {
@@ -110,11 +110,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 取消任务(发布方)
-        public ActionResult CancelByReleasePerson(int TaskID)
+        public ActionResult CancelByReleasePerson(int Task_ID)
         {
             try
             {
-                dm_TaskIBLL.CancelByReleasePerson(TaskID);
+                dm_TaskIBLL.CancelByReleasePerson(Task_ID);
                 return Success("取消成功!");
             }
             catch (Exception ex)
@@ -124,13 +124,29 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
-        #region 取消任务(接受方)
-        public ActionResult CancelByRevicePerson(int ReviceID)
+        #region 获取任务接收人列表
+        public ActionResult GetReviceListByTaskID(int Task_ID, int Status = 0, int PageNo = 1, int PageSize = 10)
         {
             try
             {
-                dm_Task_ReviceIBLL.CancelByRevicePerson(ReviceID);
-                return Success("取消成功!");
+                if (Status > 0)
+                    return SuccessList("获取成功!", dm_Task_ReviceIBLL.GetPageListByDataTable(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"Task_ID\":\"" + Task_ID + "\",\"Status\":\"" + Status + "\"}"));
+                else
+                    return SuccessList("获取成功!", dm_Task_ReviceIBLL.GetPageListByDataTable(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"Task_ID\":\"" + Task_ID + "\"}"));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 取消任务(接受方)
+        public ActionResult CancelByRevicePerson(int ReviceID, int IsPubCancel = 0)
+        {
+            try
+            {
+                return Success("取消成功!", dm_Task_ReviceIBLL.CancelByRevicePerson(ReviceID, IsPubCancel));
             }
             catch (Exception ex)
             {
@@ -146,8 +162,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string appid = CheckAPPID();
 
-                dm_Task_ReviceIBLL.ReviceTask(dm_Task_ReviceEntity, appid);
-                return Success("接受成功!");
+                return Success("接受成功!", dm_Task_ReviceIBLL.ReviceTask(dm_Task_ReviceEntity, appid));
             }
             catch (Exception ex)
             {
@@ -161,8 +176,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                dm_Task_ReviceIBLL.SubmitMeans(dm_Task_ReviceEntity);
-                return Success("资料提交成功!");
+                return Success("资料提交成功!", dm_Task_ReviceIBLL.SubmitMeans(dm_Task_ReviceEntity));
             }
             catch (Exception ex)
             {
@@ -176,8 +190,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                dm_Task_ReviceIBLL.AuditTask(ReviceID);
-                return Success("审核成功!");
+                return Success("审核成功!", dm_Task_ReviceIBLL.AuditTask(ReviceID));
             }
             catch (Exception ex)
             {
@@ -258,7 +271,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
 
-                var obj = new { TaskInfo = dm_TaskIBLL.GetTaskDetail(task_id), ReviceInfo = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id),Extend=new {Task_Rule= dm_BasesettingEntity.task_rule } };
+                var obj = new { TaskInfo = dm_TaskIBLL.GetTaskDetail(task_id), ReviceInfo = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id), Extend = new { Task_Rule = dm_BasesettingEntity.task_rule } };
                 return Success("获取成功!", obj);
             }
             catch (Exception ex)

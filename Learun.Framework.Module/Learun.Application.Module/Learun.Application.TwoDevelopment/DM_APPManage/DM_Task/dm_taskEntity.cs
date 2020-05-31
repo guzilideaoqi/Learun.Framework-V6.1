@@ -40,7 +40,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("TASK_TYPE")]
         public int? task_type { get; set; }
         /// <summary>
-        /// 任务状态 0进行中  1已完成  2已取消
+        /// 任务状态 -2待审核 0进行中  1已完成  2已取消
         /// </summary>
         /// <returns></returns>
         [Column("TASK_STATUS")]

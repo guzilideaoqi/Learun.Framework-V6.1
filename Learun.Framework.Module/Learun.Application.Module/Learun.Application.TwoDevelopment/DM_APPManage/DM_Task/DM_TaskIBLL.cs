@@ -33,7 +33,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <param name="queryJson"></param>
         /// <returns></returns>
-        DataTable GetPageListByDataTable(Pagination pagination, string queryJson);
+        DataTable GetPageListByDataTable(Pagination pagination, string queryJson, bool IsApi = false);
         /// <summary>
         /// 获取实体数据
         /// <param name="keyValue">主键</param>
@@ -62,6 +62,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// <returns></returns>
         void SaveEntity(int keyValue, dm_taskEntity entity);
+        /// <summary>
+        /// 后台审核发布任务
+        /// </summary>
+        /// <param name="id"></param>
+        void CheckTaskByWeb(int id);
         #endregion
 
 

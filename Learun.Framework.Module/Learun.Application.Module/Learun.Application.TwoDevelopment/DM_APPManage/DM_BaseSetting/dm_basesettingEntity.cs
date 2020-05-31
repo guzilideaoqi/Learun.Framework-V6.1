@@ -407,6 +407,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("TASK_RULE")]
         public string task_rule { get; set; }
 
+        /// <summary>
+        /// 任务审核  1开启  0关闭
+        /// </summary>
+        [Column("TASKCHECKED")]
+        public int taskchecked { get; set; }
+
         public void Create()
         {
             UserInfo userInfo = LoginUserInfo.Get();

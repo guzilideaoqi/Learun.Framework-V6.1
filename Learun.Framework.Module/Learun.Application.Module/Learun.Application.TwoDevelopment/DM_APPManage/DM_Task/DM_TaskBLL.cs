@@ -65,11 +65,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson, bool IsApi = false)
         {
             try
             {
-                return dM_TaskService.GetPageListByDataTable(pagination, queryJson);
+                return dM_TaskService.GetPageListByDataTable(pagination, queryJson, IsApi);
             }
             catch (Exception ex)
             {
@@ -168,6 +168,29 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 dM_TaskService.SaveEntity(keyValue, entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 后台审核发布任务
+        /// </summary>
+        /// <param name="id"></param>
+        public void CheckTaskByWeb(int id)
+        {
+            try
+            {
+                dM_TaskService.CheckTaskByWeb(id);
             }
             catch (Exception ex)
             {

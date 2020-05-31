@@ -20,7 +20,6 @@ var bootstrap = function ($, learun) {
                     return false;
                 }
                 var postData = $('#lr_layout').lrGetFormData();
-                console.log(postData);
                 $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_BaseSetting/SaveForm?keyValue=' + keyValue, postData, function (res) {
                     // 保存成功后才回调
                     //if (!!callBack) {
@@ -64,6 +63,8 @@ var bootstrap = function ($, learun) {
             });
 
             $("#openchecked").lrselect();
+
+            $("#taskchecked").lrselect();
         },
     };
     page.init();

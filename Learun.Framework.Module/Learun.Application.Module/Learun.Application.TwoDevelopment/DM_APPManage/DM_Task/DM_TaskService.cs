@@ -132,7 +132,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson, bool IsApi = false)
         {
             try
             {
@@ -168,6 +168,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (!queryParam["txt_title"].IsEmpty())
                 {
                     strSql.Append(" and t.task_title like '%" + queryParam["txt_title"].ToString() + "%'");
+                }
+
+                if (IsApi)
+                {
+                    strSql.Append(" and t.task_status = 0");
                 }
 
 
@@ -223,7 +228,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 var strSql = new StringBuilder();
-                strSql.Append("select t.*,u.nickname,u.realname,u.phone,u.headpic as task_image from dm_task t left join dm_user u on t.user_id=u.id where t.id=");
+                strSql.Append("select t.*,u.nickname,u.realname,u.phone,ty.name as task_type_name,u.headpic as task_image from dm_task t left join dm_user u on t.user_id=u.id left join dm_task_type ty on t.task_type=ty.id where t.id=");
                 strSql.Append(id.ToString());
 
                 DataTable dataTable = this.BaseRepository("dm_data").FindTable(strSql.ToString());
@@ -316,6 +321,32 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        /// <summary>
+        /// 后台审核发布任务
+        /// </summary>
+        /// <param name="id"></param>
+        public void CheckTaskByWeb(int id)
+        {
+            try
+            {
+                dm_taskEntity entity = GetEntity(id);
+                entity.task_status = 0;
+                this.BaseRepository("dm_data").Update(entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+
+        }
+
         #endregion
 
         #region 发布任务
@@ -386,6 +417,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 entity.servicefee = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_servicefee) / 100, 2);//任务服务费(奖励在服务费中分发)
                 entity.task_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + entity.user_id.ToString().PadLeft(6, '0');
                 entity.sort = GetSort(dm_User_RelationEntity, entity.totalcommission);
+
+                if (dm_BaseSettingEntity.taskchecked == 1)
+                    entity.task_status = -2;
+                else
+                    entity.task_status = 0;
 
                 entity.Create();
                 dm_UserEntity.accountprice -= entity.totalcommission;

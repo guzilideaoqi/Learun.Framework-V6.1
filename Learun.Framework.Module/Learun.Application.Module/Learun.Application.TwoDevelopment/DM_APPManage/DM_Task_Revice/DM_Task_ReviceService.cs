@@ -120,7 +120,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 var queryParam = queryJson.ToJObject();
                 var strSql = new StringBuilder();
-                strSql.Append("select r.*,U.nickname,u.realname,u.phone from dm_task_revice r LEFT JOIN dm_user u on r.user_id=u.id where 1=1");
+                strSql.Append("select r.*,U.nickname,u.realname,u.phone,u.headpic from dm_task_revice r LEFT JOIN dm_user u on r.user_id=u.id where 1=1");
                 if (!queryParam["User_ID"].IsEmpty())
                 {
                     strSql.Append(" and u.id=" + queryParam["User_ID"].ToString());
@@ -129,6 +129,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (!queryParam["Task_ID"].IsEmpty())
                 {
                     strSql.Append(" and r.task_id=" + queryParam["Task_ID"].ToString());
+                }
+
+                if (!queryParam["Status"].IsEmpty())
+                {
+                    strSql.Append(" and r.status=" + queryParam["Status"].ToString());
                 }
 
                 return BaseRepository("dm_data").FindTable(strSql.ToString(), pagination);
@@ -300,7 +305,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.task_id == task_id);
                     if (dm_Task_ReviceEntities.Count() > 0)
-                        redisCache.Write<IEnumerable<dm_task_reviceEntity>>(cacheKey, dm_Task_ReviceEntities, 7);
+                        redisCache.Write<IEnumerable<dm_task_reviceEntity>>(cacheKey, dm_Task_ReviceEntities, DateTime.Now.AddMinutes(5), 7);
                 }
                 return dm_Task_ReviceEntities;
             }
@@ -319,7 +324,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 接受任务
-        public void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity, string appid)
+        public dm_task_reviceEntity ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity, string appid)
         {
             IRepository db = null;
             try
@@ -340,7 +345,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw new Exception("当前等级无法接受任务,请升级后重试!");
 
                 //判断当前未在审核状态的任务数量
-                int noFinishCount = BaseRepository("dm_data").IQueryable<dm_task_reviceEntity>(t => t.status == 1 || t.status == 2).Count();
+                int noFinishCount = BaseRepository("dm_data").IQueryable<dm_task_reviceEntity>(t => (t.status == 1 || t.status == 2) && t.user_id == dm_Task_ReviceEntity.user_id).Count();
                 if (noFinishCount >= dm_BasesettingEntity.revicetaskcountlimit)
                     throw new Exception("同时接单任务数已达到上限,请先完成其他任务后再来接单!");
 
@@ -356,6 +361,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 db.Update(dm_TaskEntity);
                 db.Insert(dm_Task_ReviceEntity);
                 db.Commit();
+
+                return dm_Task_ReviceEntity;
             }
             catch (Exception ex)
             {
@@ -374,7 +381,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 提交资料
-        public void SubmitMeans(dm_task_reviceEntity dm_Task_ReviceEntity)
+        public dm_task_reviceEntity SubmitMeans(dm_task_reviceEntity dm_Task_ReviceEntity)
         {
             try
             {
@@ -391,6 +398,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity_New.id);
                 dm_Task_ReviceEntity_New.submit_data = dm_Task_ReviceEntity.submit_data;
                 BaseRepository("dm_data").Update(dm_Task_ReviceEntity_New);
+
+                return dm_Task_ReviceEntity_New;
             }
             catch (Exception ex)
             {
@@ -407,7 +416,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 取消任务
-        public void CancelByRevicePerson(int revice_id)
+        public dm_task_reviceEntity CancelByRevicePerson(int revice_id, int IsPubCancel = 0)
         {
             IRepository db = null;
             try
@@ -427,13 +436,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw new Exception("任务已完成，取消任务失败!");
                 if (dm_Task_ReviceEntity.status == 4)
                     throw new Exception("任务已取消，请勿重复提交!");
+
+                dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
+
+
+                if (IsPubCancel == 1)
+                {
+                    DateTime diffTime = ((DateTime)dm_Task_ReviceEntity.revice_time).AddHours(dm_TaskEntity.task_time_limit);
+                    if (DateTime.Now < diffTime)
+                        throw new Exception("该用户提交资料未超过设定时间,无法取消任务,您可在" + diffTime.ToString("yyyy-MM-dd HH:mm:ss") + "重试操作!");
+                }
+
+
                 dm_Task_ReviceEntity.status = 4;
                 dm_Task_ReviceEntity.canceltime = DateTime.Now;
                 dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity.id);
                 #endregion
 
                 #region 修改任务主表数据
-                dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
                 dm_TaskEntity.revicecount -= 1;
                 dm_TaskEntity.Modify(dm_TaskEntity.id);
                 #endregion
@@ -456,6 +476,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 db.Insert(dm_MessagerecordEntity);
 
                 db.Commit();
+
+                return dm_Task_ReviceEntity;
             }
             catch (Exception ex)
             {
@@ -477,7 +499,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 审核任务
         private List<dm_accountdetailEntity> dm_AccountdetailEntities = new List<dm_accountdetailEntity>();
         private List<dm_userEntity> calculateComissionEntities = new List<dm_userEntity>();
-        public void AuditTask(int revice_id)
+        public dm_task_reviceEntity AuditTask(int revice_id)
         {
             IRepository db = null;
             try
@@ -556,7 +578,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 #endregion
                 dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity.id);//由于需要修改任务所得佣金  故修改放到此处
 
-                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(currentUser.appid);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(dm_TaskEntity.appid);
 
                 #region 更改一级账户余额及明细
                 dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Task_ReviceEntity.user_id).FirstOrDefault();
@@ -641,6 +663,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     db.Update(calculateComissionEntities);//批量修改用户信息
                     db.Commit();
                 }
+
+                return dm_Task_ReviceEntity;
             }
             catch (Exception ex)
             {

@@ -7,6 +7,7 @@
 var selectedRow;
 var refreshGirdData;
 var LookReviceDetail;
+var CheckTask;
 var bootstrap = function ($, learun) {
     "use strict";
     var page = {
@@ -86,6 +87,10 @@ var bootstrap = function ($, learun) {
                         label: '任务状态', name: 'task_status', width: 80, align: "left", formatter: function (cellvalue, rowData, options) {
                             var status = "";
                             switch (cellvalue) {
+                                case -2:
+                                    var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
+                                    status = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;margin-left:8px;\" onclick=\"CheckTask(" + tempJsonStr + ");\"><i class=\"fa fa-edit\"></i>&nbsp;审核</a>";
+                                    break;
                                 case 0:
                                     status = "未进行";
                                     break;
@@ -130,7 +135,7 @@ var bootstrap = function ($, learun) {
                     { label: '创建时间', name: 'createtime', width: 150, align: "left" },
                     {
                         label: '操作', name: 'id', width: 200, align: "left", formatter: function (cellvalue, rowData, options) {
-                            var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
+                            var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'");
                             //var btnList = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"LookUserDetail(" + tempJsonStr + ");\"><i class=\"fa fa-search\"></i>&nbsp;任务详情</a>";
                             var btnList = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;margin-left:8px;\" onclick=\"LookReviceDetail(" + tempJsonStr + ");\"><i class=\"fa fa-edit\"></i>&nbsp;接单人信息</a>";
 
@@ -169,6 +174,16 @@ var bootstrap = function ($, learun) {
                 return top[id].acceptClick(refreshGirdData);
             }
         });
-    }
+    };
+    CheckTask = function (rowData) {
+        selectedRow = rowData;
+        learun.layerConfirm('审核通过之后任务将会在APP端展示,如果任务需要取消,请联系发布者在APP端任务详情中操作,是否继续？', function (res) {
+            if (res) {
+                learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Task/CheckTaskByWeb', { keyValue: selectedRow.id }, function () {
+                    refreshGirdData();
+                });
+            }
+        })
+    };
     page.init();
 }

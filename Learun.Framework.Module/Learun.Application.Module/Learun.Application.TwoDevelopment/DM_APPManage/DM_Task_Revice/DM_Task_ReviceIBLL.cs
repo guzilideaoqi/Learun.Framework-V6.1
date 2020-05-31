@@ -70,25 +70,25 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 接受任务
         /// </summary>
         /// <param name="dm_Task_ReviceEntity"></param>
-        void ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity,string appid);
+        dm_task_reviceEntity ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity,string appid);
 
         /// <summary>
         /// 提交资料
         /// </summary>
         /// <param name="dm_Task_ReviceEntity"></param>
-        void SubmitMeans(dm_task_reviceEntity dm_Task_ReviceEntity);
+        dm_task_reviceEntity SubmitMeans(dm_task_reviceEntity dm_Task_ReviceEntity);
 
         /// <summary>
         /// 取消任务
         /// </summary>
         /// <param name="revice_id"></param>
-        void CancelByRevicePerson(int revice_id);
+        dm_task_reviceEntity CancelByRevicePerson(int revice_id, int IsPubCancel = 0);
 
         /// <summary>
         /// 审核任务
         /// </summary>
         /// <param name="revice_id"></param>
-        void AuditTask(int revice_id);
+        dm_task_reviceEntity AuditTask(int revice_id);
 
         /// <summary>
         /// 我的接受任务
