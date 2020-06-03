@@ -1571,7 +1571,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             List<CommonGoodInfo> commonGoodInfoList = new List<CommonGoodInfo>();
             foreach (RankingItem item in rankingItemList)
             {
-                string[] images = new string[] { item.mainPic };
+                string[] images = new string[] { GetImage(item.mainPic) };
                 commonGoodInfoList.Add(new CommonGoodInfo
                 {
                     skuid = item.goodsId.ToString(),
@@ -1585,7 +1585,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
-                    image = item.mainPic,
+                    image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
@@ -1612,7 +1612,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             List<CommonGoodInfo> commonGoodInfoList = new List<CommonGoodInfo>();
             foreach (SuperGoodItem item in superGoodItemList)
             {
-                string[] images = new string[] { item.mainPic };
+                string[] images = new string[] { GetImage(item.mainPic) };
                 commonGoodInfoList.Add(new CommonGoodInfo
                 {
                     skuid = item.goodsId.ToString(),
@@ -1626,7 +1626,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
-                    image = item.mainPic,
+                    image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
@@ -1652,7 +1652,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             List<CommonGoodInfo> commonGoodInfoList = new List<CommonGoodInfo>();
             foreach (DTK_SearchGoodItem item in dTK_SearchGoodItemList)
             {
-                string[] images = new string[] { item.mainPic };
+                string[] images = new string[] { GetImage(item.mainPic) };
                 commonGoodInfoList.Add(new CommonGoodInfo
                 {
                     skuid = item.goodsId.ToString(),
@@ -1666,7 +1666,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
-                    image = item.mainPic,
+                    image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
@@ -1693,7 +1693,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             List<CommonGoodInfo> commonGoodInfoList = new List<CommonGoodInfo>();
             foreach (ActivityGoodItem item in activityGoodItemList)
             {
-                string[] images = new string[] { item.mainPic };
+                string[] images = new string[] { GetImage(item.mainPic) };
                 commonGoodInfoList.Add(new CommonGoodInfo
                 {
                     skuid = item.goodsId.ToString(),
@@ -1707,7 +1707,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
-                    image = item.mainPic,
+                    image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
@@ -1734,7 +1734,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             List<CommonGoodInfo> commonGoodInfoList = new List<CommonGoodInfo>();
             foreach (TopicGoodItem item in topicGoodItemList)
             {
-                string[] images = new string[] { item.mainPic };
+                string[] images = new string[] { GetImage(item.mainPic) };
                 commonGoodInfoList.Add(new CommonGoodInfo
                 {
                     skuid = item.goodsId.ToString(),
@@ -1748,7 +1748,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
-                    image = item.mainPic,
+                    image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
@@ -1777,7 +1777,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             List<CommonGoodInfo> commonGoodInfoList = new List<CommonGoodInfo>();
             foreach (OPGoodItem item in oPGoodItemList)
             {
-                string[] images = new string[] { item.mainPic };
+                string[] images = new string[] { GetImage(item.mainPic) };
                 commonGoodInfoList.Add(new CommonGoodInfo
                 {
                     skuid = item.goodsId.ToString(),
@@ -1791,7 +1791,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_start_time = item.couponStartTime,
                     detail_images = images,
                     images = images,
-                    image = item.mainPic,
+                    image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
                     LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
@@ -1830,6 +1830,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     return score;
                 }
             }
+        }
+
+        string GetImage(string img)
+        {
+            if (!img.StartsWith("http"))
+            {
+                img = "http:" + img;
+            }
+            return img;
         }
         #endregion
     }

@@ -859,7 +859,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (dm_User_RelationEntity.IsEmpty())
                     throw new Exception("未检测到您的上级信息!");
 
-                dm_userEntity dm_UserEntity = GetEntityByCache(dm_User_RelationEntity.parent_id);
+                dm_userEntity dm_UserEntity = GetEntityByCache(User_ID);
                 if (dm_UserEntity.IsEmpty())
                     throw new Exception("用户信息异常!");
 
