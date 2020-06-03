@@ -353,6 +353,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (InviteCode.Length != 6)
+                    return null;
+
                 string appid = CheckAPPID();
 
                 int? UserID = dm_userIBLL.DecodeInviteCode(InviteCode);
@@ -365,7 +368,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     UserID = dm_UserEntity.id,
                     NickName = dm_UserEntity.nickname,
-                    HeadPic = CommonConfig.ImageQianZhui + dm_UserEntity.headpic,
+                    HeadPic = dm_UserEntity.headpic,
                     RealName = dm_UserEntity.realname,
                     Phone = dm_UserEntity.phone
                 }); ;

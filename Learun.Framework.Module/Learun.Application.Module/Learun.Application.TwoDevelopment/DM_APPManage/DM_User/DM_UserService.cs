@@ -325,12 +325,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
                     dm_UserEntity.pwd = Md5Helper.Encrypt(dm_UserEntity.pwd, 16);
                     dm_UserEntity.token = Guid.NewGuid().ToString();
+                    dm_UserEntity.Create();
+
                     BaseRepository("dm_data").Insert(dm_UserEntity);
                     dm_userEntity updateEntity = new dm_userEntity();
                     id = (updateEntity.id = BaseRepository("dm_data").FindObject("SELECT LAST_INSERT_ID();").ToInt());
                     updateEntity.invitecode = EncodeInviteCode(updateEntity.id);
                     updateEntity.integral = dm_BasesettingEntity.new_people;
-                    updateEntity.Create();
+                    updateEntity.Modify(id);
                     db = BaseRepository("dm_data").BeginTrans();
                     db.Update(updateEntity);
                     db.Insert(new dm_intergraldetailEntity

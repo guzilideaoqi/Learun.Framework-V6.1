@@ -11,6 +11,6 @@ namespace Learun.Application.TwoDevelopment.Common
         /// <summary>
         /// 图片的前缀
         /// </summary>
-        public static string ImageQianZhui = "";
+        //public static string ImageQianZhui = "";
     }
 }

@@ -200,7 +200,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     Directory.CreateDirectory(path);
                 pic_file.SaveAs(fullFileName);
 
-                return Success("上传成功", new { ImageUrl = CommonConfig.ImageQianZhui + virtualPath });
+                return Success("上传成功", new { ImageUrl =  virtualPath });
             }
             catch (Exception ex)
             {
@@ -240,7 +240,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     pic_file.SaveAs(fullFileName);
 
 
-                    images.Add(CommonConfig.ImageQianZhui + virtualPath);
+                    images.Add(virtualPath);
                 }
 
                 return Success("上传成功", new { ImageUrls = images });

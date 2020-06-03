@@ -42,11 +42,14 @@ namespace Learun.Application.TwoDevelopment.Common
 
             if (httpResponse.StatusCode != HttpStatusCode.OK)
             {
-                return false;
+                throw new Exception("短信接口验证错误" + httpResponse.Content);
+                //return false;
             }
             else
             {
                 SmsVerifityMsg smsVerifityMsg = JsonConvert.JsonDeserialize<SmsVerifityMsg>(httpResponse.Content);
+                if (!smsVerifityMsg.is_valid)
+                    throw new Exception(httpResponse.Content);
                 return smsVerifityMsg.is_valid;
             }
         }

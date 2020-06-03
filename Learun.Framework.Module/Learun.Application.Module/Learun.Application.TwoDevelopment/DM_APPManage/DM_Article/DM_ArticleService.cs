@@ -232,11 +232,7 @@ t.a_image
                         redisCache.Write("ArticleList", dm_ArticleEntities, 7);
                 }
 
-                return dm_ArticleEntities.Where(t => t.parentid == ModeType).Select(delegate (dm_articleEntity t)
-                {
-                    t.a_image = CommonConfig.ImageQianZhui + t.a_image;
-                    return t;
-                });
+                return dm_ArticleEntities.Where(t => t.parentid == ModeType);
             }
             catch (Exception ex)
             {

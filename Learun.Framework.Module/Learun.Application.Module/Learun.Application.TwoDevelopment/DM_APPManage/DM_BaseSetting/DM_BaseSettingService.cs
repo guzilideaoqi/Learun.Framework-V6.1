@@ -91,11 +91,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 redisCache.Write(cacheKey, dm_BasesettingEntity, 7L);
             }
 
-            if (dm_BasesettingEntity != null)
-            {
-                CommonConfig.ImageQianZhui = dm_BasesettingEntity.qianzhui_image;
-            }
-
             return dm_BasesettingEntity;
         }
 
