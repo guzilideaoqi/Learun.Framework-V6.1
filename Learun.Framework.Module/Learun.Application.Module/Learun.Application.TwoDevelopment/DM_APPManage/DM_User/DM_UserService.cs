@@ -1,3 +1,10 @@
+using io.rong.methods.user;
+using io.rong.methods.user.tag;
+using io.rong.models;
+using io.rong.models.response;
+using io.rong.models.push;
+using io.rong.models.push.tag;
+
 using Learun.Application.TwoDevelopment.Common;
 using Learun.Cache.Base;
 using Learun.Cache.Factory;
@@ -12,6 +19,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using io.rong;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -339,6 +347,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         id = updateEntity.id;
                         updateEntity.invitecode = EncodeInviteCode(updateEntity.id);
                         updateEntity.integral = dm_BasesettingEntity.new_people;
+                        updateEntity.rongcloud_token = rongyun_token(id, updateEntity.nickname);
                         updateEntity.Modify(id);
                         db.Update(updateEntity);
                         db.Insert(new dm_intergraldetailEntity
@@ -894,6 +903,72 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw;
                 }
                 throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
+        #region 生成融云Token
+        /**
+         * 此处替换成您的appKey
+         * */
+        private static readonly String appKey = "bmdehs6pbaxds";
+        /**
+         * 此处替换成您的appSecret
+         * */
+        private static readonly String appSecret = "TEb6PGdHJXI";
+        /**
+         * 自定义api地址
+         * */
+        private static readonly String api = "http://api.cn.ronghub.com";
+        public string GeneralRongTokne(int User_ID)
+        {
+            try
+            {
+                dm_userEntity dm_UserEntity = GetEntity(User_ID);
+                if (dm_UserEntity.IsEmpty())
+                    throw new Exception("未找到该用户!");
+
+                dm_UserEntity.rongcloud_token = rongyun_token(User_ID, dm_UserEntity.nickname);
+                dm_UserEntity.Modify(dm_UserEntity.id);
+
+                BaseRepository("dm_data").Update(dm_UserEntity);
+
+
+                return dm_UserEntity.rongcloud_token;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        string rongyun_token(int? User_ID,string nickname) {
+            try
+            {
+
+                RongCloud rongCloud = RongCloud.GetInstance(appKey, appSecret);
+                User User = rongCloud.User;
+
+                /**
+                 * API 文档: http://www.rongcloud.cn/docs/server_sdk_api/user/user.html#register
+                 *
+                 * 注册用户，生成用户在融云的唯一身份标识 Token
+                 */
+                UserModel user = new UserModel
+                {
+                    Id = User_ID.ToString(),
+                    Name = nickname,
+                    Portrait = "http://www.rongcloud.cn/images/logo.png"
+                };
+
+                TokenResult result = User.Register(user);
+
+                return result.Token;
+            }
+            catch (Exception)
+            {
+                return "";
             }
         }
         #endregion

@@ -1109,6 +1109,22 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 生成融云token
+        public ActionResult GeneralRongTokne(int User_ID)
+        {
+            try
+            {
+                if (User_ID <= 0) return FailNoLogin();
+
+                return SuccessList("获取成功", dm_userIBLL.GeneralRongTokne(User_ID));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         public string CheckAPPID()
         {
             if (base.Request.Headers["appid"].IsEmpty())

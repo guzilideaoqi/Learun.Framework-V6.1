@@ -66,5 +66,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         FansStaticInfoEntity GetFansStaticInfo(int User_ID);
         #endregion
 
+        #region Éú³ÉÈÚÔÆToken
+        string GeneralRongTokne(int User_ID);
+        #endregion
+
     }
 }

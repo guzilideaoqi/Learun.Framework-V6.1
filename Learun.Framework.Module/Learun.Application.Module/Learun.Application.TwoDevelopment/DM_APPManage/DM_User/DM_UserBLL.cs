@@ -402,5 +402,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
         #endregion
+
+        #region Éú³ÉÈÚÔÆToken
+        public string GeneralRongTokne(int User_ID) {
+            try
+            {
+                return dM_UserService.GeneralRongTokne(User_ID);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
     }
 }

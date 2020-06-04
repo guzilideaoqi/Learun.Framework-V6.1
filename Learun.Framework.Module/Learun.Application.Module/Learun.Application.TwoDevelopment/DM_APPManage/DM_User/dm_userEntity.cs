@@ -345,7 +345,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("ISRELATION_BEIAN")]
         public int isrelation_beian { get; set; }
 
-
+        /// <summary>
+        /// ÈÚÔÆToken
+        /// </summary>
+        [Column("RONGCLOUD_TOKEN")]
+        public string rongcloud_token { get; set; }
         public void Create()
         {
             userlevel = 0;
