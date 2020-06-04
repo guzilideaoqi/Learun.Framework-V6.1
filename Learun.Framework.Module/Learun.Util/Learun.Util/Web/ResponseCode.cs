@@ -21,6 +21,7 @@
         /// 异常
         /// </summary>
         exception = 500,
-        NoRelation=101
+        NoRelation = 101,
+        NoLogin = 401
     }
 }

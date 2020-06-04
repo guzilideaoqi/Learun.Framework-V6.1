@@ -281,6 +281,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (User_ID <= 0)
+                    return FailNoLogin();
                 return Success("获取成功", dm_userIBLL.GetEntityByCache(User_ID));
             }
             catch (Exception ex)
@@ -300,6 +302,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (User_ID <= 0)
+                    return FailNoLogin();
                 return Success("获取成功", dm_UserRelationIBLL.GetIncomeReport(User_ID));
             }
             catch (Exception ex)
@@ -319,6 +323,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 return this.Success("签到成功", (dynamic)dm_userIBLL.SignIn(User_ID));
             }
             catch (Exception ex)
@@ -334,6 +340,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (id <= 0) return FailNoLogin();
+
                 string appid = CheckAPPID();
                 return Success("获取成功", new
                 {
@@ -390,15 +398,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="CertificaRecordID"></param>
         /// <returns></returns>
 
-        public ActionResult Certification(int user_id, string name, string cardno, string facecard = "", string frontcard = "")
+        public ActionResult Certification(int User_ID, string name, string cardno, string facecard = "", string frontcard = "")
         {
             try
             {
                 string appid = CheckAPPID();
-                if (user_id.IsEmpty())
-                {
-                    return Fail("用户id不能为空!");
-                }
+                if (User_ID <= 0) return FailNoLogin();
 
                 if (name.IsEmpty())
                 {
@@ -407,7 +412,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 //dm_certifica_recordEntity dm_Certifica_RecordEntity = new dm_certifica_recordEntity();
                 dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
 
-                dm_certifica_recordEntity dm_Certifica_RecordEntity = dm_CertificaRecordIBLL.GetCertificationRecord(user_id);
+                dm_certifica_recordEntity dm_Certifica_RecordEntity = dm_CertificaRecordIBLL.GetCertificationRecord(User_ID);
                 if (dm_Certifica_RecordEntity.IsEmpty())
                     dm_Certifica_RecordEntity = new dm_certifica_recordEntity();
 
@@ -447,7 +452,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 #endregion
 
                 #region 构造其他信息
-                dm_Certifica_RecordEntity.user_id = user_id;
+                dm_Certifica_RecordEntity.user_id = User_ID;
                 dm_Certifica_RecordEntity.realname = name;
                 dm_Certifica_RecordEntity.cardno = cardno;
                 dm_Certifica_RecordEntity.realstatus = 0;
@@ -470,16 +475,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="user_id"></param>
         /// <returns></returns>
 
-        public ActionResult GetCertificationRecord(int user_id)
+        public ActionResult GetCertificationRecord(int User_ID)
         {
             try
             {
-                if (user_id.IsEmpty())
-                {
-                    return Fail("用户id不能为空!");
-                }
+                if (User_ID <= 0) return FailNoLogin();
 
-                return Success("获取成功", dm_CertificaRecordIBLL.GetCertificationRecord(user_id));
+                return Success("获取成功", dm_CertificaRecordIBLL.GetCertificationRecord(User_ID));
             }
             catch (Exception ex)
             {
@@ -490,10 +492,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         #region 修改收货地址
 
-        public ActionResult UpdateAddress(int user_id, dm_userEntity dm_UserEntity)
+        public ActionResult UpdateAddress(int User_ID, dm_userEntity dm_UserEntity)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 if (dm_UserEntity.province.IsEmpty())
                     return Fail("省份不能为空!");
                 if (dm_UserEntity.city.IsEmpty())
@@ -503,7 +507,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (dm_UserEntity.address.IsEmpty())
                     return Fail("详细地址不能为空!");
 
-                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                dm_userIBLL.SaveEntity(User_ID, dm_UserEntity);
 
                 return Success("修改成功!");
             }
@@ -521,16 +525,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="user_id"></param>
         /// <param name="dm_UserEntity"></param>
         /// <returns></returns>
-        public ActionResult UpdateZFBInfo(int user_id, dm_userEntity dm_UserEntity)
+        public ActionResult UpdateZFBInfo(int User_ID, dm_userEntity dm_UserEntity)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 if (dm_UserEntity.zfb.IsEmpty())
                     return Fail("支付宝账号不能为空!");
                 if (dm_UserEntity.realname.IsEmpty())
                     return Fail("真实姓名不能为空!");
 
-                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                dm_userIBLL.SaveEntity(User_ID, dm_UserEntity);
 
                 return Success("修改成功!");
             }
@@ -542,14 +548,16 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 修改用户昵称
-        public ActionResult UpdateNickName(int user_id, dm_userEntity dm_UserEntity)
+        public ActionResult UpdateNickName(int User_ID, dm_userEntity dm_UserEntity)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 if (dm_UserEntity.nickname.IsEmpty())
                     return Fail("用户昵称不能为空!");
 
-                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                dm_userIBLL.SaveEntity(User_ID, dm_UserEntity);
                 return Success("修改成功!");
             }
             catch (Exception ex)
@@ -560,14 +568,16 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 修改微信号
-        public ActionResult UpdateWeChatID(int user_id, dm_userEntity dm_UserEntity)
+        public ActionResult UpdateWeChatID(int User_ID, dm_userEntity dm_UserEntity)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 if (dm_UserEntity.mywechat.IsEmpty())
                     return Fail("微信号不能为空!");
 
-                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                dm_userIBLL.SaveEntity(User_ID, dm_UserEntity);
                 return Success("修改成功!");
             }
             catch (Exception ex)
@@ -578,10 +588,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 修改用户头像
-        public ActionResult UploadHeadPic(int user_id, dm_userEntity dm_UserEntity)
+        public ActionResult UploadHeadPic(int User_ID, dm_userEntity dm_UserEntity)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
                 if (System.Web.HttpContext.Current.Request.Files.Count > 0)
                 {
                     #region 头像上传
@@ -602,7 +613,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_UserEntity.headpic = virtualPath;
                 }
 
-                dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                dm_userIBLL.SaveEntity(User_ID, dm_UserEntity);
                 return Success("修改成功");
             }
             catch (Exception ex)
@@ -633,19 +644,16 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// 获取系统消息 (做短时间的缓存 10分钟)
         /// </summary>
         /// <returns></returns>
-        public ActionResult GetSystemMessage(int user_id, int pageNo = 1, int pageSize = 10)
+        public ActionResult GetSystemMessage(int User_ID, int pageNo = 1, int pageSize = 10)
         {
             try
             {
-                if (user_id.IsEmpty())
-                {
-                    return Fail("用户id不能为空!");
-                }
-                string cacheKey = Md5Helper.Hash("SystemMessage" + user_id + pageNo + pageSize);
+                if (User_ID <= 0) return FailNoLogin();
+                string cacheKey = Md5Helper.Hash("SystemMessage" + User_ID + pageNo + pageSize);
                 IEnumerable<dm_messagerecordEntity> messageRecordList = redisCache.Read<IEnumerable<dm_messagerecordEntity>>(cacheKey, 7);
                 if (messageRecordList == null)
                 {
-                    messageRecordList = dm_MessageRecordIBLL.GetPageList(new Pagination { rows = pageSize, page = pageNo, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + user_id + "\"}");
+                    messageRecordList = dm_MessageRecordIBLL.GetPageList(new Pagination { rows = pageSize, page = pageNo, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + User_ID + "\"}");
                     if (messageRecordList != null)
                     {
                         redisCache.Write<IEnumerable<dm_messagerecordEntity>>(cacheKey, messageRecordList, DateTime.Now.AddMinutes(10), 7);
@@ -665,15 +673,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// </summary>
         /// <param name="user_id"></param>
         /// <returns></returns>
-        public ActionResult MessageToReadByUserID(int user_id)
+        public ActionResult MessageToReadByUserID(int User_ID)
         {
             try
             {
-                if (user_id.IsEmpty())
-                {
-                    return Fail("用户id不能为空!");
-                }
-                dm_MessageRecordIBLL.MessageToReadByUserID(user_id);
+                if (User_ID <= 0) return FailNoLogin();
+                dm_MessageRecordIBLL.MessageToReadByUserID(User_ID);
                 return Success("状态更改成功!");
             }
             catch (Exception ex)
@@ -714,22 +719,19 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="PageSize">每页显示数量</param>
         /// <param name="MessageType">消息类型 0全部 1订单佣金  2一级粉丝订单  3二级粉丝订单  4团队订单  5下级团队订单  6下级开通代理  7下下级开通代理 8团队成员  9下级团队成员</param>
         /// <returns></returns>
-        public ActionResult GetAccountDetailList(int user_id, int pageNo = 1, int pageSize = 20, int MessageType = 0)
+        public ActionResult GetAccountDetailList(int User_ID, int pageNo = 1, int pageSize = 20, int MessageType = 0)
         {
             try
             {
-                if (user_id.IsEmpty())
-                {
-                    return Fail("用户id不能为空!");
-                }
+                if (User_ID <= 0) return FailNoLogin();
 
-                string cacheKey = Md5Helper.Hash("AccountDetail" + user_id + pageNo + pageSize + MessageType);
+                string cacheKey = Md5Helper.Hash("AccountDetail" + User_ID + pageNo + pageSize + MessageType);
 
                 IEnumerable<dm_accountdetailEntity> accountDetailList = redisCache.Read<IEnumerable<dm_accountdetailEntity>>(cacheKey, 7);
 
                 if (accountDetailList == null)
                 {
-                    string queryJson = "{\"user_id\":\"" + user_id + "\"";
+                    string queryJson = "{\"user_id\":\"" + User_ID + "\"";
                     if (MessageType == 0)
                         queryJson += "}";
                     else
@@ -759,22 +761,19 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="pageSize">每页显示数量</param>
         /// <param name="MessageType">类型  1新用户注册  2签到  3邀请好友奖励</param>
         /// <returns></returns>
-        public ActionResult GetIntegralDetailList(int user_id, int pageNo = 1, int pageSize = 20, int MessageType = 0)
+        public ActionResult GetIntegralDetailList(int User_ID, int pageNo = 1, int pageSize = 20, int MessageType = 0)
         {
             try
             {
-                if (user_id.IsEmpty())
-                {
-                    return Fail("用户id不能为空!");
-                }
+                if (User_ID <= 0) return FailNoLogin();
 
-                string cacheKey = Md5Helper.Hash("IntegralDetail" + user_id + pageNo + pageSize + MessageType);
+                string cacheKey = Md5Helper.Hash("IntegralDetail" + User_ID + pageNo + pageSize + MessageType);
 
                 IEnumerable<dm_intergraldetailEntity> intergralchangegoodList = redisCache.Read<IEnumerable<dm_intergraldetailEntity>>(cacheKey, 7);
 
                 if (intergralchangegoodList == null)
                 {
-                    string queryJson = "{\"user_id\":\"" + user_id + "\"";
+                    string queryJson = "{\"user_id\":\"" + User_ID + "\"";
                     if (MessageType == 0)
                         queryJson += "}";
                     else
@@ -798,18 +797,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取个人任务进度
-        public ActionResult GetPersonProcess(int user_id)
+        public ActionResult GetPersonProcess(int User_ID)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 string appid = CheckAPPID();
 
-                string cacheKey = "MyPersonTask_" + user_id;
+                string cacheKey = "MyPersonTask_" + User_ID;
 
                 IEnumerable<dm_task_person_settingEntity> totalTask = redisCache.Read<IEnumerable<dm_task_person_settingEntity>>(cacheKey, 7);
                 if (totalTask == null)
                 {
-                    totalTask = dm_Task_Person_SettingIBLL.GetPersonProcess(user_id, appid);
+                    totalTask = dm_Task_Person_SettingIBLL.GetPersonProcess(User_ID, appid);
 
                     redisCache.Write<IEnumerable<dm_task_person_settingEntity>>(cacheKey, totalTask, DateTime.Now.AddMinutes(10), 7);
                 }
@@ -832,11 +833,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 领取任务
-        public ActionResult ReceiveAwards(int user_id, int task_id)
+        public ActionResult ReceiveAwards(int User_ID, int task_id)
         {
             try
             {
-                dm_Task_Person_SettingIBLL.ReceiveAwards(user_id, task_id);
+                if (User_ID <= 0) return FailNoLogin();
+
+                dm_Task_Person_SettingIBLL.ReceiveAwards(User_ID, task_id);
                 return Success("领取成功!");
             }
             catch (Exception ex)
@@ -847,12 +850,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取升级合伙人条件
-        public ActionResult GetPartnersProcess(int user_id)
+        public ActionResult GetPartnersProcess(int User_ID)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 string appid = CheckAPPID();
-                return Success("领取成功!", dm_Task_Person_SettingIBLL.GetPartnersProcess(user_id, appid));
+                return Success("领取成功!", dm_Task_Person_SettingIBLL.GetPartnersProcess(User_ID, appid));
             }
             catch (Exception ex)
             {
@@ -862,12 +867,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 申请合伙人
-        public ActionResult ApplyPartners(int user_id)
+        public ActionResult ApplyPartners(int User_ID)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 string appid = CheckAPPID();
-                dm_Task_Person_SettingIBLL.ApplyPartners(user_id, appid);
+                dm_Task_Person_SettingIBLL.ApplyPartners(User_ID, appid);
 
                 return Success("申请成为合伙人成功,我们会在7个工作日审核,请耐心等待!", new { });
             }
@@ -879,16 +886,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 找回订单
-        public ActionResult BindOrder(int user_id, string OrderSn)
+        public ActionResult BindOrder(int User_ID, string OrderSn)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 string appid = CheckAPPID();
-                if (user_id.IsEmpty())
-                {
-                    return Fail("用户id不能为空!");
-                }
-                dm_OrderIBLL.BindOrder(user_id, appid, OrderSn);
+
+                dm_OrderIBLL.BindOrder(User_ID, appid, OrderSn);
                 return Success("订单绑定成功!");
             }
             catch (Exception ex)
@@ -899,20 +905,17 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 我的订单
-        public ActionResult GetMyOrder(int user_id, int PlaformType = 1, int Status = 0, int PageNo = 1, int PageSize = 20)
+        public ActionResult GetMyOrder(int User_ID, int PlaformType = 1, int Status = 0, int PageNo = 1, int PageSize = 20)
         {
             try
             {
-                if (user_id.IsEmpty())
-                {
-                    return Fail("用户id不能为空!");
-                }
+                if (User_ID <= 0) return FailNoLogin();
 
-                string cacheKey = Md5Helper.Hash("OrderList" + user_id + PlaformType + Status + PageNo + PageSize);
+                string cacheKey = Md5Helper.Hash("OrderList" + User_ID + PlaformType + Status + PageNo + PageSize);
                 IEnumerable<dm_orderEntity> dm_OrderEntities = redisCache.Read<IEnumerable<dm_orderEntity>>(cacheKey, 7);
                 if (dm_OrderEntities == null)
                 {
-                    dm_OrderEntities = dm_OrderIBLL.GetMyOrder(user_id, PlaformType, Status, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
+                    dm_OrderEntities = dm_OrderIBLL.GetMyOrder(User_ID, PlaformType, Status, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
 
                     if (dm_OrderEntities.Count() > 0)
                     {
@@ -935,12 +938,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// </summary>
         /// <param name="user_id"></param>
         /// <returns></returns>
-        public ActionResult GetShareImage(int user_id)
+        public ActionResult GetShareImage(int User_ID)
         {
             try
             {
                 string appid = CheckAPPID();
-                return SuccessList("获取成功", dm_userIBLL.GetShareImage(user_id, appid));
+
+                if (User_ID <= 0) return FailNoLogin();
+
+                return SuccessList("获取成功", dm_userIBLL.GetShareImage(User_ID, appid));
             }
             catch (Exception ex)
             {
@@ -950,15 +956,17 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取粉丝数据统计
-        public ActionResult GetFansStaticInfo(int user_id)
+        public ActionResult GetFansStaticInfo(int User_ID)
         {
             try
             {
-                string cacheKey = Md5Helper.Hash("FansStaticInfo" + user_id);
+                if (User_ID <= 0) return FailNoLogin();
+
+                string cacheKey = Md5Helper.Hash("FansStaticInfo" + User_ID);
                 FansStaticInfoEntity fansStaticInfo = redisCache.Read<FansStaticInfoEntity>(cacheKey, 7);
                 if (fansStaticInfo == null)
                 {
-                    fansStaticInfo = dm_userIBLL.GetFansStaticInfo(user_id);
+                    fansStaticInfo = dm_userIBLL.GetFansStaticInfo(User_ID);
                     redisCache.Write<FansStaticInfoEntity>(cacheKey, fansStaticInfo, DateTime.Now.AddMinutes(5), 7);
                 }
                 return Success("获取成功!", fansStaticInfo);
@@ -971,20 +979,22 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取粉丝--直属粉丝
-        public ActionResult GetChildDetail(int user_id, int PageNo = 1, int PageSize = 20)
+        public ActionResult GetChildDetail(int User_ID, int PageNo = 1, int PageSize = 20)
         {
             try
             {
-                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+                if (User_ID <= 0) return FailNoLogin();
+
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
                 if (dm_UserEntity.IsEmpty())
                     return Fail("用户信息异常!");
                 else
                 {
-                    string cacheKey = Md5Helper.Hash("ChildDetail" + user_id + PageNo + PageSize);
+                    string cacheKey = Md5Helper.Hash("ChildDetail" + User_ID + PageNo + PageSize);
                     DataTable dataTable = redisCache.Read(cacheKey, 7);
                     if (dataTable == null)
                     {
-                        dataTable = dm_UserRelationIBLL.GetMyChildDetail(user_id, PageNo, PageSize);
+                        dataTable = dm_UserRelationIBLL.GetMyChildDetail(User_ID, PageNo, PageSize);
                         if (dataTable.Rows.Count >= PageSize)
                             redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(3), 7);
                         else
@@ -1001,20 +1011,21 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取粉丝--二级粉丝
-        public ActionResult GetSonChildDetail(int user_id, int PageNo = 1, int PageSize = 20)
+        public ActionResult GetSonChildDetail(int User_ID, int PageNo = 1, int PageSize = 20)
         {
             try
             {
-                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+                if (User_ID <= 0) return FailNoLogin();
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
                 if (dm_UserEntity.IsEmpty())
                     return Fail("用户信息异常!");
                 else
                 {
-                    string cacheKey = Md5Helper.Hash("SonChildDetail" + user_id + PageNo + PageSize);
+                    string cacheKey = Md5Helper.Hash("SonChildDetail" + User_ID + PageNo + PageSize);
                     DataTable dataTable = redisCache.Read(cacheKey, 7);
                     if (dataTable == null)
                     {
-                        dataTable = dm_UserRelationIBLL.GetMySonChildDetail(user_id, PageNo, PageSize);
+                        dataTable = dm_UserRelationIBLL.GetMySonChildDetail(User_ID, PageNo, PageSize);
                         if (dataTable.Rows.Count >= PageSize)
                             redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(3), 7);
                         else
@@ -1031,18 +1042,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取粉丝--团队粉丝
-        public ActionResult GetPartnersChildDetail(int user_id, int PageNo = 1, int PageSize = 20)
+        public ActionResult GetPartnersChildDetail(int User_ID, int PageNo = 1, int PageSize = 20)
         {
             try
             {
-                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+                if (User_ID <= 0) return FailNoLogin();
+
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
                 if (dm_UserEntity.IsEmpty())
                     return Fail("用户信息异常!");
                 if (dm_UserEntity.partnersstatus == 0)
                     return Fail("当前非合伙人，无法看团队粉丝");
                 else
                 {
-                    string cacheKey = Md5Helper.Hash("PartnersChildDetail" + user_id + PageNo + PageSize);
+                    string cacheKey = Md5Helper.Hash("PartnersChildDetail" + User_ID + PageNo + PageSize);
                     DataTable dataTable = redisCache.Read(cacheKey, 7);
                     if (dataTable == null)
                     {
@@ -1063,16 +1076,31 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 申请提现
-        public ActionResult ApplyAccountCash(int user_id, decimal Price = 0, string Remark = "")
+        public ActionResult ApplyAccountCash(int User_ID, decimal Price = 0, string Remark = "")
         {
             try
             {
-                if (user_id <= 0)
-                    return Fail("用户信息异常!");
+                if (User_ID <= 0) return FailNoLogin();
                 if (Price < 10)
                     return Fail("提现金额不能小于10元!");
-                dm_Apply_CashRecordIBLL.ApplyAccountCash(user_id, Price, Remark);
+                dm_Apply_CashRecordIBLL.ApplyAccountCash(User_ID, Price, Remark);
                 return Success("提现成功!", new { });
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取我的提现记录
+        public ActionResult GetMyCashRecord(int User_ID, int PageNo = 1, int PageSize = 10)
+        {
+            try
+            {
+                if (User_ID <= 0) return FailNoLogin();
+
+                return SuccessList("获取成功", dm_Apply_CashRecordIBLL.GetMyCashRecord(User_ID, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }));
             }
             catch (Exception ex)
             {

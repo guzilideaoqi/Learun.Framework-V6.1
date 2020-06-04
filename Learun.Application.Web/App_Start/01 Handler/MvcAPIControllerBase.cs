@@ -141,6 +141,11 @@ namespace Learun.Application.Web.App_Start._01_Handler
             return Content(new ResParameter { code = ResponseCode.fail, info = info }.ToJson());
         }
 
+        protected virtual ActionResult FailNoLogin()
+        {
+            return Content(new ResParameter { code = ResponseCode.NoLogin, info = "用户未登录!" }.ToJson());
+        }
+
         protected virtual ActionResult FailException(Exception ex)
         {
             if (ex.InnerException.IsEmpty())

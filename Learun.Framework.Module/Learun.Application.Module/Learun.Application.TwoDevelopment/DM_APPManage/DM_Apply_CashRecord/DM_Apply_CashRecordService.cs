@@ -30,7 +30,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 t.status,
                 t.paytype,
                 t.remark,
-                t.createtime
+                t.createtime,
+                t.failreason,
+                t.currentprice
             ";
         }
         #endregion
@@ -324,6 +326,38 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 if (db != null)
                     db.Rollback();
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 我的提现列表
+        public IEnumerable<dm_apply_cashrecordEntity> GetMyCashRecord(int user_id, Pagination pagination)
+        {
+            try
+            {
+                var strSql = new StringBuilder();
+                strSql.Append("SELECT ");
+                strSql.Append(fieldSql);
+                strSql.Append(" FROM dm_apply_cashrecord t ");
+
+                if (user_id > 0)
+                {
+                    strSql.Append(" where t.user_id=");
+                    strSql.Append(user_id.ToString());
+                }
+
+                return this.BaseRepository("dm_data").FindList<dm_apply_cashrecordEntity>(strSql.ToString(), pagination);
+            }
+            catch (Exception ex)
+            {
                 if (ex is ExceptionEx)
                 {
                     throw;

@@ -11,14 +11,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 日 期：2020-04-14 17:35
     /// 描 述：提现申请记录
     /// </summary>
-    public class dm_apply_cashrecordEntity 
+    public class dm_apply_cashrecordEntity
     {
         #region 实体成员
         /// <summary>
         /// 记录id
         /// </summary>
         /// <returns></returns>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("ID")]
         public int? id { get; set; }
         /// <summary>
         /// 用户id
@@ -62,6 +63,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         [Column("CHECKTIME")]
         public DateTime? checktime { get; set; }
+
+        /// <summary>
+        /// 审核失败原因
+        /// </summary>
+        [Column("FAILREASON")]
+        public string failreason { get; set; }
         #endregion
 
         #region 扩展操作

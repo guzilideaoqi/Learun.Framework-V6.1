@@ -200,18 +200,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取我的发布
-        public ActionResult GetMyReleaseTask(int user_id, int PageNo = 1, int PageSize = 20, int TaskStatus = -1)
+        public ActionResult GetMyReleaseTask(int User_ID, int PageNo = 1, int PageSize = 20, int TaskStatus = -1)
         {
             try
             {
-                string cacheKey = "MyReleaseTask" + Md5Helper.Hash(user_id + "" + PageNo + "" + PageSize + "" + TaskStatus);
+                if (User_ID <= 0) return FailNoLogin();
+
+                string cacheKey = "MyReleaseTask" + Md5Helper.Hash(User_ID + "" + PageNo + "" + PageSize + "" + TaskStatus);
                 IEnumerable<dm_taskEntity> dm_TaskEntities = redisCache.Read<IEnumerable<dm_taskEntity>>(cacheKey, 7);
                 if (dm_TaskEntities == null)
                 {
                     if (TaskStatus == -1)
-                        dm_TaskEntities = dm_TaskIBLL.GetPageList(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + user_id + "\"}");
+                        dm_TaskEntities = dm_TaskIBLL.GetPageList(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + User_ID + "\"}");
                     else
-                        dm_TaskEntities = dm_TaskIBLL.GetPageList(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + user_id + "\",\"taskstatus\":\"" + TaskStatus + "\"}");
+                        dm_TaskEntities = dm_TaskIBLL.GetPageList(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + User_ID + "\",\"taskstatus\":\"" + TaskStatus + "\"}");
 
                     if (dm_TaskEntities.Count() > 0)
                     {
@@ -231,15 +233,16 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取我的接受
-        public ActionResult GetMyReviceTask(int user_id, int PageNo = 1, int PageSize = 20, int TaskStatus = -1)
+        public ActionResult GetMyReviceTask(int User_ID, int PageNo = 1, int PageSize = 20, int TaskStatus = -1)
         {
             try
             {
-                string cacheKey = "MyReviceTask" + Md5Helper.Hash(user_id + "" + PageNo + "" + PageSize + "" + TaskStatus);
+                if (User_ID <= 0) return FailNoLogin();
+                string cacheKey = "MyReviceTask" + Md5Helper.Hash(User_ID + "" + PageNo + "" + PageSize + "" + TaskStatus);
                 DataTable dataTable = redisCache.Read(cacheKey, 7);
                 if (dataTable == null)
                 {
-                    dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(user_id, TaskStatus, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
+                    dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(User_ID, TaskStatus, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
                     int datarow = dataTable.Rows.Count;
                     if (datarow > 0)
                     {
@@ -345,6 +348,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 string appid = CheckAPPID();
                 string cacheKey = "TaskTemplate" + User_ID;
                 IEnumerable<dm_task_templateEntity> dm_Task_TemplateEntities = redisCache.Read<IEnumerable<dm_task_templateEntity>>(cacheKey, 7);

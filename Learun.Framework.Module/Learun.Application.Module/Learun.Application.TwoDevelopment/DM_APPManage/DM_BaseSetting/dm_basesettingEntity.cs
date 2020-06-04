@@ -413,6 +413,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("TASKCHECKED")]
         public int taskchecked { get; set; }
 
+        /// <summary>
+        /// ÈÚÔÆToken
+        /// </summary>
+        [Column("RONGCLOUD_TOKEN")]
+        public string rongcloud_token { get; set; }
+
         public void Create()
         {
             UserInfo userInfo = LoginUserInfo.Get();

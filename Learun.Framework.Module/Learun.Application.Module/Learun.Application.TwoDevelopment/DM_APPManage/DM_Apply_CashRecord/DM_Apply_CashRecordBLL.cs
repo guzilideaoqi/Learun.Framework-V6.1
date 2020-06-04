@@ -209,5 +209,26 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
         #endregion
+
+        #region 获取我的提现记录
+        public IEnumerable<dm_apply_cashrecordEntity> GetMyCashRecord(int user_id, Pagination pagination)
+        {
+            try
+            {
+                return dM_Apply_CashRecordService.GetMyCashRecord(user_id, pagination);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

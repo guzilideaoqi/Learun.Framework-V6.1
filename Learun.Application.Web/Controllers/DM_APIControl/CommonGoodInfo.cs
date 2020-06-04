@@ -56,6 +56,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// </summary>
         public string shopName { get; set; }
         /// <summary>
+        /// 店铺Logo
+        /// </summary>
+        public string shopLogo { get; set; }
+        /// <summary>
         /// 详情图片
         /// </summary>
         public string[] detail_images { get; set; }

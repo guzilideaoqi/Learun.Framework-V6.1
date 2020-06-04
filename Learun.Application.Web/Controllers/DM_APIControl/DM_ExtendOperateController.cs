@@ -99,7 +99,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     //isAppStorePreview = ((base.Request.Headers["version"].ToString() == dm_BasesettingEntity.previewversion) ? 1 : 0)
                     previewversion = dm_BasesettingEntity.previewversion,
-                    ischecked = dm_BasesettingEntity.openchecked
+                    ischecked = dm_BasesettingEntity.openchecked,
+                    rongCloudToken = dm_BasesettingEntity.rongcloud_token
                 });
             }
             catch (Exception ex)
@@ -200,7 +201,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     Directory.CreateDirectory(path);
                 pic_file.SaveAs(fullFileName);
 
-                return Success("上传成功", new { ImageUrl =  virtualPath });
+                return Success("上传成功", new { ImageUrl = virtualPath });
             }
             catch (Exception ex)
             {

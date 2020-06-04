@@ -301,6 +301,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             lock (lockObject)
             {
+                Log log = LogFactory.GetLogger("workflowapi");
+
                 IRepository db = null;
                 int parent_id = 0;
                 int? id = 0;
@@ -312,13 +314,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         throw new Exception("邀请码错误!");
                     }
                     dm_userEntity parent_user_entity = GetEntity(parent_id.ToInt());
-                    if (parent_user_entity == null)
+                    if (parent_user_entity.IsEmpty())
                     {
                         throw new Exception("您的邀请人用户异常!");
                     }
                     dm_user_relationEntity dm_Parent_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(parent_id);
                     dm_userEntity dm_UserEntity_exist = GetEntityByPhone(dm_UserEntity.phone, appid);
-                    if (dm_UserEntity_exist != null)
+                    if (!dm_UserEntity_exist.IsEmpty())
                     {
                         throw new Exception("该手机号已注册!");
                     }
@@ -327,50 +329,60 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_UserEntity.token = Guid.NewGuid().ToString();
                     dm_UserEntity.Create();
 
-                    BaseRepository("dm_data").Insert(dm_UserEntity);
-                    dm_userEntity updateEntity = new dm_userEntity();
-                    id = (updateEntity.id = BaseRepository("dm_data").FindObject("SELECT LAST_INSERT_ID();").ToInt());
-                    updateEntity.invitecode = EncodeInviteCode(updateEntity.id);
-                    updateEntity.integral = dm_BasesettingEntity.new_people;
-                    updateEntity.Modify(id);
-                    db = BaseRepository("dm_data").BeginTrans();
-                    db.Update(updateEntity);
-                    db.Insert(new dm_intergraldetailEntity
+                    int effectCount = BaseRepository("dm_data").Insert(dm_UserEntity);
+                    log.Error("用户创建结果" + effectCount);
+                    if (effectCount > 0)
                     {
-                        createtime = DateTime.Now,
-                        currentvalue = updateEntity.integral,
-                        title = "新用户注册奖励",
-                        stepvalue = dm_BasesettingEntity.new_people,
-                        type = 1,
-                        user_id = id
-                    });
-                    parent_user_entity.integral += dm_BasesettingEntity.new_people_parent;
-                    db.Update(parent_user_entity);
-                    db.Insert(new dm_intergraldetailEntity
+                        db = BaseRepository("dm_data").BeginTrans();
+
+                        dm_userEntity updateEntity = BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.token == dm_UserEntity.token);
+                        id = updateEntity.id;
+                        updateEntity.invitecode = EncodeInviteCode(updateEntity.id);
+                        updateEntity.integral = dm_BasesettingEntity.new_people;
+                        updateEntity.Modify(id);
+                        db.Update(updateEntity);
+                        db.Insert(new dm_intergraldetailEntity
+                        {
+                            createtime = DateTime.Now,
+                            currentvalue = updateEntity.integral,
+                            title = "新用户注册奖励",
+                            stepvalue = dm_BasesettingEntity.new_people,
+                            type = 1,
+                            user_id = id
+                        });
+                        parent_user_entity.integral += dm_BasesettingEntity.new_people_parent;
+                        db.Update(parent_user_entity);
+                        db.Insert(new dm_intergraldetailEntity
+                        {
+                            createtime = DateTime.Now,
+                            currentvalue = parent_user_entity.integral,
+                            title = "邀请好友奖励",
+                            stepvalue = dm_BasesettingEntity.new_people_parent,
+                            type = 3,
+                            user_id = parent_id
+                        });
+                        dm_user_relationEntity dm_User_RelationEntity = new dm_user_relationEntity
+                        {
+                            user_id = id,
+                            parent_id = parent_id,
+                            parent_nickname = parent_user_entity.nickname,
+                            partners_id = parent_user_entity.partnersstatus == 1 ? parent_user_entity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
+                        };
+                        dm_User_RelationEntity.Create();
+                        db.Insert(dm_User_RelationEntity);
+                        db.Commit();
+                    }
+                    else
                     {
-                        createtime = DateTime.Now,
-                        currentvalue = parent_user_entity.integral,
-                        title = "邀请好友奖励",
-                        stepvalue = dm_BasesettingEntity.new_people_parent,
-                        type = 3,
-                        user_id = parent_id
-                    });
-                    dm_user_relationEntity dm_User_RelationEntity = new dm_user_relationEntity
-                    {
-                        user_id = id,
-                        parent_id = parent_id,
-                        parent_nickname = parent_user_entity.nickname,
-                        partners_id = parent_user_entity.partnersstatus == 1 ? parent_user_entity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
-                    };
-                    dm_User_RelationEntity.Create();
-                    db.Insert(dm_User_RelationEntity);
-                    db.Commit();
+                        throw new Exception("用户注册失败!");
+                    }
+
                     return GetEntity(id.ToInt());
                 }
                 catch (Exception ex)
                 {
-                    db.Rollback();
-                    Log log = LogFactory.GetLogger("workflowapi");
+                    if (db != null)
+                        db.Rollback();
                     string[] obj = new string[6]
                     {
                         "上下级绑定失败,当前用户",

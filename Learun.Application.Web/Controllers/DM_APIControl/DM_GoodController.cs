@@ -268,7 +268,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                KeyWords = KeyWords == "" ? "潮流" : KeyWords;
+                KeyWords = KeyWords == "" ? "潮流" : KeyWords.Substring(0, 1);
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("CommonSearchGood" + PlaformType + PageNo + PageSize + KeyWords + sort);
                 List<CommonGoodInfo> superGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
@@ -790,6 +790,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string appid = CheckAPPID();
 
+                if (user_id <= 0)
+                    return FailNoLogin();
+
                 #region 解析出来优惠券ID
                 if (couponid.Contains("activityId="))
                 {
@@ -986,6 +989,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
+                if (user_id <= 0)
+                    return FailNoLogin();
                 string cacheKey = Md5Helper.Hash(user_id.ToString() + skuid + couponlink + "2");
                 JDLinkInfo jDLinkInfo = redisCache.Read<JDLinkInfo>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
@@ -1194,6 +1199,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
+                if (user_id <= 0)
+                    return FailNoLogin();
                 string cacheKey = Md5Helper.Hash(user_id.ToString() + skuid + "3");
                 GeneralUrl pDDLinkInfo = redisCache.Read<GeneralUrl>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
@@ -1306,6 +1313,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (user_id <= 0)
+                    return FailNoLogin();
+
                 string cacheKey = "MyIntegralGoodRecord" + user_id + PageNo.ToString() + PageSize;
                 DataTable dataTable = redisCache.Read(cacheKey, 7);
                 if (dataTable == null)
@@ -1406,6 +1416,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (user_id <= 0)
+                    return FailNoLogin();
+
                 string appid = CheckAPPID();
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
 
@@ -1577,6 +1590,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     skuid = item.goodsId.ToString(),
                     title = item.title,
                     shopId = item.sellerId,
+                    shopLogo = "https://wwc.alicdn.com/avatar/getAvatar.do?userId=" + item.sellerId,
                     shopName = item.guideName,
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
@@ -1618,6 +1632,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     skuid = item.goodsId.ToString(),
                     title = item.title,
                     shopId = item.sellerId,
+                    shopLogo = "https://wwc.alicdn.com/avatar/getAvatar.do?userId=" + item.sellerId,
                     shopName = item.shopName,
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
@@ -1658,6 +1673,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     skuid = item.goodsId.ToString(),
                     title = item.title,
                     shopId = item.sellerId,
+                    shopLogo = "https://wwc.alicdn.com/avatar/getAvatar.do?userId=" + item.sellerId,
                     shopName = item.shopName,
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
@@ -1699,6 +1715,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     skuid = item.goodsId.ToString(),
                     title = item.title,
                     shopId = item.sellerId,
+                    shopLogo = "https://wwc.alicdn.com/avatar/getAvatar.do?userId=" + item.sellerId,
                     shopName = item.shopName,
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
@@ -1740,6 +1757,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     skuid = item.goodsId.ToString(),
                     title = item.title,
                     shopId = item.sellerId,
+                    shopLogo = "https://wwc.alicdn.com/avatar/getAvatar.do?userId=" + item.sellerId,
                     shopName = item.shopName,
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
@@ -1783,6 +1801,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     skuid = item.goodsId.ToString(),
                     title = item.title,
                     shopId = item.sellerId,
+                    shopLogo = "https://wwc.alicdn.com/avatar/getAvatar.do?userId=" + item.sellerId,
                     shopName = item.shopName,
                     coupon_after_price = item.actualPrice.ToString(),
                     coupon_price = item.couponPrice.ToString(),
