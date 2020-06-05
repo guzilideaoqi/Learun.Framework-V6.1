@@ -492,6 +492,136 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public List<SignRecord> GetSignData(int User_ID, ref int sign_Count, ref int finish_sign)
+        {
+            try
+            {
+                int? lastIntergral = 0;
+
+                List<SignRecord> signRecords = new List<SignRecord>();
+                /*如果昨天有签到记录则从昨天开始统计  负责从当天开始统计*/
+
+                dm_userEntity dm_UserEntity = GetEntityByCache(User_ID);
+                if (dm_UserEntity.IsEmpty())
+                {
+                    throw new Exception("用户信息异常!");
+                }
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(dm_UserEntity.appid);
+                if (dm_BasesettingEntity.IsEmpty())
+                {
+                    throw new Exception("获取基础配置信息异常!");
+                }
+                int? currentIntegral = 0;
+                int signCount = 0;
+                dm_intergraldetailEntity dm_IntergraldetailEntity = dM_IntergralDetailService.GetLastSignData(User_ID);
+                ///无签到记录
+                if (dm_IntergraldetailEntity == null)
+                {
+                    signRecords.Add(new SignRecord
+                    {
+                        DetailDate = "今日",
+                        IsFinish = 0,
+                        SignIntegral = dm_BasesettingEntity.firstsign
+                    });
+                    sign_Count = 0;
+                }
+                else
+                {
+                    string lastDate = dm_IntergraldetailEntity.createtime.ToString("yyyy-MM-dd");
+                    //签到时间为今天
+                    if (lastDate == DateTime.Now.ToString("yyyy-MM-dd"))
+                    {
+                        finish_sign = 1;
+                        int sign_days = string.IsNullOrWhiteSpace(dm_IntergraldetailEntity.remark) ? 0 : int.Parse(dm_IntergraldetailEntity.remark);
+                        if (sign_days > 1)
+                        {//大于1说明昨天签到了  则构造昨天的数据
+                            signRecords.Add(new SignRecord
+                            {
+                                DetailDate = dm_IntergraldetailEntity.createtime.AddDays(-1).ToString("MM.dd").TrimStart('0'),
+                                IsFinish = 1,
+                                SignIntegral = dm_IntergraldetailEntity.stepvalue - dm_BasesettingEntity.signscrement
+                            });
+                            sign_Count = sign_days;
+                        }
+                        else
+                        {
+                            sign_Count = 1;
+                        }
+                        lastIntergral = dm_IntergraldetailEntity.stepvalue;
+
+                        signRecords.Add(new SignRecord
+                        {
+                            DetailDate = "今日",
+                            IsFinish = 1,
+                            SignIntegral = lastIntergral
+                        });
+
+                    }
+                    //签到时间为昨天
+                    else if (lastDate == DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"))
+                    {
+                        signRecords.Add(new SignRecord
+                        {
+                            DetailDate = dm_IntergraldetailEntity.createtime.AddDays(-1).ToString("MM.dd").TrimStart('0'),
+                            IsFinish = 1,
+                            SignIntegral = dm_IntergraldetailEntity.stepvalue
+                        });
+
+                        lastIntergral = GetCurrentIntegral(dm_BasesettingEntity, dm_IntergraldetailEntity.stepvalue + dm_BasesettingEntity.signscrement);
+
+                        signRecords.Add(new SignRecord
+                        {
+                            DetailDate = "今日",
+                            IsFinish = 0,
+                            SignIntegral = lastIntergral
+                        });
+
+                        sign_Count = int.Parse(dm_IntergraldetailEntity.remark);
+                    }
+                    //非近两天签到
+                    else
+                    {
+                        lastIntergral = dm_BasesettingEntity.firstsign;
+                        signRecords.Add(new SignRecord
+                        {
+                            DetailDate = "今日",
+                            IsFinish = 0,
+                            SignIntegral = lastIntergral
+                        });
+                        sign_Count = 0;
+                    }
+
+
+                }
+
+                #region 填充其他日期
+                int padd_day = signRecords.Count == 1 ? 4 : 3;//追加不同的日期
+                for (int i = 1; i <= padd_day; i++)
+                {
+                    DateTime newTime = DateTime.Now.AddDays(i);
+                    int? newIntegral = GetCurrentIntegral(dm_BasesettingEntity, lastIntergral + dm_BasesettingEntity.signscrement * i);
+                    signRecords.Add(new SignRecord
+                    {
+                        DetailDate = newTime.ToString("MM.dd").TrimStart('0'),
+                        IsFinish = 0,
+                        SignIntegral = newIntegral
+                    });
+                }
+                #endregion
+
+                return signRecords;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        int? GetCurrentIntegral(dm_basesettingEntity dm_BasesettingEntity, int? currentIntegral)
+        {
+            return currentIntegral > dm_BasesettingEntity.signcapping ? dm_BasesettingEntity.signcapping : currentIntegral;
+        }
+
         public string EncodeInviteCode(int? id)
         {
             char[] buf = new char[32];
@@ -943,7 +1073,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         }
 
-        string rongyun_token(int? User_ID,string nickname) {
+        string rongyun_token(int? User_ID, string nickname)
+        {
             try
             {
 
@@ -972,5 +1103,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
         #endregion
+    }
+
+    public class SignRecord
+    {
+        public int? SignIntegral { get; set; }
+        public string DetailDate { get; set; }
+        public int IsFinish { get; set; }
     }
 }

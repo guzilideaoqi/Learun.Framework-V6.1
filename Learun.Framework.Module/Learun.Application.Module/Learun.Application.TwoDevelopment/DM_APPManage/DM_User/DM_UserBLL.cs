@@ -404,10 +404,29 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 生成融云Token
-        public string GeneralRongTokne(int User_ID) {
+        public string GeneralRongTokne(int User_ID)
+        {
             try
             {
                 return dM_UserService.GeneralRongTokne(User_ID);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取签到数据
+        public List<SignRecord> GetSignData(int User_ID, ref int sign_Count, ref int finish_sign)
+        {
+            try
+            {
+                return dM_UserService.GetSignData(User_ID, ref sign_Count, ref finish_sign);
             }
             catch (Exception ex)
             {

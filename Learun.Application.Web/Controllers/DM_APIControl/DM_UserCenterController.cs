@@ -38,6 +38,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_BaseSettingIBLL dm_BaseSettingIBLL = new DM_BaseSettingBLL();
 
+        private DM_IntergralChangeGoodIBLL dM_IntergralChangeGoodIBLL = new DM_IntergralChangeGoodBLL();
+
         #region 用户名密码登陆
 
         public ActionResult DM_Login(dm_userEntity dm_UserEntity)
@@ -1117,6 +1119,39 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (User_ID <= 0) return FailNoLogin();
 
                 return SuccessList("获取成功", dm_userIBLL.GeneralRongTokne(User_ID));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取签到数据
+        public ActionResult GetSignData(int User_ID)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                if (User_ID <= 0) return FailNoLogin();
+                int sign_day = 0, finishsign = 0;
+
+                List<SignRecord> signRecord = dm_userIBLL.GetSignData(User_ID, ref sign_day, ref finishsign);
+
+                dynamic dy = new
+                {
+                    SignData = signRecord,
+                    SignDay = sign_day,
+                    TodaySign = finishsign,
+                    SignRule = "首次签到可得10积分，连续签到每次加3积分，20积分封顶",
+                    IntegralGood = dM_IntergralChangeGoodIBLL.GetPageListByCache(new Pagination
+                    {
+                        page = 1,
+                        rows = 20
+                    }, appid)
+                };
+
+                return Success("数据获取成功!", dy);
             }
             catch (Exception ex)
             {

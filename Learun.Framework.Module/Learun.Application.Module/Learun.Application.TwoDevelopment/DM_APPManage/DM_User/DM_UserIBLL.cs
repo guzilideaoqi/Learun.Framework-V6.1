@@ -70,5 +70,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         string GeneralRongTokne(int User_ID);
         #endregion
 
+        #region 获取签到数据
+        List<SignRecord> GetSignData(int User_ID, ref int sign_Count, ref int finish_sign);
+        #endregion
+
     }
 }
