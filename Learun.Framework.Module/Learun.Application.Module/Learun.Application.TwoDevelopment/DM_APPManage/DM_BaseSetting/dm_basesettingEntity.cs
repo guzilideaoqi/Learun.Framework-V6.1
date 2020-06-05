@@ -413,6 +413,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("TASKCHECKED")]
         public int taskchecked { get; set; }
 
+        /// <summary>
+        /// ÈÚÔÆAPPKEY
+        /// </summary>
+        [Column("RONGCLOUD_APPKEY")]
+        public string rongcloud_appkey { get; set; }
+
+        /// <summary>
+        /// ÈÚÔÆAPPSECRET
+        /// </summary>
+        [Column("RONGCLOUD_APPSECRET")]
+        public string rongcloud_appsecret { get; set; }
+
         public void Create()
         {
             UserInfo userInfo = LoginUserInfo.Get();

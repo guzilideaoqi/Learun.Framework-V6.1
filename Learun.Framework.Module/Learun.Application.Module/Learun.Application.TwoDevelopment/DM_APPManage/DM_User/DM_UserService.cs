@@ -347,7 +347,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         id = updateEntity.id;
                         updateEntity.invitecode = EncodeInviteCode(updateEntity.id);
                         updateEntity.integral = dm_BasesettingEntity.new_people;
-                        updateEntity.rongcloud_token = rongyun_token(id, updateEntity.nickname);
+                        updateEntity.rongcloud_token = rongyun_token(id, updateEntity.nickname, appid);
                         updateEntity.Modify(id);
                         db.Update(updateEntity);
                         db.Insert(new dm_intergraldetailEntity
@@ -1050,7 +1050,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
          * 自定义api地址
          * */
         private static readonly String api = "http://api.cn.ronghub.com";
-        public string GeneralRongTokne(int User_ID)
+        public string GeneralRongTokne(int User_ID, string appid)
         {
             try
             {
@@ -1058,7 +1058,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (dm_UserEntity.IsEmpty())
                     throw new Exception("未找到该用户!");
 
-                dm_UserEntity.rongcloud_token = rongyun_token(User_ID, dm_UserEntity.nickname);
+                dm_UserEntity.rongcloud_token = rongyun_token(User_ID, dm_UserEntity.nickname, appid);
                 dm_UserEntity.Modify(dm_UserEntity.id);
 
                 BaseRepository("dm_data").Update(dm_UserEntity);
@@ -1073,12 +1073,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         }
 
-        string rongyun_token(int? User_ID, string nickname)
+        string rongyun_token(int? User_ID, string nickname, string appid)
         {
             try
             {
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
 
-                RongCloud rongCloud = RongCloud.GetInstance(appKey, appSecret);
+                RongCloud rongCloud = RongCloud.GetInstance(dm_BasesettingEntity.rongcloud_appkey, dm_BasesettingEntity.rongcloud_appsecret);
                 User User = rongCloud.User;
 
                 /**

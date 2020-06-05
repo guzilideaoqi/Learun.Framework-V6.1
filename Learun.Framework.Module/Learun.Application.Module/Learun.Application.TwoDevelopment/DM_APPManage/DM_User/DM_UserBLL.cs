@@ -404,11 +404,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region Éú³ÉÈÚÔÆToken
-        public string GeneralRongTokne(int User_ID)
+        public string GeneralRongTokne(int User_ID, string appid)
         {
             try
             {
-                return dM_UserService.GeneralRongTokne(User_ID);
+                return dM_UserService.GeneralRongTokne(User_ID, appid);
             }
             catch (Exception ex)
             {

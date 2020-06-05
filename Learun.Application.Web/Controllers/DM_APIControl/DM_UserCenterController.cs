@@ -1116,9 +1116,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                string appid = CheckAPPID();
                 if (User_ID <= 0) return FailNoLogin();
 
-                return SuccessList("获取成功", dm_userIBLL.GeneralRongTokne(User_ID));
+                return SuccessList("获取成功", dm_userIBLL.GeneralRongTokne(User_ID, appid));
             }
             catch (Exception ex)
             {
