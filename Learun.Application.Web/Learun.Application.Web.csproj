@@ -67,9 +67,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\HYG.CommonHelper.dll</HintPath>
     </Reference>
-    <Reference Include="HYG.DTK.Helper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="HYG.DTK.Helper, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\HYG.DTK.Helper.dll</HintPath>
+      <HintPath>..\..\大淘客\bin\Debug\HYG.DTK.Helper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">

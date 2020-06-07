@@ -324,6 +324,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 switch (sort)
                 {
+                    case 0:
+                        sortName = "total_sales_des";
+                        break;
                     case 1:
                         sortName = "price_asc";
                         break;
@@ -336,6 +339,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     case 4:
                         sortName = "total_sales_des";
                         break;
+                    default:
+                        sortName = "total_sales_des";
+                        break;
+
                 }
             }
             else if (plaform == 3)

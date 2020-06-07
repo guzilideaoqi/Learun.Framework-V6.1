@@ -22,6 +22,7 @@
         /// </summary>
         exception = 500,
         NoRelation = 101,
-        NoLogin = 401
+        NoLogin = 401,
+        NoMoney = 102
     }
 }

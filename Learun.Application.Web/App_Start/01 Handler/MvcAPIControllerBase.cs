@@ -146,10 +146,20 @@ namespace Learun.Application.Web.App_Start._01_Handler
             return Content(new ResParameter { code = ResponseCode.NoLogin, info = "用户未登录!" }.ToJson());
         }
 
+        protected virtual ActionResult FailNoPrice(string info)
+        {
+            return Content(new ResParameter { code = ResponseCode.NoMoney, info = info }.ToJson());
+        }
+
         protected virtual ActionResult FailException(Exception ex)
         {
             if (ex.InnerException.IsEmpty())
-                return Fail(ex.Message);
+            {
+                if (ex.Message.Contains("账户余额不足"))
+                    return FailNoPrice(ex.Message);
+                else
+                    return Fail(ex.Message);
+            }
             else
                 return Fail(ex.InnerException.Message);
         }
