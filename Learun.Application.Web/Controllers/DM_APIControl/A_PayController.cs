@@ -70,74 +70,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 request.SetNotifyUrl(dm_BasesettingEntity.alipay_notifyurl);
                 request.SetReturnUrl(dm_BasesettingEntity.alipay_notifyurl);
 
-                request.BizContent = "{" +
-    "\"timeout_express\":\"90m\"," +
-    "\"total_amount\":\"" + dm_Alipay_TemplateEntity.finishprice + "\"," +
-    "\"product_code\":\"QUICK_MSECURITY_PAY\"," +
-    "\"body\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
-    "\"subject\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
-    "\"out_trade_no\":\"" + out_trade_no + "\"," +
-    "\"time_expire\":\"" + DateTime.Now.AddMinutes(30).ToString("yyyy-MM-dd HH:mm:ss") + "\"," +
-    "\"goods_type\":\"1\"," +
-    //"\"promo_params\":\"{\\\"storeIdType\\\":\\\"1\\\"}\"," +
-    "\"passback_params\":\"" + HttpUtility.UrlEncode(dm_Alipay_TemplateEntity.name) + "\"," +
-    "\"extend_params\":{" +
-    "\"sys_service_provider_id\":\"" + user_id + "\"," +
-    "\"hb_fq_num\":\"3\"," +
-    "\"hb_fq_seller_percent\":\"100\"," +
-    "\"industry_reflux_info\":\"{\\\\\\\"scene_code\\\\\\\":\\\\\\\"metro_tradeorder\\\\\\\",\\\\\\\"channel\\\\\\\":\\\\\\\"xxxx\\\\\\\",\\\\\\\"scene_data\\\\\\\":{\\\\\\\"asset_name\\\\\\\":\\\\\\\"ALIPAY\\\\\\\"}}\"," +
-    "\"card_type\":\"S0JP0000\"" +
-    "    }," +
-    "\"merchant_order_no\":\"20201008001\"," +
-    "\"enable_pay_channels\":\"pcredit,moneyFund,debitCardExpress\"," +
-    "\"store_id\":\"NJ_001\"," +
-    "\"specified_channel\":\"pcredit\"," +
-    "\"disable_pay_channels\":\"pcredit,moneyFund,debitCardExpress\"," +
-    "      \"goods_detail\":[{" +
-    "        \"goods_id\":\"" + TemplateID + "\"," +
-    "\"alipay_goods_id\":\"20010001\"," +
-    "\"goods_name\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
-    "\"quantity\":1," +
-    "\"price\":2000," +
-    "\"goods_category\":\"34543238\"," +
-    "\"categories_tree\":\"124868003|126232002|126252004\"," +
-    "\"body\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
-    "\"show_url\":\"http://www.alipay.com/xxx.jpg\"" +
-    "        }]," +
-    "\"ext_user_info\":{" +
-    "\"name\":\"" + dm_Alipay_TemplateEntity.name + "\"," +
-    "\"mobile\":\"16587658765\"," +
-    "\"cert_type\":\"IDENTITY_CARD\"," +
-    "\"cert_no\":\"362334768769238881\"," +
-    "\"min_age\":\"18\"," +
-    "\"fix_buyer\":\"F\"," +
-    "\"need_check_info\":\"F\"" +
-    "    }," +
-    "\"business_params\":\"{\\\"data\\\":\\\"123\\\"}\"," +
-    "\"agreement_sign_params\":{" +
-    "\"personal_product_code\":\"CYCLE_PAY_AUTH_P\"," +
-    "\"sign_scene\":\"INDUSTRY|DIGITAL_MEDIA\"," +
-    "\"external_agreement_no\":\"test20190701\"," +
-    "\"external_logon_id\":\"13852852877\"," +
-    "\"access_params\":{" +
-    "\"channel\":\"ALIPAYAPP\"" +
-    "      }," +
-    "\"sub_merchant\":{" +
-    "\"sub_merchant_id\":\"2088123412341234\"," +
-    "\"sub_merchant_name\":\"哆来米\"," +
-    "\"sub_merchant_service_name\":\"能省钱更能赚钱\"," +
-    "\"sub_merchant_service_description\":\"副业才有未来\"" +
-    "      }," +
-    "\"period_rule_params\":{" +
-    "\"period_type\":\"DAY\"," +
-    "\"period\":3," +
-    "\"execute_time\":\"2019-01-23\"," +
-    "\"single_amount\":10.99," +
-    "\"total_amount\":600," +
-    "\"total_payments\":12" +
-    "      }" +
-    "    }" +
-    "  }";
+                request.BizContent = GetBizContent(user_id, TemplateID, dm_Alipay_TemplateEntity.name, dm_Alipay_TemplateEntity.finishprice, out_trade_no);
                 AlipayTradeAppPayResponse response = client.SdkExecute(request);
                 dm_alipay_recordEntity dm_Alipay_RecordEntity = new dm_alipay_recordEntity();
                 dm_Alipay_RecordEntity.user_id = user_id;
@@ -238,6 +171,122 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 return FailException(ex);
             }
+        }
+        #endregion
+
+        #region 生成支付参数(金额前端传入)
+        public ActionResult GeneralPayParamByChongZhi(int User_ID, decimal FinishPrice)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+
+                if (FinishPrice < 1)
+                    throw new Exception("充值金额最小为1元");
+
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                if (dm_BasesettingEntity == null)
+                    return Fail("基础配置获取失败!");
+
+                string out_trade_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + User_ID.ToString().PadLeft(6, '0');
+                IAopClient client = new DefaultAopClient("https://openapi.alipaydev.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
+                AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+                request.SetNotifyUrl(dm_BasesettingEntity.alipay_notifyurl);
+                request.SetReturnUrl(dm_BasesettingEntity.alipay_notifyurl);
+
+                request.BizContent = GetBizContent(User_ID, 99, "余额充值", FinishPrice, out_trade_no);
+                AlipayTradeAppPayResponse response = client.SdkExecute(request);
+                dm_alipay_recordEntity dm_Alipay_RecordEntity = new dm_alipay_recordEntity();
+                dm_Alipay_RecordEntity.user_id = User_ID;
+                dm_Alipay_RecordEntity.total_amount = FinishPrice;
+                dm_Alipay_RecordEntity.templateid = 99;
+                dm_Alipay_RecordEntity.subject = "余额充值";
+                dm_Alipay_RecordEntity.out_trade_no = out_trade_no;
+                dM_Alipay_RecordIBLL.SaveEntity(0, dm_Alipay_RecordEntity);
+
+                return Success("支付参数获取成功!", new { PayParam = response.Body });
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+
+        }
+        #endregion
+
+        #region 获取构造的支付参数
+        string GetBizContent(int user_id, int TemplateID, string name, decimal finishprice, string out_trade_no)
+        {
+            string bizContent = "{" +
+        "\"timeout_express\":\"90m\"," +
+        "\"total_amount\":\"" + finishprice + "\"," +
+        "\"product_code\":\"QUICK_MSECURITY_PAY\"," +
+        "\"body\":\"" + name + "\"," +
+        "\"subject\":\"" + name + "\"," +
+        "\"out_trade_no\":\"" + out_trade_no + "\"," +
+        "\"time_expire\":\"" + DateTime.Now.AddMinutes(30).ToString("yyyy-MM-dd HH:mm:ss") + "\"," +
+        "\"goods_type\":\"1\"," +
+        //"\"promo_params\":\"{\\\"storeIdType\\\":\\\"1\\\"}\"," +
+        "\"passback_params\":\"" + HttpUtility.UrlEncode(name) + "\"," +
+        "\"extend_params\":{" +
+        "\"sys_service_provider_id\":\"" + user_id + "\"," +
+        "\"hb_fq_num\":\"3\"," +
+        "\"hb_fq_seller_percent\":\"100\"," +
+        "\"industry_reflux_info\":\"{\\\\\\\"scene_code\\\\\\\":\\\\\\\"metro_tradeorder\\\\\\\",\\\\\\\"channel\\\\\\\":\\\\\\\"xxxx\\\\\\\",\\\\\\\"scene_data\\\\\\\":{\\\\\\\"asset_name\\\\\\\":\\\\\\\"ALIPAY\\\\\\\"}}\"," +
+        "\"card_type\":\"S0JP0000\"" +
+        "    }," +
+        "\"merchant_order_no\":\"20201008001\"," +
+        "\"enable_pay_channels\":\"pcredit,moneyFund,debitCardExpress\"," +
+        "\"store_id\":\"NJ_001\"," +
+        "\"specified_channel\":\"pcredit\"," +
+        "\"disable_pay_channels\":\"pcredit,moneyFund,debitCardExpress\"," +
+        "      \"goods_detail\":[{" +
+        "        \"goods_id\":\"" + TemplateID + "\"," +
+        "\"alipay_goods_id\":\"20010001\"," +
+        "\"goods_name\":\"" + name + "\"," +
+        "\"quantity\":1," +
+        "\"price\":2000," +
+        "\"goods_category\":\"34543238\"," +
+        "\"categories_tree\":\"124868003|126232002|126252004\"," +
+        "\"body\":\"" + name + "\"," +
+        "\"show_url\":\"http://www.alipay.com/xxx.jpg\"" +
+        "        }]," +
+        "\"ext_user_info\":{" +
+        "\"name\":\"" + name + "\"," +
+        "\"mobile\":\"16587658765\"," +
+        "\"cert_type\":\"IDENTITY_CARD\"," +
+        "\"cert_no\":\"362334768769238881\"," +
+        "\"min_age\":\"18\"," +
+        "\"fix_buyer\":\"F\"," +
+        "\"need_check_info\":\"F\"" +
+        "    }," +
+        "\"business_params\":\"{\\\"data\\\":\\\"123\\\"}\"," +
+        "\"agreement_sign_params\":{" +
+        "\"personal_product_code\":\"CYCLE_PAY_AUTH_P\"," +
+        "\"sign_scene\":\"INDUSTRY|DIGITAL_MEDIA\"," +
+        "\"external_agreement_no\":\"test20190701\"," +
+        "\"external_logon_id\":\"13852852877\"," +
+        "\"access_params\":{" +
+        "\"channel\":\"ALIPAYAPP\"" +
+        "      }," +
+        "\"sub_merchant\":{" +
+        "\"sub_merchant_id\":\"2088123412341234\"," +
+        "\"sub_merchant_name\":\"哆来米\"," +
+        "\"sub_merchant_service_name\":\"能省钱更能赚钱\"," +
+        "\"sub_merchant_service_description\":\"副业才有未来\"" +
+        "      }," +
+        "\"period_rule_params\":{" +
+        "\"period_type\":\"DAY\"," +
+        "\"period\":3," +
+        "\"execute_time\":\"2019-01-23\"," +
+        "\"single_amount\":10.99," +
+        "\"total_amount\":600," +
+        "\"total_payments\":12" +
+        "      }" +
+        "    }" +
+        "  }";
+
+            return bizContent;
         }
         #endregion
 

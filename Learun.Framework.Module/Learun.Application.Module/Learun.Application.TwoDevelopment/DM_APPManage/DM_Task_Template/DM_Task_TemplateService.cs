@@ -22,16 +22,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         private string fieldSql;
         public DM_Task_TemplateService()
         {
-            fieldSql=@"
+            fieldSql= @"
                 t.id,
                 t.task_title,
                 t.task_type,
                 t.task_description,
                 t.task_operate,
                 t.needcount,
-                t.totalcommission,
+                t.singlecommission,
                 t.createtime,
-                t.user_id
+                t.user_id,
+                t.task_time_limit
             ";
         }
         #endregion
@@ -59,6 +60,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (!queryParam["User_ID"].IsEmpty()) {
                     strSql.Append(" and t.user_id='" + queryParam["User_ID"].ToString() + "'");
                 }
+
+                strSql.Append(" order by createtime desc");
 
                 return this.BaseRepository("dm_data").FindList<dm_task_templateEntity>(strSql.ToString());
             }

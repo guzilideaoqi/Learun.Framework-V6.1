@@ -160,8 +160,12 @@ namespace Learun.Application.Web.App_Start._01_Handler
                 else
                     return Fail(ex.Message);
             }
-            else
-                return Fail(ex.InnerException.Message);
+            else {
+                if (ex.InnerException.Message.Contains("账户余额不足"))
+                    return FailNoPrice(ex.InnerException.Message);
+                else
+                    return Fail(ex.InnerException.Message);
+            }
         }
         /// <summary>
         /// 返回失败消息

@@ -55,8 +55,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 总佣金
         /// </summary>
         /// <returns></returns>
-        [Column("TOTALCOMMISSION")]
-        public decimal? totalcommission { get; set; }
+        [Column("SINGLECOMMISSION")]
+        public decimal? singlecommission { get; set; }
         /// <summary>
         /// createtime
         /// </summary>
@@ -69,6 +69,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("USER_ID")]
         public int? user_id { get; set; }
+
+        /// <summary>
+        /// 任务限制时间
+        /// </summary>
+        [Column("TASK_TIME_LIMIT")]
+        public int? task_time_limit { get; set; }
         #endregion
 
         #region 扩展操作

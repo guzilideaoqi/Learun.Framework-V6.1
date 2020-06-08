@@ -209,8 +209,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             IRepository db = null;
             try
             {
-                dm_AccountdetailEntities.Clear();
-                calculateComissionEntities.Clear();
+
                 /*
                  * 根据外部交易单号获取订单记录
                  * 更改用户状态并完成返利
@@ -221,137 +220,159 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                  */
                 dm_alipay_recordEntity dm_Alipay_RecordEntity_old = this.BaseRepository("dm_data").FindEntity<dm_alipay_recordEntity>(t => t.out_trade_no == dm_Alipay_RecordEntity.out_trade_no);
 
-                decimal one_agent_commission = 0, two_agent_commission = 0, one_partners_commission = 0, two_partners_commission = 0;
-
-                dm_userEntity currentUser = null, one_User = null, two_User = null, one_partners = null, two_partners = null;
-
-                ///如果老的记录是已支付状态则不需要再执行修改和返利
-                if (dm_Alipay_RecordEntity_old.alipay_status.ToUpper() == "TRADE_SUCCESS")
-                    return;
-
-                if (dm_Alipay_RecordEntity_old.IsEmpty())
-                    throw new Exception("根据外部交易单号未能查询到支付记录,当前传入外部交易单号" + dm_Alipay_RecordEntity.out_trade_no);
-                dm_Alipay_RecordEntity.Modify(dm_Alipay_RecordEntity_old.id);//更改交易信息
-
-
-                #region 获取上下级关系
-                IEnumerable<dm_user_relationEntity> userRelationList = dM_UserRelationService.GetParentRelation(dm_Alipay_RecordEntity_old.user_id);
-                #endregion
-
-                #region 获取上下级关系的用户信息
-                IEnumerable<dm_userEntity> userList = dM_UserService.GetParentUser(dm_Alipay_RecordEntity_old.user_id);
-                #endregion
-
-                #region 更改当前用户等级
-                currentUser = userList.Where(t => t.id == dm_Alipay_RecordEntity_old.user_id).FirstOrDefault();
-                if (currentUser.IsEmpty())
-                    throw new Exception("用户信息异常!");
-                //初级代理
-                if (dm_Alipay_RecordEntity_old.templateid == 1)
+                if (dm_Alipay_RecordEntity_old.templateid == 99)//余额充值
                 {
-                    currentUser.userlevel = 1;
+                    dm_userEntity dm_UserEntity = dM_UserService.GetEntity(dm_Alipay_RecordEntity_old.user_id);
+                    if (dm_UserEntity.IsEmpty())
+                        throw new Exception("用户信息异常!");
+                    ///修改账户余额
+                    dm_UserEntity.accountprice += dm_Alipay_RecordEntity_old.total_amount;//充值成功后的账户余额
+                    dm_UserEntity.Modify(dm_UserEntity.id);
+
+                    dm_accountdetailEntity dm_AccountdetailEntity = GeneralAccountDetail(dm_Alipay_RecordEntity_old.user_id, 21, "余额充值", "账户充值", (decimal)dm_Alipay_RecordEntity_old.total_amount, dm_UserEntity.accountprice);
+
+                    db = BaseRepository("dm_data").BeginTrans();
+                    db.Update(dm_UserEntity);
+                    db.Insert(dm_AccountdetailEntity);
+                    db.Commit();
                 }
-                //高级代理
-                else if (dm_Alipay_RecordEntity_old.templateid == 2)
-                {
-                    currentUser.userlevel = 2;
-                }
-                //升级代理
-                else if (dm_Alipay_RecordEntity.templateid == 3)
-                {
-                    currentUser.userlevel = 2;
-                }
-                calculateComissionEntities.Add(currentUser);
-                #endregion
+                else
+                {//代理开通
+                    dm_AccountdetailEntities.Clear();
+                    calculateComissionEntities.Clear();
 
-                #region 增加开通代理消息记录
-                dm_messagerecordEntity dm_MessagerecordEntity = new dm_messagerecordEntity();
-                dm_MessagerecordEntity.user_id = dm_Alipay_RecordEntity_old.user_id;
-                dm_MessagerecordEntity.messagetitle = "开通代理";
-                dm_MessagerecordEntity.messagecontent = "代理开通成功，发展下级可享受永久提成!";
-                dm_MessagerecordEntity.messagetype = 1;
-                dm_MessagerecordEntity.createtime = DateTime.Now;
-                dm_MessagerecordEntity.isread = 0;
-                #endregion
+                    decimal one_agent_commission = 0, two_agent_commission = 0, one_partners_commission = 0, two_partners_commission = 0;
 
-                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(currentUser.appid);
+                    dm_userEntity currentUser = null, one_User = null, two_User = null, one_partners = null, two_partners = null;
 
-                #region 更改一级账户余额及明细
-                dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Alipay_RecordEntity_old.user_id).FirstOrDefault();
-                one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
-                if (!one_User.IsEmpty())
-                {
-                    if (one_User.userlevel == 2)
-                    {//高级代理才能享受代理提成
-                        one_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
-                        if (one_agent_commission > 0)
-                        {
-                            one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
-                            dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 6, "下级开通代理", "您的下级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_agent_commission, one_User.accountprice));
-                        }
+                    ///如果老的记录是已支付状态则不需要再执行修改和返利
+                    if (dm_Alipay_RecordEntity_old.alipay_status.ToUpper() == "TRADE_SUCCESS")
+                        return;
 
-                        #region 更改二级账户余额及明细
-                        dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
-                        two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
-                        if (!two_User.IsEmpty())
-                        {
-                            two_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_two * dm_Alipay_RecordEntity_old.total_amount);
-                            if (two_agent_commission > 0)
-                            {
-                                two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 7, "二级开通代理", "您的二级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_agent_commission, two_User.accountprice));
-                            }
-                        }
-                        #endregion
+                    if (dm_Alipay_RecordEntity_old.IsEmpty())
+                        throw new Exception("根据外部交易单号未能查询到支付记录,当前传入外部交易单号" + dm_Alipay_RecordEntity.out_trade_no);
+                    dm_Alipay_RecordEntity.Modify(dm_Alipay_RecordEntity_old.id);//更改交易信息
 
-                    }
-                }
-                #endregion
 
-                #region 获取当前用户所属合伙人(一级合伙人)
-                one_partners = dM_UserService.GetUserByPartnersID(dm_User_RelationEntity_one.partners_id);
-                if (!one_partners.IsEmpty())
-                {
-                    one_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_one_partners * dm_Alipay_RecordEntity_old.total_amount);
-                    if (one_partners_commission > 0)
+                    #region 获取上下级关系
+                    IEnumerable<dm_user_relationEntity> userRelationList = dM_UserRelationService.GetParentRelation(dm_Alipay_RecordEntity_old.user_id);
+                    #endregion
+
+                    #region 获取上下级关系的用户信息
+                    IEnumerable<dm_userEntity> userList = dM_UserService.GetParentUser(dm_Alipay_RecordEntity_old.user_id);
+                    #endregion
+
+                    #region 更改当前用户等级
+                    currentUser = userList.Where(t => t.id == dm_Alipay_RecordEntity_old.user_id).FirstOrDefault();
+                    if (currentUser.IsEmpty())
+                        throw new Exception("用户信息异常!");
+                    //初级代理
+                    if (dm_Alipay_RecordEntity_old.templateid == 1)
                     {
-                        one_partners = CalculateComission(one_partners.id, one_partners_commission, one_partners.accountprice);
-                        dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 8, "团队成员开通代理", "您的团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_partners_commission, one_partners.accountprice));
+                        currentUser.userlevel = 1;
                     }
-
-                    #region 二级合伙人
-                    dm_user_relationEntity dm_User_RelationEntity_one_partners = dM_UserRelationService.GetEntityByUserID(one_partners.id);
-                    two_partners = dM_UserService.GetEntityByCache(dm_User_RelationEntity_one_partners.parent_id);
-                    if (!two_partners.IsEmpty())
+                    //高级代理
+                    else if (dm_Alipay_RecordEntity_old.templateid == 2)
                     {
-                        if (two_partners.partnersstatus == 1)
-                        {//二级用户为合伙人时才进行返利
-                            two_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_two_partners * dm_Alipay_RecordEntity_old.total_amount);
-                            if (two_partners_commission > 0)
+                        currentUser.userlevel = 2;
+                    }
+                    //升级代理
+                    else if (dm_Alipay_RecordEntity.templateid == 3)
+                    {
+                        currentUser.userlevel = 2;
+                    }
+                    calculateComissionEntities.Add(currentUser);
+                    #endregion
+
+                    #region 增加开通代理消息记录
+                    dm_messagerecordEntity dm_MessagerecordEntity = new dm_messagerecordEntity();
+                    dm_MessagerecordEntity.user_id = dm_Alipay_RecordEntity_old.user_id;
+                    dm_MessagerecordEntity.messagetitle = "开通代理";
+                    dm_MessagerecordEntity.messagecontent = "代理开通成功，发展下级可享受永久提成!";
+                    dm_MessagerecordEntity.messagetype = 1;
+                    dm_MessagerecordEntity.createtime = DateTime.Now;
+                    dm_MessagerecordEntity.isread = 0;
+                    #endregion
+
+                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(currentUser.appid);
+
+                    #region 更改一级账户余额及明细
+                    dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Alipay_RecordEntity_old.user_id).FirstOrDefault();
+                    one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
+                    if (!one_User.IsEmpty())
+                    {
+                        if (one_User.userlevel == 2)
+                        {//高级代理才能享受代理提成
+                            one_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
+                            if (one_agent_commission > 0)
                             {
-                                two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 9, "下级团队成员开通代理", "您的下级团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_partners_commission, two_partners.accountprice));
+                                one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
+                                dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 6, "下级开通代理", "您的下级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_agent_commission, one_User.accountprice));
                             }
+
+                            #region 更改二级账户余额及明细
+                            dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
+                            two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
+                            if (!two_User.IsEmpty())
+                            {
+                                two_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_two * dm_Alipay_RecordEntity_old.total_amount);
+                                if (two_agent_commission > 0)
+                                {
+                                    two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 7, "二级开通代理", "您的二级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                }
+                            }
+                            #endregion
+
                         }
                     }
                     #endregion
-                }
-                #endregion
 
-
-                if (calculateComissionEntities.Count > 0)
-                {
-                    //必须加上这个变量,用于清除当前返利账户的余额
-                    foreach (var item in calculateComissionEntities)
+                    #region 获取当前用户所属合伙人(一级合伙人)
+                    one_partners = dM_UserService.GetUserByPartnersID(dm_User_RelationEntity_one.partners_id);
+                    if (!one_partners.IsEmpty())
                     {
-                        item.Modify(item.id);
+                        one_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_one_partners * dm_Alipay_RecordEntity_old.total_amount);
+                        if (one_partners_commission > 0)
+                        {
+                            one_partners = CalculateComission(one_partners.id, one_partners_commission, one_partners.accountprice);
+                            dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 8, "团队成员开通代理", "您的团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_partners_commission, one_partners.accountprice));
+                        }
+
+                        #region 二级合伙人
+                        dm_user_relationEntity dm_User_RelationEntity_one_partners = dM_UserRelationService.GetEntityByUserID(one_partners.id);
+                        two_partners = dM_UserService.GetEntityByCache(dm_User_RelationEntity_one_partners.parent_id);
+                        if (!two_partners.IsEmpty())
+                        {
+                            if (two_partners.partnersstatus == 1)
+                            {//二级用户为合伙人时才进行返利
+                                two_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_two_partners * dm_Alipay_RecordEntity_old.total_amount);
+                                if (two_partners_commission > 0)
+                                {
+                                    two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 9, "下级团队成员开通代理", "您的下级团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_partners_commission, two_partners.accountprice));
+                                }
+                            }
+                        }
+                        #endregion
                     }
-                    db = BaseRepository("dm_data").BeginTrans();
-                    db.Update(dm_Alipay_RecordEntity);//修改原有的支付宝支付记录
-                    db.Insert(dm_MessagerecordEntity);//增加消息记录
-                    db.Insert(dm_AccountdetailEntities);//增加账户余额明细
-                    db.Update(calculateComissionEntities);//批量修改用户信息
-                    db.Commit();
+                    #endregion
+
+
+                    if (calculateComissionEntities.Count > 0)
+                    {
+                        //必须加上这个变量,用于清除当前返利账户的余额
+                        foreach (var item in calculateComissionEntities)
+                        {
+                            item.Modify(item.id);
+                        }
+                        db = BaseRepository("dm_data").BeginTrans();
+                        db.Update(dm_Alipay_RecordEntity);//修改原有的支付宝支付记录
+                        db.Insert(dm_MessagerecordEntity);//增加消息记录
+                        db.Insert(dm_AccountdetailEntities);//增加账户余额明细
+                        db.Update(calculateComissionEntities);//批量修改用户信息
+                        db.Commit();
+                    }
                 }
             }
             catch (Exception ex)
