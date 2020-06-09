@@ -22,6 +22,9 @@ using System.Data;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Net;
+using System.Text;
+using System.IO;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -264,11 +267,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 三合一超级搜索接口
-        public ActionResult CommonSearchGood(int user_id = 0, int PlaformType = 1, int PageNo = 1, int PageSize = 10, string KeyWords = "", int sort = 0)
+        public ActionResult CommonSearchGood(int user_id = 0, int PlaformType = 1, int PageNo = 1, int PageSize = 10, string KeyWords = "20", int sort = 0)
         {
             try
             {
-                KeyWords = KeyWords == "" ? "潮流" : KeyWords.Substring(0, 1);
+                //KeyWords = KeyWords == "" ? "潮流" : KeyWords.Substring(0, 1);
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("CommonSearchGood" + PlaformType + PageNo + PageSize + KeyWords + sort);
                 List<CommonGoodInfo> superGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
@@ -284,7 +287,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         dTK_Super_GoodRequest.type = 0;
                         dTK_Super_GoodRequest.pageId = PageNo;
                         dTK_Super_GoodRequest.pageSize = PageSize;
-                        dTK_Super_GoodRequest.keyWords = KeyWords;
+                        dTK_Super_GoodRequest.keyWords = GetNumid(KeyWords);
                         dTK_Super_GoodRequest.tmall = 0;
                         dTK_Super_GoodRequest.haitao = 0;
                         dTK_Super_GoodRequest.sort = GetSort(PlaformType, sort);
@@ -401,7 +404,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="haitao">1-海淘商品，0-所有商品，不填默认为0</param>
         /// <param name="sort">排序字段信息 销量（total_sales） 价格（price），排序_des（降序），排序_asc（升序）</param>
         /// <returns></returns>
-        public ActionResult GetSuperSerachGood(int user_id, int type = 0, int pageId = 1, int pageSize = 20, string keyWords = "", int tmall = 0, int haitao = 0, string sort = "total_sales_des")
+        public ActionResult GetSuperSerachGood(int user_id, int type = 0, int pageId = 1, int pageSize = 20, string keyWords = "20", int tmall = 0, int haitao = 0, string sort = "total_sales_des")
         {
             try
             {
@@ -421,7 +424,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dTK_Super_GoodRequest.type = type;
                     dTK_Super_GoodRequest.pageId = pageId;
                     dTK_Super_GoodRequest.pageSize = pageSize;
-                    dTK_Super_GoodRequest.keyWords = keyWords;
+                    dTK_Super_GoodRequest.keyWords = GetNumid(keyWords);
                     dTK_Super_GoodRequest.tmall = tmall;
                     dTK_Super_GoodRequest.haitao = haitao;
                     dTK_Super_GoodRequest.sort = sort;
@@ -446,7 +449,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         #region 大淘客搜索商品(2个小时更新一次)
         //public ActionResult GetDTKSearchGood(int user_id, int pageId = 1, int pageSize = 20, string cids = "", int subcid = -1, int juHuaSuan = -1, int taoQiangGou = -1, string keyWords = "", int tmall = -1, int tchaoshi = -1,int goldSeller=-1,int haitao=-1,int brand=-1,string brandIds="", string sort = "total_sales_des")
-        public ActionResult GetDTKSearchGood(int user_id, int pageId = 1, int pageSize = 20, string cids = "", int subcid = -1, string keyWords = "", string sort = "0")
+        public ActionResult GetDTKSearchGood(int user_id, int pageId = 1, int pageSize = 20, string cids = "", int subcid = -1, string keyWords = "20", string sort = "0")
         {
             try
             {
@@ -474,7 +477,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         if (cids != "")
                             dtk_Get_dtk_Search_GoodRequest.cids = cids;
                     }
-                    dtk_Get_dtk_Search_GoodRequest.keyWords = keyWords;
+                    dtk_Get_dtk_Search_GoodRequest.keyWords = GetNumid(keyWords);
                     dtk_Get_dtk_Search_GoodRequest.sort = sort;
                     DTK_Get_dtk_Search_GoodResponse dTK_Get_dtk_Search_GoodResponse = dTK_ApiManage.GetDtkSearchGood(dtk_Get_dtk_Search_GoodRequest);
                     if (dTK_Get_dtk_Search_GoodResponse.code != 0)
@@ -1867,5 +1870,108 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             return img;
         }
         #endregion
+
+        #region 正则解析获取商品id
+        string GetNumid(string keyWord)
+        {
+            string pwdContent = "";
+            try
+            {
+                #region 正则获取链接中的商品id
+                pwdContent = getValue("(?<=(id=))[0-9]{5,}", keyWord);//识别出来的商品ID
+                if (string.IsNullOrWhiteSpace(pwdContent))
+                {
+                    string pwdReg = @"[^a-zA-Z=/\d@<\u4E00-\u9FA5]([a-zA-Z0-9]{11})[^a-zA-Z=.\d@>\u4E00-\u9FA5]";
+                    pwdContent = getValue(pwdReg, keyWord);
+                    if (pwdContent != "")
+                    {
+                        #region 解析淘口令
+                        pwdContent = ParsePwd("http://cloud.jinglm.com/TB_OpenApi/TKL_Query", string.Format("PasswordContent={0}&AdzoneId={1}&SiteId={2}&AccountID={3}", keyWord, "110249350265", "967450311", "127267155"));
+                        #endregion
+                    }
+                }
+                else
+                {
+                    Regex tb_regex = new Regex(@"^(http|https)(://detail.tmall.com|://item.taobao.com|://chaoshi.detail.tmall.com)");
+                    if (!tb_regex.IsMatch(keyWord))
+                    {
+                        pwdContent = "";
+                    }
+                }
+                #endregion
+            }
+            catch (Exception)
+            {
+                pwdContent = "";
+            }
+
+            if (pwdContent == "")
+                return new string[] { "家装家纺", "文娱车品" }.Contains(keyWord) ? keyWord.Substring(0, 1) : keyWord;
+            else
+                return pwdContent;
+        }
+
+        public string getValue(string parn, string content)
+        {
+            Regex reg = new Regex(parn);
+            return reg.Match(content).Value;
+        }
+
+        HttpWebResponse response = null;
+        public string ParsePwd(string Url, string postDataStr)
+        {
+            try
+            {
+                System.Net.ServicePointManager.Expect100Continue = false;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                //request.ContentLength = postDataStr.Length;
+                request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)";
+
+                request.Headers.Add("apikey", "a5a553f7d21647a5a95bef69546894f3");
+
+
+                byte[] byteData = Encoding.UTF8.GetBytes(postDataStr);
+                int length = byteData.Length;
+                request.ContentLength = length;
+                Stream writer = request.GetRequestStream();
+                writer.Write(byteData, 0, length);
+                writer.Close();
+
+                response = (HttpWebResponse)request.GetResponse();
+
+                string encoding = response.ContentEncoding; if (encoding == null || encoding.Length < 1)
+                {
+                    encoding = "UTF-8";
+                }
+                StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(encoding));
+                string retstring = reader.ReadToEnd();
+
+                PwdResult pwdResult = JsonConvert.DeserializeObject<PwdResult>(retstring);
+
+                return pwdResult.data.NumIid;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+        #endregion
+    }
+
+    public class PwdResult
+    {
+        public int code { get; set; }
+        public string info { get; set; }
+        public PwdData data { get; set; }
+    }
+
+    public class PwdData
+    {
+        public string ClickUrl { get; set; }
+        public string NumIid { get; set; }
+        public string OriginPid { get; set; }
+        public string OriginUrl { get; set; }
     }
 }

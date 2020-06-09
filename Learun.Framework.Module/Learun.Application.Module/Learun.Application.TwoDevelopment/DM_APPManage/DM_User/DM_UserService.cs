@@ -1013,8 +1013,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw new Exception("未检测到您的上级信息!");
 
                 dm_userEntity dm_ParentUserEntity = GetEntityByCache(dm_User_RelationEntity.parent_id);
-                if (dm_ParentUserEntity.IsEmpty())
-                    throw new Exception("上级用户信息异常!");
+                //if (dm_ParentUserEntity.IsEmpty())
+                //    throw new Exception("上级用户信息异常!");
 
                 dm_userEntity dm_UserEntity = GetEntityByCache(User_ID);
                 if (dm_UserEntity.IsEmpty())
@@ -1022,12 +1022,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 return new FansStaticInfoEntity
                 {
-                    Parent_WX = dm_ParentUserEntity.mywechat,
-                    Parent_NickName = dm_ParentUserEntity.nickname,
+                    Parent_WX = dm_ParentUserEntity.IsEmpty() ? "无" : dm_ParentUserEntity.mywechat,
+                    Parent_NickName = dm_ParentUserEntity.IsEmpty() ? "无" : dm_ParentUserEntity.nickname,
                     MyChildCount = dm_UserEntity.mychildcount,
                     MySonChildCount = dm_UserEntity.mysonchildcount,
                     MyPartnersCount = dm_UserEntity.mypartnerscount,
-                    HeadPic = dm_ParentUserEntity.headpic
+                    HeadPic = dm_ParentUserEntity.IsEmpty() ? "" : dm_ParentUserEntity.headpic
                 };
             }
             catch (Exception ex)

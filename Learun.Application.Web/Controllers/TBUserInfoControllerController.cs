@@ -56,8 +56,8 @@ namespace Learun.Application.Web.Controllers
                 /*
                 * 多米的授权配置
                 */
-                dm_basesettingEntity dm_BasesettingEntity = new dm_basesettingEntity();
-                dm_BasesettingEntity.appid = userid;
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(userid);
+                //dm_BasesettingEntity.appid = userid;
                 dm_BasesettingEntity.tb_sessionkey = access_token;
                 dm_BasesettingEntity.tb_authorendtime = DateTime.Now.AddMonths(1);
 
