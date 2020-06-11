@@ -268,7 +268,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         item.finishstatus = GetFinishStatus(item.finishcount, item.needcount, user_id, item.id);
                         item.remark += string.Format("({0}/{1})", item.finishcount, item.needcount);
 
-                        item.btntext = getBtnText(item.finishstatus);
+                        item.btntext = getBtnText(item.finishstatus, item.s_type);
                     }
                     else if (item.s_type == 4)
                     {//购物任务
@@ -278,7 +278,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                         item.remark += string.Format("({0}/{1})", item.finishcount, item.needcount);
 
-                        item.btntext = getBtnText(item.finishstatus);
+                        item.btntext = getBtnText(item.finishstatus, item.s_type);
                     }
                     else if (item.s_type == 6)
                     {
@@ -322,13 +322,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        string getBtnText(int finishstatus)
+        string getBtnText(int finishstatus, int? s_type)
         {
             string btnText = "未完成";
             switch (finishstatus)
             {
                 case 0:
-                    btnText = "未完成";
+                    btnText = s_type == 2 ? "去邀请" : "未完成";
                     break;
                 case 1:
                     btnText = "领取";
