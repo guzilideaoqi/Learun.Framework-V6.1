@@ -58,6 +58,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 return FailException(ex);
             }
         }
+
+        public ActionResult GetGoodTypeByCache()
+        {
+            try
+            {
+                string cacheKey = "SuperCategory";
+                List<CategoryItem> categoryItems = redisCache.Read<List<CategoryItem>>(cacheKey, 7L);
+                return Success("获取成功", categoryItems);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
         #endregion
 
         #region 获取商品二级分类
@@ -282,21 +296,43 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (PlaformType == 1)
                     {
                         DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
-                        DTK_Super_GoodRequest dTK_Super_GoodRequest = new DTK_Super_GoodRequest();
-                        dTK_Super_GoodRequest.version = "v1.2.1";
-                        dTK_Super_GoodRequest.type = 0;
-                        dTK_Super_GoodRequest.pageId = PageNo;
-                        dTK_Super_GoodRequest.pageSize = PageSize;
-                        dTK_Super_GoodRequest.keyWords = GetNumid(KeyWords);
-                        dTK_Super_GoodRequest.tmall = 0;
-                        dTK_Super_GoodRequest.haitao = 0;
-                        dTK_Super_GoodRequest.sort = GetSort(PlaformType, sort);
-                        DTK_Super_GoodResponse dTK_Super_GoodResponse = dTK_ApiManage.GetSuperGood(dTK_Super_GoodRequest);
-                        if (dTK_Super_GoodResponse.code != 0)
+
+                        if (dm_BasesettingEntity.goodsource == 0)
                         {
-                            return Fail(dTK_Super_GoodResponse.msg);
+                            DTK_TB_Service_GoodRequest dTK_TB_Service_GoodRequest = new DTK_TB_Service_GoodRequest();
+                            dTK_TB_Service_GoodRequest.version = "v2.0.0";
+                            dTK_TB_Service_GoodRequest.pageNo = PageNo;
+                            dTK_TB_Service_GoodRequest.pageSize = PageSize;
+                            dTK_TB_Service_GoodRequest.keyWords = GetNumid(KeyWords);
+                            //dTK_TB_Service_GoodRequest.startPrice = 0;
+                            //dTK_TB_Service_GoodRequest.endPrice = 0;
+                            //dTK_TB_Service_GoodRequest.startTkRate = 0;
+                            //dTK_TB_Service_GoodRequest.startTkRate = 0;
+                            dTK_TB_Service_GoodRequest.sort = GetSort(PlaformType, sort);
+                            DTK_TB_Service_GoodResponse dTK_TB_Service_GoodResponse = dTK_ApiManage.GetDTK_TBServiceGood(dTK_TB_Service_GoodRequest);
+
+                            if (dTK_TB_Service_GoodResponse.code != 0)
+                                return Fail(dTK_TB_Service_GoodResponse.msg);
+                            superGoodItems = ConvertCommonGoodEntityByTBServiceGood(dTK_TB_Service_GoodResponse.data, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                         }
-                        superGoodItems = ConvertCommonGoodEntityBySuperGood(dTK_Super_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                        else
+                        {
+                            DTK_Super_GoodRequest dTK_Super_GoodRequest = new DTK_Super_GoodRequest();
+                            dTK_Super_GoodRequest.version = "v1.2.1";
+                            dTK_Super_GoodRequest.type = 0;
+                            dTK_Super_GoodRequest.pageId = PageNo;
+                            dTK_Super_GoodRequest.pageSize = PageSize;
+                            dTK_Super_GoodRequest.keyWords = GetNumid(KeyWords);
+                            dTK_Super_GoodRequest.tmall = 0;
+                            dTK_Super_GoodRequest.haitao = 0;
+                            dTK_Super_GoodRequest.sort = GetSort(PlaformType, sort);
+                            DTK_Super_GoodResponse dTK_Super_GoodResponse = dTK_ApiManage.GetSuperGood(dTK_Super_GoodRequest);
+                            if (dTK_Super_GoodResponse.code != 0)
+                            {
+                                return Fail(dTK_Super_GoodResponse.msg);
+                            }
+                            superGoodItems = ConvertCommonGoodEntityBySuperGood(dTK_Super_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                        }
                     }
                     else if (PlaformType == 3)
                     {
@@ -488,6 +524,89 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
                 }
 
+
+                return SuccessList("获取成功!", superGoodItems);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取首页不同类别的商品(9.9包邮、超级券)
+        public ActionResult GetRecommendGoodByTB(string ChannelType, int User_ID = 0, int PageNo = 1, int PageSize = 20)
+        {
+            try
+            {
+                string cacheKey = Md5Helper.Hash("GetRecommendGoodByTB" + ChannelType + PageNo + PageSize);
+                List<CommonGoodInfo> superGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+
+                if (superGoodItems == null)
+                {
+                    #region 获取关键词
+                    List<CategoryItem> categoryItems = redisCache.Read<List<CategoryItem>>("SuperCategory", 7L);
+                    #endregion
+
+                    string appid = CheckAPPID();
+                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
+                    DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
+
+                    if (ChannelType == "99zhuanqu")//使用联盟搜索
+                    {
+                        CategoryItem categoryItem = categoryItems.Where(t => t.cid == dm_BasesettingEntity.goodtype).FirstOrDefault();
+
+                        DTK_TB_Service_GoodRequest dTK_TB_Service_GoodRequest = new DTK_TB_Service_GoodRequest();
+                        dTK_TB_Service_GoodRequest.version = "v2.0.0";
+                        dTK_TB_Service_GoodRequest.pageNo = PageNo;
+                        dTK_TB_Service_GoodRequest.pageSize = PageSize;
+                        dTK_TB_Service_GoodRequest.keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname);
+                        if (dm_BasesettingEntity.min_price > 0)
+                            dTK_TB_Service_GoodRequest.startPrice = dm_BasesettingEntity.min_price;
+                        if (dm_BasesettingEntity.max_price > 0)
+                            dTK_TB_Service_GoodRequest.endPrice = dm_BasesettingEntity.max_price;
+                        if (dm_BasesettingEntity.min_tk_rate > 0)
+                            dTK_TB_Service_GoodRequest.startTkRate = dm_BasesettingEntity.min_tk_rate;
+                        if (dm_BasesettingEntity.max_price > 0)
+                            dTK_TB_Service_GoodRequest.endTkRate = dm_BasesettingEntity.max_tk_rate;
+                        //dTK_TB_Service_GoodRequest.sort = GetSort(PlaformType, sort);
+                        DTK_TB_Service_GoodResponse dTK_TB_Service_GoodResponse = dTK_ApiManage.GetDTK_TBServiceGood(dTK_TB_Service_GoodRequest);
+
+                        if (dTK_TB_Service_GoodResponse.code != 0)
+                            return Fail(dTK_TB_Service_GoodResponse.msg);
+                        superGoodItems = ConvertCommonGoodEntityByTBServiceGood(dTK_TB_Service_GoodResponse.data, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    }
+                    else if (ChannelType == "chaojiquan")//使用大淘客搜索
+                    {
+                        CategoryItem categoryItem = categoryItems.Where(t => t.cid == dm_BasesettingEntity.super_coupon_goodtype).FirstOrDefault();
+                        DTK_Get_dtk_Search_GoodRequest dtk_Get_dtk_Search_GoodRequest = new DTK_Get_dtk_Search_GoodRequest();
+                        dtk_Get_dtk_Search_GoodRequest.version = "v2.1.2";
+                        dtk_Get_dtk_Search_GoodRequest.pageId = PageNo.ToString();
+                        dtk_Get_dtk_Search_GoodRequest.pageSize = PageSize;
+                        dtk_Get_dtk_Search_GoodRequest.keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname);
+                        if (dm_BasesettingEntity.super_coupon_min_price > 0)
+                            dtk_Get_dtk_Search_GoodRequest.priceLowerLimit = dm_BasesettingEntity.super_coupon_min_price;
+                        if (dm_BasesettingEntity.super_coupon_max_price > 0)
+                            dtk_Get_dtk_Search_GoodRequest.priceUpperLimit = dm_BasesettingEntity.super_coupon_max_price;
+                        if (dm_BasesettingEntity.super_coupon_goodtype > 0)
+                            dtk_Get_dtk_Search_GoodRequest.cids = dm_BasesettingEntity.super_coupon_goodtype.ToString();
+                        if (dm_BasesettingEntity.super_coupon_min_tk_rate > 0)
+                            dtk_Get_dtk_Search_GoodRequest.commissionRateLowerLimit = dm_BasesettingEntity.super_coupon_min_tk_rate;
+                        if (dm_BasesettingEntity.super_coupon_couponPriceLowerLimit > 0)
+                            dtk_Get_dtk_Search_GoodRequest.couponPriceLowerLimit = dm_BasesettingEntity.super_coupon_couponPriceLowerLimit;
+                        DTK_Get_dtk_Search_GoodResponse dTK_Get_dtk_Search_GoodResponse = dTK_ApiManage.GetDtkSearchGood(dtk_Get_dtk_Search_GoodRequest);
+                        if (dTK_Get_dtk_Search_GoodResponse.code != 0)
+                        {
+                            return Fail(dTK_Get_dtk_Search_GoodResponse.msg);
+                        }
+
+                        superGoodItems = ConvertCommonGoodEntityByDTK_SearchGoodItem(dTK_Get_dtk_Search_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    }
+
+                    if (superGoodItems.Count > 0)
+                        redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
+                }
 
                 return SuccessList("获取成功!", superGoodItems);
             }
@@ -1830,6 +1949,51 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     userEvaluateScore = GetScore(item.descScore.ToString()),
                     remark = item.desc,
                     coupon_link = item.couponLink,
+                    cacheKey = cacheKey
+                });
+            }
+
+            return commonGoodInfoList;
+        }
+
+        /// <summary>
+        /// 淘宝联盟搜索的商品转换
+        /// </summary>
+        /// <param name="dTK_TB_Service_GoodItemList"></param>
+        /// <param name="dm_UserEntity"></param>
+        /// <param name="dm_BasesettingEntity"></param>
+        /// <param name="cacheKey"></param>
+        /// <returns></returns>
+        List<CommonGoodInfo> ConvertCommonGoodEntityByTBServiceGood(List<DTK_TB_Service_GoodItem> dTK_TB_Service_GoodItemList, dm_userEntity dm_UserEntity, dm_basesettingEntity dm_BasesettingEntity, string cacheKey)
+        {
+            List<CommonGoodInfo> commonGoodInfoList = new List<CommonGoodInfo>();
+            foreach (DTK_TB_Service_GoodItem item in dTK_TB_Service_GoodItemList)
+            {
+                string[] images = new string[] { GetImage(item.pict_url) };
+                commonGoodInfoList.Add(new CommonGoodInfo
+                {
+                    skuid = item.item_id.ToString(),
+                    title = item.title,
+                    shopId = item.seller_id,
+                    shopLogo = "https://wwc.alicdn.com/avatar/getAvatar.do?userId=" + item.seller_id,
+                    shopName = item.nick,
+                    coupon_after_price = item.zk_final_price.ToString(),
+                    coupon_price = item.coupon_amount.ToString(),
+                    origin_price = item.reserve_price.ToString(),
+                    coupon_end_time = item.coupon_end_time,
+                    coupon_start_time = item.coupon_start_time,
+                    detail_images = images,
+                    images = images,
+                    image = GetImage(item.white_image),
+                    month_sales = item.volume,
+                    LevelCommission = GetCommissionRate(decimal.Parse(item.zk_final_price), decimal.Parse(item.commission_rate), dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
+                    SuperCommission = GetCommissionRate(decimal.Parse(item.zk_final_price), decimal.Parse(item.commission_rate), 2, dm_BasesettingEntity),
+                    PlaformType = 1,
+                    afterServiceScore = GetScore(item.shop_dsr.ToString()),
+                    logisticsLvyueScore = GetScore(item.shop_dsr.ToString()),
+                    userEvaluateScore = GetScore(item.shop_dsr.ToString()),
+                    remark = item.short_title,
+                    coupon_link = item.coupon_id,
                     cacheKey = cacheKey
                 });
             }

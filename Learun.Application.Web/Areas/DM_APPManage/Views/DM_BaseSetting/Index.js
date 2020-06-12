@@ -14,7 +14,7 @@ var bootstrap = function ($, learun) {
             page.bind();
         },
         bind: function () {
-            // 查询
+            // 保存
             $('#lr_save_btn').on('click', function () {
                 if (!$('#lr_layout').lrValidform()) {
                     return false;
@@ -65,6 +65,20 @@ var bootstrap = function ($, learun) {
             $("#openchecked").lrselect();
 
             $("#taskchecked").lrselect();
+
+            $("#goodsource").lrselect();
+
+            $("#goodtype").lrselect({
+                url: top.$.rootUrl + "/DM_Good/GetGoodTypeByCache",
+                value: "cid",
+                text: "cname"
+            });
+
+            $("#super_coupon_goodtype").lrselect({
+                url: top.$.rootUrl + "/DM_Good/GetGoodTypeByCache",
+                value: "cid",
+                text: "cname"
+            });
         },
     };
     page.init();

@@ -26,6 +26,7 @@
                     <li data-value="9">任务设置</li>
                     <li data-value="10">OSS配置</li>
                     <li data-value="11">融云配置</li>
+                    <li data-value="12">商品设置</li>
                     <li data-value="6">其他配置</li>
                 </ul>
             </div>
@@ -366,9 +367,70 @@
                         <input id="rongcloud_appsecret" type="text" class="form-control" />
                     </div>
                     @*<div class="lr-form-item">
-                        <div class="lr-form-item-title">Token</div>
-                        <input id="rongcloud_token" type="text" class="form-control" />
-                    </div>*@
+                    <div class="lr-form-item-title">Token</div>
+                    <input id="rongcloud_token" type="text" class="form-control" />
+                </div>*@
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item" id="lr_layout_item12">
+                <div class="title">
+                    <div>商品筛选设置</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">搜索商品来源</div>
+                        <div id="goodsource"><ul><li data-value="1">大淘客</li><li data-value="0">淘宝联盟</li></ul></div>
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>淘宝9.9筛选条件</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">商品类别</div>
+                        <div id="goodtype"></div>
+                        </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">价格下限</div>
+                        <input id="min_price" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="价格的最小值,0表示无下限" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">价格上限</div>
+                        <input id="max_price" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="价格的最大值,0表示无上限" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">佣金比例下限</div>
+                        <input id="min_tk_rate" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="佣金的最小值,0表示无下限"/>
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">佣金比例上限</div>
+                        <input id="max_tk_rate" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="佣金的最大值,0表示无上限"/>
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>超级券筛选条件</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">商品类别</div>
+                        <div id="super_coupon_goodtype"></div>
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">价格下限</div>
+                        <input id="super_coupon_min_price" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="价格的最小值,0表示无下限" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">价格上限</div>
+                        <input id="super_coupon_max_price" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="价格的最大值,0表示无上限" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">最低佣金比例</div>
+                        <input id="super_coupon_min_tk_rate" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="佣金的最小值,0表示无下限" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">最低优惠券面额</div>
+                        <input id="super_coupon_couponPriceLowerLimit" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="佣金的最大值,0表示无上限" />
+                    </div>
                 </div>
             </div>
             <div class="lr-layout-wrap-item" id="lr_layout_item6">

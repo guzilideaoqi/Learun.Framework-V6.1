@@ -425,6 +425,71 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("RONGCLOUD_APPSECRET")]
         public string rongcloud_appsecret { get; set; }
 
+        /// <summary>
+        /// 商品源  0淘宝联盟  1大淘客
+        /// </summary>
+        [Column("GOODSOURCE")]
+        public int? goodsource { get; set; }
+
+        /// <summary>
+        /// 商品类型
+        /// </summary>
+        [Column("GOODTYPE")]
+        public int? goodtype { get; set; }
+
+        /// <summary>
+        /// 9.9商品最小金额
+        /// </summary>
+        [Column("MIN_PRICE")]
+        public decimal? min_price { get; set; }
+
+        /// <summary>
+        /// 9.9商品最大金额
+        /// </summary>
+        [Column("MAX_PRICE")]
+        public decimal? max_price { get; set; }
+        /// <summary>
+        /// 最小佣金比例
+        /// </summary>
+        [Column("MIN_TK_RATE")]
+        public decimal? min_tk_rate { get; set; }
+
+        /// <summary>
+        /// 最大佣金比例
+        /// </summary>
+        [Column("MAX_TK_RATE")]
+        public decimal? max_tk_rate { get; set; }
+
+        /// <summary>
+        /// 超级券商品类别
+        /// </summary>
+        [Column("SUPER_COUPON_GOODTYPE")]
+        public int? super_coupon_goodtype { get; set; }
+
+        /// <summary>
+        /// 超级券最小金额
+        /// </summary>
+        [Column("SUPER_COUPON_MIN_PRICE")]
+        public decimal? super_coupon_min_price { get; set; }
+
+        /// <summary>
+        /// 超级券最大金额
+        /// </summary>
+        [Column("SUPER_COUPON_MAX_PRICE")]
+        public decimal? super_coupon_max_price { get; set; }
+
+        /// <summary>
+        /// 超级券最小佣金比例
+        /// </summary>
+        [Column("SUPER_COUPON_MIN_TK_RATE")]
+        public decimal? super_coupon_min_tk_rate { get; set; }
+
+        /// <summary>
+        /// 超级券最小面额
+        /// </summary>
+        [Column("SUPER_COUPON_COUPONPRICELOWERLIMIT")]
+        public int? super_coupon_couponPriceLowerLimit { get; set; }
+
         public void Create()
         {
             UserInfo userInfo = LoginUserInfo.Get();
