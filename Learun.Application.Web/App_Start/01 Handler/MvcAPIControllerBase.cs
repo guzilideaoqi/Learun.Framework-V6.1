@@ -151,18 +151,45 @@ namespace Learun.Application.Web.App_Start._01_Handler
             return Content(new ResParameter { code = ResponseCode.NoMoney, info = info }.ToJson());
         }
 
+        protected virtual ActionResult FailNoBindAliPay(string info)
+        {
+            return Content(new ResParameter { code = ResponseCode.NoBindAliPay, info = info }.ToJson());
+        }
+
+        protected virtual ActionResult FailNoRealName(string info)
+        {
+            return Content(new ResParameter { code = ResponseCode.NoRealName, info = info }.ToJson());
+        }
+
         protected virtual ActionResult FailException(Exception ex)
         {
             if (ex.InnerException.IsEmpty())
             {
                 if (ex.Message.Contains("账户余额不足"))
                     return FailNoPrice(ex.Message);
+                else if (ex.Message.Contains("您的账号未实名"))
+                {
+                    return FailNoRealName(ex.Message);
+                }
+                else if (ex.Message.Contains("支付宝账号未绑定"))
+                {
+                    return FailNoBindAliPay(ex.Message);
+                }
                 else
                     return Fail(ex.Message);
             }
-            else {
+            else
+            {
                 if (ex.InnerException.Message.Contains("账户余额不足"))
                     return FailNoPrice(ex.InnerException.Message);
+                else if (ex.InnerException.Message.Contains("您的账号未实名"))
+                {
+                    return FailNoRealName(ex.InnerException.Message);
+                }
+                else if (ex.InnerException.Message.Contains("支付宝账号未绑定"))
+                {
+                    return FailNoBindAliPay(ex.InnerException.Message);
+                }
                 else
                     return Fail(ex.InnerException.Message);
             }

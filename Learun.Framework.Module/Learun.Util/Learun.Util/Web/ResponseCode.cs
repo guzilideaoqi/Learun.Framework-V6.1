@@ -23,6 +23,8 @@
         exception = 500,
         NoRelation = 101,
         NoLogin = 401,
-        NoMoney = 102
+        NoMoney = 102,
+        NoBindAliPay = 103,
+        NoRealName = 104
     }
 }

@@ -253,6 +253,7 @@
     <Compile Include="Controllers\DM_APIControl\JDEliteIDInfo.cs" />
     <Compile Include="Controllers\DM_APIControl\PDDCatInfo.cs" />
     <Compile Include="Controllers\DM_APIControl\SmallCate.cs" />
+    <Compile Include="Controllers\DM_APIControl\TencentMeetingController.cs" />
     <Compile Include="Controllers\RobotApiController.cs" />
     <Compile Include="Controllers\TBUserInfoControllerController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -2346,6 +2347,7 @@
     <Folder Include="Areas\LR_WebChatModule\Views\User\" />
     <Folder Include="Areas\LR_WorkFlowModule\Views\WfEngine\" />
     <Folder Include="Views\A_Pay\" />
+    <Folder Include="Views\TencentMeeting\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

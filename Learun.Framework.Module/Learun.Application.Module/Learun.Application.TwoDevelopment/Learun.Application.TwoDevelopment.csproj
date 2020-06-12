@@ -71,6 +71,7 @@
     <Compile Include="Common\CommonConfig.cs" />
     <Compile Include="Common\CommonSMSHelper.cs" />
     <Compile Include="Common\JSMSClient.cs" />
+    <Compile Include="Common\MeetingAPI.cs" />
     <Compile Include="Common\Model\HttpResponse.cs" />
     <Compile Include="Common\Model\SignModel.cs" />
     <Compile Include="Common\Model\TemplateMessage.cs" />
