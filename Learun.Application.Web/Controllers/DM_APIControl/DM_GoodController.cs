@@ -535,7 +535,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取首页不同类别的商品(9.9包邮、超级券)
-        public ActionResult GetRecommendGoodByTB(string ChannelType, int User_ID = 0, int PageNo = 1, int PageSize = 20)
+        public ActionResult GetRecommendGoodByTB(string ChannelType, int User_ID = 0, int PageNo = 1, int PageSize = 10)
         {
             try
             {
@@ -557,19 +557,22 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     {
                         CategoryItem categoryItem = categoryItems.Where(t => t.cid == dm_BasesettingEntity.goodtype).FirstOrDefault();
 
+                        int? min_price = dm_BasesettingEntity.min_price, max_price = dm_BasesettingEntity.max_price, min_tk_rate = dm_BasesettingEntity.min_tk_rate, max_tk_rate = dm_BasesettingEntity.max_tk_rate;
+
                         DTK_TB_Service_GoodRequest dTK_TB_Service_GoodRequest = new DTK_TB_Service_GoodRequest();
                         dTK_TB_Service_GoodRequest.version = "v2.0.0";
                         dTK_TB_Service_GoodRequest.pageNo = PageNo;
                         dTK_TB_Service_GoodRequest.pageSize = PageSize;
                         dTK_TB_Service_GoodRequest.keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname);
-                        if (dm_BasesettingEntity.min_price > 0)
-                            dTK_TB_Service_GoodRequest.startPrice = dm_BasesettingEntity.min_price;
-                        if (dm_BasesettingEntity.max_price > 0)
-                            dTK_TB_Service_GoodRequest.endPrice = dm_BasesettingEntity.max_price;
-                        if (dm_BasesettingEntity.min_tk_rate > 0)
-                            dTK_TB_Service_GoodRequest.startTkRate = dm_BasesettingEntity.min_tk_rate;
-                        if (dm_BasesettingEntity.max_price > 0)
-                            dTK_TB_Service_GoodRequest.endTkRate = dm_BasesettingEntity.max_tk_rate;
+                        if (min_price > 0)
+                            dTK_TB_Service_GoodRequest.startPrice = min_price;
+                        if (max_price > 0)
+                            dTK_TB_Service_GoodRequest.endPrice = max_price;
+                        if (min_tk_rate > 0)
+                            dTK_TB_Service_GoodRequest.startTkRate = min_tk_rate;
+                        if (max_tk_rate > 0)
+                            dTK_TB_Service_GoodRequest.endTkRate = max_tk_rate;
+
                         //dTK_TB_Service_GoodRequest.sort = GetSort(PlaformType, sort);
                         DTK_TB_Service_GoodResponse dTK_TB_Service_GoodResponse = dTK_ApiManage.GetDTK_TBServiceGood(dTK_TB_Service_GoodRequest);
 

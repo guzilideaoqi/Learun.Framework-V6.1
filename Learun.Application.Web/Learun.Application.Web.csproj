@@ -297,6 +297,7 @@
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_ReviceController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_TemplateController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_TypeController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\DM_MeetingListController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -2339,6 +2340,10 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\TBUserInfoController\AuthorResult.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_MeetingList\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_MeetingList\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_MeetingList\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_MeetingList\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

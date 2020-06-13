@@ -140,6 +140,7 @@
     <Compile Include="DM_APPManage\dm_task_reviceMap.cs" />
     <Compile Include="DM_APPManage\dm_task_templateMap.cs" />
     <Compile Include="DM_APPManage\dm_task_typeMap.cs" />
+    <Compile Include="DM_APPManage\dm_meetinglistMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

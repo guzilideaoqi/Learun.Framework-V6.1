@@ -441,24 +441,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 9.9商品最小金额
         /// </summary>
         [Column("MIN_PRICE")]
-        public decimal? min_price { get; set; }
+        public int? min_price { get; set; }
 
         /// <summary>
         /// 9.9商品最大金额
         /// </summary>
         [Column("MAX_PRICE")]
-        public decimal? max_price { get; set; }
+        public int? max_price { get; set; }
         /// <summary>
         /// 最小佣金比例
         /// </summary>
         [Column("MIN_TK_RATE")]
-        public decimal? min_tk_rate { get; set; }
+        public int? min_tk_rate { get; set; }
 
         /// <summary>
         /// 最大佣金比例
         /// </summary>
         [Column("MAX_TK_RATE")]
-        public decimal? max_tk_rate { get; set; }
+        public int? max_tk_rate { get; set; }
 
         /// <summary>
         /// 超级券商品类别
@@ -489,6 +489,30 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("SUPER_COUPON_COUPONPRICELOWERLIMIT")]
         public int? super_coupon_couponPriceLowerLimit { get; set; }
+
+        /// <summary>
+        /// 腾讯会议AppID
+        /// </summary>
+        [Column("MEETING_APPID")]
+        public string meeting_appid { get; set; }
+
+        /// <summary>
+        /// 腾讯会议SecretID
+        /// </summary>
+        [Column("MEETING_SECRETID")]
+        public string meeting_secretid { get; set; }
+
+        /// <summary>
+        /// 腾讯会议SecretKey
+        /// </summary>
+        [Column("MEETING_SECRETKEY")]
+        public string meeting_secretkey { get; set; }
+
+        /// <summary>
+        /// 腾讯会议sdkid
+        /// </summary>
+        [Column("MEETING_SDKID")]
+        public string meeting_sdkid { get; set; }
 
         public void Create()
         {

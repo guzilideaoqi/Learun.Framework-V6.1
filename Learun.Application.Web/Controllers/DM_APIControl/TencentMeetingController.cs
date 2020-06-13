@@ -5,59 +5,134 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Learun.Util;
+using Learun.Application.TwoDevelopment.DM_APPManage;
+using HYG.CommonHelper.Common;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
     public class TencentMeetingController : MvcAPIControllerBase
     {
+        private DM_BaseSettingIBLL dm_BaseSettingIBLL = new DM_BaseSettingBLL();
+
+        private DM_UserIBLL dm_userIBLL = new DM_UserBLL();
         /// <summary>
         /// 创建会议房间
         /// </summary>
         /// <returns></returns>
-        public ActionResult CreateMetting()
+        public ActionResult CreateMetting(int User_ID, string Subject, DateTime StartTime, DateTime EndTime, string Password = "", int Mute_Enable_Join = 0, int Allow_Unmute_Self = 0, int Mute_All = 0, int Host_Video = 0, int Participant_Video = 0, int Play_Ivr_On_Leave = 0, int Play_Ivr_On_Join = 0)
         {
             try
             {
+                if (User_ID <= 0)
+                    return FailNoLogin();
+
+                string appid = CheckAPPID();
+
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
+
                 MeetingSettings msettings = new MeetingSettings()
                 {
-                    mute_enable_join = true,
-                    allow_unmute_self = false,
-                    mute_all = false,
-                    host_video = true,
-                    participant_video = false,
+                    mute_enable_join = Mute_Enable_Join == 1,
+                    allow_unmute_self = Allow_Unmute_Self == 1,
+                    mute_all = Mute_All == 1,
+                    host_video = Host_Video == 1,
+                    participant_video = Participant_Video == 1,
                     enable_record = false,
-                    play_ivr_on_leave = false,
-                    play_ivr_on_join = false,
+                    play_ivr_on_leave = Play_Ivr_On_Leave == 1,
+                    play_ivr_on_join = Play_Ivr_On_Join == 1,
                     live_url = false
                 };
 
                 Dictionary<string, string> user = new Dictionary<string, string>();
-                user.Add("userid", "1234567890");
+                user.Add("userid", dm_UserEntity.phone);
                 CreateMeeting createMeeting = new CreateMeeting()
                 {
-                    userid = "1234567890",
+                    userid = dm_UserEntity.phone,
                     instanceid = 1,
-                    subject = "test meeting",
+                    subject = Subject,
                     type = 0,
                     hosts = new List<Dictionary<string, string>>() { user },
                     settings = msettings,
-                    start_time = "1590562357",
-                    end_time = "1590564097"
+                    start_time = Time.GetTimeStamp(StartTime),
+                    end_time = Time.GetTimeStamp(EndTime),
+                    password=Password
                 };
 
                 MeetingAPI meetingAPI = new MeetingAPI()
                 {
-                    AppId = @"223516798",
-                    SecretId = @"oNMfqH5G83RSBuIPVj7m9en4Q0sbiLJDychw",
-                    Secretkey = @"jzmABOQC2kpWDnsHEdV6JLYb0e41ht3a",
-                    SdkId = "2006105282"
+                    AppId = dm_BasesettingEntity.meeting_appid,
+                    SecretId = dm_BasesettingEntity.meeting_secretid,
+                    Secretkey = dm_BasesettingEntity.meeting_secretkey,
+                    SdkId = dm_BasesettingEntity.meeting_sdkid,
+                    //Registered = 1
                 };
-                int result = meetingAPI.CreateMeetings(createMeeting, (int resultCode, dynamic resultMsg) =>
-                {
-                    Console.WriteLine("创建会议结果：\nresultCode：" + resultCode + "：" + resultMsg);
-                });
 
-                return Success("创建成功!");
+                #region 创建用户(不管是否成功  都需要创建房间)
+                MeetingUser meetingUser = new MeetingUser()
+                {
+                    userid = dm_UserEntity.phone,
+                    username = dm_UserEntity.nickname,
+                    email = dm_UserEntity.phone + "@qq.com",
+                    phone = dm_UserEntity.phone,
+                    avatar_url = dm_UserEntity.headpic
+                };
+                string userdetail = meetingAPI.GetUserDetail(dm_UserEntity.phone);
+                if (userdetail.Contains("error_info"))
+                {//有错误就执行创建
+                    MeetingErrorResponse meetingErrorResponse = JsonConvert.JsonDeserialize<MeetingErrorResponse>(userdetail);
+                    if (meetingErrorResponse.error_info.error_code == 20002)
+                    {//用户已存在
+                        meetingAPI.UpdateUser(meetingUser);
+                    }
+                    else if (meetingErrorResponse.error_info.error_code == 20001)
+                    {//用户不存在
+                        meetingAPI.CreateUser(meetingUser);
+                    }
+                }
+                else
+                {//执行更新
+                    meetingAPI.UpdateUser(meetingUser);
+                }
+                #endregion
+
+                string result = meetingAPI.CreateMeetings(createMeeting);
+
+                if (!result.Contains("error_info"))
+                {
+                    CreateMeetingResponse createMeetingResponse = JsonConvert.JsonDeserialize<CreateMeetingResponse>(result);
+                    if (createMeetingResponse.meeting_number > 0)
+                    {
+                        List<dm_meetinglistEntity> MeetingEntityList = new List<dm_meetinglistEntity>();
+                        foreach (MeetingInfo item in createMeetingResponse.meeting_info_list)
+                        {
+                            MeetingEntityList.Add(new dm_meetinglistEntity {
+                                hosts = User_ID.ToString(),
+                                join_url = item.join_url,
+                                meeting_code = item.meeting_code,
+                                meeting_id = item.meeting_id,
+                                start_time = StartTime,
+                                end_time = EndTime,
+                                participants = "",
+                                password = Password,
+                                user_id = User_ID,
+                                subject = item.subject,
+                                createtime = DateTime.Now,
+                                settings = "",
+                                join_image =""
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    MeetingErrorResponse meetingErrorResponse = JsonConvert.JsonDeserialize<MeetingErrorResponse>(result);
+                    throw new Exception(meetingErrorResponse.error_info.message);
+                }
+
+                return Success("创建成功,请刷新直播列表!");
             }
             catch (Exception ex)
             {
@@ -69,7 +144,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// 创建用户
         /// </summary>
         /// <returns></returns>
-        public ActionResult CreateUser() {
+        public ActionResult CreateUser()
+        {
             try
             {
                 MeetingUser meetingUser = new MeetingUser()
@@ -89,7 +165,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     Console.WriteLine("创建用户结果：\nresultCode：" + resultCode + "：" + resultMsg);
                 });
-
                 return Success("创建成功!");
             }
             catch (Exception ex)
@@ -97,5 +172,65 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 return FailException(ex);
             }
         }
+
+        public string CheckAPPID()
+        {
+            if (base.Request.Headers["appid"].IsEmpty())
+            {
+                throw new Exception("缺少参数appid");
+            }
+            return base.Request.Headers["appid"].ToString();
+        }
+    }
+
+    public class MeetingErrorResponse
+    {
+        public ErrorInfo error_info { get; set; }
+    }
+
+    public class ErrorInfo
+    {
+        public int error_code { get; set; }
+        public string message { get; set; }
+    }
+
+    public class CreateMeetingResponse
+    {
+        /// <summary>
+        /// 创建会议的数量
+        /// </summary>
+        public int meeting_number { get; set; }
+        /// <summary>
+        /// 会议列表
+        /// </summary>
+        public List<MeetingInfo> meeting_info_list { get; set; }
+    }
+
+    public class MeetingInfo
+    {
+        /// <summary>
+        /// 会议名称
+        /// </summary>
+        public string subject { get; set; }
+        /// <summary>
+        /// 会议ID
+        /// </summary>
+        public string meeting_id { get; set; }
+        /// <summary>
+        /// 会议编号
+        /// </summary>
+        public string meeting_code { get; set; }
+        /// <summary>
+        /// 会议开始时间
+        /// </summary>
+        public string start_time { get; set; }
+        /// <summary>
+        /// 会议结束时间
+        /// </summary>
+        public string end_time { get; set; }
+        /// <summary>
+        /// 入会链接
+        /// </summary>
+        public string join_url { get; set; }
     }
 }

@@ -27,6 +27,7 @@
                     <li data-value="10">OSS配置</li>
                     <li data-value="11">融云配置</li>
                     <li data-value="12">商品设置</li>
+                    <li data-value="13">腾讯会议</li>
                     <li data-value="6">其他配置</li>
                 </ul>
             </div>
@@ -389,7 +390,7 @@
                     <div class="lr-form-item">
                         <div class="lr-form-item-title">商品类别</div>
                         <div id="goodtype"></div>
-                        </div>
+                    </div>
                     <div class="lr-form-item">
                         <div class="lr-form-item-title">价格下限</div>
                         <input id="min_price" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="价格的最小值,0表示无下限" />
@@ -400,11 +401,11 @@
                     </div>
                     <div class="lr-form-item">
                         <div class="lr-form-item-title">佣金比例下限</div>
-                        <input id="min_tk_rate" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="佣金的最小值,0表示无下限"/>
+                        <input id="min_tk_rate" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="佣金的最小值,0表示无下限" />
                     </div>
                     <div class="lr-form-item">
                         <div class="lr-form-item-title">佣金比例上限</div>
-                        <input id="max_tk_rate" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="佣金的最大值,0表示无上限"/>
+                        <input id="max_tk_rate" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="佣金的最大值,0表示无上限" />
                     </div>
                 </div>
                 <div class="title" style="position:relative;">
@@ -430,6 +431,29 @@
                     <div class="lr-form-item">
                         <div class="lr-form-item-title">最低优惠券面额</div>
                         <input id="super_coupon_couponPriceLowerLimit" type="text" class="form-control" isvalid="yes" checkexpession="isDouble" placeholder="佣金的最大值,0表示无上限" />
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item" id="lr_layout_item13">
+                <div class="title">
+                    <div>腾讯会议配置</div>
+                </div>
+                <div class="content" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">AppID</div>
+                        <input id="meeting_appid" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">SecretID</div>
+                        <input id="meeting_secretid" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">SecretKey</div>
+                        <input id="meeting_secretkey" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">SdkID</div>
+                        <input id="meeting_sdkid" type="text" class="form-control" />
                     </div>
                 </div>
             </div>

@@ -211,6 +211,10 @@
     <Compile Include="DM_APPManage\DM_Task_Type\DM_Task_TypeService.cs" />
     <Compile Include="DM_APPManage\DM_Task_Type\DM_Task_TypeIBLL.cs" />
     <Compile Include="DM_APPManage\DM_Task_Type\DM_Task_TypeBLL.cs" />
+    <Compile Include="DM_APPManage\DM_MeetingList\dm_meetinglistEntity.cs" />
+    <Compile Include="DM_APPManage\DM_MeetingList\DM_MeetingListService.cs" />
+    <Compile Include="DM_APPManage\DM_MeetingList\DM_MeetingListIBLL.cs" />
+    <Compile Include="DM_APPManage\DM_MeetingList\DM_MeetingListBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

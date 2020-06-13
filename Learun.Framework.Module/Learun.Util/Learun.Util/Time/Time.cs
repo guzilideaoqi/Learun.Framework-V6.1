@@ -559,6 +559,17 @@ namespace Learun.Util
         }
         #endregion
 
+        #region 获取指定时间的时间戳
+        public static string GetTimeStamp(DateTime CurrentTime, bool IsMillSecond = false)
+        {
+            TimeSpan ts = CurrentTime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            if (IsMillSecond)
+                return Convert.ToInt64(ts.TotalMilliseconds).ToString();
+            else
+                return Convert.ToInt64(ts.TotalSeconds).ToString();
+        }
+        #endregion
+
         #region 时间戳转时间
         /// <summary>
         /// 时间戳转为C#格式时间10位

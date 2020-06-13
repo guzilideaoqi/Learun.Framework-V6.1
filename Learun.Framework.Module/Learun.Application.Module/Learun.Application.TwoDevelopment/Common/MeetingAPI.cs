@@ -116,6 +116,23 @@ namespace Learun.Application.TwoDevelopment.Common
             return 0;
         }
 
+        public string CreateMeetings(CreateMeeting createMeeting)
+        {
+            string httpMethod = @"POST";
+            string nonce = GetNonce().ToString();
+            string timeStamp = GetTimestamp().ToString();
+            Console.WriteLine("时间戳：" + timeStamp);
+            string uri = @"/v1/meetings";
+            //去除空值
+            JsonSerializerSettings jss = new JsonSerializerSettings();
+            jss.NullValueHandling = NullValueHandling.Ignore;
+            string body = JsonConvert.SerializeObject(createMeeting, Formatting.Indented, jss);
+            string signature = MeetingSignature.MeetingSign(secretId, secretkey, httpMethod,
+                nonce, timeStamp, uri, body);
+
+            return m_HttpRequestSubmit(uri, httpMethod, signature, nonce, timeStamp, body);
+        }
+
         /// <summary>
         /// 通过会议 ID 查询会议详情
         /// </summary>
@@ -336,6 +353,21 @@ namespace Learun.Application.TwoDevelopment.Common
             return 0;
         }
 
+        public string CreateUser(MeetingUser meetingUser) {
+                string httpMethod = @"POST";
+                string nonce = GetNonce().ToString();
+                string timeStamp = GetTimestamp().ToString();
+                string uri = @"/v1/users";
+                //去除空值
+                JsonSerializerSettings jss = new JsonSerializerSettings();
+                jss.NullValueHandling = NullValueHandling.Ignore;
+                string body = JsonConvert.SerializeObject(meetingUser, Formatting.Indented, jss);
+                string signature = MeetingSignature.MeetingSign(secretId, secretkey, httpMethod,
+                    nonce, timeStamp, uri, body);
+
+                return m_HttpRequestSubmit(uri, httpMethod, signature,nonce, timeStamp, body);
+        }
+
         /// <summary>
         /// 更新企业用户
         /// </summary>
@@ -368,6 +400,24 @@ namespace Learun.Application.TwoDevelopment.Common
             return 0;
         }
 
+        public string UpdateUser(MeetingUser meetingUser)
+        {
+            if (meetingUser == null)
+                return "";
+            string httpMethod = @"PUT";
+            string nonce = GetNonce().ToString();
+            string timeStamp = GetTimestamp().ToString();
+            string uri = @"/v1/users/" + meetingUser.userid;
+            //去除空值
+            JsonSerializerSettings jss = new JsonSerializerSettings();
+            jss.NullValueHandling = NullValueHandling.Ignore;
+            string body = JsonConvert.SerializeObject(meetingUser, Formatting.Indented, jss);
+            string signature = MeetingSignature.MeetingSign(secretId, secretkey, httpMethod,
+                nonce, timeStamp, uri, body);
+
+            return m_HttpRequestSubmit(uri, httpMethod, signature, nonce, timeStamp, body);
+        }
+
         /// <summary>
         /// 获取企业用户详情
         /// </summary>
@@ -393,6 +443,20 @@ namespace Learun.Application.TwoDevelopment.Common
                });
 
             return 0;
+        }
+
+        public string GetUserDetail(string userid)
+        {
+            if (userid == null)
+                return "";
+            string httpMethod = @"GET";
+            string nonce = GetNonce().ToString();
+            string timeStamp = GetTimestamp().ToString();
+            string uri = @"/v1/users/" + userid;
+            string body = @"";
+            string signature = MeetingSignature.MeetingSign(secretId, secretkey, httpMethod,
+                nonce, timeStamp, uri, body);
+            return m_HttpRequestSubmit(uri, httpMethod, signature, nonce, timeStamp, body);
         }
 
         /// <summary>
@@ -543,6 +607,73 @@ namespace Learun.Application.TwoDevelopment.Common
                 }
             }
             //return strResult;
+        }
+
+        private string m_HttpRequestSubmit(string strUri, string httpMethod, string signature, string nonce, string timestamp, string requestBody)
+        {
+            string strResult = "error";
+            try
+            {
+                string strUrl = @"https://api.meeting.qq.com" + strUri;
+                HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(strUrl);
+                req.Host = "api.meeting.qq.com";
+
+                byte[] bs = Encoding.UTF8.GetBytes(requestBody);
+                string responseData = System.String.Empty;
+
+                req.Method = httpMethod;
+                if (httpMethod == @"POST" || httpMethod == @"PUT")
+                {
+                    req.ContentLength = bs.Length;
+                }
+
+                req.Headers.Add("AppId", appId ?? @"");
+                req.ContentType = "application/json";
+                if (sdkId != null && sdkId.Length > 0)
+                    req.Headers.Add("SdkId", sdkId);
+                req.Headers.Add("X-TC-Key", secretId ?? @"");
+                req.Headers.Add("X-TC-Nonce", nonce.ToString());
+                if (registered > -1)
+                    req.Headers.Add("X-TC-Registered", registered.ToString());
+                req.Headers.Add("X-TC-Signature", signature);
+                req.Headers.Add("X-TC-Timestamp", timestamp.ToString());
+
+                //Console.WriteLine("Headers：/n" + req.Headers);
+
+                if (httpMethod == @"POST" || httpMethod == @"PUT")
+                {
+                    using (Stream reqStream = req.GetRequestStream())
+                    {
+                        reqStream.Write(bs, 0, bs.Length);
+                        reqStream.Close();
+                    }
+                }
+                using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
+                {
+
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                    {
+                        responseData = reader.ReadToEnd().ToString();
+                        strResult = responseData;
+                    }
+                }
+
+            }
+            catch (WebException ex)
+            {
+                using (WebResponse response = ex.Response)
+                {
+                    HttpWebResponse httpResponse = (HttpWebResponse)response;
+                    using (Stream data = response.GetResponseStream())
+                    {
+                        using (var reader = new StreamReader(data))
+                        {
+                            strResult = reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            return strResult;
         }
     }
 
@@ -758,6 +889,11 @@ namespace Learun.Application.TwoDevelopment.Common
         /// 调用方用于标示用户的唯一 ID
         /// </summary>
         public string userid;
+
+        /// <summary>
+        /// 用户头像
+        /// </summary>
+        public string avatar_url;
     }
 
     /// <summary>
