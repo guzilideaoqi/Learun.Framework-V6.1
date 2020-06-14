@@ -63,10 +63,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         #region 用户注册
 
-        public ActionResult DM_Register(dm_userEntity dm_UserEntity, string ParentInviteCode, string VerifiCode, string SmsMessageID)
+        public ActionResult DM_Register(dm_userEntity dm_UserEntity, string VerifiCode, string SmsMessageID, string ParentInviteCode = "EX3LFY")
         {
             try
             {
+                if (ParentInviteCode.IsEmpty())
+                    ParentInviteCode = ParentInviteCode = "EX3LFY";
                 string appid = CheckAPPID();
                 /*if (dm_UserEntity.nickname.IsEmpty())
                 {
@@ -461,7 +463,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 dm_Certifica_RecordEntity.appid = appid;
                 #endregion
 
-                dm_CertificaRecordIBLL.SaveEntity((int)dm_Certifica_RecordEntity.id, dm_Certifica_RecordEntity);
+                dm_CertificaRecordIBLL.SaveEntity(dm_Certifica_RecordEntity.id, dm_Certifica_RecordEntity);
 
                 return Success("提交成功!");
             }

@@ -310,12 +310,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             set;
         }
 
+        /// <summary>
+        /// 当前上架版本号(IOS)
+        /// </summary>
         [Column("PREVIEWVERSION")]
         public string previewversion
         {
             get;
             set;
         }
+
+        /// <summary>
+        /// 当前上架版本号(安卓)
+        /// </summary>
+        [Column("PREVIEWVERSIONANDROID")]
+        public string previewversionandroid { get; set; }
 
         /// <summary>
         /// 开发私钥
@@ -396,7 +405,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public string oss_buketname { get; set; }
 
         /// <summary>
-        /// 审核模式  1开启  0关闭
+        /// 审核模式 2上架模式 1开启  0关闭
         /// </summary>
         [Column("OPENCHECKED")]
         public string openchecked { get; set; }

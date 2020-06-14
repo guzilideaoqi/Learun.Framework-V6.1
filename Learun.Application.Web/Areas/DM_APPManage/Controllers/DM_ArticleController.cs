@@ -15,6 +15,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
     /// 日 期：2020-04-06 21:10
     /// 描 述：文案管理
     /// </summary>
+    [HandlerLogin(FilterMode.Ignore)]
     public class DM_ArticleController : MvcControllerBase
     {
         private DM_ArticleIBLL dM_ArticleIBLL = new DM_ArticleBLL();
@@ -38,6 +39,15 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult LookArticle(int id)
+        {
+            var data = dM_ArticleIBLL.GetEntity(id);
+            ViewBag.PageHtml = data.content;
+            ViewBag.Title = data.title;
             return View();
         }
         #endregion

@@ -1877,6 +1877,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_User\SetLevel.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Order\SyncOrder.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\JPushManage.cshtml" />
+    <EmbeddedResource Include="Areas\DM_APPManage\Views\DM_Article\LookArticle.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

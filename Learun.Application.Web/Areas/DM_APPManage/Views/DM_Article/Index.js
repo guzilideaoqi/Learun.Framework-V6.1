@@ -29,7 +29,20 @@ var bootstrap = function ($, learun) {
                 learun.layerForm({
                     id: 'form',
                     title: '新增',
-                    url: top.$.rootUrl + '/DM_APPManage/DM_Article/Form?keyValue=0',
+                    url: top.$.rootUrl + '/DM_APPManage/DM_Article/Form?keyValue=0&issoftarticle=0',
+                    width: 1000,
+                    height: 650,
+                    callBack: function (id) {
+                        return top[id].acceptClick(refreshGirdData);
+                    }
+                });
+            });
+            $('#lr_addsoftarticle').on('click', function () {
+                selectedRow = null;
+                learun.layerForm({
+                    id: 'form',
+                    title: '新增',
+                    url: top.$.rootUrl + '/DM_APPManage/DM_Article/Form?keyValue=0&issoftarticle=1',
                     width: 1000,
                     height: 650,
                     callBack: function (id) {

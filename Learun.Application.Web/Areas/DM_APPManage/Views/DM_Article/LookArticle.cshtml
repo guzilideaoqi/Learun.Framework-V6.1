@@ -1,0 +1,6 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+    ViewBag.Title = @ViewBag.Title;
+}
+
+@Html.Raw(HttpUtility.HtmlDecode(ViewBag.PageHtml))

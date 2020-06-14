@@ -32,7 +32,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 StringBuilder strSql = new StringBuilder();
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
-                strSql.Append(" FROM dm_banner t where t.isenable=1");
+                strSql.Append(" FROM dm_banner t where t.isenable=1 or t.isenable=2");
                 if (!queryParam["appid"].IsEmpty())
                 {
                     strSql.Append(" and t.appid='" + queryParam["appid"].ToString() + "'");
@@ -59,7 +59,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 strSql.Append(" FROM dm_banner t ");
 
                 UserInfo userInfo = LoginUserInfo.Get();
-                if (!userInfo.IsEmpty()) {
+                if (!userInfo.IsEmpty())
+                {
                     strSql.Append(" where t.appid='" + userInfo.companyId + "'");
                 }
 
@@ -75,7 +76,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public IEnumerable<dm_bannerEntity> GetPageListByCache(Pagination pagination, int type, string appid)
+        public IEnumerable<dm_bannerEntity> GetPageListByCache(Pagination pagination, int type, int status, string appid)
         {
             dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(appid);
             string cacheKey = "Banner" + appid;
@@ -86,7 +87,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 redisCache.Write(cacheKey, dm_BannerEntities2, 7L);
             }
 
-            return dm_BannerEntities2.Where((dm_bannerEntity t) => t.b_type == type).Skip((pagination.page - 1) * pagination.rows).Take(pagination.rows);
+            return dm_BannerEntities2.Where((dm_bannerEntity t) => t.b_type == type && t.isenable == status).Skip((pagination.page - 1) * pagination.rows).Take(pagination.rows);
         }
 
         public dm_bannerEntity GetEntity(int keyValue)

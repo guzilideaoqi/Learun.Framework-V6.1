@@ -1079,7 +1079,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="sortname">排序字段(price：单价, commissionShare：佣金比例, commission：佣金， inOrderCount30DaysSku：sku维度30天引单量，comments：评论数，goodComments：好评数)</param>
         /// <param name="sort">asc,desc升降序,默认降序</param>
         /// <returns></returns>
-        public ActionResult Get_JD_GoodList(int user_id = 0, int eliteId = 1, int pageIndex = 1, int pageSize = 20, string sortname = "price", string sort = "desc")
+        public ActionResult Get_JD_GoodList(int user_id = 0, int eliteId = 1, int pageIndex = 1, int pageSize = 20, string sortname = "price", string sort = "asc")
         {
             try
             {
@@ -1987,7 +1987,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_start_time = item.coupon_start_time,
                     detail_images = images,
                     images = images,
-                    image = GetImage(item.white_image),
+                    image = GetImage(item.pict_url),
                     month_sales = item.volume,
                     LevelCommission = GetCommissionRate(decimal.Parse(item.zk_final_price), decimal.Parse(item.commission_rate), dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
                     SuperCommission = GetCommissionRate(decimal.Parse(item.zk_final_price), decimal.Parse(item.commission_rate), 2, dm_BasesettingEntity),
@@ -2073,7 +2073,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
 
             if (pwdContent == "")
-                return new string[] { "家装家纺", "文娱车品" }.Contains(keyWord) ? keyWord.Substring(0, 1) : keyWord;
+                return new string[] { "数码家电","家装家纺", "文娱车品" }.Contains(keyWord) ? keyWord.Substring(0, 1) : keyWord;
             else
                 return pwdContent;
         }

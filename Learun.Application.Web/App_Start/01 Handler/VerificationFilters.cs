@@ -59,6 +59,20 @@ namespace Learun.Application.Web.App_Start._01_Handler
                 filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
                 return;
             }
+            else if (filterContext.HttpContext.Request.Headers["version"] == null)
+            {
+                modelResult.code = ResponseCode.fail;
+                modelResult.info = "缺少version参数!";
+                filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
+                return;
+            }
+            else if (filterContext.HttpContext.Request.Headers["platform"] == null)
+            {
+                modelResult.code = ResponseCode.fail;
+                modelResult.info = "缺少platform参数!";
+                filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
+                return;
+            }
         }
     }
 }

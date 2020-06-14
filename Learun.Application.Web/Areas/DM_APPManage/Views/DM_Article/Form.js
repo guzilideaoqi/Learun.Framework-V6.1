@@ -7,6 +7,7 @@
  */
 
 var keyValue = request('keyValue');
+var issoftarticle = request('issoftarticle');
 var acceptClick;
 var loaddfimg;
 var headimg;
@@ -77,6 +78,9 @@ var bootstrap = function ($, learun) {
             learun.alert.error('上级不能是自己本身');
             return false;
         }
+
+        if (!issoftarticle)
+            postData["issoftarticle"] = issoftarticle;
 
         var f = document.getElementById('uploadFile').files[0];
 

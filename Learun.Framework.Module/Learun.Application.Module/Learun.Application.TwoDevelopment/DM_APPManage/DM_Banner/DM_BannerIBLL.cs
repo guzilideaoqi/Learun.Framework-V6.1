@@ -9,7 +9,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		IEnumerable<dm_bannerEntity> GetPageList(Pagination pagination, string queryJson);
 
-		IEnumerable<dm_bannerEntity> GetPageListByCache(Pagination pagination, int type, string appid);
+		IEnumerable<dm_bannerEntity> GetPageListByCache(Pagination pagination, int type, int status, string appid);
 
 		dm_bannerEntity GetEntity(int keyValue);
 

@@ -65,6 +65,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("A_IMAGE")]
         public string a_image { get; set; }
+
+        /// <summary>
+        /// 是否为软件  1是  0否
+        /// </summary>
+        [Column("ISSOFTARTICLE")]
+        public string issoftarticle { get; set; }
         #endregion
 
         #region 扩展操作

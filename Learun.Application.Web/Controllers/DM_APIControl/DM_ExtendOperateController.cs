@@ -75,11 +75,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
+
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+                int status = 1;
+
+                if (type == 0)
+                {
+                    GetPreviewVersion(dm_BasesettingEntity, ref status);
+                }
+
                 return SuccessList("获取成功", dm_BannerIBLL.GetPageListByCache(new Pagination
                 {
                     page = 1,
                     rows = 50
-                }, type, appid));
+                }, type, status, appid));
             }
             catch (Exception ex)
             {
@@ -430,6 +439,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 检查head数据
         public string CheckAPPID()
         {
             if (base.Request.Headers["appid"].IsEmpty())
@@ -438,5 +448,35 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             return base.Request.Headers["appid"].ToString();
         }
+
+        public string CheckPlaform()
+        {
+            if (base.Request.Headers["platform"].IsEmpty())
+            {
+                throw new Exception("缺少参数platform");
+            }
+            return base.Request.Headers["platform"].ToString();
+        }
+
+        public string CheckVersion()
+        {
+            if (base.Request.Headers["version"].IsEmpty())
+            {
+                throw new Exception("缺少参数version");
+            }
+            return base.Request.Headers["version"].ToString();
+        }
+
+        public void GetPreviewVersion(dm_basesettingEntity dm_BasesettingEntity, ref int Status)
+        {
+            if (dm_BasesettingEntity.openchecked == "1")
+            { //开启审核模式
+                string version = CheckVersion();
+                string platform = CheckPlaform();
+                if ((platform == "ios" && version == dm_BasesettingEntity.previewversion) || (platform == "android" && version == dm_BasesettingEntity.previewversionandroid))
+                    Status = 2;
+            }
+        }
+        #endregion
     }
 }
