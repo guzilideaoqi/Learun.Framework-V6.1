@@ -1980,7 +1980,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     shopId = item.seller_id,
                     shopLogo = "https://wwc.alicdn.com/avatar/getAvatar.do?userId=" + item.seller_id,
                     shopName = item.nick,
-                    coupon_after_price = item.zk_final_price.ToString(),
+                    coupon_after_price = (decimal.Parse(item.zk_final_price) - decimal.Parse(item.coupon_amount.IsEmpty() ? "0" : item.coupon_amount)).ToString(),
                     coupon_price = item.coupon_amount.ToString(),
                     origin_price = item.reserve_price.ToString(),
                     coupon_end_time = item.coupon_end_time,
@@ -2007,7 +2007,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         string GetScore(string score)
         {
             if (score == null)
-                return "-";
+            {
+                string[] scoreList = new string[] { "4.8", "4.9", "5.0" };
+                return scoreList[new Random().Next(scoreList.Length)];
+            }
             else
             {
                 decimal scoreValue = 0;
@@ -2055,10 +2058,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         #region 解析淘口令
                         pwdContent = ParsePwd("http://cloud.jinglm.com/TB_OpenApi/TKL_Query", string.Format("PasswordContent={0}&AdzoneId={1}&SiteId={2}&AccountID={3}", keyWord, "110249350265", "967450311", "127267155"));
                         #endregion
+                        pwdContent = "https://item.taobao.com/item.htm?id=" + pwdContent;
                     }
                 }
                 else
                 {
+                    pwdContent = "https://item.taobao.com/item.htm?id=" + pwdContent;
                     Regex tb_regex = new Regex(@"^(http|https)(://detail.tmall.com|://item.taobao.com|://chaoshi.detail.tmall.com)");
                     if (!tb_regex.IsMatch(keyWord))
                     {
@@ -2073,7 +2078,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
 
             if (pwdContent == "")
-                return new string[] { "数码家电","家装家纺", "文娱车品" }.Contains(keyWord) ? keyWord.Substring(0, 1) : keyWord;
+                return new string[] { "数码家电", "家装家纺", "文娱车品" }.Contains(keyWord) ? keyWord.Substring(0, 1) : keyWord;
             else
                 return pwdContent;
         }

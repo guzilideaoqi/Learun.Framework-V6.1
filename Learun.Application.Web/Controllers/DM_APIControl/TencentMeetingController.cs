@@ -16,6 +16,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private DM_BaseSettingIBLL dm_BaseSettingIBLL = new DM_BaseSettingBLL();
 
         private DM_UserIBLL dm_userIBLL = new DM_UserBLL();
+
+        private DM_MeetingListIBLL dm_MeetingListIBLL = new DM_MeetingListBLL();
         /// <summary>
         /// 创建会议房间
         /// </summary>
@@ -32,6 +34,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
 
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
+
+                if (dm_UserEntity.isvoice != 1)
+                    throw new Exception("无创建直播间权限!");
 
                 MeetingSettings msettings = new MeetingSettings()
                 {
@@ -58,7 +63,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     settings = msettings,
                     start_time = Time.GetTimeStamp(StartTime),
                     end_time = Time.GetTimeStamp(EndTime),
-                    password=Password
+                    password = Password
                 };
 
                 MeetingAPI meetingAPI = new MeetingAPI()
@@ -108,7 +113,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         List<dm_meetinglistEntity> MeetingEntityList = new List<dm_meetinglistEntity>();
                         foreach (MeetingInfo item in createMeetingResponse.meeting_info_list)
                         {
-                            MeetingEntityList.Add(new dm_meetinglistEntity {
+                            MeetingEntityList.Add(new dm_meetinglistEntity
+                            {
                                 hosts = User_ID.ToString(),
                                 join_url = item.join_url,
                                 meeting_code = item.meeting_code,
@@ -121,8 +127,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                                 subject = item.subject,
                                 createtime = DateTime.Now,
                                 settings = "",
-                                join_image =""
+                                join_image = dm_MeetingListIBLL.GeneralMeetingImage(dm_BasesettingEntity, item.join_url)
                             });
+                        }
+                        if (MeetingEntityList.Count > 0)
+                        {
+                            dm_MeetingListIBLL.CreateMetting(MeetingEntityList);
                         }
                     }
                 }
@@ -140,6 +150,37 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
 
+        /// <summary>
+        /// 获取直播间权限(只显示未过期的)
+        /// </summary>
+        /// <param name="User_ID">用户ID，传0时默认是全部</param>
+        /// <param name="keyword">关键词  房间名称或房间编号</param>
+        /// <returns></returns>
+        public ActionResult GetMeetingList(int User_ID=0,string keyword="")
+        {
+            try
+            {
+                return SuccessList("获取成功", dm_MeetingListIBLL.GetMeetingList(keyword, User_ID));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
+        public ActionResult GetMeetingJoinImage(string Join_Url) {
+            try
+            {
+                string appid = CheckAPPID();
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+
+                return Success("生成成功!", dm_MeetingListIBLL.GeneralMeetingImage(dm_BasesettingEntity, Join_Url));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
         /// <summary>
         /// 创建用户
         /// </summary>

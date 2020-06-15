@@ -63,6 +63,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="dm_Meetinglist"></param>
         void CreateMetting(List<dm_meetinglistEntity> dm_Meetinglist);
+
+        /// <summary>
+        /// 生成推广图片
+        /// </summary>
+        /// <param name="dm_BasesettingEntity"></param>
+        /// <param name="Join_Url"></param>
+        /// <returns></returns>
+        string GeneralMeetingImage(dm_basesettingEntity dm_BasesettingEntity, string Join_Url);
         #endregion
     }
 }

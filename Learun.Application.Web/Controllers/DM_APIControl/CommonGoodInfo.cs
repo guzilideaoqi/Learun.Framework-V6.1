@@ -28,7 +28,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// </summary>
         public string coupon_after_price { get; set; }
         /// <summary>
-        /// 平台  1淘宝 2京东  3拼多多
+        /// 所属平台  1淘宝  3京东  4拼多多
         /// </summary>
         public int PlaformType { get; set; }
 

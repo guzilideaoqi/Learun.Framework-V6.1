@@ -190,6 +190,31 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
         }
+
+        /// <summary>
+        /// 生成会议推广图片
+        /// </summary>
+        /// <param name="dm_BasesettingEntity"></param>
+        /// <param name="Join_Url"></param>
+        /// <returns></returns>
+        public string GeneralMeetingImage(dm_basesettingEntity dm_BasesettingEntity, string Join_Url)
+        {
+            try
+            {
+                return dM_MeetingListService.GeneralMeetingImage(dm_BasesettingEntity, Join_Url);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
 
     }

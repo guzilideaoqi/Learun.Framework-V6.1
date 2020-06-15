@@ -227,7 +227,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (User_ID > 0)
                     expression = LinqExtensions.And<dm_meetinglistEntity>(expression, (dm_meetinglistEntity t) => t.user_id == User_ID);
 
-                return this.BaseRepository("dm_data").FindList<dm_meetinglistEntity>(t => t.end_time < DateTime.Now);
+                return this.BaseRepository("dm_data").FindList<dm_meetinglistEntity>(expression);
             }
             catch (Exception ex)
             {
@@ -254,22 +254,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 //生成推广二维码
                 Bitmap qrCode = QRCodeHelper.GenerateQRCode(Join_Url, 280, 280);
 
-                return "";
+                return GeneralShareImage(dm_BasesettingEntity, path1, qrCode);
             }
             catch (Exception ex)
             {
-                if (ex is ExceptionEx)
-                {
-                    throw;
-                }
-                else
-                {
-                    throw ExceptionEx.ThrowServiceException(ex);
-                }
+                return "";
             }
         }
 
-        string GeneralShareImage(dm_basesettingEntity dm_BasesettingEntity, string bj_image_path, Bitmap qrCode, string InviteCode)
+        string GeneralShareImage(dm_basesettingEntity dm_BasesettingEntity, string bj_image_path, Bitmap qrCode)
         {
             System.Drawing.Image imgSrc = System.Drawing.Image.FromFile(bj_image_path);
             using (Graphics g = Graphics.FromImage(imgSrc))
@@ -283,13 +276,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 //画头像
                 //g.DrawImage(titleImage, 8, 8, titleImage.Width, titleImage.Height);
-                //OSSHelper.PutObject(dm_BasesettingEntity, "", qrCode);
             }
 
-            MemoryStream mStream = new MemoryStream();
+            string basePath = System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd("\\".ToCharArray());
+            string path1 = basePath + @"/Resource/ShareImage/MeetingDefault1.jpg";
+            using (System.IO.FileStream fs = new System.IO.FileStream(path1, FileMode.Create))
+            {
+                imgSrc.Save(fs, System.Drawing.Imaging.ImageFormat.Bmp);
+            }
+            return OSSHelper.PutObject(dm_BasesettingEntity, "", path1);
+
+            //MemoryStream mStream = new MemoryStream();
+            //imgSrc.Save(mStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+
             //imgSrc.Save(newPath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
-            return "";
         }
         #endregion
     }

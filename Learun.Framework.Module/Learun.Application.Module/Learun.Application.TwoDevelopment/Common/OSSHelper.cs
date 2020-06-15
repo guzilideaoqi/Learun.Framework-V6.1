@@ -28,10 +28,30 @@ namespace Learun.Application.TwoDevelopment.Common
             var client = new OssClient(dm_BasesettingEntity.oss_endpoint, dm_BasesettingEntity.oss_accesskeyid, dm_BasesettingEntity.oss_accesskeysecret);
             try
             {
-                if(key.IsEmpty())
+                if (key.IsEmpty())
                     key = DateTime.Now.ToString("yyyyMMdd") + "/" + Guid.NewGuid().ToString() + Path.GetExtension(pic_file.FileName);
 
                 PutObjectResult putObjectResult = client.PutObject(dm_BasesettingEntity.oss_buketname, key, pic_file.InputStream);
+                //var uri = client.GeneratePresignedUri(bucketName, key);
+                //return uri.ToString();
+                return string.Format("http://{0}.{2}/{1}", dm_BasesettingEntity.oss_buketname, key, dm_BasesettingEntity.oss_endpoint);
+            }
+            catch (OssException ex)
+            {
+                throw new Exception("阿里云请求异常", ex);
+                //LogHelper.LogException<OssException>($"Msg:{ex.Message};Code:{ex.ErrorCode};RequestID:{ex.RequestId};HostID:{ex.HostId}");
+            }
+        }
+
+        public static string PutObject(dm_basesettingEntity dm_BasesettingEntity, string key, string pic_file)
+        {
+            var client = new OssClient(dm_BasesettingEntity.oss_endpoint, dm_BasesettingEntity.oss_accesskeyid, dm_BasesettingEntity.oss_accesskeysecret);
+            try
+            {
+                if (key.IsEmpty())
+                    key = DateTime.Now.ToString("yyyyMMdd") + "/" + Guid.NewGuid().ToString() + ".jpg";
+
+                PutObjectResult putObjectResult = client.PutObject(dm_BasesettingEntity.oss_buketname, key, pic_file);
                 //var uri = client.GeneratePresignedUri(bucketName, key);
                 //return uri.ToString();
                 return string.Format("http://{0}.{2}/{1}", dm_BasesettingEntity.oss_buketname, key, dm_BasesettingEntity.oss_endpoint);
