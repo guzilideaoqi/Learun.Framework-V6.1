@@ -148,7 +148,8 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
                 Directory.CreateDirectory(path);
                 files[0].SaveAs(fullFileName);
                 entity.a_image = virtualPath;*/
-                entity.a_image = OSSHelper.PutObject(dM_BaseSettingIBLL.GetEntityByCache(userInfo.companyId), "", files[0]);
+                string appid = userInfo.IsEmpty() ? "e2b3ec3a-310b-4ab8-aa81-b563ac8f3006" : userInfo.companyId;
+                entity.a_image = OSSHelper.PutObject(dM_BaseSettingIBLL.GetEntityByCache(appid), "", files[0]);
             }
             dM_ArticleIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功。");

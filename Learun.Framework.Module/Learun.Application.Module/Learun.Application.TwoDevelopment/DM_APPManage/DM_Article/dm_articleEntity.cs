@@ -81,7 +81,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             UserInfo userInfo = LoginUserInfo.Get();
             createtime = DateTime.Now;
-            appid = userInfo.companyId;
+            appid = userInfo.IsEmpty()? "e2b3ec3a-310b-4ab8-aa81-b563ac8f3006" : userInfo.companyId;
         }
         /// <summary>
         /// 编辑调用

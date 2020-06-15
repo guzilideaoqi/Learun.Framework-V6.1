@@ -83,7 +83,7 @@ var bootstrap = function ($, learun) {
 
         },
         initGird: function () {
-            $('#girdtable').lrAuthorizeJfGrid({
+            $('#girdtable').jfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_Article/GetList',
                 headData: [
                     { label: '名称', name: 'title', width: 200, align: 'left' },

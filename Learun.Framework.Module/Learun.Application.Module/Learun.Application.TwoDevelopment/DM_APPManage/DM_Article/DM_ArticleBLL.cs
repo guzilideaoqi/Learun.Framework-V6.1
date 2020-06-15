@@ -100,7 +100,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 UserInfo userInfo = LoginUserInfo.Get();
-                IEnumerable<dm_articleEntity> classifyList = GetList("{\"appid\":\"" + userInfo.companyId + "\"}");
+                string appid = userInfo.IsEmpty() ? "e2b3ec3a-310b-4ab8-aa81-b563ac8f3006" : userInfo.companyId;
+                IEnumerable<dm_articleEntity> classifyList = GetList("{\"appid\":\"" + appid + "\"}");
                 List<TreeModel> treeList = new List<TreeModel>();
                 foreach (var item in classifyList)
                 {

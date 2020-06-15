@@ -62,6 +62,13 @@ var bootstrap = function ($, learun) {
                         document.getElementById('uploadPreview').src = headimg;
                     }
                 }, 300);
+            } else {
+                $('.file').prepend('<img src="' + top.$.rootUrl + '/Content/images/head/on-boy.jpg" id="uploadPreview" onerror="loaddfimg()" >');
+
+
+                loaddfimg = function () {
+                    document.getElementById('uploadPreview').src = headimg;
+                }
             }
         }
     };
