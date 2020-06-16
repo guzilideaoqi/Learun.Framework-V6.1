@@ -233,7 +233,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     {
                         Title = "实惠",
                         SubTitle = "品质生活",
-                        SmallType = 7
+                        SmallType = 2
                     });
                     redisCache.Write(cacheKey, smallCateList, 7L);
                 }
@@ -260,15 +260,39 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
 
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
-                    DTK_Ranking_ListRequest dTK_Ranking_ListRequest = new DTK_Ranking_ListRequest();
-                    dTK_Ranking_ListRequest.version = "v1.1.2";
-                    dTK_Ranking_ListRequest.rankType = 7;
-                    DTK_Ranking_ListResponse dTK_Ranking_ListResponse = dTK_ApiManage.GetRankingList(dTK_Ranking_ListRequest);
-                    if (dTK_Ranking_ListResponse.code != 0)
-                    {
-                        return Fail(dTK_Ranking_ListResponse.msg);
+
+                    if (true)
+                    {//数据切换  此处先定死
+                        DTK_OP_ListRequest dTK_OP_ListRequest = new DTK_OP_ListRequest();
+                        dTK_OP_ListRequest.version = "v1.2.2";
+                        dTK_OP_ListRequest.nineCid = "1";
+                        dTK_OP_ListRequest.pageId = "1";
+                        dTK_OP_ListRequest.pageSize = 10;
+                        DTK_OP_ListResponse dTK_OP_ListResponse = dTK_ApiManage.GetOPGood(dTK_OP_ListRequest);
+
+                        if (dTK_OP_ListResponse.code != 0)
+                        {
+                            return Fail(dTK_OP_ListResponse.msg);
+                        }
+
+
+                        RankingList = ConvertCommonGoodEntityByOPGood(dTK_OP_ListResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
-                    RankingList = ConvertCommonGoodEntityByRank(dTK_Ranking_ListResponse.data, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    else
+                    {
+                        DTK_Ranking_ListRequest dTK_Ranking_ListRequest = new DTK_Ranking_ListRequest();
+                        dTK_Ranking_ListRequest.version = "v1.1.2";
+                        dTK_Ranking_ListRequest.rankType = 7;
+                        DTK_Ranking_ListResponse dTK_Ranking_ListResponse = dTK_ApiManage.GetRankingList(dTK_Ranking_ListRequest);
+                        if (dTK_Ranking_ListResponse.code != 0)
+                        {
+                            return Fail(dTK_Ranking_ListResponse.msg);
+                        }
+                        RankingList = ConvertCommonGoodEntityByRank(dTK_Ranking_ListResponse.data, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    }
+
+
+
                     redisCache.Write(cacheKey, RankingList, DateTime.Now.AddHours(2.0), 7L);
                 }
                 return SuccessList("获取成功!", RankingList);
@@ -956,6 +980,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         return Fail(dTK_Privilege_LinkResponse.msg);
                     }
                     ConvertLinkResult = dTK_Privilege_LinkResponse.data;
+                    DTK_Good_DetailsItem dTK_Good_DetailsItem = GetGoodDetail(appid, originid);
+                    if (dTK_Good_DetailsItem != null)
+                    {
+                        ConvertLinkResult.tpwd = string.Format(@"{0}
+【原价】{1}元
+【券后价】{2}元
+复制这条信息{3}打开手机淘宝领券下单", dTK_Good_DetailsItem.title, (dTK_Good_DetailsItem.actualPrice+ dTK_Good_DetailsItem.couponPrice), dTK_Good_DetailsItem.actualPrice, ConvertLinkResult.tpwd);
+                    }
+                    else
+                    {
+                        ConvertLinkResult.tpwd = string.Format(@"复制这条信息{0}打开手机淘宝领券下单", ConvertLinkResult.tpwd);
+                    }
                     redisCache.Write(cacheKey, ConvertLinkResult, DateTime.Now.AddHours(1.0), 7L);
                 }
                 return Success("转链成功!", ConvertLinkResult);
@@ -963,6 +999,27 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             catch (Exception ex)
             {
                 return FailException(ex);
+            }
+        }
+
+        DTK_Good_DetailsItem GetGoodDetail(string appid, string goodid)
+        {
+            try
+            {
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
+                DTK_Get_Good_DetailsRequest dTK_Get_Good_DetailsRequest = new DTK_Get_Good_DetailsRequest();
+                dTK_Get_Good_DetailsRequest.goodsId = goodid;
+                dTK_Get_Good_DetailsRequest.version = "v1.2.2";
+                DTK_Get_Good_DetailsResponse dTK_Get_Good_DetailsResponse = dTK_ApiManage.GetGoodDetail(dTK_Get_Good_DetailsRequest);
+                if (dTK_Get_Good_DetailsResponse.code == 0)
+                    return dTK_Get_Good_DetailsResponse.data;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
         #endregion
