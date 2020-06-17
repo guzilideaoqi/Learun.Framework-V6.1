@@ -215,6 +215,10 @@
     <Compile Include="DM_APPManage\DM_MeetingList\DM_MeetingListService.cs" />
     <Compile Include="DM_APPManage\DM_MeetingList\DM_MeetingListIBLL.cs" />
     <Compile Include="DM_APPManage\DM_MeetingList\DM_MeetingListBLL.cs" />
+    <Compile Include="DM_APPManage\dm_business_cooperation\dm_business_cooperationEntity.cs" />
+    <Compile Include="DM_APPManage\dm_business_cooperation\dm_business_cooperationService.cs" />
+    <Compile Include="DM_APPManage\dm_business_cooperation\dm_business_cooperationIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_business_cooperation\dm_business_cooperationBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

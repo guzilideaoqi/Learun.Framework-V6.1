@@ -298,6 +298,7 @@
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_TemplateController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_TypeController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_MeetingListController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_business_cooperationController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -2345,6 +2346,10 @@
     <Content Include="Areas\DM_APPManage\Views\DM_MeetingList\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_MeetingList\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_MeetingList\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_business_cooperation\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_business_cooperation\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_business_cooperation\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_business_cooperation\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

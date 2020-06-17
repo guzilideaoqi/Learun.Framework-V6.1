@@ -40,6 +40,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_IntergralChangeGoodIBLL dM_IntergralChangeGoodIBLL = new DM_IntergralChangeGoodBLL();
 
+        private dm_business_cooperationIBLL dm_Business_CooperationIBLL = new dm_business_cooperationBLL();
+
         #region 用户名密码登陆
 
         public ActionResult DM_Login(dm_userEntity dm_UserEntity)
@@ -1105,6 +1107,25 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (User_ID <= 0) return FailNoLogin();
 
                 return SuccessList("获取成功", dm_Apply_CashRecordIBLL.GetMyCashRecord(User_ID, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 商务合作
+        public ActionResult BusinessCooperation(dm_business_cooperationEntity dm_Business_CooperationEntity)
+        {
+            try
+            {
+                if (dm_Business_CooperationEntity.user_id <= 0)
+                    return FailNoLogin();
+
+                dm_Business_CooperationIBLL.SaveEntity(0, dm_Business_CooperationEntity);
+
+                return Success("提交成功,工作人员稍后会与您联系!", new { });
             }
             catch (Exception ex)
             {

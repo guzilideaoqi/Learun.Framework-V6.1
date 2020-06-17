@@ -986,7 +986,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         ConvertLinkResult.tpwd = string.Format(@"{0}
 【原价】{1}元
 【券后价】{2}元
-复制这条信息{3}打开手机淘宝领券下单", dTK_Good_DetailsItem.title, (dTK_Good_DetailsItem.actualPrice+ dTK_Good_DetailsItem.couponPrice), dTK_Good_DetailsItem.actualPrice, ConvertLinkResult.tpwd);
+复制这条信息{3}打开手机淘宝领券下单", dTK_Good_DetailsItem.title, (dTK_Good_DetailsItem.actualPrice + dTK_Good_DetailsItem.couponPrice), dTK_Good_DetailsItem.actualPrice, ConvertLinkResult.tpwd);
                     }
                     else
                     {
@@ -1427,6 +1427,23 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             return View();
         }
 
+        #region 获取公用的商品详情
+        public ActionResult GetGoodImageDetail(int User_ID, string SkuID)
+        {
+            try
+            {
+                if (User_ID <= 0)
+                    return FailNoLogin();
+
+                string[] imageDetailByApi = GetGoodImageDetailByApi(SkuID);
+                return SuccessList("获取成功!", imageDetailByApi);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
         public ActionResult GetCommonGoodDetail(string CacheKey, string SkuID)
         {
             try
@@ -1437,6 +1454,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 else
                 {
                     CommonGoodInfo commonGoodInfo = commonGoodInfoList.Where(t => t.skuid == SkuID).FirstOrDefault();
+
+                    if (commonGoodInfo.PlaformType == 1)
+                    {
+                        string[] imageDetailByApi = GetGoodImageDetailByApi(SkuID);
+                        commonGoodInfo.detail_images = imageDetailByApi.IsEmpty() ? commonGoodInfo.detail_images : imageDetailByApi;
+                    }
+
+
                     if (commonGoodInfo.IsEmpty())
                         return Fail("商品信息加载异常,请重试!");
                     else
@@ -1448,6 +1473,42 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 return FailException(ex);
             }
         }
+
+        public string[] GetGoodImageDetailByApi(string SkuID)
+        {
+            string cacheKey = "GoodImageDetail" + SkuID;
+            string[] imageDetail = redisCache.Read<string[]>(cacheKey, 7);
+            if (imageDetail == null)
+            {
+                #region 获取商品详情图片
+                string resultContent = HttpMethods.Get("https://h5api.m.taobao.com/h5/mtop.taobao.detail.getdesc/6.0?api=mtop.taobao.detail.getdesc&v=6.0&jsv=2.4.11&data={%22id%22:%22" + SkuID + "%22}&callback=jsonp_1f7f8047e1fead0");
+                #endregion
+
+                List<string> ImageDetailByApi = getValues("(?<=src=\\\\[\'\"]).*?jpg(?=\\\\)", resultContent);
+
+                if (ImageDetailByApi.Count > 0)
+                {
+                    imageDetail = ImageDetailByApi.ToArray();
+                    redisCache.Write<string[]>(cacheKey, imageDetail, DateTime.Now.AddDays(3), 7);
+                }
+            }
+
+            return imageDetail;
+        }
+
+        public List<string> getValues(string parn, string content)
+        {
+            List<string> values = new List<string>();
+            Regex reg = new Regex(parn);
+            MatchCollection matchs = reg.Matches(content);
+            foreach (Match item in matchs)
+            {
+
+                values.Add(GetImage(item.Value));
+            }
+            return values;
+        }
+        #endregion
 
         #region 获取积分兑换商品
         /// <summary>
