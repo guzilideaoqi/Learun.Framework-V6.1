@@ -341,7 +341,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw new Exception("请勿重复接受该任务!");
 
                 dm_userEntity dm_UserEntity = dM_UserService.GetEntity(dm_Task_ReviceEntity.user_id);
-                if (dm_UserEntity.userlevel != 1 && dm_UserEntity.userlevel != 3)
+                if (dm_UserEntity.userlevel != 1 && dm_UserEntity.userlevel != 2)
                     throw new Exception("当前等级无法接受任务,请升级后重试!");
 
                 //判断当前未在审核状态的任务数量
