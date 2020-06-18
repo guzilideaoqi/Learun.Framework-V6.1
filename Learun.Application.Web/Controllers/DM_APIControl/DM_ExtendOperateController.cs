@@ -108,7 +108,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     //isAppStorePreview = ((base.Request.Headers["version"].ToString() == dm_BasesettingEntity.previewversion) ? 1 : 0)
                     previewversion = dm_BasesettingEntity.previewversion,
-                    ischecked = dm_BasesettingEntity.openchecked
+                    ischecked = dm_BasesettingEntity.openchecked,
+                    welcomenewperson = dm_BasesettingEntity.welcomenewperson,
+                    showcommission = dm_BasesettingEntity.showcommission
                 });
             }
             catch (Exception ex)

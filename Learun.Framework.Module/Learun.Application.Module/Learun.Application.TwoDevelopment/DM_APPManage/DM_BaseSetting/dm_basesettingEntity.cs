@@ -523,6 +523,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("MEETING_SDKID")]
         public string meeting_sdkid { get; set; }
 
+        /// <summary>
+        /// 新人欢迎语
+        /// </summary>
+        [Column("WELCOMENEWPERSON")]
+        public string welcomenewperson { get; set; }
+
+        /// <summary>
+        /// 显示佣金类型  0显示低佣金   1显示高佣金
+        /// </summary>
+        public int? showcommission { get; set; }
         public void Create()
         {
             UserInfo userInfo = LoginUserInfo.Get();

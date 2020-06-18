@@ -1444,6 +1444,22 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
 
+        public ActionResult GetGoodDetailByTB(int User_ID, string SkuID)
+        {
+            try
+            {
+                if (User_ID <= 0)
+                    return FailNoLogin();
+
+                string resultContent = GetGoodDetailByApi(SkuID);
+                return Success("获取成功!", resultContent);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
         public ActionResult GetCommonGoodDetail(string CacheKey, string SkuID)
         {
             try
@@ -1494,6 +1510,30 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
 
             return imageDetail;
+        }
+
+        public string GetGoodDetailByApi(string SkuID)
+        {
+            string resultContent = "";
+            try
+            {
+                string cacheKey = "TB_GoodDetailApi" + SkuID;
+                resultContent = redisCache.Read<string>(cacheKey, 7);
+                if (string.IsNullOrWhiteSpace(resultContent))
+                {
+                    resultContent = HttpMethods.Get("https://h5api.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?data=%7B%22itemNumId%22%3A%22" + SkuID + "%22%7D&callback=jsonp_1290ab1b928e600");
+                    if (resultContent.Contains("SUCCESS::调用成功"))
+                    {
+                        redisCache.Write<string>(cacheKey, resultContent, DateTime.Now.AddDays(3), 7);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("当前访问量过大，请稍后重试!");
+            }
+
+            return resultContent;
         }
 
         public List<string> getValues(string parn, string content)

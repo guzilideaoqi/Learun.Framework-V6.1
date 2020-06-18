@@ -62,18 +62,22 @@ var bootstrap = function ($, learun) {
                 }
             });
 
-            $("#openchecked").lrselect();
+            $("#openchecked").lrselect();//上架审核模式
 
-            $("#taskchecked").lrselect();
+            $("#taskchecked").lrselect();//任务审核模式
 
-            $("#goodsource").lrselect();
+            $("#goodsource").lrselect();//商品搜索来源
 
+            $("#showcommission").lrselect();//显示佣金类型
+
+            //商品类型
             $("#goodtype").lrselect({
                 url: top.$.rootUrl + "/DM_Good/GetGoodTypeByCache",
                 value: "cid",
                 text: "cname"
             });
 
+            //超级券商品类型
             $("#super_coupon_goodtype").lrselect({
                 url: top.$.rootUrl + "/DM_Good/GetGoodTypeByCache",
                 value: "cid",
