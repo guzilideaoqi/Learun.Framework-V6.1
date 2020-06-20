@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using HYG.CommonHelper.Common;
 using Learun.Application.TwoDevelopment.Common;
 using Learun.DataBase.Repository;
 using Learun.Util;
@@ -250,11 +251,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 string basePath = System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd("\\".ToCharArray());
                 string path1 = basePath + @"/Resource/ShareImage/MeetingDefault.jpg";
+                string path2 = basePath + @"/Resource/ShareImage/MeetingDefault2.jpg";
+                string path3 = basePath + @"/Resource/ShareImage/MeetingDefault3.jpg";
 
                 //生成推广二维码
                 Bitmap qrCode = QRCodeHelper.GenerateQRCode(Join_Url, 280, 280);
 
-                return GeneralShareImage(dm_BasesettingEntity, path1, qrCode);
+                List<string> imageList = new List<string>();
+                imageList.Add(GeneralShareImage(dm_BasesettingEntity, path1, qrCode));
+                imageList.Add(GeneralShareImage(dm_BasesettingEntity, path2, qrCode));
+                imageList.Add(GeneralShareImage(dm_BasesettingEntity, path3, qrCode));
+
+                return JsonConvert.JsonSerializerIO(imageList.ToArray());
             }
             catch (Exception ex)
             {
@@ -284,8 +292,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 imgSrc.Save(fs, System.Drawing.Imaging.ImageFormat.Bmp);
             }
-            return OSSHelper.PutObject(dm_BasesettingEntity, "", path1);
+            string oss_url= OSSHelper.PutObject(dm_BasesettingEntity, "", path1);
 
+            return oss_url;
             //MemoryStream mStream = new MemoryStream();
             //imgSrc.Save(mStream, System.Drawing.Imaging.ImageFormat.Jpeg);
 
