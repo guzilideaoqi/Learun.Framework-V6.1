@@ -41,7 +41,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 t.settings,
                 t.join_image,
                 t.createtime,
-                t.updatetime
+                t.updatetime,
+t.page_image
             ";
         }
         #endregion
@@ -217,7 +218,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 获取进行中的直播间
-        public IEnumerable<dm_meetinglistEntity> GetMeetingList(string keyWord, int User_ID)
+        public IEnumerable<dm_meetinglistEntity> GetMeetingList(Pagination pagination, string keyWord, int User_ID)
         {
             try
             {
@@ -228,7 +229,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (User_ID > 0)
                     expression = LinqExtensions.And<dm_meetinglistEntity>(expression, (dm_meetinglistEntity t) => t.user_id == User_ID);
 
-                return this.BaseRepository("dm_data").FindList<dm_meetinglistEntity>(expression);
+                return this.BaseRepository("dm_data").FindList<dm_meetinglistEntity>(expression, pagination);
             }
             catch (Exception ex)
             {
@@ -250,17 +251,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 string basePath = System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd("\\".ToCharArray());
-                string path1 = basePath + @"/Resource/ShareImage/MeetingDefault.jpg";
-                string path2 = basePath + @"/Resource/ShareImage/MeetingDefault2.jpg";
-                string path3 = basePath + @"/Resource/ShareImage/MeetingDefault3.jpg";
+                string path1 = basePath + @"/Resource/ShareImage/MeetingDefault.png";
+                string path2 = basePath + @"/Resource/ShareImage/MeetingDefault2.png";
+                string path3 = basePath + @"/Resource/ShareImage/MeetingDefault3.png";
 
                 //生成推广二维码
-                Bitmap qrCode = QRCodeHelper.GenerateQRCode(Join_Url, 280, 280);
+                Bitmap qrCode = QRCodeHelper.GenerateQRCode(Join_Url, 300, 300);
 
                 List<string> imageList = new List<string>();
                 imageList.Add(GeneralShareImage(dm_BasesettingEntity, path1, qrCode));
-                imageList.Add(GeneralShareImage(dm_BasesettingEntity, path2, qrCode));
-                imageList.Add(GeneralShareImage(dm_BasesettingEntity, path3, qrCode));
+                imageList.Add(GeneralShareImage(dm_BasesettingEntity, path2, qrCode, 260, 1050));
+                imageList.Add(GeneralShareImage(dm_BasesettingEntity, path3, qrCode, 260, 600));
 
                 return JsonConvert.JsonSerializerIO(imageList.ToArray());
             }
@@ -270,14 +271,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        string GeneralShareImage(dm_basesettingEntity dm_BasesettingEntity, string bj_image_path, Bitmap qrCode)
+        string GeneralShareImage(dm_basesettingEntity dm_BasesettingEntity, string bj_image_path, Bitmap qrCode, int width = 260, int height = 980)
         {
             System.Drawing.Image imgSrc = System.Drawing.Image.FromFile(bj_image_path);
             using (Graphics g = Graphics.FromImage(imgSrc))
             {
                 //画专属推广二维码
-                g.DrawImage(qrCode, new Rectangle(260,//-450这个数，越小越靠左，可以调整二维码在背景图的位置
-                1080,//同理-650越小越靠上
+                g.DrawImage(qrCode, new Rectangle(width,//-450这个数，越小越靠左，可以调整二维码在背景图的位置
+                height,//同理-650越小越靠上
                 qrCode.Width,
                 qrCode.Height),
                 0, 0, qrCode.Width, qrCode.Height, GraphicsUnit.Pixel);
@@ -287,12 +288,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
 
             string basePath = System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd("\\".ToCharArray());
-            string path1 = basePath + @"/Resource/ShareImage/MeetingDefault1.jpg";
+            string path1 = basePath + @"/Resource/ShareImage/MeetingDefault1.png";
             using (System.IO.FileStream fs = new System.IO.FileStream(path1, FileMode.Create))
             {
                 imgSrc.Save(fs, System.Drawing.Imaging.ImageFormat.Bmp);
             }
-            string oss_url= OSSHelper.PutObject(dm_BasesettingEntity, "", path1);
+            string oss_url = OSSHelper.PutObject(dm_BasesettingEntity, "", path1);
 
             return oss_url;
             //MemoryStream mStream = new MemoryStream();

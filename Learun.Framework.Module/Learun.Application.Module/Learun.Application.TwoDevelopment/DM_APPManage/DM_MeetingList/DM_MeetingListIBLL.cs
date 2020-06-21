@@ -56,7 +56,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyWord">关键词</param>
         /// <param name="User_ID">用户ID</param>
         /// <returns></returns>
-        IEnumerable<dm_meetinglistEntity> GetMeetingList(string keyWord, int User_ID);
+        IEnumerable<dm_meetinglistEntity> GetMeetingList(Pagination pagination, string keyWord, int User_ID);
 
         /// <summary>
         /// 创建房间

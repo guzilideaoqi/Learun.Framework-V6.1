@@ -22,7 +22,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// 创建会议房间
         /// </summary>
         /// <returns></returns>
-        public ActionResult CreateMetting(int User_ID, string Subject, DateTime StartTime, DateTime EndTime, string Password = "", int Mute_Enable_Join = 0, int Allow_Unmute_Self = 0, int Mute_All = 0, int Host_Video = 0, int Participant_Video = 0, int Play_Ivr_On_Leave = 0, int Play_Ivr_On_Join = 0)
+        public ActionResult CreateMetting(int User_ID, string Subject, DateTime StartTime, DateTime EndTime, string Page_Image = "", string Password = "", int Mute_Enable_Join = 0, int Allow_Unmute_Self = 0, int Mute_All = 0, int Host_Video = 0, int Participant_Video = 0, int Play_Ivr_On_Leave = 0, int Play_Ivr_On_Join = 0)
         {
             try
             {
@@ -127,7 +127,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                                 subject = item.subject,
                                 createtime = DateTime.Now,
                                 settings = "",
-                                join_image = dm_MeetingListIBLL.GeneralMeetingImage(dm_BasesettingEntity, item.join_url)
+                                join_image = dm_MeetingListIBLL.GeneralMeetingImage(dm_BasesettingEntity, item.join_url),
+                                page_image= Page_Image
                             });
                         }
                         if (MeetingEntityList.Count > 0)
@@ -156,11 +157,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="User_ID">用户ID，传0时默认是全部</param>
         /// <param name="keyword">关键词  房间名称或房间编号</param>
         /// <returns></returns>
-        public ActionResult GetMeetingList(int User_ID=0,string keyword="")
+        public ActionResult GetMeetingList(int PageNo=1,int PageSize=10,int User_ID=0,string keyword="")
         {
             try
             {
-                return SuccessList("获取成功", dm_MeetingListIBLL.GetMeetingList(keyword, User_ID));
+                return SuccessList("获取成功", dm_MeetingListIBLL.GetMeetingList(new Pagination { rows = PageSize, page = PageNo, sidx = "createtime", sord = "desc" }, keyword, User_ID));
             }
             catch (Exception ex)
             {

@@ -104,6 +104,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("USER_ID")]
         public int user_id { get; set; }
+
+        /// <summary>
+        /// 封面图片
+        /// </summary>
+        [Column("PAGE_IMAGE")]
+        public string page_image { get; set; }
         #endregion
 
         #region 扩展操作

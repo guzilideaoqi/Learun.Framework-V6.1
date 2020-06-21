@@ -838,7 +838,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                             });
                         }
                     }
-                    redisCache.Write(cacheKey, topicCatalogueItems, DateTime.Now.AddDays(1.0), 7L);
+                    if (topicCatalogueItems.Count > 0)
+                        redisCache.Write(cacheKey, topicCatalogueItems, DateTime.Now.AddDays(1.0), 7L);
                 }
                 return SuccessList("获取成功!", topicCatalogueItems);
             }
