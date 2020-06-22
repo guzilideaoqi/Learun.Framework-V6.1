@@ -551,7 +551,7 @@ namespace Learun.Util
         #region 获取当前时间戳
         public static string GetTimeStamp(bool IsMillSecond = false)
         {
-            TimeSpan ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            TimeSpan ts = DateTime.Now - new DateTime(1970, 1, 1, 8, 0, 0, 0);
             if (IsMillSecond)
                 return Convert.ToInt64(ts.TotalMilliseconds).ToString();
             else
@@ -562,7 +562,7 @@ namespace Learun.Util
         #region 获取指定时间的时间戳
         public static string GetTimeStamp(DateTime CurrentTime, bool IsMillSecond = false)
         {
-            TimeSpan ts = CurrentTime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            TimeSpan ts = CurrentTime - new DateTime(1970, 1, 1, 8, 0, 0, 0);
             if (IsMillSecond)
                 return Convert.ToInt64(ts.TotalMilliseconds).ToString();
             else

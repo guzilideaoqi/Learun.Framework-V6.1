@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq.Expressions;
 using System.Text;
@@ -251,9 +252,9 @@ t.page_image
             try
             {
                 string basePath = System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd("\\".ToCharArray());
-                string path1 = basePath + @"/Resource/ShareImage/MeetingDefault.png";
-                string path2 = basePath + @"/Resource/ShareImage/MeetingDefault2.png";
-                string path3 = basePath + @"/Resource/ShareImage/MeetingDefault3.png";
+                string path1 = basePath + @"/Resource/ShareImage/MeetingDefault.jpg";
+                string path2 = basePath + @"/Resource/ShareImage/MeetingDefault2.jpg";
+                string path3 = basePath + @"/Resource/ShareImage/MeetingDefault3.jpg";
 
                 //生成推广二维码
                 Bitmap qrCode = QRCodeHelper.GenerateQRCode(Join_Url, 300, 300);
@@ -283,23 +284,23 @@ t.page_image
                 qrCode.Height),
                 0, 0, qrCode.Width, qrCode.Height, GraphicsUnit.Pixel);
 
+                //g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+                //g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
                 //画头像
                 //g.DrawImage(titleImage, 8, 8, titleImage.Width, titleImage.Height);
             }
 
             string basePath = System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd("\\".ToCharArray());
-            string path1 = basePath + @"/Resource/ShareImage/MeetingDefault1.png";
+            string path1 = basePath + @"/Resource/ShareImage/MeetingDefault1.jpg";
             using (System.IO.FileStream fs = new System.IO.FileStream(path1, FileMode.Create))
             {
-                imgSrc.Save(fs, System.Drawing.Imaging.ImageFormat.Bmp);
+                imgSrc.Save(fs, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
             string oss_url = OSSHelper.PutObject(dm_BasesettingEntity, "", path1);
 
             return oss_url;
-            //MemoryStream mStream = new MemoryStream();
-            //imgSrc.Save(mStream, System.Drawing.Imaging.ImageFormat.Jpeg);
-
-            //imgSrc.Save(newPath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
         }
         #endregion
