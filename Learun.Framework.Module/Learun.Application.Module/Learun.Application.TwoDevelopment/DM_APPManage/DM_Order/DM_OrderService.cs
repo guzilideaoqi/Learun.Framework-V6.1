@@ -433,7 +433,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         TBApi tbApi = null;
         JDApi jDApi = null;
         PDDApi pDDApi = null;
-        string tb_tool_appkey = "25552805", tb_tool_appsecret = "7341a330d97862f21447f34c0fc326c9", appid = "";
+        string tb_tool_appkey = "25552805", tb_tool_appsecret = "7341a330d97862f21447f34c0fc326c9", appid = "e2b3ec3a-310b-4ab8-aa81-b563ac8f3006";
         List<dm_orderEntity> commonOrderList = new List<dm_orderEntity>();
         public int SyncOrder(int plaform, int timetype, int status, string startTime, string endTime)
         {
@@ -447,7 +447,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 if (plaform == 1)
                 {
-                    endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddHours(3));
+                    endTime = Extensions.ToDateTimeString(DateTime.Parse(startTime).AddMinutes(20));
                     effectCount = synd_tb_order(timetype == 1 ? 2 : 3, 1, 20, "", startTime, endTime, dm_BasesettingEntity);
                 }
                 else if (plaform == 3)
@@ -526,7 +526,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 commonOrderEntity.pid = item.adzone_id;
                                 commonOrderEntity.pid_name = item.adzone_name;
                                 commonOrderEntity.relation_id = item.relation_id.ToString();
-                                commonOrderEntity.special_id = item.special_id.ToString();
+                                commonOrderEntity.special_id = Extensions.ToString(item.special_id);
                                 commonOrderEntity.protection_status = item.refund_tag;
                                 commonOrderEntity.insert_type = 1;
                                 commonOrderEntity.order_create_date = ConvertDate(commonOrderEntity.order_createtime);
@@ -541,7 +541,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     if (orderData.has_next)
                     {
-                        tbApi.GetOrder("2", orderData.position_index, pageSize.ToString(), "", startTime, endTime, "1", pageNo.ToString(), "2");
+                        tbApi.GetOrder(queryType.ToString(), orderData.position_index, pageSize.ToString(), "", startTime, endTime, "1", pageNo.ToString(), "2");
                     }
                     else
                     {
@@ -552,7 +552,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
             catch (Exception ex)
             {
-                throw new Exception("订单同步异常", ex);
+                throw new Exception("订单同步异常" + ex.Message + ex.StackTrace, ex);
             }
 
             return effectCount;
@@ -735,17 +735,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             int effetcCount = commonOrderList.Count;
 
             if (commonOrderList.Count <= 0)
-                return 0;
-            IEnumerable<string> hashids = commonOrderList.Select(t => t.id);
-
-            IEnumerable<dm_orderEntity> orderList = BaseRepository("dm_data").IQueryable<dm_orderEntity>(t => hashids.Contains(t.id));
-
-            foreach (dm_orderEntity commonOrderEntity in commonOrderList)
+                effetcCount = 0;
+            try
             {
-                dm_orderEntity dm_OrderEntity = orderList.Where(t => t.id == commonOrderEntity.id).FirstOrDefault();
-                try
+                IEnumerable<string> hashids = commonOrderList.Select(t => t.id);
+
+                IEnumerable<dm_orderEntity> orderList = BaseRepository("dm_data").IQueryable<dm_orderEntity>(t => hashids.Contains(t.id));
+
+                foreach (dm_orderEntity commonOrderEntity in commonOrderList)
                 {
-                    dm_OrderEntity.appid = appid;
+                    dm_orderEntity dm_OrderEntity = orderList.Where(t => t.id == commonOrderEntity.id).FirstOrDefault();
+
+                    commonOrderEntity.appid = appid;
                     if (dm_OrderEntity.IsEmpty())
                     {
                         BaseRepository("dm_data").Insert(commonOrderEntity);
@@ -758,12 +759,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         }
                     }
                 }
-                catch (Exception)
-                {
-                    continue;
-                }
+                commonOrderList.Clear();
+
             }
-            commonOrderList.Clear();
+            catch (Exception ex)
+            {
+                throw new Exception("订单插入异常" + ex.Message + ex.StackTrace, ex);
+            }
 
             return effetcCount;
         }

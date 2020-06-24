@@ -587,7 +587,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         dTK_TB_Service_GoodRequest.version = "v2.0.0";
                         dTK_TB_Service_GoodRequest.pageNo = PageNo;
                         dTK_TB_Service_GoodRequest.pageSize = PageSize;
-                        dTK_TB_Service_GoodRequest.keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname);
+                        dTK_TB_Service_GoodRequest.keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname.Substring(0, 1));
                         if (min_price > 0)
                             dTK_TB_Service_GoodRequest.startPrice = min_price;
                         if (max_price > 0)
@@ -981,7 +981,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         return Fail(dTK_Privilege_LinkResponse.msg);
                     }
                     ConvertLinkResult = dTK_Privilege_LinkResponse.data;
-                    DTK_Good_DetailsItem dTK_Good_DetailsItem = GetGoodDetail(appid, originid);
+                    /*DTK_Good_DetailsItem dTK_Good_DetailsItem = GetGoodDetail(appid, originid);
                     if (dTK_Good_DetailsItem != null)
                     {
                         ConvertLinkResult.tpwd = string.Format(@"{0}
@@ -992,7 +992,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     else
                     {
                         ConvertLinkResult.tpwd = string.Format(@"复制这条信息{0}打开手机淘宝领券下单", ConvertLinkResult.tpwd);
-                    }
+                    }*/
+
+                    ConvertLinkResult.tpwd = string.Format(@"复制这条信息{0}打开手机淘宝领券下单", ConvertLinkResult.tpwd);
+
                     redisCache.Write(cacheKey, ConvertLinkResult, DateTime.Now.AddHours(1.0), 7L);
                 }
                 return Success("转链成功!", ConvertLinkResult);
@@ -1202,6 +1205,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                     if (jDLinkInfo != null)
                     {
+                        jDLinkInfo.tpwd = "下单链接:" + jDLinkInfo.clickURL;
                         redisCache.Write(cacheKey, jDLinkInfo, DateTime.Now.AddHours(2.0), 7L);
                     }
                 }
@@ -1410,6 +1414,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                     if (pDDLinkInfo != null)
                     {
+                        pDDLinkInfo.tpwd = "下单链接:" + pDDLinkInfo.mobile_short_url;
                         redisCache.Write(cacheKey, pDDLinkInfo, DateTime.Now.AddHours(2.0), 7L);
                     }
                 }
