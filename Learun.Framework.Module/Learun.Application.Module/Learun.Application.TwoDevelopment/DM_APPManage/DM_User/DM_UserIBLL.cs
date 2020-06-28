@@ -23,7 +23,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         dm_userEntity Login(dm_userEntity entity);
 
-        dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string appid);
+        dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string ParentInviteCode, string appid, string SmsMessageID);
 
         string EncodeInviteCode(int? id);
 

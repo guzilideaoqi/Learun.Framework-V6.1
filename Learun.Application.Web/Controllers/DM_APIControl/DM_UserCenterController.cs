@@ -92,14 +92,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     return Fail("验证码不能为空!");
                 }
-                if (!CommonSMSHelper.IsPassVerification(SmsMessageID, VerifiCode, appid))
-                {
-                    return Fail("验证码错误!");
-                }
+
                 dm_UserEntity.appid = appid;
                 dm_UserEntity.nickname = "dlm_" + Time.GetTimeStamp();
                 dm_UserEntity.pwd = "123456";
-                return Success("注册成功!", dm_userIBLL.Register(dm_UserEntity, ParentInviteCode, appid));
+                return Success("注册成功!", dm_userIBLL.Register(dm_UserEntity, VerifiCode, ParentInviteCode, appid, SmsMessageID));
             }
             catch (Exception ex)
             {
@@ -149,7 +146,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_UserEntity.nickname = "dlm_" + Time.GetTimeStamp();
                     dm_UserEntity.pwd = "123456";
 
-                    return Success("登录成功!", dm_userIBLL.Register(dm_UserEntity, ParentInviteCode, appid));
+                    return Success("登录成功!", dm_userIBLL.Register(dm_UserEntity, VerifiCode, ParentInviteCode, appid, SmsMessageID));
                 }
                 else
                 {//如果是老用户  直接根据手机号查询出用户信息

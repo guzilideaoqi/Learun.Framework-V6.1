@@ -305,7 +305,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string appid)
+        public dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode,string ParentInviteCode, string appid,string SmsMessageID)
         {
             lock (lockObject)
             {
@@ -316,7 +316,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 int? id = 0;
                 try
                 {
-                    parent_id = DecodeInviteCode(VerifiCode);
+                    parent_id = DecodeInviteCode(ParentInviteCode);
                     if (parent_id <= 0)
                     {
                         throw new Exception("邀请码错误!");
@@ -332,6 +332,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     {
                         throw new Exception("该手机号已注册!");
                     }
+
+                    if (!CommonSMSHelper.IsPassVerification(SmsMessageID, VerifiCode, appid))
+                    {
+                        throw new Exception("验证码错误!");
+                    }
+
                     dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
                     dm_UserEntity.pwd = Md5Helper.Encrypt(dm_UserEntity.pwd, 16);
                     dm_UserEntity.token = Guid.NewGuid().ToString();

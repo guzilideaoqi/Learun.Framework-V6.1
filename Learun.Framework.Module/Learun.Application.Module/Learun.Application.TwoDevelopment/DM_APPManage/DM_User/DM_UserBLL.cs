@@ -153,11 +153,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string appid)
+        public dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string ParentInviteCode, string appid, string SmsMessageID)
         {
             try
             {
-                return dM_UserService.Register(dm_UserEntity, VerifiCode, appid);
+                return dM_UserService.Register(dm_UserEntity, VerifiCode, ParentInviteCode, appid, SmsMessageID);
             }
             catch (Exception ex)
             {
