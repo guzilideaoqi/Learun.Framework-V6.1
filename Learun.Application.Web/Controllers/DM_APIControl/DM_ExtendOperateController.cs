@@ -104,11 +104,19 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string appid = CheckAPPID();
                 dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+                int Status = 0;
+                if (dm_BasesettingEntity.openchecked == "1")
+                { //开启审核模式
+                    string version = CheckVersion();
+                    string platform = CheckPlaform();
+                    if ((platform == "ios" && version == dm_BasesettingEntity.previewversion) || (platform == "android" && version == dm_BasesettingEntity.previewversionandroid))
+                        Status = 1;
+                }
                 return Success("获取成功", new
                 {
                     //isAppStorePreview = ((base.Request.Headers["version"].ToString() == dm_BasesettingEntity.previewversion) ? 1 : 0)
-                    previewversion = dm_BasesettingEntity.previewversion,
-                    ischecked = dm_BasesettingEntity.openchecked,
+                    //previewversion = dm_BasesettingEntity.previewversion,
+                    ischecked = Status,  //dm_BasesettingEntity.openchecked,
                     welcomenewperson = dm_BasesettingEntity.welcomenewperson,
                     showcommission = dm_BasesettingEntity.showcommission
                 });

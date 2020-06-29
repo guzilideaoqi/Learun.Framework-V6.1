@@ -264,7 +264,18 @@ t.page_image
                 imageList.Add(GeneralShareImage(dm_BasesettingEntity, path2, qrCode, 260, 1050));
                 imageList.Add(GeneralShareImage(dm_BasesettingEntity, path3, qrCode, 260, 600));
 
-                return JsonConvert.JsonSerializerIO(imageList.ToArray());
+                string images = "[";
+                foreach (var item in imageList)
+                {
+                    if (images != "[")
+                        images += ",";
+                    images += "\"" + item + "\"";
+                }
+                images += "]";
+
+                return images;
+
+                //return JsonConvert.JsonSerializerIO(imageList.ToArray());
             }
             catch (Exception ex)
             {
