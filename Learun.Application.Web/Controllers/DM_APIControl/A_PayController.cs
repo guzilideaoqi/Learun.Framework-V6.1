@@ -65,13 +65,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     return Fail("基础配置获取失败!");
 
                 string out_trade_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + user_id.ToString().PadLeft(6, '0');
-                IAopClient client = new DefaultAopClient("https://openapi.alipaydev.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
+                IAopClient client = new DefaultAopClient("https://openapi.alipay.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
                 AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
                 request.SetNotifyUrl(dm_BasesettingEntity.alipay_notifyurl);
                 request.SetReturnUrl(dm_BasesettingEntity.alipay_notifyurl);
 
-                request.BizContent = GetBizContent(user_id, TemplateID, dm_Alipay_TemplateEntity.name, dm_Alipay_TemplateEntity.finishprice, out_trade_no);
+                request.BizContent = GetBizContent1(user_id, TemplateID, dm_Alipay_TemplateEntity.name, dm_Alipay_TemplateEntity.finishprice, out_trade_no);
                 AlipayTradeAppPayResponse response = client.SdkExecute(request);
+
                 dm_alipay_recordEntity dm_Alipay_RecordEntity = new dm_alipay_recordEntity();
                 dm_Alipay_RecordEntity.user_id = user_id;
                 dm_Alipay_RecordEntity.total_amount = dm_Alipay_TemplateEntity.finishprice;
@@ -146,7 +147,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         dm_Alipay_RecordEntity.notify_time = notify_time;
                         dm_Alipay_RecordEntity.seller_id = seller_id;
                         dm_Alipay_RecordEntity.notify_id = notify_id;
-                        dm_Alipay_RecordEntity.alipay_status = "NoPay";
+                        dm_Alipay_RecordEntity.alipay_status = trade_status.ToUpper();
+                        dm_Alipay_RecordEntity.alipay_trade_no = sArray["trade_no"].ToString();
 
                         dM_Alipay_RecordIBLL.OpenAgent(dm_Alipay_RecordEntity);
                         #endregion
@@ -188,13 +190,15 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (dm_BasesettingEntity == null)
                     return Fail("基础配置获取失败!");
 
+                FinishPrice = 0.01M;
+
                 string out_trade_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + User_ID.ToString().PadLeft(6, '0');
-                IAopClient client = new DefaultAopClient("https://openapi.alipaydev.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
+                IAopClient client = new DefaultAopClient("https://openapi.alipay.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
                 AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
                 request.SetNotifyUrl(dm_BasesettingEntity.alipay_notifyurl);
                 request.SetReturnUrl(dm_BasesettingEntity.alipay_notifyurl);
 
-                request.BizContent = GetBizContent(User_ID, 99, "余额充值", FinishPrice, out_trade_no);
+                request.BizContent = GetBizContent1(User_ID, 99, "余额充值", FinishPrice, out_trade_no);
                 AlipayTradeAppPayResponse response = client.SdkExecute(request);
                 dm_alipay_recordEntity dm_Alipay_RecordEntity = new dm_alipay_recordEntity();
                 dm_Alipay_RecordEntity.user_id = User_ID;
@@ -287,6 +291,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         "  }";
 
             return bizContent;
+        }
+
+        string GetBizContent1(int user_id, int TemplateID, string name, decimal finishprice, string out_trade_no)
+        {
+            return "{\"out_trade_no\":\"" + out_trade_no + "\",\"total_amount\":\"" + finishprice + "\",\"subject\":\"" + HttpUtility.UrlEncode(name) + "\",\"goods_detail\":[]}";
+            return "{\"timeout_express\":\"90m\",\"total_amount\":\"" + finishprice + "\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"body\":\"" + name + "\",\"subject\":\"" + name + "\",\"out_trade_no\":\"" + out_trade_no + "\",\"time_expire\":\"" + DateTime.Now.AddMinutes(30).ToString("yyyy-MM-dd HH:mm:ss") + "\",\"goods_type\":\"1\",\"specified_channel\":\"pcredit\",\"goods_detail\":[{\"goods_id\":\"1\",\"alipay_goods_id\":\"20010001\",\"goods_name\":\"" + name + "\",\"quantity\":1,\"price\":2000,\"goods_category\":\"34543238\",\"categories_tree\":\"124868003|126232002|126252004\",\"body\":\"初级代理\",\"show_url\":\"http://www.alipay.com/xxx.jpg\"}]}";
         }
         #endregion
 

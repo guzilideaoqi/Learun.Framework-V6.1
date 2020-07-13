@@ -1,0 +1,1477 @@
+﻿.topHeadBar {
+    width: 100%;
+    min-width: 1203px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 110;
+    background: #fff;
+    box-shadow: 7px 28px 32px rgba(0, 0, 0, 0.07);
+}
+
+.topHead .header {
+    height: 60px;
+    padding: 5px 0;
+}
+
+    .topHead .header .logo .left_Mglogo {
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+    }
+
+        .topHead .header .logo .left_Mglogo .meiguanglink {
+            display: block;
+            width: 60px;
+            height: 60px;
+        }
+
+        .topHead .header .logo .left_Mglogo .logo_bgPic {
+            width: 100%;
+            height: 100%;
+        }
+
+    .topHead .header .logo .left_Mgtitle {
+        margin-top: 18px;
+        margin-left: 16px;
+    }
+
+        .topHead .header .logo .left_Mgtitle .Mg_title {
+            display: block;
+            width: 208px;
+            height: 22px;
+        }
+
+    .topHead .header .navBar {
+        line-height: 60px;
+    }
+
+        .topHead .header .navBar li {
+            float: left;
+            margin: 0 28px;
+            color: #333;
+        }
+
+            .topHead .header .navBar li .nav_item {
+                font-size: 16px;
+                color: #333;
+                padding: 0 0 15px 0;
+            }
+
+                .topHead .header .navBar li .nav_item:hover {
+                    color: #cd0244;
+                }
+
+        .topHead .header .navBar .active > a {
+            color: #cd0244 !important;
+            border-bottom: 2px solid #cd0244;
+        }
+
+        .topHead .header .navBar li:last-child {
+            margin-right: 2px;
+        }
+
+.topCause {
+    position: relative;
+}
+
+    .topCause .crause {
+        cursor: pointer;
+        max-width: 1920px;
+        min-width: 1203px;
+        margin: 0 auto;
+    }
+
+        .topCause .crause img {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            margin-left: -600px;
+        }
+
+        .topCause .crause .item-bg1 {
+            width: 100%;
+            height: 475px;
+            background: url("../images/mg-crauseBg_02.jpg") no-repeat;
+            background-position: center center;
+        }
+
+        .topCause .crause .item-bg2 {
+            width: 100%;
+            height: 475px;
+            background: url("../images/mg-crauseBg_01.jpg") no-repeat;
+            background-position: center center;
+        }
+
+    .topCause .vx_erwm {
+        position: fixed;
+        top: 520px;
+        right: 20px;
+        z-index: 99;
+    }
+
+        .topCause .vx_erwm .ewm_pic {
+            display: block;
+            width: 114px;
+            height: 111px;
+        }
+
+ {
+    padding: 160px 0 80px 0;
+}
+
+     .left_MgApp {
+        width: 481px;
+        height: 311px;
+        padding: 50px 52px 55px 56px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        position: relative;
+    }
+
+         .left_MgApp .aq_MgApp .aq_wrapper img {
+            width: 100%;
+            height: 100%;
+        }
+
+         .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .left_bgPic-a {
+            width: 173px;
+            height: 308px;
+            /*background: url("../images/mgkj_15.png") no-repeat;*/
+        }
+
+         .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-a {
+            overflow: hidden;
+            padding-left: 40px;
+            height: 308px;
+        }
+
+             .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-a .Mg_app_title-a {
+                display: block;
+                width: 146px;
+                height: 23px;
+                background: url("../images/mgkj_18.png") no-repeat;
+                margin-bottom: 36px;
+            }
+
+             .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-a .MgApp_introduceWord-a {
+                color: #333333;
+                font-size: 15px;
+                line-height: 28px;
+            }
+
+         .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .left_bgPic-c {
+            width: 173px;
+            height: 308px;
+            /*background: url("../images/app3.png") no-repeat;*/
+        }
+
+         .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-c {
+            overflow: hidden;
+            padding-left: 40px;
+            height: 308px;
+        }
+
+             .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-c .Mg_app_title-c {
+                font: 24px 'Microsoft YaHei';
+                font-weight: 700;
+                color: #ec5151;
+            }
+
+             .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-c .MgApp_introduceWord-c {
+                color: #333333;
+                font-size: 15px;
+                line-height: 28px;
+                margin-top: 42px;
+            }
+
+         .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .left_bgPic-d {
+            width: 173px;
+            height: 308px;
+            background: url("../images/app4.png") no-repeat;
+        }
+
+         .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-d {
+            overflow: hidden;
+            padding-left: 40px;
+            height: 308px;
+        }
+
+             .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-d .Mg_app_title-d {
+                font: 24px 'Microsoft YaHei';
+                font-weight: 700;
+                color: #ec5151;
+            }
+
+             .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-d .MgApp_introduceWord-d {
+                color: #333333;
+                font-size: 15px;
+                line-height: 28px;
+                padding-top: 36px;
+            }
+
+         .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .left_bgPic-e {
+            width: 173px;
+            height: 308px;
+            /*background: url("../images/app5.png") no-repeat;*/
+        }
+
+         .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-e {
+            overflow: hidden;
+            padding-left: 40px;
+            height: 308px;
+        }
+
+             .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-e .Mg_app_title-e {
+                font: 24px 'Microsoft YaHeiBold';
+                font-weight: 700;
+                color: #ec5151;
+            }
+
+             .left_MgApp .aq_MgApp .aq_wrapper .Mg_appItem .rightWord-e .MgApp_introduceWord-e {
+                color: #333333;
+                font-size: 15px;
+                line-height: 28px;
+                padding-top: 36px;
+            }
+
+     .right_Mgfuture {
+        width: 481px;
+        height: 311px;
+        padding: 50px 52px 55px 56px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+    }
+
+         .right_Mgfuture .MgfutureItem .left_bgPic {
+            width: 160px;
+            height: 251px;
+            /*background: url("../images/mgkj_25.png") no-repeat;*/
+            margin-top: 25px;
+        }
+
+         .right_Mgfuture .MgfutureItem .rightWord {
+            overflow: hidden;
+            padding-left: 40px;
+            height: 308px;
+        }
+
+             .right_Mgfuture .MgfutureItem .rightWord .Mgfuture_title {
+                display: block;
+                width: 95px;
+                height: 23px;
+                margin-bottom: 36px;
+            }
+
+             .right_Mgfuture .MgfutureItem .rightWord .Mgfuture_introduceWord {
+                color: #333333;
+                font-size: 15px;
+                line-height: 28px;
+            }
+
+.Mg_specialBg {
+    min-width: 1203px;
+    height: auto;
+    padding-bottom: 43px;
+    background-color: #f5f5f5;
+}
+
+    .Mg_specialBg .Mg_chooseReason {
+        padding-top: 106px;
+        text-align: center;
+    }
+
+        .Mg_specialBg .Mg_chooseReason .meiguangJs {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+            .Mg_specialBg .Mg_chooseReason .meiguangJs h3 {
+                font-size: 26px;
+                color: #EC5151;
+            }
+
+            .Mg_specialBg .Mg_chooseReason .meiguangJs .p1 {
+                margin-top: 15px;
+            }
+
+            .Mg_specialBg .Mg_chooseReason .meiguangJs .MgInfo {
+                line-height: 35px;
+                font-size: 18px;
+                text-align: left;
+                color: #333;
+                text-indent: 2em;
+            }
+
+        .Mg_specialBg .Mg_chooseReason .Mg_topTitle {
+            height: 40px;
+            line-height: 40px;
+            font-size: 30px;
+            color: #EC5151;
+            font-weight: bold;
+        }
+
+        .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox {
+            margin-top: 88px;
+        }
+
+            .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl li {
+                cursor: pointer;
+            }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl li h3 {
+                    font: 18px 'Microsoft YaHei';
+                }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl li:hover .MgItem_iconBg {
+                    margin-top: -20px;
+                    transition: all 0.5s;
+                }
+
+            .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_specialItem {
+                height: 320px;
+            }
+
+            .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Business {
+                text-align: center;
+                float: left;
+                width: 240px;
+            }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Business .MgItem_iconBg {
+                    display: inline-block;
+                    width: 150px;
+                    height: 150px;
+                    background-color: #e6e6e6;
+                    border-radius: 50%;
+                    line-height: 182px;
+                    text-align: center;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Business .MgItem_iconBg .Mg_icon {
+                        display: inline-block;
+                        width: 47px;
+                        height: 53px;
+                        background: url("../images/mgkj_40.png") no-repeat center;
+                    }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Business .specialItem_word {
+                    margin-top: 22px;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Business .specialItem_word .word_title {
+                        color: #333333;
+                        font-size: 18px;
+                    }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Business .specialItem_word .item_word {
+                        color: #808080;
+                        font-size: 14px;
+                        line-height: 25px;
+                    }
+
+            .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Class {
+                text-align: center;
+                float: left;
+                width: 240px;
+            }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Class .MgItem_iconBg {
+                    display: inline-block;
+                    width: 150px;
+                    height: 150px;
+                    background-color: #e6e6e6;
+                    border-radius: 50%;
+                    line-height: 174px;
+                    text-align: center;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Class .MgItem_iconBg .Mg_icon {
+                        display: inline-block;
+                        width: 40px;
+                        height: 39px;
+                        background: url("../images/mgkj_46.png") no-repeat center;
+                    }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Class .specialItem_word {
+                    margin-top: 22px;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Class .specialItem_word .word_title {
+                        color: #333333;
+                        font-size: 18px;
+                    }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Class .specialItem_word .item_word {
+                        color: #808080;
+                        font-size: 14px;
+                        line-height: 25px;
+                    }
+
+            .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Group {
+                text-align: center;
+                float: left;
+                width: 240px;
+            }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Group .MgItem_iconBg {
+                    display: inline-block;
+                    width: 150px;
+                    height: 150px;
+                    background-color: #e6e6e6;
+                    border-radius: 50%;
+                    line-height: 182px;
+                    text-align: center;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Group .MgItem_iconBg .Mg_icon {
+                        display: inline-block;
+                        width: 57px;
+                        height: 48px;
+                        background: url("../images/mgkj_43.png") no-repeat center;
+                    }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Group .specialItem_word {
+                    margin-top: 22px;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Group .specialItem_word .word_title {
+                        color: #333333;
+                        font-size: 18px;
+                    }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Group .specialItem_word .item_word {
+                        color: #808080;
+                        font-size: 14px;
+                        line-height: 25px;
+                    }
+
+            .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Rate {
+                text-align: center;
+                float: left;
+                width: 240px;
+            }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Rate .MgItem_iconBg {
+                    display: inline-block;
+                    width: 150px;
+                    height: 150px;
+                    background-color: #e6e6e6;
+                    border-radius: 50%;
+                    line-height: 190px;
+                    text-align: center;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Rate .MgItem_iconBg .Mg_icon {
+                        display: inline-block;
+                        width: 60px;
+                        height: 59px;
+                        background: url("../images/mgkj_37.png") no-repeat center;
+                    }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Rate .specialItem_word {
+                    margin-top: 22px;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Rate .specialItem_word .word_title {
+                        color: #333333;
+                        font-size: 18px;
+                    }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_Rate .specialItem_word .item_word {
+                        color: #808080;
+                        font-size: 14px;
+                        line-height: 25px;
+                    }
+
+            .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_safe {
+                text-align: center;
+                float: left;
+                width: 240px;
+            }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_safe .MgItem_iconBg {
+                    display: inline-block;
+                    width: 150px;
+                    height: 150px;
+                    background-color: #e6e6e6;
+                    border-radius: 50%;
+                    line-height: 198px;
+                    text-align: center;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_safe .MgItem_iconBg .Mg_icon {
+                        display: inline-block;
+                        width: 53px;
+                        height: 63px;
+                        background: url("../images/mgkj_34.png") no-repeat center;
+                    }
+
+                .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_safe .specialItem_word {
+                    margin-top: 22px;
+                }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_safe .specialItem_word .word_title {
+                        color: #333333;
+                        font-size: 18px;
+                    }
+
+                    .Mg_specialBg .Mg_chooseReason .Mg_specialItemBox .Mg_specialUl .Mg_safe .specialItem_word .item_word {
+                        color: #808080;
+                        font-size: 14px;
+                        line-height: 25px;
+                    }
+
+.Mg_rightChoose {
+    padding-top: 74px;
+    padding-bottom: 100px;
+}
+
+    .Mg_rightChoose .titlePic {
+        width: 205px;
+        height: 27px;
+        /*background: url("../images/mgkj_54.png") no-repeat;*/
+        margin: 0 auto;
+        margin-bottom: 46px;
+    }
+
+    .Mg_rightChoose .caseList li {
+        width: 270px;
+        height: 106px;
+        float: left;
+        border: 1px solid #ccc;
+        padding: 22px 92px 22px 22px;
+        margin-right: 22px;
+    }
+
+        .Mg_rightChoose .caseList li .actorPic_mum {
+            width: 99px;
+            height: 98px;
+            margin-top: 5px;
+            /*background: url("../images/mgkj_58.png") no-repeat;*/
+        }
+
+        .Mg_rightChoose .caseList li .actorPic_stu {
+            width: 99px;
+            height: 98px;
+            margin-top: 5px;
+            /*background: url("../images/mgkj_61.png") no-repeat;*/
+        }
+
+        .Mg_rightChoose .caseList li .actorPic_team {
+            width: 99px;
+            height: 98px;
+            margin-top: 5px;
+            /*background: url("../images/mgkj_64.png") no-repeat;*/
+        }
+
+        .Mg_rightChoose .caseList li .actorProduce {
+            overflow: hidden;
+            padding-left: 35px;
+        }
+
+            .Mg_rightChoose .caseList li .actorProduce .actor_name .Mg_name {
+                font: 16px 'Microsoft YaHei';
+                color: #000;
+            }
+
+            .Mg_rightChoose .caseList li .actorProduce .actor_name .Mg_job {
+                font: 14px 'Microsoft YaHei';
+                color: #666;
+            }
+
+            .Mg_rightChoose .caseList li .actorProduce .addTime {
+                font: 12px 'Microsoft YaHei';
+                color: #999;
+                margin-top: 14px;
+                margin-bottom: 20px;
+            }
+
+            .Mg_rightChoose .caseList li .actorProduce .seeCase_btn {
+                height: 32px;
+                text-align: center;
+                line-height: 32px;
+                background-color: #f9713b;
+                color: #fff;
+                font-size: 15px;
+                border: 0 none;
+                border-radius: 32px;
+                padding: 0px 38px;
+                outline: none;
+                cursor: pointer;
+            }
+
+                .Mg_rightChoose .caseList li .actorProduce .seeCase_btn:hover {
+                    transition: all 1s;
+                    background-color: #e7561c;
+                }
+
+            .Mg_rightChoose .caseList li .actorProduce .Mg_name {
+                margin-right: 20px;
+            }
+
+        .Mg_rightChoose .caseList li:last-child {
+            margin-right: 0;
+        }
+
+.Mg_activity {
+    min-width: 1203px;
+    height: 820px;
+    background-color: #f5f5f5;
+    padding-top: 115px;
+}
+
+    .Mg_activity .topTitle_pic {
+        width: 400px;
+        height: 29px;
+        /*background: url("../images/mgkj_69.png") no-repeat;*/
+        margin: 0 auto;
+    }
+
+    .Mg_activity .Mg_botContent {
+        margin-top: 76px;
+    }
+
+        .Mg_activity .Mg_botContent .Mg_founder {
+            text-align: center;
+            margin-right: 58px;
+        }
+
+            .Mg_activity .Mg_botContent .Mg_founder .Mg_founder-Ul li {
+                text-align: center;
+                margin-bottom: 34px;
+            }
+
+                .Mg_activity .Mg_botContent .Mg_founder .Mg_founder-Ul li .Mg_founderPic-a {
+                    width: 140px;
+                    height: 139px;
+                    /*background: url("../images/mgkj_81.png") no-repeat;*/
+                }
+
+                .Mg_activity .Mg_botContent .Mg_founder .Mg_founder-Ul li .Mg_founderPic-b {
+                    width: 140px;
+                    height: 139px;
+                    /*background: url("../images/mgkj_98.png") no-repeat;*/
+                }
+
+                .Mg_activity .Mg_botContent .Mg_founder .Mg_founder-Ul li .Mg_founderPic-c {
+                    width: 140px;
+                    height: 139px;
+                    /*background: url("../images/mgkj_107.png") no-repeat;*/
+                }
+
+                .Mg_activity .Mg_botContent .Mg_founder .Mg_founder-Ul li p {
+                    font-size: 16px;
+                    margin-top: 10px;
+                }
+
+        .Mg_activity .Mg_botContent .Mg_employee {
+            text-align: center;
+            overflow: hidden;
+        }
+
+            .Mg_activity .Mg_botContent .Mg_employee .Mg_employeePic {
+                width: 1007px;
+                height: 567px;
+                /*background: url("../images/mg_activity_01_07.png") no-repeat;*/
+            }
+
+.Mg_branchCompony {
+    /* height: 798px; */
+    padding-top: 100px;
+    padding-bottom: 112px;
+}
+
+    .Mg_branchCompony .Mg_BC_btnList .Mg_ul li {
+        width: 310px;
+        height: 76px;
+        float: left;
+        margin-right: 134px;
+        background: #ec5151;
+        text-align: center;
+        line-height: 76px;
+        border-radius: 5px;
+    }
+
+        .Mg_branchCompony .Mg_BC_btnList .Mg_ul li a {
+            font-size: 18px;
+            padding: 28px 106px;
+            color: #fff;
+        }
+
+        .Mg_branchCompony .Mg_BC_btnList .Mg_ul li .MgSm_Store {
+            padding: 28px 100px;
+        }
+
+        .Mg_branchCompony .Mg_BC_btnList .Mg_ul li a:hover {
+            color: #fff !important;
+        }
+
+        .Mg_branchCompony .Mg_BC_btnList .Mg_ul li:last-child {
+            margin-right: 0;
+        }
+
+    .Mg_branchCompony .Mg_BC_btnList .Mg_ul .MgBcButton:hover {
+        background-color: #dd3131;
+        transition: all 1s;
+    }
+
+    .Mg_branchCompony .MgBc_botContent {
+        padding-top: 120px;
+        text-align: center;
+    }
+
+        .Mg_branchCompony .MgBc_botContent .MgBc_title .MgBc_TitlePic {
+            width: 137px;
+            height: 27px;
+            /*background: url("../images/mgkj_113.png") no-repeat;*/
+            margin: 0 auto;
+        }
+
+        .Mg_branchCompony .MgBc_botContent .MgBc_produce {
+            margin-top: 46px;
+            text-align: left;
+        }
+
+            .Mg_branchCompony .MgBc_botContent .MgBc_produce .leftMgBc_item {
+                width: 342px;
+                height: 410px;
+                background-color: #f5f5f5;
+                padding: 34px 0 44px 28px;
+                margin-top: 10px;
+            }
+
+                .Mg_branchCompony .MgBc_botContent .MgBc_produce .leftMgBc_item .MgBc_applicationItem {
+                    width: 292px;
+                    height: 203px;
+                    border-bottom: 1px solid #ccc;
+                }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .leftMgBc_item .MgBc_applicationItem .MgBc_topTitle-a {
+                        display: block;
+                        width: 158px;
+                        height: 22px;
+                        /*background: url("../images/mgkj_126.png") no-repeat;*/
+                        margin-bottom: 30px;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .leftMgBc_item .MgBc_applicationItem p {
+                        font-size: 16px;
+                        color: #737373;
+                        line-height: 30px;
+                    }
+
+                .Mg_branchCompony .MgBc_botContent .MgBc_produce .leftMgBc_item .MgBc_prerogative .MgBc_prerogativeItem {
+                    width: 292px;
+                    height: 156px;
+                }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .leftMgBc_item .MgBc_prerogative .MgBc_prerogativeItem .MgBc_topTitle-b {
+                        width: 116px;
+                        height: 22px;
+                        /*background: url("../images/mgkj_133.png") no-repeat;*/
+                        margin: 33px 0 22px 0;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .leftMgBc_item .MgBc_prerogative .MgBc_prerogativeItem p {
+                        font-size: 16px;
+                        color: #737373;
+                        line-height: 30px;
+                    }
+
+            .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead {
+                padding-left: 17px;
+                overflow: hidden;
+                height: 500px;
+                overflow-y: auto;
+            }
+
+                .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li {
+                    float: left;
+                    margin-left: 10px;
+                    margin-top: 10px;
+                    text-align: center;
+                }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li .fgs_img {
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li .topMgBc_leaderPic-a {
+                        display: block;
+                        width: 248px;
+                        height: 208px;
+                        /*background: url("../images/mgkj_117.png") no-repeat;*/
+                        margin-bottom: 12px;
+                        margin-right: 0;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li .topMgBc_leaderPic-b {
+                        width: 248px;
+                        height: 208px;
+                        /*background: url("../images/mgkj_120.png") no-repeat;*/
+                        margin-bottom: 12px;
+                        margin-right: 0;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li .topMgBc_leaderPic-c {
+                        width: 248px;
+                        height: 208px;
+                        /*background: url("../images/mgkj_123.png") no-repeat;*/
+                        margin-bottom: 12px;
+                        margin-right: 0;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li .topMgBc_leaderPic-d {
+                        width: 248px;
+                        height: 208px;
+                        /*background: url("../images/mgkj_135.png") no-repeat;*/
+                        margin-bottom: 12px;
+                        margin-right: 0;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li .topMgBc_leaderPic-e {
+                        width: 248px;
+                        height: 208px;
+                        /*background: url("../images/mgkj_138.png") no-repeat;*/
+                        margin-bottom: 12px;
+                        margin-right: 0;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li .topMgBc_leaderPic-f {
+                        width: 248px;
+                        height: 208px;
+                        /*background: url("../images/mgkj_140.png") no-repeat;*/
+                        margin-bottom: 12px;
+                        margin-right: 0;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li .topMgBc_leaderPic-g {
+                        width: 248px;
+                        height: 208px;
+                        /*background: url("../images/mgkj_258.png") no-repeat;*/
+                        margin-bottom: 12px;
+                        margin-right: 0;
+                    }
+
+                    .Mg_branchCompony .MgBc_botContent .MgBc_produce .rightMgBc_lead li span {
+                        font-size: 12px;
+                        color: #737373;
+                        margin-bottom: 30px;
+                    }
+
+.Mg_smallStore {
+    min-width: 1203px;
+    height: 607px;
+    background-color: #f5f5f5;
+    padding-top: 120px;
+    padding-bottom: 92px;
+    text-align: center;
+}
+
+    .Mg_smallStore .Mg_SmTitlePic {
+        width: 167px;
+        height: 28px;
+        /*  background: url("../images/mgkj_146.png") no-repeat;*/
+        margin-bottom: 14px;
+        margin: 0 auto;
+    }
+
+    .Mg_smallStore .Mg_botSmStorePic .leftSmStorePic {
+        width: 755px;
+        height: 495px;
+        /*background: url("../images/mgkj_259_07.png") no-repeat;*/
+        padding-right: 32px;
+    }
+
+    .Mg_smallStore .Mg_botSmStorePic .rightSmStoreApllyAway {
+        width: 340px;
+        height: 387px;
+        background-color: #e7e7e7;
+        padding: 52px 30px 56px 42px;
+        text-align: left;
+        overflow: hidden;
+    }
+
+        .Mg_smallStore .Mg_botSmStorePic .rightSmStoreApllyAway .Mg_topApplyAway {
+            height: 252px;
+            border-bottom: 1px solid #ccc;
+        }
+
+            .Mg_smallStore .Mg_botSmStorePic .rightSmStoreApllyAway .Mg_topApplyAway .Mg_topTitle-pic {
+                width: 137px;
+                height: 22px;
+                /*background: url("../images/mgkj_158.png") no-repeat;*/
+                margin-bottom: 30px;
+            }
+
+            .Mg_smallStore .Mg_botSmStorePic .rightSmStoreApllyAway .Mg_topApplyAway .Mg_botTitle-pic {
+                width: 93px;
+                height: 26px;
+                /*background: url("../images/mgkj_170.png") no-repeat;*/
+                margin-top: 42px;
+                margin-bottom: 26px;
+            }
+
+            .Mg_smallStore .Mg_botSmStorePic .rightSmStoreApllyAway .Mg_topApplyAway p {
+                line-height: 32px;
+                font-size: 16px;
+                color: #737373;
+            }
+
+.Mg_starGroupExample {
+    height: 488px;
+    padding: 120px 0 154px 0;
+    text-align: center;
+}
+
+    .Mg_starGroupExample .topMg_starTitlePic {
+        width: 203px;
+        height: 28px;
+        background: url("../images/mgkj_177.png") no-repeat;
+        margin: 0 auto;
+    }
+
+    .Mg_starGroupExample .Mg_GroupsWindyCloud {
+        overflow: hidden;
+        height: 438px;
+        position: relative;
+    }
+
+        .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard {
+            width: 3000px;
+            height: 438px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+            .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item {
+                width: 1203px;
+                height: 438px;
+                float: left;
+                text-align: left;
+            }
+
+                .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li {
+                    float: left;
+                    width: 385px;
+                    height: 124px;
+                    border: 1px solid #ccc;
+                    padding: 12px 0 12px 25px;
+                    margin: 0 16px 22px 0;
+                    box-sizing: border-box;
+                }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leaderHeadPic {
+                        padding-right: 30px;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-Caris {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/Caris.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-yuw {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/yuwen.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-taot {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/mgkj_181.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-xm {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/mgkj_184.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-boyu {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/mgkj_187.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-xqbb {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/mgkj_192.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-baixu {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/mgkj_195.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-lx {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/mgkj_196.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-feier {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/mgkj_200.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-ruoshui {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/mgkj_201.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-vict {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/k.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-srdz {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/l.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-ais {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/m.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-hw {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/n.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-lyy {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/o.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-lbt {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/p.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-ml {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/q.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-wk {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/r.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-kk {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/kk.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-xinerm {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/xerm.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-meiy {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/meiy.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-qdr {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/qdr.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-ljg {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/ljg.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-mgo {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/mgo.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-wl {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/wl.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .leftGroupLeaderPic-shaobing {
+                        width: 100px;
+                        height: 99px;
+                        background: url("../images/shaobing.png") no-repeat;
+                    }
+
+                    .Mg_starGroupExample .Mg_GroupsWindyCloud .Mg_starGroupCard .Mg_starGroupCard_item li .rightGroupInfo {
+                        overflow: hidden;
+                    }
+
+.businesWork {
+    width: 100%;
+    height: 324px;
+    background-color: #f5f5f5;
+    text-align: center;
+    padding-top: 115px;
+}
+
+    .businesWork .titPic {
+        display: inline-block;
+        width: 141px;
+        height: 28px;
+        /*background: url(../images/teamWorktitle_03.jpg) center center no-repeat;*/
+        background-size: 100% 100%;
+    }
+
+    .businesWork .teamTips {
+        text-align: center;
+        margin-top: 62px;
+    }
+
+        .businesWork .teamTips p {
+            height: 24px;
+            line-height: 24px;
+            font-size: 16px;
+            color: #4c4c4c;
+        }
+
+            .businesWork .teamTips p:last-child {
+                margin-top: 4px;
+            }
+
+    .businesWork .contactWay {
+        margin-top: 74px;
+    }
+
+        .businesWork .contactWay span {
+            line-height: 45px;
+            padding-left: 83px;
+            height: 42px;
+            color: #5084cd;
+        }
+
+        .businesWork .contactWay .left_qq {
+            display: inline-block;
+            width: 233px;
+            height: 42px;
+            background: url(../images/qq.png) left center no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .businesWork .contactWay .right_qq {
+            display: inline-block;
+            width: 233px;
+            height: 42px;
+            background: url(../images/qq.png) right center no-repeat;
+            background-size: 100% 100%;
+            margin-left: 110px;
+        }
+
+        .businesWork .contactWay .newQQ {
+            display: inline-block;
+            width: 354px;
+            height: 42px;
+            background: url(../images/newqq.png) right center no-repeat;
+            background-size: 100% 100%;
+            margin-left: 110px;
+        }
+
+            .businesWork .contactWay .newQQ span {
+                padding-left: 120px;
+            }
+
+.Mg_footer .Mg_footerBg {
+    width: 100%;
+    height: 495px;
+    min-width: 1203px;
+    background: url(../images/mgkj_botBg_204.png) no-repeat;
+    padding-top: 100px;
+}
+
+    .Mg_footer .Mg_footerBg .Mg_footerTitle {
+        width: 436px;
+        height: 33px;
+        /*background: url("../images/mgkj_206.png") no-repeat;*/
+        margin: 0 auto;
+    }
+
+    .Mg_footer .Mg_footerBg .footerMidContent {
+        margin-top: 108px;
+    }
+
+        .Mg_footer .Mg_footerBg .footerMidContent .left_Mg_tipWord .top_Mg_believeWords {
+            width: 592px;
+            height: 58px;
+            border-bottom: 2px solid #f09191;
+        }
+
+            .Mg_footer .Mg_footerBg .footerMidContent .left_Mg_tipWord .top_Mg_believeWords .Mg_BaojhhTipsPic {
+                width: 311px;
+                height: 23px;
+                /*background: url(../images/footer001_14.jpg) no-repeat;*/
+            }
+
+        .Mg_footer .Mg_footerBg .footerMidContent .left_Mg_tipWord .Mg_botContentPic {
+            width: 700px;
+            margin-top: 44px;
+        }
+
+            .Mg_footer .Mg_footerBg .footerMidContent .left_Mg_tipWord .Mg_botContentPic .left_MgtipsWords_pic {
+                width: 245px;
+                height: 91px;
+                background: url("../images/footer001_22.jpg") no-repeat;
+            }
+
+            .Mg_footer .Mg_footerBg .footerMidContent .left_Mg_tipWord .Mg_botContentPic .rightMgtipsWordsBox {
+                margin-left: 80px;
+            }
+
+                .Mg_footer .Mg_footerBg .footerMidContent .left_Mg_tipWord .Mg_botContentPic .rightMgtipsWordsBox .right_MgtipsWordsPic-a {
+                    width: 193px;
+                    height: 21px;
+                    background: url("../images/foot_24.jpg") no-repeat;
+                }
+
+                .Mg_footer .Mg_footerBg .footerMidContent .left_Mg_tipWord .Mg_botContentPic .rightMgtipsWordsBox .rightMgtipsWordsPic-b {
+                    width: 319px;
+                    height: 20px;
+                    background: url("../images/foot_28.png") no-repeat;
+                    margin-top: 15px;
+                }
+
+        .Mg_footer .Mg_footerBg .footerMidContent .right_Mg_PhoneBox {
+            float: right;
+        }
+
+            .Mg_footer .Mg_footerBg .footerMidContent .right_Mg_PhoneBox .topPhoneWay {
+                width: 150px;
+                height: 58px;
+                border-bottom: 2px solid #f09191;
+            }
+
+                .Mg_footer .Mg_footerBg .footerMidContent .right_Mg_PhoneBox .topPhoneWay .topPhoneWayTitle_pic {
+                    width: 96px;
+                    height: 24px;
+                    /*background: url("../images/mgkj_212.png") no-repeat;*/
+                }
+
+            .Mg_footer .Mg_footerBg .footerMidContent .right_Mg_PhoneBox .bot_Mg_ErWMPic {
+                width: 120px;
+                height: 120px;
+                background: url(../images/mgkj_217.png) no-repeat;
+                margin-top: 33px;
+            }
+
+.Mg_footerBar {
+    width: 100%;
+    min-width: 1203px;
+    height: 60px;
+    background-color: #363636;
+    line-height: 60px;
+    text-align: center;
+}
+
+.mumPop {
+    width: 826px;
+    height: 624px;
+    display: none;
+    background-color: #fff;
+    z-index: 99;
+    padding: 60px 38px 28px 56px;
+    border-radius: 8px;
+}
+
+    .mumPop .mumPop_pic {
+        width: 473px;
+        height: 503px;
+        margin-top: 5px;
+    }
+
+    .mumPop .mumPop_word {
+        overflow: hidden;
+    }
+
+        .mumPop .mumPop_word .topMumDetail .leftMum_pic {
+            width: 99px;
+            height: 98px;
+            /*background: url('../images/mgkj_58.png') no-repeat;*/
+        }
+
+        .mumPop .mumPop_word .topMumDetail .rightMum_produce {
+            overflow: hidden;
+            padding-left: 28px;
+            padding-top: 24px;
+        }
+
+        .mumPop .mumPop_word .Mum_sayingBox {
+            height: 360px;
+            margin-top: 36px;
+            padding-bottom: 10px;
+            overflow-y: auto;
+        }
+
+            .mumPop .mumPop_word .Mum_sayingBox p {
+                line-height: 25px;
+                font-size: 14px;
+            }
+
+    .mumPop .MumPopCloseBtn {
+        width: 146px;
+        height: 50px;
+        background-color: #ec5151;
+        color: #fff;
+        font: 20px 'Microsoft YaHei';
+        border: 0 none;
+        outline: none;
+        border-radius: 5px;
+        margin-top: 60px;
+        margin-left: 40%;
+        cursor: pointer;
+    }
+
+.studentPop {
+    width: 826px;
+    height: 624px;
+    display: none;
+    background-color: #fff;
+    z-index: 99;
+    padding: 60px 33px 28px 56px;
+    border-radius: 8px;
+}
+
+    .studentPop .studentPop_pic {
+        width: 473px;
+        height: 503px;
+        /*background: url('../images/student.jpg') no-repeat;*/
+        margin-top: 5px;
+    }
+
+    .studentPop .studentPop_word {
+        overflow: hidden;
+        height: 654px;
+    }
+
+        .studentPop .studentPop_word .topstudentDetail .leftstudent_pic {
+            width: 98px;
+            height: 98px;
+            /*background: url('../images/mgkj_61.png') no-repeat;*/
+        }
+
+        .studentPop .studentPop_word .topstudentDetail .rightstudent_produce {
+            overflow: hidden;
+            padding-left: 28px;
+            padding-top: 24px;
+        }
+
+        .studentPop .studentPop_word .student_sayingBox p {
+            line-height: 25px;
+            font-size: 14px;
+        }
+
+    .studentPop .closeBtnBox_S {
+        width: 860px;
+        width: 920px;
+        height: 140px;
+        background-color: #fff;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+    }
+
+        .studentPop .closeBtnBox_S .studentPopCloseBtn {
+            width: 146px;
+            height: 50px;
+            background-color: #ec5151;
+            color: #fff;
+            font: 20px 'Microsoft YaHei';
+            border: 0 none;
+            outline: none;
+            border-radius: 5px;
+            margin-top: 60px;
+            margin-left: 40%;
+            cursor: pointer;
+        }
+
+.GroupPop {
+    width: 826px;
+    height: 624px;
+    display: none;
+    background-color: #fff;
+    z-index: 99;
+    padding: 60px 33px 28px 56px;
+    border-radius: 8px;
+}
+
+    .GroupPop .GroupPop_pic {
+        width: 473px;
+        height: 503px;
+        /*background: url('../images/grouppop.jpg') no-repeat;*/
+        margin-top: 5px;
+    }
+
+    .GroupPop .GroupPop_word {
+        overflow: hidden;
+        margin-bottom: 145px;
+    }
+
+        .GroupPop .GroupPop_word .topGroupDetail .leftGroup_pic {
+            width: 98px;
+            height: 98px;
+            /*background: url('../images/mgkj_64.png') no-repeat;*/
+        }
+
+        .GroupPop .GroupPop_word .topGroupDetail .rightGroup_produce {
+            overflow: hidden;
+            padding-left: 28px;
+            padding-top: 24px;
+        }
+
+        .GroupPop .GroupPop_word .Group_sayingBox p {
+            line-height: 25px;
+            font-size: 14px;
+        }
+
+    .GroupPop .closeBtnBox_G {
+        width: 860px;
+        width: 920px;
+        height: 140px;
+        background-color: #fff;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+    }
+
+        .GroupPop .closeBtnBox_G .GroupPopCloseBtn {
+            width: 146px;
+            height: 50px;
+            background-color: #ec5151;
+            color: #fff;
+            font: 20px 'Microsoft YaHei';
+            border: 0 none;
+            outline: none;
+            border-radius: 5px;
+            margin-top: 60px;
+            margin-left: 40%;
+            cursor: pointer;
+        }

@@ -1,0 +1,180 @@
+﻿body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+blockquote,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+form,
+fieldset,
+legend,
+button,
+input,
+textarea,
+th,
+td,
+select {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+}
+
+ul,
+ol,
+li {
+    list-style: none;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+    a:active {
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #333;
+    }
+
+input::-webkit-input-placeholder {
+    color: #B3B3B3;
+    font-size: 16px;
+}
+
+html,
+body {
+    width: 100%;
+}
+
+body {
+    background-color: #fff;
+}
+
+i {
+    font-style: normal;
+}
+
+.w {
+    width: 1203px;
+    margin: 0 auto;
+}
+
+.float_l {
+    float: left;
+}
+
+.float_r {
+    float: right;
+}
+
+.Pr_10 {
+    padding-right: 10px;
+}
+
+.Pl_10 {
+    padding-left: 10px;
+}
+
+.mr-68 {
+    margin-right: 68px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+/*婊氬姩鏉� start*/
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background-color: #F5F5F5;
+}
+/*瀹氫箟婊氬姩鏉¤建閬� 鍐呴槾褰�+鍦嗚*/
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background: #fff;
+}
+/*瀹氫箟婊戝潡 鍐呴槾褰�+鍦嗚*/
+::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #E46418;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: #E46418;
+    }
+/*瑙ｅ喅ie鐗堟湰婊氬姩鏉℃牱寮�*/
+#scroll-2 {
+    width: 200px;
+    height: 200px;
+    overflow: auto;
+    margin-bottom: 20px;
+}
+
+    #scroll-2 div {
+        width: 400px;
+        height: 400px;
+    }
+
+    #scroll-2::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    #scroll-2::-webkit-scrollbar-track {
+        background: #E6E6E6;
+    }
+
+    #scroll-2::-webkit-scrollbar-thumb {
+        background: #747474;
+        border-radius: 2px;
+    }
+
+    #scroll-2::-webkit-scrollbar-corner {
+        background: #E6E6E6;
+    }
+
+.swiper-button-next {
+    background: url("next001_07.png") no-repeat;
+    outline: none;
+}
+
+.swiper-button-prev {
+    background: url('prev001_07.png') no-repeat;
+    outline: none;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #ed8484;
+}
+
+.swiper-pagination-bullet {
+    margin-left: 5px;
+}
+
+.clearfix:after {
+    content: "";
+    height: 0;
+    line-height: 0;
+    display: block;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    zoom: 1;
+}

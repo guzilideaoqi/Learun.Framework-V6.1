@@ -246,7 +246,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_userEntity currentUser = null, one_User = null, two_User = null, one_partners = null, two_partners = null;
 
                     ///如果老的记录是已支付状态则不需要再执行修改和返利
-                    if (dm_Alipay_RecordEntity_old.alipay_status.ToUpper() == "TRADE_SUCCESS")
+                    if (!dm_Alipay_RecordEntity_old.alipay_status.IsEmpty() && dm_Alipay_RecordEntity_old.alipay_status.ToUpper() == "TRADE_SUCCESS")
                         return;
 
                     if (dm_Alipay_RecordEntity_old.IsEmpty())
@@ -277,7 +277,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         currentUser.userlevel = 2;
                     }
                     //升级代理
-                    else if (dm_Alipay_RecordEntity.templateid == 3)
+                    else if (dm_Alipay_RecordEntity_old.templateid == 3)
                     {
                         currentUser.userlevel = 2;
                     }

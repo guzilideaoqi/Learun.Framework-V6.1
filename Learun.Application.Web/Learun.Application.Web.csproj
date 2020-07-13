@@ -243,6 +243,7 @@
     <Compile Include="Areas\LR_WorkFlowModule\Controllers\WfSchemeController.cs" />
     <Compile Include="Areas\LR_WorkFlowModule\Controllers\WfSystemDemoController.cs" />
     <Compile Include="Areas\LR_WorkFlowModule\LR_WorkFlowModuleAreaRegistration.cs" />
+    <Compile Include="Controllers\DLM_PageController.cs" />
     <Compile Include="Controllers\DM_APIControl\A_PayController.cs" />
     <Compile Include="Controllers\DM_APIControl\BannerInfo.cs" />
     <Compile Include="Controllers\DM_APIControl\CommonGoodInfo.cs" />
@@ -562,6 +563,26 @@
     <Content Include="Content\datepicker\开发包\skin\whyGreen\bg.jpg" />
     <Content Include="Content\datepicker\开发包\skin\whyGreen\datepicker.css" />
     <Content Include="Content\datepicker\开发包\skin\whyGreen\img.gif" />
+    <Content Include="Content\dlm\bootstrap.min.css" />
+    <Content Include="Content\dlm\combined_shape copy.png" />
+    <Content Include="Content\dlm\good.png" />
+    <Content Include="Content\dlm\group_4 copy.png" />
+    <Content Include="Content\dlm\group_4.png" />
+    <Content Include="Content\dlm\jianzhi.png" />
+    <Content Include="Content\dlm\jquery.fancybox.pack.js" />
+    <Content Include="Content\dlm\king.png" />
+    <Content Include="Content\dlm\main.css" />
+    <Content Include="Content\dlm\main.js" />
+    <Content Include="Content\dlm\meeting.png" />
+    <Content Include="Content\dlm\mg_officeWeb.css" />
+    <Content Include="Content\dlm\next001_07.png" />
+    <Content Include="Content\dlm\owl.carousel.css" />
+    <Content Include="Content\dlm\owl.carousel.min.js" />
+    <Content Include="Content\dlm\prev001_07.png" />
+    <Content Include="Content\dlm\reset.css" />
+    <Content Include="Content\dlm\responsive.css" />
+    <Content Include="Content\dlm\style1.css" />
+    <Content Include="Content\dlm\swiper.min.js" />
     <Content Include="Content\echarts\charts_comm.js" />
     <Content Include="Content\echarts\echarts.js" />
     <Content Include="Content\echarts\echarts.min.js" />
@@ -630,6 +651,7 @@
     <Content Include="Content\images\adminDefault.png" />
     <Content Include="Content\images\arrow1.png" />
     <Content Include="Content\images\bg.png" />
+    <Content Include="Content\images\bk.png" />
     <Content Include="Content\images\codeGenerator\lc.png" />
     <Content Include="Content\images\codeGenerator\multitable.png" />
     <Content Include="Content\images\codeGenerator\multitable0.png" />
@@ -1867,6 +1889,7 @@
     <Content Include="Areas\LR_WorkFlowModule\Views\WfScheme\Form.cshtml" />
     <Content Include="Areas\LR_WorkFlowModule\Views\WfScheme\HistoryForm.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="mgkj_15.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\CheckCertificaRecord.cshtml" />
@@ -1879,9 +1902,11 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Order\SyncOrder.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\JPushManage.cshtml" />
     <EmbeddedResource Include="Areas\DM_APPManage\Views\DM_Article\LookArticle.cshtml" />
+    <Content Include="Content\dlm\swiper.min.css" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="UpdateRecord.txt" />
     <Content Include="Views\Home\AdminAccordion\Index.css" />
     <Content Include="Views\Home\AdminAccordion\Index.js" />
@@ -1893,6 +1918,10 @@
     <Content Include="Views\Home\AdminTop\Index.js" />
     <Content Include="Views\Home\AdminWindos\Index.css" />
     <Content Include="Views\Home\AdminWindos\Index.js" />
+    <Content Include="Content\dlm\core.js" />
+    <Content Include="Content\dlm\plug-in.css" />
+    <Content Include="Content\dlm\plug-in.js" />
+    <Content Include="Content\dlm\style.css" />
     <Content Include="Views\LR_Content\plugin\contextmenu\lr-contextmenu.css" />
     <Content Include="Views\LR_Content\plugin\contextmenu\lr-contextmenu.js" />
     <Content Include="Views\LR_Content\plugin\custmerform\lr-formcomponts.js" />
@@ -2350,6 +2379,9 @@
     <Content Include="Areas\DM_APPManage\Views\dm_business_cooperation\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_business_cooperation\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_business_cooperation\Form.js" />
+    <Content Include="Views\DLM_Page\Index.cshtml" />
+    <Content Include="Views\Shared\_dlm_Form.cshtml" />
+    <Content Include="Content\dlm\sy.woff" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />
