@@ -122,12 +122,20 @@ namespace Learun.Application.Web.Controllers
                     throw new Exception(rsp.SubErrMsg);
                 else
                 {
-                    string[] pids = dm_BasesettingEntity.tb_relation_pid.Split('_');
-                    dm_UserEntity.tb_pid = pids.Length == 4 ? pids[3] : "";
-                    dm_UserEntity.tb_relationid = rsp.Data.RelationId.ToString();
-                    dm_UserEntity.tb_nickname = HttpUtility.UrlDecode(authorInfo.taobao_user_nick);
-                    dm_UserEntity.isrelation_beian = 1;
-                    dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                    string relation_id = rsp.Data.RelationId.ToString();
+                    if (dm_userIBLL.NoExistRelationID(relation_id))
+                    {
+                        string[] pids = dm_BasesettingEntity.tb_relation_pid.Split('_');
+                        dm_UserEntity.tb_pid = pids.Length == 4 ? pids[3] : "";
+                        dm_UserEntity.tb_relationid = relation_id;
+                        dm_UserEntity.tb_nickname = HttpUtility.UrlDecode(authorInfo.taobao_user_nick);
+                        dm_UserEntity.isrelation_beian = 1;
+                        dm_userIBLL.SaveEntity(user_id, dm_UserEntity);
+                    }
+                    else
+                    {
+                        throw new Exception("当前淘宝账号已在其他账号下备案,请更换账号!");
+                    }
                 }
 
 

@@ -66,6 +66,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         FansStaticInfoEntity GetFansStaticInfo(int User_ID);
         #endregion
 
+        #region 判断渠道ID是否存在
+        bool NoExistRelationID(string relationid);
+        #endregion
+
         #region 生成融云Token
         string GeneralRongTokne(int User_ID, string appid);
         #endregion

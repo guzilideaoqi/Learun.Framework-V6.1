@@ -403,6 +403,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        #region 判断渠道ID是否存在
+        public bool NoExistRelationID(string relationid) {
+            try
+            {
+                return dM_UserService.NoExistRelationID(relationid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
         #region 生成融云Token
         public string GeneralRongTokne(int User_ID, string appid)
         {

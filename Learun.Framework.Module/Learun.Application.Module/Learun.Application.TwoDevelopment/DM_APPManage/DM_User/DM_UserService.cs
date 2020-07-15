@@ -1047,15 +1047,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        #region 检测渠道ID是否存在
+        /// <summary>
+        /// 是否存在渠道ID  如果为true说明不存在
+        /// </summary>
+        /// <param name="relationid"></param>
+        /// <returns></returns>
+        public bool NoExistRelationID(string relationid) {
+            dm_userEntity dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.tb_relationid == relationid);
+            return dm_UserEntity.IsEmpty();
+        }
+        #endregion
+
         #region 生成融云Token
         /**
          * 此处替换成您的appKey
          * */
-        private static readonly String appKey = "bmdehs6pbaxds";
+        //private static readonly String appKey = "bmdehs6pbaxds";
         /**
          * 此处替换成您的appSecret
          * */
-        private static readonly String appSecret = "TEb6PGdHJXI";
+        //private static readonly String appSecret = "TEb6PGdHJXI";
         /**
          * 自定义api地址
          * */

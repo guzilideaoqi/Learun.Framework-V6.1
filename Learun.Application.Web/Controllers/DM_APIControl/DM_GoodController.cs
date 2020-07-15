@@ -1220,7 +1220,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 京东商品搜索查询
-        public ActionResult Get_JD_SearchGoodList(int User_ID = 0, string keyWord = "", int PageNo = 1, int PageSize = 10, decimal price_start = 0, decimal price_end = 0, int cate_id = 0, string sort = "finally")
+        public ActionResult Get_JD_SearchGoodList(int User_ID = 0, string keyWord = "1", int PageNo = 1, int PageSize = 10, decimal price_start = 0, decimal price_end = 0, int cate_id = 0, string sort = "finally")
         {
             try
             {
