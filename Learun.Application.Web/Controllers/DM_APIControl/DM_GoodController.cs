@@ -1655,17 +1655,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         decimal GetCommissionRate(decimal zkprice, decimal commission, int? userlevel, dm_basesettingEntity dm_BasesettingEntity)
         {
             decimal userComission = 0.00M;
-            switch (userlevel)
+            if (!IsPreview(dm_BasesettingEntity))
             {
-                case 0:
-                    userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_junior / 10000, 2);
-                    break;
-                case 1:
-                    userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_middle / 10000, 2);
-                    break;
-                case 2:
-                    userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_senior / 10000, 2);
-                    break;
+                switch (userlevel)
+                {
+                    case 0:
+                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_junior / 10000, 2);
+                        break;
+                    case 1:
+                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_middle / 10000, 2);
+                        break;
+                    case 2:
+                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_senior / 10000, 2);
+                        break;
+                }
             }
             return userComission;
         }
@@ -1673,35 +1676,42 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         decimal GetJDCommissionRate(double comission, int? userlevel, dm_basesettingEntity dm_BasesettingEntity)
         {
             double userComission = 0.00;
-            switch (userlevel)
+            if (!IsPreview(dm_BasesettingEntity))
             {
-                case 0:
-                    userComission = Math.Round(comission * dm_BasesettingEntity.shopping_pay_junior / 100, 2);
-                    break;
-                case 1:
-                    userComission = Math.Round(comission * dm_BasesettingEntity.shopping_pay_middle / 100, 2);
-                    break;
-                case 2:
-                    userComission = Math.Round(comission * dm_BasesettingEntity.shopping_pay_senior / 100, 2);
-                    break;
+                switch (userlevel)
+                {
+                    case 0:
+                        userComission = Math.Round(comission * dm_BasesettingEntity.shopping_pay_junior / 100, 2);
+                        break;
+                    case 1:
+                        userComission = Math.Round(comission * dm_BasesettingEntity.shopping_pay_middle / 100, 2);
+                        break;
+                    case 2:
+                        userComission = Math.Round(comission * dm_BasesettingEntity.shopping_pay_senior / 100, 2);
+                        break;
+                }
             }
+
             return Convert.ToDecimal(userComission);
         }
 
         decimal GetPDDCommissionRate(decimal zkprice, decimal commission, int? userlevel, dm_basesettingEntity dm_BasesettingEntity)
         {
             decimal userComission = 0.00M;
-            switch (userlevel)
+            if (!IsPreview(dm_BasesettingEntity))
             {
-                case 0:
-                    userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_junior / 10000000, 2);
-                    break;
-                case 1:
-                    userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_middle / 10000000, 2);
-                    break;
-                case 2:
-                    userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_senior / 10000000, 2);
-                    break;
+                switch (userlevel)
+                {
+                    case 0:
+                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_junior / 10000000, 2);
+                        break;
+                    case 1:
+                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_middle / 10000000, 2);
+                        break;
+                    case 2:
+                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_senior / 10000000, 2);
+                        break;
+                }
             }
             return userComission;
         }
@@ -2294,6 +2304,41 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
         #endregion
+
+        bool IsPreview(dm_basesettingEntity dm_BasesettingEntity)
+        {
+            if (dm_BasesettingEntity.openchecked == "1")
+            { //开启审核模式
+                string version = CheckVersion();
+                string platform = CheckPlaform();
+                if ((platform == "ios" && version == dm_BasesettingEntity.previewversion) || (platform == "android" && version == dm_BasesettingEntity.previewversionandroid))
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public string CheckPlaform()
+        {
+            if (base.Request.Headers["platform"].IsEmpty())
+            {
+                throw new Exception("缺少参数platform");
+            }
+            return base.Request.Headers["platform"].ToString();
+        }
+
+        public string CheckVersion()
+        {
+            if (base.Request.Headers["version"].IsEmpty())
+            {
+                throw new Exception("缺少参数version");
+            }
+            return base.Request.Headers["version"].ToString();
+        }
     }
 
     public class PwdResult
