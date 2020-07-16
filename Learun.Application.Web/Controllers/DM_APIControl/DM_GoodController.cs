@@ -630,6 +630,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                         superGoodItems = ConvertCommonGoodEntityByDTK_SearchGoodItem(dTK_Get_dtk_Search_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
+                    else if (ChannelType == "chihuo")
+                    {
+                        superGoodItems = GetActivityGoodData(User_ID, 45, PageNo.ToString(), PageSize, 6);
+                    }
 
                     if (superGoodItems.Count > 0)
                         redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -769,6 +773,19 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+
+                return SuccessList("获取成功!", GetActivityGoodData(user_id, activityId, pageId, pageSize, cid));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
+        List<CommonGoodInfo> GetActivityGoodData(int user_id, int activityId, string pageId = "1", int pageSize = 20, int cid = 1)
+        {
+            try
+            {
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("ActivityGoodList" + activityId + pageId + pageSize + cid);
                 List<CommonGoodInfo> activityGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
@@ -780,25 +797,27 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Activity_GoodListRequest dTK_Activity_GoodListRequest = new DTK_Activity_GoodListRequest();
-                    dTK_Activity_GoodListRequest.version = "v1.2.0";
+                    dTK_Activity_GoodListRequest.version = "v1.2.2";
                     dTK_Activity_GoodListRequest.pageId = pageId;
                     dTK_Activity_GoodListRequest.pageSize = pageSize;
-                    dTK_Activity_GoodListRequest.cid = cid;
+                    if (cid > -1)
+                        dTK_Activity_GoodListRequest.cid = cid;
                     dTK_Activity_GoodListRequest.activityId = activityId;
                     DTK_Activity_GoodListResponse dTK_Activity_GoodListResponse = dTK_ApiManage.GetActivityGoodList(dTK_Activity_GoodListRequest);
                     if (dTK_Activity_GoodListResponse.code != 0)
                     {
-                        return Fail(dTK_Activity_GoodListResponse.msg);
+                        throw new Exception(dTK_Activity_GoodListResponse.msg);
                     }
                     activityGoodItems = ConvertCommonGoodEntityByActivityGood(dTK_Activity_GoodListResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, activityGoodItems, DateTime.Now.AddHours(2.0), 7L);
                 }
-                return SuccessList("获取成功!", activityGoodItems);
+                return activityGoodItems;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return FailException(ex);
+                return new List<CommonGoodInfo>();
             }
+
         }
         #endregion
 
