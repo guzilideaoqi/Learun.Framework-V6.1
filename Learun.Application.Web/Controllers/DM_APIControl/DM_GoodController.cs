@@ -566,14 +566,16 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string cacheKey = Md5Helper.Hash("GetRecommendGoodByTB" + ChannelType + PageNo + PageSize);
                 List<CommonGoodInfo> superGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
 
+                string appid = CheckAPPID();
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+
                 if (superGoodItems == null)
                 {
                     #region 获取关键词
                     List<CategoryItem> categoryItems = redisCache.Read<List<CategoryItem>>("SuperCategory", 7L);
                     #endregion
 
-                    string appid = CheckAPPID();
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+
                     dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
 
@@ -637,6 +639,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                     if (superGoodItems.Count > 0)
                         redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
+                }
+
+                if (IsPreview(dm_BasesettingEntity)) {
+                    superGoodItems = superGoodItems.Select(p => { p.SuperCommission = 0M; p.LevelCommission = 0M; return p; }).ToList();
                 }
 
                 return SuccessList("获取成功!", superGoodItems);

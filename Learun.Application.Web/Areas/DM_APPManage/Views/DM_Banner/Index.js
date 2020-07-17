@@ -99,7 +99,8 @@ var bootstrap = function ($, learun) {
                                 return '<span class=\"label label-success\" style=\"cursor: pointer;\">启用</span>';
                             } else if (cellvalue == 0) {
                                 return '<span class=\"label label-default\" style=\"cursor: pointer;\">禁用</span>';
-                            }
+                            } else if (cellvalue == 2)
+                                return '上架模式';
                         }
                     },
                     { label: 'appid', name: 'appid', width: 200, align: "left" },

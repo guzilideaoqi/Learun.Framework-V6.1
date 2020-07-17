@@ -190,7 +190,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (dm_BasesettingEntity == null)
                     return Fail("基础配置获取失败!");
 
-                FinishPrice = 0.01M;
+                //FinishPrice = 0.01M;//测试支付金额为0.01
 
                 string out_trade_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + User_ID.ToString().PadLeft(6, '0');
                 IAopClient client = new DefaultAopClient("https://openapi.alipay.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
