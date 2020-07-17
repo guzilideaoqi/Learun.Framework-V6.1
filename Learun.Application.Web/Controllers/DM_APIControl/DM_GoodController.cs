@@ -1680,6 +1680,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         decimal GetCommissionRate(decimal zkprice, decimal commission, int? userlevel, dm_basesettingEntity dm_BasesettingEntity)
         {
             decimal userComission = 0.00M;
+            return userComission;
             if (!IsPreview(dm_BasesettingEntity))
             {
                 switch (userlevel)
