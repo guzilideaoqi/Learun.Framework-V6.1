@@ -76,6 +76,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// 高级佣金金额
         /// </summary>
         public decimal SuperCommission { get; set; }
+
+        /// <summary>
+        /// 总佣金
+        /// </summary>
+        public double TotalCommission { get; set; }
         /// <summary>
         /// 商品描述
         /// </summary>

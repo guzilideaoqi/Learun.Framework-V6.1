@@ -36,7 +36,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                return SuccessList("获取成功!", dm_Task_TypeIBLL.GetList("{\"appid\":\"" + appid + "\"}"));
+                return SuccessList("获取成功!", dm_Task_TypeIBLL.GetList("{\"appid\":\"" + appid + "\"}").Where(t => t.status == 1));
             }
             catch (Exception ex)
             {

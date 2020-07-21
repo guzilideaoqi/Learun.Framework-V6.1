@@ -167,11 +167,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = "RankingList" + RandType.ToString();
                 List<CommonGoodInfo> RankingList = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
+
                 if (RankingList == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
-
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Ranking_ListRequest dTK_Ranking_ListRequest = new DTK_Ranking_ListRequest();
                     dTK_Ranking_ListRequest.version = "v1.1.2";
@@ -186,13 +186,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     redisCache.Write(cacheKey, RankingList, DateTime.Now.AddHours(4.0), 7L);
                 }
 
-                IEnumerable<CommonGoodInfo> rankItemList = null;
+                List<CommonGoodInfo> rankItemList = null;
                 if (RankingList != null)
                 {
-                    rankItemList = RankingList.Skip((PageNo - 1) * PageSize).Take(PageSize);
+                    rankItemList = RankingList.Skip((PageNo - 1) * PageSize).Take(PageSize).ToList();
                 }
 
-                return SuccessList("获取成功!", rankItemList);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, rankItemList));
             }
             catch (Exception ex)
             {
@@ -254,11 +254,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = "TodayGood";
                 List<CommonGoodInfo> RankingList = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
+
                 if (RankingList == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
-
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
 
                     if (true)
@@ -295,7 +295,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                     redisCache.Write(cacheKey, RankingList, DateTime.Now.AddHours(2.0), 7L);
                 }
-                return SuccessList("获取成功!", RankingList);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, RankingList));
             }
             catch (Exception ex)
             {
@@ -313,10 +313,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("CommonSearchGood" + PlaformType + PageNo + PageSize + KeyWords + sort);
                 List<CommonGoodInfo> superGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
                 if (superGoodItems == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
                     if (PlaformType == 1)
                     {
                         DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
@@ -372,7 +372,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
                 }
 
-                return SuccessList("获取成功", superGoodItems);
+                return SuccessList("获取成功", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, superGoodItems));
             }
             catch (Exception ex)
             {
@@ -471,13 +471,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("SuperSerachGood" + type + pageId + pageSize + keyWords + tmall + haitao + sort);
                 List<CommonGoodInfo> superGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
-
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
                 if (superGoodItems == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Super_GoodRequest dTK_Super_GoodRequest = new DTK_Super_GoodRequest();
                     dTK_Super_GoodRequest.version = "v1.2.1";
@@ -498,7 +496,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
 
 
-                return SuccessList("获取成功!", superGoodItems);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, superGoodItems));
             }
             catch (Exception ex)
             {
@@ -516,13 +514,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("DtkSerachGood" + pageId + pageSize + cids + subcid + keyWords + sort);
                 List<CommonGoodInfo> superGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
-
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
                 if (superGoodItems == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Get_dtk_Search_GoodRequest dtk_Get_dtk_Search_GoodRequest = new DTK_Get_dtk_Search_GoodRequest();
                     dtk_Get_dtk_Search_GoodRequest.version = "v2.1.2";
@@ -549,7 +545,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
 
 
-                return SuccessList("获取成功!", superGoodItems);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, superGoodItems));
             }
             catch (Exception ex)
             {
@@ -568,6 +564,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 string appid = CheckAPPID();
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
 
                 if (superGoodItems == null)
                 {
@@ -575,8 +572,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     List<CategoryItem> categoryItems = redisCache.Read<List<CategoryItem>>("SuperCategory", 7L);
                     #endregion
 
-
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
 
                     if (ChannelType == "99zhuanqu")//使用联盟搜索
@@ -634,18 +629,19 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                     else if (ChannelType == "chihuo")
                     {
-                        superGoodItems = GetActivityGoodData(User_ID, 45, PageNo.ToString(), PageSize, 6);
+                        superGoodItems = GetActivityGoodData(User_ID, 45, PageNo.ToString(), PageSize, 6).ToList();
                     }
 
                     if (superGoodItems.Count > 0)
                         redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
                 }
 
-                if (IsPreview(dm_BasesettingEntity)) {
+                if (IsPreview(dm_BasesettingEntity))
+                {
                     superGoodItems = superGoodItems.Select(p => { p.SuperCommission = 0M; p.LevelCommission = 0M; return p; }).ToList();
                 }
 
-                return SuccessList("获取成功!", superGoodItems);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, superGoodItems));
             }
             catch (Exception ex)
             {
@@ -669,12 +665,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("OPGood" + pageId + pageSize + nineCid);
                 List<CommonGoodInfo> oPGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
                 if (oPGoodItems == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_OP_ListRequest dTK_OP_ListRequest = new DTK_OP_ListRequest();
                     dTK_OP_ListRequest.version = "v1.1.0";
@@ -691,7 +686,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
 
 
-                return SuccessList("获取成功!", oPGoodItems);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, oPGoodItems));
             }
             catch (Exception ex)
             {
@@ -788,19 +783,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
 
-        List<CommonGoodInfo> GetActivityGoodData(int user_id, int activityId, string pageId = "1", int pageSize = 20, int cid = 1)
+        IEnumerable<CommonGoodInfo> GetActivityGoodData(int user_id, int activityId, string pageId = "1", int pageSize = 20, int cid = 1)
         {
             try
             {
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("ActivityGoodList" + activityId + pageId + pageSize + cid);
                 List<CommonGoodInfo> activityGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
                 if (activityGoodItems == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Activity_GoodListRequest dTK_Activity_GoodListRequest = new DTK_Activity_GoodListRequest();
                     dTK_Activity_GoodListRequest.version = "v1.2.2";
@@ -817,7 +811,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     activityGoodItems = ConvertCommonGoodEntityByActivityGood(dTK_Activity_GoodListResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, activityGoodItems, DateTime.Now.AddHours(2.0), 7L);
                 }
-                return activityGoodItems;
+                return CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, activityGoodItems);
             }
             catch (Exception)
             {
@@ -883,12 +877,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("TopicGoodList" + topicId + pageId + pageSize);
                 List<CommonGoodInfo> topicGoodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
                 if (topicGoodItems == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Topic_GoodListRequest dTK_Topic_GoodListRequest = new DTK_Topic_GoodListRequest();
                     dTK_Topic_GoodListRequest.version = "v1.2.0";
@@ -904,7 +897,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     redisCache.Write(cacheKey, topicGoodItems, DateTime.Now.AddHours(2.0), 7L);
                 }
 
-                return SuccessList("获取成功!", topicGoodItems);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, topicGoodItems));
             }
             catch (Exception ex)
             {
@@ -1172,12 +1165,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("JDGoodList" + eliteId + pageIndex + pageSize + sortname + sort);
                 List<CommonGoodInfo> jFGoodsRespRows = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
                 if (jFGoodsRespRows == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-
-
                     JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
                     jFGoodsRespRows = ConvertCommonGoodEntityByJF(jDApi.GetGoodList(eliteId, pageIndex, pageSize, sortname, sort), dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     //jFGoodsRespRows= ConvertCommonGoodEntityByJTT(jDApi.GetJTT_GoodItemInfoList("女装", 1, 20, 0, 0, -1, ""), dm_UserEntity, dm_BasesettingEntity, cacheKey);
@@ -1192,7 +1183,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                 }
 
-                return SuccessList("获取成功!", jFGoodsRespRows);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, jFGoodsRespRows));
             }
             catch (Exception ex)
             {
@@ -1252,12 +1243,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("JDSearchGoodList" + keyWord + PageNo + PageSize + price_start + price_end + cate_id + sort);
                 List<CommonGoodInfo> jFGoodsRespRows = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
                 if (jFGoodsRespRows == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
-
-
                     JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
                     jFGoodsRespRows = ConvertCommonGoodEntityByJTT(jDApi.GetJTT_GoodItemInfoList(keyWord, PageNo, PageSize, price_start, price_end, cate_id, sort), dm_UserEntity, dm_BasesettingEntity, cacheKey);
 
@@ -1271,7 +1260,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                 }
 
-                return SuccessList("获取成功!", jFGoodsRespRows, new { RequestDetailID = cacheKey });
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, jFGoodsRespRows), new { RequestDetailID = cacheKey });
             }
             catch (Exception ex)
             {
@@ -1341,11 +1330,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("PDDGoodList" + keyWord + pageIndex + pageSize + sort + with_coupon + cat_id);
                 List<CommonGoodInfo> goodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+
                 if (goodItems == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-
                     PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
                     goodItems = ConvertCommonGoodEntityByPDD(pDDApi.SearchGood(keyWord, pageIndex, pageSize, sort, with_coupon, cat_id), dm_UserEntity, dm_BasesettingEntity, cacheKey);
 
@@ -1359,7 +1348,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                 }
 
-                return SuccessList("获取成功!", goodItems);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, goodItems));
             }
             catch (Exception ex)
             {
@@ -1385,11 +1374,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("PDDRecommendGoodList" + channel_type + "" + pageIndex + "" + pageSize + "" + cat_id);
                 List<CommonGoodInfo> goodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
+
                 if (goodItems == null)
                 {
-                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
-                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-
                     PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
                     goodItems = ConvertCommonGoodEntityByPDD(pDDApi.GetRecommendGood(channel_type, "", pageSize, "", pageSize * pageIndex, "", cat_id), dm_UserEntity, dm_BasesettingEntity, cacheKey);
 
@@ -1403,7 +1392,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                 }
 
-                return SuccessList("获取成功!", goodItems);
+                return SuccessList("获取成功!", CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, goodItems));
             }
             catch (Exception ex)
             {
@@ -1668,81 +1657,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
-        #region 获取佣金比例
-        /// <summary>
-        /// 淘宝
-        /// </summary>
-        /// <param name="zkprice"></param>
-        /// <param name="commission"></param>
-        /// <param name="userlevel"></param>
-        /// <param name="dm_BasesettingEntity"></param>
-        /// <returns></returns>
-        decimal GetCommissionRate(decimal zkprice, decimal commission, int? userlevel, dm_basesettingEntity dm_BasesettingEntity)
-        {
-            decimal userComission = 0.00M;
-            return userComission;
-            if (!IsPreview(dm_BasesettingEntity))
-            {
-                switch (userlevel)
-                {
-                    case 0:
-                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_junior / 10000, 2);
-                        break;
-                    case 1:
-                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_middle / 10000, 2);
-                        break;
-                    case 2:
-                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_senior / 10000, 2);
-                        break;
-                }
-            }
-            return userComission;
-        }
-
-        decimal GetJDCommissionRate(double comission, int? userlevel, dm_basesettingEntity dm_BasesettingEntity)
-        {
-            double userComission = 0.00;
-            if (!IsPreview(dm_BasesettingEntity))
-            {
-                switch (userlevel)
-                {
-                    case 0:
-                        userComission = Math.Round(comission * dm_BasesettingEntity.shopping_pay_junior / 100, 2);
-                        break;
-                    case 1:
-                        userComission = Math.Round(comission * dm_BasesettingEntity.shopping_pay_middle / 100, 2);
-                        break;
-                    case 2:
-                        userComission = Math.Round(comission * dm_BasesettingEntity.shopping_pay_senior / 100, 2);
-                        break;
-                }
-            }
-
-            return Convert.ToDecimal(userComission);
-        }
-
-        decimal GetPDDCommissionRate(decimal zkprice, decimal commission, int? userlevel, dm_basesettingEntity dm_BasesettingEntity)
-        {
-            decimal userComission = 0.00M;
-            if (!IsPreview(dm_BasesettingEntity))
-            {
-                switch (userlevel)
-                {
-                    case 0:
-                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_junior / 10000000, 2);
-                        break;
-                    case 1:
-                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_middle / 10000000, 2);
-                        break;
-                    case 2:
-                        userComission = Math.Round(zkprice * commission * dm_BasesettingEntity.shopping_pay_senior / 10000000, 2);
-                        break;
-                }
-            }
-            return userComission;
-        }
-        #endregion
-
         #region 生成淘宝授权地址
         public ActionResult Get_TB_Author_Address(int user_id)
         {
@@ -1776,8 +1690,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             return base.Request.Headers["appid"].ToString();
         }
 
-
-
         #region 商品数据转公用类
         /// <summary>
         /// 京东商品转公用商品类
@@ -1804,8 +1716,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = images,
                     image = images != null ? images[0] : "",
                     month_sales = item.inOrderCount30Days,
-                    LevelCommission = GetJDCommissionRate(item.couponCommission, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetJDCommissionRate(item.couponCommission, 2, dm_BasesettingEntity),
+                    TotalCommission = item.discount > 0 ? item.couponCommission : item.commission,
                     PlaformType = 3,
                     afterServiceScore = "4.9",
                     logisticsLvyueScore = "4.85",
@@ -1850,8 +1761,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = JsonConvert.DeserializeObject<string[]>(item.img_list),
                     image = item.goods_img,
                     month_sales = item.inOrderCount30Days,
-                    LevelCommission = GetJDCommissionRate(Math.Round((double)(item.coupon_price * item.commission / 100), 2), dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetJDCommissionRate(Math.Round((double)(item.coupon_price * item.commission / 100), 2), 2, dm_BasesettingEntity),
+                    TotalCommission = Math.Round((double)(item.coupon_price * item.commission / 100), 2),
                     PlaformType = 3,
                     afterServiceScore = score == null ? "-" : GetScore(score.afterServiceScore),
                     logisticsLvyueScore = score == null ? "-" : GetScore(score.logisticsLvyueScore),
@@ -1891,8 +1801,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = images,
                     image = item.goods_thumbnail_url,
                     month_sales = item.coupon_total_quantity,
-                    LevelCommission = GetPDDCommissionRate(item.min_group_price - item.coupon_discount, item.promotion_rate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetPDDCommissionRate(item.min_group_price - item.coupon_discount, item.promotion_rate, 2, dm_BasesettingEntity),
+                    TotalCommission = Math.Round((double)((item.min_group_price - item.coupon_discount) * item.promotion_rate) / 100000, 2),
                     PlaformType = 4,
                     afterServiceScore = GetScore(item.serv_txt),
                     logisticsLvyueScore = GetScore(item.lgst_txt),
@@ -1933,8 +1842,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = images,
                     image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
-                    LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
+                    TotalCommission = Math.Round((double)(item.actualPrice * item.commissionRate) / 100, 2),
                     PlaformType = 1,
                     afterServiceScore = GetScore(null),
                     logisticsLvyueScore = GetScore(null),
@@ -1975,8 +1883,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = images,
                     image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
-                    LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
+                    TotalCommission = Math.Round((double)(item.actualPrice * item.commissionRate) / 100, 2),
                     PlaformType = 1,
                     afterServiceScore = GetScore(item.serviceScore.ToString()),
                     logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
@@ -2016,8 +1923,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = images,
                     image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
-                    LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
+                    TotalCommission = Math.Round((double)(item.actualPrice * item.commissionRate) / 100, 2),
                     PlaformType = 1,
                     afterServiceScore = GetScore(item.serviceScore.ToString()),
                     logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
@@ -2058,8 +1964,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = images,
                     image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
-                    LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
+                    TotalCommission = Math.Round((double)(item.actualPrice * item.commissionRate) / 100, 2),
                     PlaformType = 1,
                     afterServiceScore = GetScore(item.serviceScore.ToString()),
                     logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
@@ -2100,8 +2005,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = images,
                     image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
-                    LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
+                    TotalCommission = Math.Round((double)(item.actualPrice * item.commissionRate) / 100, 2),
                     PlaformType = 1,
                     afterServiceScore = GetScore(item.serviceScore.ToString()),
                     logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
@@ -2144,8 +2048,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = images,
                     image = GetImage(item.mainPic),
                     month_sales = item.monthSales,
-                    LevelCommission = GetCommissionRate(item.actualPrice, item.commissionRate, dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetCommissionRate(item.actualPrice, item.commissionRate, 2, dm_BasesettingEntity),
+                    TotalCommission = Math.Round((double)(item.actualPrice * item.commissionRate) / 100, 2),
                     PlaformType = 1,
                     afterServiceScore = GetScore(item.serviceScore.ToString()),
                     logisticsLvyueScore = GetScore(item.serviceScore.ToString()),
@@ -2189,8 +2092,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     images = images,
                     image = GetImage(item.pict_url),
                     month_sales = item.volume,
-                    LevelCommission = GetCommissionRate(decimal.Parse(item.zk_final_price), decimal.Parse(item.commission_rate), dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel, dm_BasesettingEntity),
-                    SuperCommission = GetCommissionRate(decimal.Parse(item.zk_final_price), decimal.Parse(item.commission_rate), 2, dm_BasesettingEntity),
+                    TotalCommission = Math.Round((double.Parse(item.zk_final_price) * double.Parse(item.commission_rate)) / 100, 2),
                     PlaformType = 1,
                     afterServiceScore = GetScore(item.shop_dsr.ToString()),
                     logisticsLvyueScore = GetScore(item.shop_dsr.ToString()),
@@ -2331,6 +2233,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 审核模式判断
         bool IsPreview(dm_basesettingEntity dm_BasesettingEntity)
         {
             if (dm_BasesettingEntity.openchecked == "1")
@@ -2365,6 +2268,50 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             return base.Request.Headers["version"].ToString();
         }
+        #endregion
+
+        #region 检测审核并输出商品
+        /// <summary>
+        /// 检测审核并输出商品
+        /// </summary>
+        IEnumerable<CommonGoodInfo> CheckPreviewOutGood(dm_basesettingEntity dm_BasesettingEntity, dm_userEntity dm_UserEntity, List<CommonGoodInfo> superGoodItems)
+        {
+            IEnumerable<CommonGoodInfo> newGoodItemList = null;
+            if (!superGoodItems.IsEmpty() && superGoodItems.Count > 0)
+            {
+                if (IsPreview(dm_BasesettingEntity))
+                {
+                    newGoodItemList = superGoodItems.Select(p => { p.SuperCommission = 0M; p.LevelCommission = 0M; return p; });
+                }
+                else
+                {
+                    int? userLevel = dm_UserEntity.IsEmpty() ? 0 : dm_UserEntity.userlevel;
+                    double userRate = 0.00;
+                    switch (userLevel)
+                    {
+                        case 0:
+                            userRate = dm_BasesettingEntity.shopping_pay_junior;
+                            break;
+                        case 1:
+                            userRate = dm_BasesettingEntity.shopping_pay_middle;
+                            break;
+                        case 2:
+                            userRate = dm_BasesettingEntity.shopping_pay_senior;
+                            break;
+                    }
+
+                    newGoodItemList = superGoodItems.Select(p => { p.SuperCommission = ConvertDecimal(p.TotalCommission * dm_BasesettingEntity.shopping_pay_senior); p.LevelCommission = ConvertDecimal(p.TotalCommission * userRate); return p; });
+                }
+            }
+
+            return newGoodItemList;
+        }
+
+        decimal ConvertDecimal(double comission)
+        {
+            return Math.Round((decimal)comission / 100, 2);
+        }
+        #endregion
     }
 
     public class PwdResult

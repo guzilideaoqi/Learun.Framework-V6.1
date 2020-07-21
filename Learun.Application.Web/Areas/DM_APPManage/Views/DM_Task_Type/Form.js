@@ -33,16 +33,21 @@ var bootstrap = function ($, learun) {
                 $('#form').lrSetFormData(selectedRow);
                 headimg = selectedRow.image;
             }
-            $('.file').prepend('<img src="' + headimg + '" id="uploadPreview" onerror="loaddfimg()" >');
-            if (true) {
+            if (!!headimg)
+                $('.file').prepend('<img src="' + headimg + '" id="uploadPreview" onerror="loaddfimg()" >');
+            else {
+                headimg = top.$.rootUrl + '/Content/images/head/on-boy.jpg';
+                $('.file').prepend('<img src="' + headimg + '" id="uploadPreview" onerror="loaddfimg()" >');
+            }
+            /*if (true) {
                 headimg = top.$.rootUrl + '/Content/images/head/on-boy.jpg';
             }
             else {
                 headimg = top.$.rootUrl + '/Content/images/head/on-girl.jpg';
-            }
+            }*/
 
             loaddfimg = function () {
-                document.getElementById('uploadPreview').src = headimg;
+                document.getElementById('uploadPreview').src = top.$.rootUrl + '/Content/images/head/on-boy.jpg';
             }
         }
     };

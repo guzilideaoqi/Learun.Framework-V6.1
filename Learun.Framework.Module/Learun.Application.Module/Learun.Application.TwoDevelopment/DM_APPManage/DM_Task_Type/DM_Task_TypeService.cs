@@ -164,7 +164,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 #region 清除缓存
                 UserInfo userInfo = LoginUserInfo.Get();
                 string cacheKey = "TaskType" + userInfo.companyId;
-                redisCache.Read(cacheKey, 7);
+                redisCache.Remove(cacheKey, 7);
                 #endregion
             }
             catch (Exception ex)
@@ -203,7 +203,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 #region 清除缓存
                 UserInfo userInfo = LoginUserInfo.Get();
                 string cacheKey = "TaskType" + userInfo.companyId;
-                redisCache.Read(cacheKey, 7);
+                redisCache.Remove(cacheKey, 7);
                 #endregion
             }
             catch (Exception ex)
