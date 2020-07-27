@@ -17,6 +17,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         dm_userEntity GetEntityByCache(int id);
 
+        dm_userEntity GetEntityByInviteCode(string InviteCode, ref dm_user_relationEntity dm_User_RelationEntity);
+
+        /// <summary>
+        /// 导入用户信息
+        /// </summary>
+        /// <param name="Phone">手机号</param>
+        /// <param name="RealName">真实姓名</param>
+        /// <param name="NickName">用户昵称</param>
+        /// <param name="identitycard">身份证号</param>
+        /// <param name="userlevel">用户等级 0普通用户  1初级用户  2高级用户</param>
+        /// <param name="province">省份</param>
+        /// <param name="city">城市</param>
+        /// <param name="down">区县</param>
+        /// <param name="address">详细地址</param>
+        /// <param name="wechat">微信号</param>
+        /// <param name="parent_id">上级id</param>
+        /// <param name="parent_nickname">上级昵称</param>
+        /// <param name="partners_id">合伙人编号</param>
+        /// <returns></returns>
+        bool ImportUserInfo(string AppID,string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id);
+
         void DeleteEntity(int keyValue);
 
         void SaveEntity(int keyValue, dm_userEntity entity);

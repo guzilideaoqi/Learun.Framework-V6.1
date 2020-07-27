@@ -136,7 +136,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             set;
         }
         /// <summary>
-        /// 合伙人状态(0非合伙人  1合伙人)
+        /// 0非合伙人  1合伙人申请中   2已成为合伙人
         /// </summary>
 		[Column("PARTNERSSTATUS")]
         public int? partnersstatus

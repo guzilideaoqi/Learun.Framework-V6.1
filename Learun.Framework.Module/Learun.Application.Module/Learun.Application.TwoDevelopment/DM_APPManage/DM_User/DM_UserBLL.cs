@@ -105,6 +105,59 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        /// <summary>
+        /// 通过邀请码获取实体信息
+        /// </summary>
+        /// <param name="InviteCode"></param>
+        /// <returns></returns>
+        public dm_userEntity GetEntityByInviteCode(string InviteCode, ref dm_user_relationEntity dm_User_RelationEntity)
+        {
+            try
+            {
+                return dM_UserService.GetEntityByInviteCode(InviteCode, ref dm_User_RelationEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 导入用户信息
+        /// </summary>
+        /// <param name="Phone">手机号</param>
+        /// <param name="RealName">真实姓名</param>
+        /// <param name="NickName">用户昵称</param>
+        /// <param name="identitycard">身份证号</param>
+        /// <param name="userlevel">用户等级 0普通用户  1初级用户  2高级用户</param>
+        /// <param name="province">省份</param>
+        /// <param name="city">城市</param>
+        /// <param name="down">区县</param>
+        /// <param name="address">详细地址</param>
+        /// <param name="wechat">微信号</param>
+        /// <param name="parent_id">上级id</param>
+        /// <param name="parent_nickname">上级昵称</param>
+        /// <param name="partners_id">合伙人编号</param>
+        /// <returns></returns>
+        public bool ImportUserInfo(string AppID, string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id)
+        {
+            try
+            {
+                return dM_UserService.ImportUserInfo(AppID,Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
         public void DeleteEntity(int keyValue)
         {
             try
@@ -404,7 +457,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 判断渠道ID是否存在
-        public bool NoExistRelationID(string relationid) {
+        public bool NoExistRelationID(string relationid)
+        {
             try
             {
                 return dM_UserService.NoExistRelationID(relationid);

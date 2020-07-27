@@ -274,7 +274,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
 
-                var obj = new { TaskInfo = dm_TaskIBLL.GetTaskDetail(task_id), ReviceInfo = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id), Extend = new { Task_Rule = dm_BasesettingEntity.task_rule } };
+                dm_task_reviceEntity dm_Task_ReviceEntity = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id);
+                if (dm_Task_ReviceEntity.IsEmpty() || dm_Task_ReviceEntity.status == 4)
+                    dm_Task_ReviceEntity = null;
+                var obj = new { TaskInfo = dm_TaskIBLL.GetTaskDetail(task_id), ReviceInfo = dm_Task_ReviceEntity, Extend = new { Task_Rule = dm_BasesettingEntity.task_rule } };
                 return Success("获取成功!", obj);
             }
             catch (Exception ex)

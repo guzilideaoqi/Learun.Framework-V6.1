@@ -336,9 +336,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
                 if (dm_TaskEntity.IsEmpty())
                     throw new Exception("任务id错误!");
-                dm_task_reviceEntity reviceEntity = GetReviceEntity(dm_Task_ReviceEntity.user_id, dm_Task_ReviceEntity.task_id);
+                /*一个任务可重复接受  2020-07-27*/
+                /*dm_task_reviceEntity reviceEntity = GetReviceEntity(dm_Task_ReviceEntity.user_id, dm_Task_ReviceEntity.task_id);
                 if (!reviceEntity.IsEmpty())
-                    throw new Exception("请勿重复接受该任务!");
+                    throw new Exception("请勿重复接受该任务!");*/
 
                 dm_userEntity dm_UserEntity = dM_UserService.GetEntity(dm_Task_ReviceEntity.user_id);
                 if (dm_UserEntity.userlevel != 1 && dm_UserEntity.userlevel != 2)

@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using io.rong;
+using System.Data.Common;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -248,6 +249,57 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        /// <summary>
+        /// 通过邀请码获取用户信息
+        /// </summary>
+        /// <param name="InviteCode"></param>
+        /// <returns></returns>
+        public dm_userEntity GetEntityByInviteCode(string InviteCode, ref dm_user_relationEntity dm_User_RelationEntity)
+        {
+            try
+            {
+                dm_userEntity dm_UserEntity = null;
+                if (!InviteCode.IsEmpty())
+                {
+                    string cacheKey = "UserInfo" + InviteCode;
+                    dm_UserEntity = redisCache.Read<dm_userEntity>(cacheKey, 7L);
+                    if (dm_UserEntity.IsEmpty())
+                    {
+                        dm_UserEntity = BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.invitecode == InviteCode);
+
+                        if (!dm_UserEntity.IsEmpty())
+                        {
+                            dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(dm_UserEntity.id);
+
+                            if (!dm_User_RelationEntity.IsEmpty())
+                            {
+                                dm_UserEntity.currentmontheffect = dm_User_RelationEntity.CurrentMonthEffect;
+                                dm_UserEntity.currentmonthreceiveeffect = dm_User_RelationEntity.CurrentMonthReceiveEffect;
+                                dm_UserEntity.upmonthreceiveeffect = dm_User_RelationEntity.UpMonthReceiveEffect;
+                            }
+
+                            redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddMinutes(30), 7L);
+                        }
+                    }
+                    else
+                    {
+                        dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(dm_UserEntity.id);
+                    }
+                }
+
+
+                return dm_UserEntity;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+
         public void DeleteEntity(int keyValue)
         {
             try
@@ -288,6 +340,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public bool ImportUserInfo(string AppID,string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id)
+        {
+            bool returnStatus = false;
+            try
+            {
+                BaseRepository("dm_data").ExecuteBySql(string.Format("call ImportUserInfo('{0}','{1}','{2}','{3}',{4},'{5}','{6}','{7}','{8}','{9}',{10},'{11}',{12},'{13}')", Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id, AppID));
+                returnStatus = true;
+            }
+            catch (Exception ex)
+            {
+                returnStatus = false;
+            }
+
+            return returnStatus;
+        }
+
         public dm_userEntity Login(dm_userEntity entity)
         {
             try
@@ -305,7 +373,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode,string ParentInviteCode, string appid,string SmsMessageID)
+        public dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string ParentInviteCode, string appid, string SmsMessageID)
         {
             lock (lockObject)
             {
@@ -1053,7 +1121,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="relationid"></param>
         /// <returns></returns>
-        public bool NoExistRelationID(string relationid) {
+        public bool NoExistRelationID(string relationid)
+        {
             dm_userEntity dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.tb_relationid == relationid);
             return dm_UserEntity.IsEmpty();
         }
