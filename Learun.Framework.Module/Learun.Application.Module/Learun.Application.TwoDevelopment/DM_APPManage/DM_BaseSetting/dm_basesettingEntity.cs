@@ -55,6 +55,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             set;
         }
 
+        /// <summary>
+        /// ÌÔ±¦ÇþµÀÑûÇëÂë
+        /// </summary>
+        [Column("TB_RELATION_INVITECODE")]
+        public string tb_relation_invitecode { get; set; }
+
         [Column("JD_ACCOUNTID")]
         public int? jd_accountid
         {
