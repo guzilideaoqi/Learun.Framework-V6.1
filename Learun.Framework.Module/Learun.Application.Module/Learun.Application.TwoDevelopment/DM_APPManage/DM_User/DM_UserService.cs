@@ -398,21 +398,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 Log log = LogFactory.GetLogger("workflowapi");
 
                 IRepository db = null;
-                int parent_id = 0;
+                dm_userEntity parent_UserEntity = null;
                 int? id = 0;
                 try
                 {
-                    parent_id = DecodeInviteCode(ParentInviteCode);
-                    if (parent_id <= 0)
+                    parent_UserEntity = DecodeInviteCode(ParentInviteCode);
+                    if (parent_UserEntity.IsEmpty())
                     {
                         throw new Exception("邀请码错误!");
                     }
-                    dm_userEntity parent_user_entity = GetEntity(parent_id.ToInt());
-                    if (parent_user_entity.IsEmpty())
-                    {
-                        throw new Exception("您的邀请人用户异常!");
-                    }
-                    dm_user_relationEntity dm_Parent_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(parent_id);
+
+                    dm_user_relationEntity dm_Parent_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(parent_UserEntity.id);
                     dm_userEntity dm_UserEntity_exist = GetEntityByPhone(dm_UserEntity.phone, appid);
                     if (!dm_UserEntity_exist.IsEmpty())
                     {
@@ -451,23 +447,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             type = 1,
                             user_id = id
                         });
-                        parent_user_entity.integral += dm_BasesettingEntity.new_people_parent;
-                        db.Update(parent_user_entity);
+                        parent_UserEntity.integral += dm_BasesettingEntity.new_people_parent;
+                        db.Update(parent_UserEntity);
                         db.Insert(new dm_intergraldetailEntity
                         {
                             createtime = DateTime.Now,
-                            currentvalue = parent_user_entity.integral,
+                            currentvalue = parent_UserEntity.integral,
                             title = "邀请好友奖励",
                             stepvalue = dm_BasesettingEntity.new_people_parent,
                             type = 3,
-                            user_id = parent_id
+                            user_id = parent_UserEntity.id
                         });
                         dm_user_relationEntity dm_User_RelationEntity = new dm_user_relationEntity
                         {
                             user_id = id,
-                            parent_id = parent_id,
-                            parent_nickname = parent_user_entity.nickname,
-                            partners_id = parent_user_entity.partnersstatus == 1 ? parent_user_entity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
+                            parent_id = (int)parent_UserEntity.id,
+                            parent_nickname = parent_UserEntity.nickname,
+                            partners_id = parent_UserEntity.partnersstatus == 1 ? parent_UserEntity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
                         };
                         dm_User_RelationEntity.Create();
                         db.Insert(dm_User_RelationEntity);
@@ -496,7 +492,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     int? num2 = id;
                     obj[1] = num2.ToString();
                     obj[2] = ",上级用户";
-                    num2 = parent_id;
+                    num2 = parent_UserEntity.id;
                     obj[3] = num2.ToString();
                     obj[4] = ex.Message;
                     obj[5] = ex.StackTrace;
@@ -740,9 +736,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             return str;
         }
 
-        public int DecodeInviteCode(string InviteCode)
+        public dm_userEntity DecodeInviteCode(string InviteCode)
         {
-            char[] chs = InviteCode.ToCharArray();
+            #region 改为直接数据库查询
+            dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.invitecode == InviteCode || t.by_invitecode == InviteCode);
+            if (dm_UserEntity.IsEmpty())
+                throw new Exception("该邀请码无效!");
+            return dm_UserEntity;
+            #endregion
+
+            /*char[] chs = InviteCode.ToCharArray();
             int res = 0;
             for (int i = 0; i < chs.Length; i++)
             {
@@ -761,7 +764,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
                 res = ((i <= 0) ? ind : (res * binLen + ind));
             }
-            return res;
+            return res;*/
         }
 
         #region 根据关系获取用户
@@ -1006,6 +1009,45 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     throw new Exception("用户信息异常!");
                 }
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
+        #region 设置自定义邀请码
+        /// <summary>
+        /// 设置自定义邀请码
+        /// </summary>
+        /// <param name="User_ID"></param>
+        /// <param name="InviteCode"></param>
+        public void SetInviteCode(int User_ID, string InviteCode)
+        {
+            try
+            {
+                if (InviteCode.IsEmpty())
+                    throw new Exception("邀请码不能为空!");
+                if (InviteCode.Length < 6)
+                    throw new Exception("邀请码长度不能小于为6位!");
+                dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.id != User_ID && (t.invitecode == InviteCode || t.by_invitecode == InviteCode));
+                if (!dm_UserEntity.IsEmpty())
+                    throw new Exception("该邀请码已存在!");
+
+                dm_UserEntity = GetEntity(User_ID);
+                if (dm_UserEntity.IsEmpty())
+                    throw new Exception("用户信息异常!");
+                if (!dm_UserEntity.by_invitecode.IsEmpty())
+                    throw new Exception("自定义邀请码只能设置一次,您当前已设置，请勿重复操作!");
+                dm_UserEntity.by_invitecode = dm_UserEntity.invitecode;
+                dm_UserEntity.invitecode = InviteCode;
+                dm_UserEntity.Modify(User_ID);
+                BaseRepository("dm_data").Update(dm_UserEntity);
             }
             catch (Exception ex)
             {

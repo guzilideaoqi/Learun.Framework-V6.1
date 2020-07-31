@@ -8,6 +8,7 @@ var selectedRow;
 var refreshGirdData;
 var LookUserDetail;
 var UpdateAccountPrice;
+var setInviteCode;
 var enableUser;
 var disableUser;
 var enableVoice;
@@ -177,6 +178,7 @@ var bootstrap = function ($, learun) {
                             var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
                             var btnList = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"LookUserDetail(" + tempJsonStr + ");\"><i class=\"fa fa-search\"></i>&nbsp;查看会员详情</a>";
                             btnList += "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;margin-left:8px;\" onclick=\"UpdateAccountPrice(" + tempJsonStr + ");\"><i class=\"fa fa-edit\"></i>&nbsp;修改余额</a>";
+                            btnList += "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;margin-left:8px;\" onclick=\"setInviteCode(" + tempJsonStr + ");\"><i class=\"fa fa-edit\"></i>&nbsp;自定义邀请码</a>";
 
                             return btnList;
                         }
@@ -215,6 +217,19 @@ var bootstrap = function ($, learun) {
             url: top.$.rootUrl + '/DM_APPManage/DM_User/UpdateAccountPrice',
             width: 600,
             height: 400,
+            callBack: function (id) {
+                return top[id].acceptClick(refreshGirdData);
+            }
+        });
+    }
+    setInviteCode = function (rowData) {
+        selectedRow = rowData;
+        learun.layerForm({
+            id: 'form',
+            title: '设置自定义邀请码',
+            url: top.$.rootUrl + '/DM_APPManage/DM_User/SetInviteCode',
+            width: 600,
+            height: 200,
             callBack: function (id) {
                 return top[id].acceptClick(refreshGirdData);
             }

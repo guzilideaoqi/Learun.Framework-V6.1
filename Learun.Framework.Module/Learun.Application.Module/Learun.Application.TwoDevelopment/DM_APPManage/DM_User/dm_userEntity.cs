@@ -126,6 +126,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             get;
             set;
         }
+
+        /// <summary>
+        /// 备用邀请码
+        /// </summary>
+        [Column("BY_INVITECODE")]
+        public string by_invitecode {
+            get;set;
+        }
         /// <summary>
         /// 合伙人id
         /// </summary>

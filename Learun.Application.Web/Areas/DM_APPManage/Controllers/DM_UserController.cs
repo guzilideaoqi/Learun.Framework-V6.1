@@ -41,6 +41,12 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         }
 
         [HttpGet]
+        public ActionResult SetInviteCode()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [AjaxOnly(false)]
         public ActionResult GetList(string queryJson)
         {
@@ -107,7 +113,8 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
 
         [HttpPost]
         [AjaxOnly(false)]
-        public ActionResult UpdateUserInfo(int keyValue, dm_userEntity entity) {
+        public ActionResult UpdateUserInfo(int keyValue, dm_userEntity entity)
+        {
             dM_UserIBLL.SaveEntity(keyValue, entity);
             return Success("修改成功！");
         }
@@ -131,8 +138,37 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [AjaxOnly(false)]
         public ActionResult UpdateAccountPrice(int User_ID, decimal UpdatePrice, int UpdateType, string Remark)
         {
-            dM_UserIBLL.UpdateAccountPrice(User_ID, UpdatePrice, UpdateType, Remark);
-            return Success("修改成功！");
+            try
+            {
+                dM_UserIBLL.UpdateAccountPrice(User_ID, UpdatePrice, UpdateType, Remark);
+                return Success("修改成功！");
+            }
+            catch (System.Exception ex)
+            {
+                return Fail(ex.InnerException.Message);
+            }
+        }
+
+        /// <summary>
+        /// 自定义用户邀请码
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AjaxOnly(false)]
+        public ActionResult SetInviteCode(int User_ID, string InviteCode)
+        {
+            try
+            {
+                dM_UserIBLL.SetInviteCode(User_ID, InviteCode);
+                return Success("自定义邀请码设置成功!");
+            }
+            catch (System.Exception ex)
+            {
+                return Fail(ex.InnerException.Message);
+            }
         }
 
         [HttpPost]
@@ -149,7 +185,6 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             {
                 return Fail(ex.InnerException.Message);
             }
-
         }
 
         /// <summary>

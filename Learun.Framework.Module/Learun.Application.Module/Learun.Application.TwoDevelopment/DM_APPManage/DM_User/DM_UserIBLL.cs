@@ -36,7 +36,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="parent_nickname">上级昵称</param>
         /// <param name="partners_id">合伙人编号</param>
         /// <returns></returns>
-        bool ImportUserInfo(string AppID,string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id);
+        bool ImportUserInfo(string AppID, string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id);
 
         void DeleteEntity(int keyValue);
 
@@ -48,7 +48,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         string EncodeInviteCode(int? id);
 
-        int? DecodeInviteCode(string InviteCode);
+        dm_userEntity DecodeInviteCode(string InviteCode);
 
         dynamic SignIn(int userid);
         /// <summary>
@@ -65,6 +65,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="userids"></param>
         /// <param name="user_level"></param>
         void SetUserLevel(string userids, int user_level);
+
+        /// <summary>
+        /// 设置自定义邀请码
+        /// </summary>
+        /// <param name="User_ID"></param>
+        /// <param name="InviteCode"></param>
+        void SetInviteCode(int User_ID, string InviteCode);
         #region 获取推广图片
         List<string> GetShareImage(int user_id, string appid);
         #endregion

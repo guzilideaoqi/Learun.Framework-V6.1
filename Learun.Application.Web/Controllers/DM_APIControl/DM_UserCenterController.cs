@@ -369,9 +369,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 string appid = CheckAPPID();
 
-                int? UserID = dm_userIBLL.DecodeInviteCode(InviteCode);
-
-                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(Convert.ToInt32(UserID));
+                dm_userEntity dm_UserEntity = dm_userIBLL.DecodeInviteCode(InviteCode);
                 if (dm_UserEntity.IsEmpty())
                     return Fail("邀请码错误!");
 

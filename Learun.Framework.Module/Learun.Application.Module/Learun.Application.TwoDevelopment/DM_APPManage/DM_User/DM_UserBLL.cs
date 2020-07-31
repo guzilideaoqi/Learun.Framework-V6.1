@@ -147,7 +147,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                return dM_UserService.ImportUserInfo(AppID,Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id);
+                return dM_UserService.ImportUserInfo(AppID, Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id);
             }
             catch (Exception ex)
             {
@@ -238,7 +238,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public int? DecodeInviteCode(string InviteCode)
+        public dm_userEntity DecodeInviteCode(string InviteCode)
         {
             try
             {
@@ -275,6 +275,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 dM_UserService.SetUserLevel(userids, user_level);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 设置自定义邀请码
+        /// </summary>
+        /// <param name="User_ID"></param>
+        /// <param name="InviteCode"></param>
+        public void SetInviteCode(int User_ID, string InviteCode)
+        {
+            try
+            {
+                dM_UserService.SetInviteCode(User_ID, InviteCode);
             }
             catch (Exception ex)
             {

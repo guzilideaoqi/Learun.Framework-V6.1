@@ -323,6 +323,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\LookUserDetail.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\LookUserDetail.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_User\SetInviteCode.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\SetLevel.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\UpdateAccountPrice.js" />
     <Content Include="Areas\LR_AuthorizeModule\Views\Authorize\Form.css" />
@@ -1903,6 +1904,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\JPushManage.cshtml" />
     <EmbeddedResource Include="Areas\DM_APPManage\Views\DM_Article\LookArticle.cshtml" />
     <Content Include="Content\dlm\swiper.min.css" />
+    <Content Include="Areas\DM_APPManage\Views\DM_User\SetInviteCode.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
