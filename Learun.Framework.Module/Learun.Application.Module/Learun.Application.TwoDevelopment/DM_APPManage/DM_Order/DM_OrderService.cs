@@ -502,7 +502,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 commonOrderEntity.order_status = item.tk_status;
                                 commonOrderEntity.order_type_new = gettbstatus(commonOrderEntity.order_status);
                                 commonOrderEntity.rebate_status = 0;
-                                commonOrderEntity.image = item.item_img;
+                                commonOrderEntity.image = item.item_img.StartsWith("//") ? ("http:" + item.item_img) : item.item_img;
                                 commonOrderEntity.product_num = item.item_num;
                                 commonOrderEntity.product_price = item.item_price;
                                 commonOrderEntity.payment_price = item.pay_price;

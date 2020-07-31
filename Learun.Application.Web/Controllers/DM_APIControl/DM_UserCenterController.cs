@@ -922,7 +922,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                     if (dm_OrderEntities.Count() > 0)
                     {
-                        redisCache.Write(cacheKey, dm_OrderEntities, DateTime.Now.AddMinutes(10), 7);
+                        redisCache.Write(cacheKey, dm_OrderEntities, DateTime.Now.AddMinutes(1), 7);
                     }
                 }
 
