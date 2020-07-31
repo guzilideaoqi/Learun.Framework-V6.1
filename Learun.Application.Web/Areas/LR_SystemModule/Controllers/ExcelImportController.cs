@@ -264,7 +264,7 @@ namespace Learun.Application.Web.Areas.LR_SystemModule.Controllers
                             }
 
                             UserInfo userInfo = LoginUserInfo.Get();
-                            if (dm_UserBLL.ImportUserInfo(userInfo.userId, Phone, RealName, NickName, CardNo, UserLevel, Province, City, Down, DetailAddress, WeChat, dm_User_RelationEntity.parent_id.ToString(), dm_User_RelationEntity.parent_nickname, partner_id.ToString()))
+                            if (dm_UserBLL.ImportUserInfo(userInfo.companyId, Phone, RealName, NickName, CardNo, UserLevel, Province, City, Down, DetailAddress, WeChat, dm_User_RelationEntity.parent_id.ToString(), dm_User_RelationEntity.parent_nickname, partner_id.ToString()))
                             {
                                 snum++;
                             }

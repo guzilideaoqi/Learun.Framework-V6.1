@@ -232,6 +232,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             }
 
                             redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddMinutes(10), 7L);
+
+                            #region 判断用户是否有邀请码  没有时再重新创建
+                            if (dm_UserEntity.invitecode.IsEmpty())
+                            {
+                                dm_UserEntity.invitecode = EncodeInviteCode(dm_UserEntity.id);
+                                dm_UserEntity.Modify(dm_UserEntity.id);
+                                BaseRepository("dm_data").Update(dm_UserEntity);
+                            }
+                            #endregion
+
+                            #region 生成融云token
+                            if (dm_UserEntity.rongcloud_token.IsEmpty())
+                            {
+                                dm_UserEntity.rongcloud_token = GeneralRongTokne((int)dm_UserEntity.id, dm_UserEntity.appid);
+                                dm_UserEntity.Modify(dm_UserEntity.id);
+                                BaseRepository("dm_data").Update(dm_UserEntity);
+                            }
+                            #endregion
                         }
                     }
                 }
@@ -340,7 +358,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public bool ImportUserInfo(string AppID,string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id)
+        public bool ImportUserInfo(string AppID, string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id)
         {
             bool returnStatus = false;
             try
