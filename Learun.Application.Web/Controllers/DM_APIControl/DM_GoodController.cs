@@ -1060,7 +1060,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 req.RelationFrom = "1";
                 req.OfflineScene = "1";
                 req.OnlineScene = "1";
-                req.InviterCode = "PCUMX2";
+                req.InviterCode = "X82SPJ";
                 req.InfoType = 1L;
                 req.Note = "哆来米代理申请";
                 req.RegisterInfo = "{\"phoneNumber\":\"18801088599\",\"city\":\"江苏省\",\"province\":\"南京市\",\"location\":\"玄武区花园小区\",\"detailAddress\":\"5号楼3单元101室\"}";
