@@ -181,6 +181,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
+
                 string appid = CheckAPPID();
 
                 if (FinishPrice < 1)
