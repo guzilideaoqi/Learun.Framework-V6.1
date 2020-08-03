@@ -629,7 +629,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                     else if (ChannelType == "chihuo")
                     {
-                        superGoodItems = GetActivityGoodData(User_ID, 45, PageNo.ToString(), PageSize, 6).ToList();
+                        superGoodItems = GetActivityGoodData(User_ID, 38, PageNo.ToString(), PageSize, 4).ToList();
                     }
 
                     if (superGoodItems.Count > 0)
@@ -770,11 +770,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 热门活动商品(2个小时更新一次)
-        public ActionResult GetActivityGoodList(int user_id, int activityId, string pageId = "1", int pageSize = 20, int cid = 1)
+        public ActionResult GetActivityGoodList(int activityId, int user_id = -1, string pageId = "1", int pageSize = 20, int cid = 1)
         {
             try
             {
-
                 return SuccessList("获取成功!", GetActivityGoodData(user_id, activityId, pageId, pageSize, cid));
             }
             catch (Exception ex)
