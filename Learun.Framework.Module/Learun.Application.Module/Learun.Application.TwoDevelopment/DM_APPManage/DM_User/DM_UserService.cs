@@ -195,7 +195,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                return BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == phone && t.appid == appid);
+                dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == phone && t.appid == appid);
+                #region 增加单点登录记录
+                CheckSingleLogin(ref dm_UserEntity);
+                #endregion
+                return dm_UserEntity;
+
             }
             catch (Exception ex)
             {
@@ -254,6 +259,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     }
                 }
 
+                if (!dm_UserEntity.IsEmpty())
+                {
+                    #region 当前登录的token
+                    string cacheKey_token = Md5Helper.Hash("SingleUserList" + dm_UserEntity.id);
+                    string singleUser_Token = redisCache.Read<string>(cacheKey_token, 7);
+                    dm_UserEntity.token = singleUser_Token;
+                    #endregion
+                }
 
                 return dm_UserEntity;
             }
@@ -379,7 +392,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 entity.pwd = Md5Helper.Encrypt(entity.pwd, 16);
-                return BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == entity.phone && t.appid == entity.appid && t.pwd == entity.pwd);
+
+                dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == entity.phone && t.appid == entity.appid && t.pwd == entity.pwd);
+                #region 增加单点登录记录
+                CheckSingleLogin(ref dm_UserEntity);
+                #endregion
+                return dm_UserEntity;
             }
             catch (Exception ex)
             {
@@ -474,7 +492,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         throw new Exception("用户注册失败!");
                     }
 
-                    return GetEntity(id.ToInt());
+                    dm_userEntity dm_UserEntity_New = GetEntity(id.ToInt());
+                    CheckSingleLogin(ref dm_UserEntity_New);
+                    return dm_UserEntity_New;
                 }
                 catch (Exception ex)
                 {
@@ -1252,6 +1272,20 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             catch (Exception)
             {
                 return "";
+            }
+        }
+        #endregion
+
+        #region 检测单点登录
+        void CheckSingleLogin(ref dm_userEntity dm_UserEntity)
+        {
+            if (!dm_UserEntity.IsEmpty())
+            {
+                string cacheKey = Md5Helper.Hash("SingleUserList" + dm_UserEntity.id);
+                string singleUser_Token = redisCache.Read<string>(cacheKey, 7);
+                string token = Guid.NewGuid().ToString();
+                redisCache.Write(cacheKey, token, 7);
+                dm_UserEntity.token = token;
             }
         }
         #endregion

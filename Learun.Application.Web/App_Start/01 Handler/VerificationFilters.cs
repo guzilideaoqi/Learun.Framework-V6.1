@@ -1,15 +1,21 @@
-﻿using Learun.Cache.Redis;
+﻿using Learun.Cache.Base;
+using Learun.Cache.Factory;
+using Learun.Cache.Redis;
 using Learun.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Text;
+
 
 namespace Learun.Application.Web.App_Start._01_Handler
 {
     public class VerificationAPIAttribute : AuthorizeAttribute
     {
+        string[] actionNameList = new string[] { "dm_login", "dm_register", "paycallback", "authorcallback", "callback", "authorresult", "getgoodtypebycache", "getrankinglist", "gettodaygood", "commonsearchgood", "getsuperserachgood", "getdtksearchgood", "getrecommendgoodbytb", "getopgood", "getactivitygoodlist", "gettopiccatalogue", "gettopicgoodlist", "gettbtopiclist", "get_jd_goodlist", "get_jd_searchgoodlist", "get_pdd_goodlist", "getrecommendgoodbypdd", "getgoodimagedetail", "getgooddetailbytb", "getbannerlist", "getgoodsmallcate" };
+        private ICache redisCache = CacheFactory.CaChe();
         private FilterMode _customMode;
         /// <summary>默认构造</summary>
         /// <param name="Mode">认证模式</param>
@@ -30,8 +36,11 @@ namespace Learun.Application.Web.App_Start._01_Handler
                 return;
             }
             string ActionName = filterContext.RouteData.Values["action"].ToString().ToLower();
+            string token = filterContext.HttpContext.Request.Headers["token"];
+            string platform = filterContext.HttpContext.Request.Headers["platform"];
+
             //登录和注册不校验
-            if (ActionName == "dm_login" || ActionName == "dm_register" || ActionName == "paycallback" || ActionName == "authorcallback" || ActionName == "callback"||ActionName== "authorresult"||ActionName== "getgoodtypebycache")
+            if (actionNameList.Contains(ActionName))
             {
                 return;
             }
@@ -42,13 +51,6 @@ namespace Learun.Application.Web.App_Start._01_Handler
             {
                 modelResult.code = ResponseCode.fail;
                 modelResult.info = "缺少appid参数!";
-                filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
-                return;
-            }
-            else if (filterContext.HttpContext.Request.Headers["token"] == null)
-            {
-                modelResult.code = ResponseCode.fail;
-                modelResult.info = "缺少token参数!";
                 filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
                 return;
             }
@@ -66,13 +68,48 @@ namespace Learun.Application.Web.App_Start._01_Handler
                 filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
                 return;
             }
-            else if (filterContext.HttpContext.Request.Headers["platform"] == null)
+            else if (platform == null)
             {
                 modelResult.code = ResponseCode.fail;
                 modelResult.info = "缺少platform参数!";
                 filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
                 return;
             }
+
+            #region 校验当前用户是否在线
+            string user_id = "";
+            if (filterContext.HttpContext.Request.Params.AllKeys.Contains("User_ID"))
+            {
+                user_id = filterContext.HttpContext.Request.Params["User_ID"];
+            }
+            if (filterContext.HttpContext.Request.Params.AllKeys.Contains("user_id"))
+            {
+                user_id = filterContext.HttpContext.Request.Params["user_id"];
+            }
+
+            if (!user_id.IsEmpty() && platform == "android")
+            {
+                if (token.IsEmpty())
+                {
+                    modelResult.code = ResponseCode.NoLogin;
+                    modelResult.info = "请登录后操作!";
+                    filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
+                    return;
+                }
+                else
+                {
+                    string cacheKey = Md5Helper.Hash("SingleUserList" + user_id);
+                    string exist_token = redisCache.Read<string>(cacheKey, 7);
+                    if (exist_token != token)
+                    {
+                        modelResult.code = ResponseCode.LoginExpire;
+                        modelResult.info = "当前登录已失效,请登录后重新操作!";
+                        filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
+                        return;
+                    }
+                }
+            }
+            #endregion
         }
     }
 }

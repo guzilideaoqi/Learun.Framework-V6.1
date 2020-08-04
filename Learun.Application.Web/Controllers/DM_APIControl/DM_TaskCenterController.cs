@@ -215,13 +215,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     else
                         dm_TaskEntities = dm_TaskIBLL.GetPageList(new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + User_ID + "\",\"taskstatus\":\"" + TaskStatus + "\"}");
 
-                    if (dm_TaskEntities.Count() > 0)
+                    /* 接受任务需要试试显示  此处先把缓存去掉 2020-08-04
+                     * if (dm_TaskEntities.Count() > 0)
                     {
                         if (dm_TaskEntities.Count() < PageSize)
-                            redisCache.Write<IEnumerable<dm_taskEntity>>(cacheKey, dm_TaskEntities, DateTime.Now.AddMinutes(5), 7);
+                            redisCache.Write<IEnumerable<dm_taskEntity>>(cacheKey, dm_TaskEntities, DateTime.Now.AddSeconds(20), 7);
                         else
-                            redisCache.Write<IEnumerable<dm_taskEntity>>(cacheKey, dm_TaskEntities, DateTime.Now.AddHours(2), 7);
-                    }
+                            redisCache.Write<IEnumerable<dm_taskEntity>>(cacheKey, dm_TaskEntities, DateTime.Now.AddSeconds(5), 7);
+                    }*/
                 }
                 return SuccessList("获取成功!", dm_TaskEntities);
             }
@@ -243,7 +244,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (dataTable == null)
                 {
                     dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(User_ID, TaskStatus, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
-                    int datarow = dataTable.Rows.Count;
+                    /* 接受任务需要试试显示  此处先把缓存去掉 2020-08-04
+                     * int datarow = dataTable.Rows.Count;
                     if (datarow > 0)
                     {
                         if (datarow < PageSize)
@@ -252,9 +254,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         }
                         else
                         {
-                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(2), 7);
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(10), 7);
                         }
-                    }
+                    }*/
                 }
                 return SuccessList("获取成功!", dataTable);
             }

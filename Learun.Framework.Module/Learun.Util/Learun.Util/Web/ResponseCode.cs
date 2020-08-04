@@ -22,7 +22,14 @@
         /// </summary>
         exception = 500,
         NoRelation = 101,
+        /// <summary>
+        /// 未登录
+        /// </summary>
         NoLogin = 401,
+        /// <summary>
+        /// 登录失效
+        /// </summary>
+        LoginExpire = 402,
         NoMoney = 102,
         NoBindAliPay = 103,
         NoRealName = 104
