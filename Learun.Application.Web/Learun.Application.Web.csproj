@@ -569,7 +569,6 @@
     <Content Include="Content\dlm\good.png" />
     <Content Include="Content\dlm\group_4 copy.png" />
     <Content Include="Content\dlm\group_4.png" />
-    <Content Include="Content\dlm\jianzhi.png" />
     <Content Include="Content\dlm\jquery.fancybox.pack.js" />
     <Content Include="Content\dlm\king.png" />
     <Content Include="Content\dlm\main.css" />
@@ -580,6 +579,7 @@
     <Content Include="Content\dlm\owl.carousel.css" />
     <Content Include="Content\dlm\owl.carousel.min.js" />
     <Content Include="Content\dlm\prev001_07.png" />
+    <Content Include="Content\dlm\jianzhi.png" />
     <Content Include="Content\dlm\reset.css" />
     <Content Include="Content\dlm\responsive.css" />
     <Content Include="Content\dlm\style1.css" />
