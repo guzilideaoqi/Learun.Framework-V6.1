@@ -181,13 +181,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="user_id"></param>
         /// <param name="task_id"></param>
         /// <returns></returns>
-        public dm_task_reviceEntity GetReviceEntity(int? user_id, int? task_id)
+        public dm_task_reviceEntity GetReviceEntity(int? user_id, int? task_id, int revice_id = 0)
         {
             try
             {
                 if (user_id <= 0)
                     return null;
-                return this.BaseRepository("dm_data").FindEntity<dm_task_reviceEntity>(t => t.user_id == user_id && t.task_id == task_id);
+                if (revice_id > 0)
+                    return GetEntity(revice_id);
+                else
+                    return this.BaseRepository("dm_data").FindEntity<dm_task_reviceEntity>(t => t.user_id == user_id && t.task_id == task_id && t.status != 4);
             }
             catch (Exception ex)
             {
@@ -212,7 +215,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("select t.*,r.status ReviceStatus from dm_task_revice r left join dm_task t on r.task_id=t.id where r.user_id=" + user_id);
+                stringBuilder.Append("select t.*,r.status ReviceStatus,r.id Revice_ID from dm_task_revice r left join dm_task t on r.task_id=t.id where r.user_id=" + user_id);
 
                 if (TaskStatus != -1)
                     stringBuilder.Append(" and r.status=" + TaskStatus);

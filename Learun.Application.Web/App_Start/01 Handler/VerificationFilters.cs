@@ -87,7 +87,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
                 user_id = filterContext.HttpContext.Request.Params["user_id"];
             }
 
-            if (!user_id.IsEmpty() && platform == "android")
+            if (!user_id.IsEmpty())// && platform == "android"
             {
                 if (token.IsEmpty())
                 {

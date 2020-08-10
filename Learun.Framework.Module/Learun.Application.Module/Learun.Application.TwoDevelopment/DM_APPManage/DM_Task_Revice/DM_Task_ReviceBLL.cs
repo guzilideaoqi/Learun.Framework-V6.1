@@ -65,7 +65,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson) {
+        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
+        {
             try
             {
                 return dM_Task_ReviceService.GetPageListByDataTable(pagination, queryJson);
@@ -190,7 +191,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 接受任务
         /// </summary>
         /// <param name="dm_Task_ReviceEntity"></param>
-        public dm_task_reviceEntity ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity,string appid)
+        public dm_task_reviceEntity ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity, string appid)
         {
             try
             {
@@ -241,7 +242,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-               return dM_Task_ReviceService.CancelByRevicePerson(revice_id, IsPubCancel);
+                return dM_Task_ReviceService.CancelByRevicePerson(revice_id, IsPubCancel);
             }
             catch (Exception ex)
             {
@@ -285,10 +286,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="user_id"></param>
         /// <param name="pagination"></param>
         /// <returns></returns>
-        public DataTable GetMyReviceTask(int user_id, int TaskStatus, Pagination pagination) {
+        public DataTable GetMyReviceTask(int user_id, int TaskStatus, Pagination pagination)
+        {
             try
             {
-               return dM_Task_ReviceService.GetMyReviceTask(user_id, TaskStatus, pagination);
+                return dM_Task_ReviceService.GetMyReviceTask(user_id, TaskStatus, pagination);
             }
             catch (Exception ex)
             {
@@ -309,10 +311,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="user_id"></param>
         /// <param name="task_id"></param>
         /// <returns></returns>
-        public dm_task_reviceEntity GetReviceEntity(int user_id, int task_id) {
+        public dm_task_reviceEntity GetReviceEntity(int user_id, int task_id, int revice_id)
+        {
             try
             {
-                return dM_Task_ReviceService.GetReviceEntity(user_id, task_id);
+                return dM_Task_ReviceService.GetReviceEntity(user_id, task_id, revice_id);
             }
             catch (Exception ex)
             {

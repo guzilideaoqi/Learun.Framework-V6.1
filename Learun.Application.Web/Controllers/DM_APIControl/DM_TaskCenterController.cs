@@ -268,7 +268,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取任务详情
-        public ActionResult GetTaskDetail(int task_id, int user_id = 0)
+        public ActionResult GetTaskDetail(int task_id, int user_id = 0, int revice_id = 0)
         {
             try
             {
@@ -276,8 +276,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
 
-                dm_task_reviceEntity dm_Task_ReviceEntity = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id);
-                if (dm_Task_ReviceEntity.IsEmpty() || dm_Task_ReviceEntity.status == 4)
+                dm_task_reviceEntity dm_Task_ReviceEntity = dm_Task_ReviceIBLL.GetReviceEntity(user_id, task_id, revice_id);
+                if ((dm_Task_ReviceEntity.IsEmpty() || dm_Task_ReviceEntity.status == 4) && revice_id <= 0)
                     dm_Task_ReviceEntity = null;
                 var obj = new { TaskInfo = dm_TaskIBLL.GetTaskDetail(task_id), ReviceInfo = dm_Task_ReviceEntity, Extend = new { Task_Rule = dm_BasesettingEntity.task_rule } };
                 return Success("获取成功!", obj);

@@ -104,7 +104,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="user_id"></param>
         /// <param name="task_id"></param>
         /// <returns></returns>
-        dm_task_reviceEntity GetReviceEntity(int user_id, int task_id);
+        dm_task_reviceEntity GetReviceEntity(int user_id, int task_id, int revice_id);
         #endregion
     }
 }
