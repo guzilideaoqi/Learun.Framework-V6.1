@@ -87,7 +87,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
                 user_id = filterContext.HttpContext.Request.Params["user_id"];
             }
 
-            if (!user_id.IsEmpty())// && platform == "android"
+            if (!user_id.IsEmpty() && user_id != "0")// && platform == "android"
             {
                 if (token.IsEmpty())
                 {
@@ -103,7 +103,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
                     if (exist_token != token)
                     {
                         modelResult.code = ResponseCode.LoginExpire;
-                        modelResult.info = "当前登录已失效,请登录后重新操作!";
+                        modelResult.info = "您的账号在另一台设备登录。如非本人操作，请注意账户安全!";
                         filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
                         return;
                     }
