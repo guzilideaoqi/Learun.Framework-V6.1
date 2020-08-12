@@ -1479,7 +1479,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
 
-        public ActionResult GetCommonGoodDetail(string CacheKey, string SkuID)
+        public ActionResult GetCommonGoodDetail(string CacheKey, string SkuID, int User_ID = 0)
         {
             try
             {
@@ -1488,14 +1488,21 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     return Fail("商品加载出现异常,请返回上一页刷新重试!");
                 else
                 {
-                    CommonGoodInfo commonGoodInfo = commonGoodInfoList.Where(t => t.skuid == SkuID).FirstOrDefault();
+                    string appid = CheckAPPID();
+
+                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+
+                    dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
+
+                    List<CommonGoodInfo> commonGoodInfoList_New = commonGoodInfoList.Where(t => t.skuid == SkuID).ToList();
+
+                    CommonGoodInfo commonGoodInfo = CheckPreviewOutGood(dm_BasesettingEntity, dm_UserEntity, commonGoodInfoList_New).FirstOrDefault();
 
                     if (commonGoodInfo.PlaformType == 1)
                     {
                         string[] imageDetailByApi = GetGoodImageDetailByApi(SkuID);
                         commonGoodInfo.detail_images = imageDetailByApi.IsEmpty() ? commonGoodInfo.detail_images : imageDetailByApi;
                     }
-
 
                     if (commonGoodInfo.IsEmpty())
                         return Fail("商品信息加载异常,请重试!");

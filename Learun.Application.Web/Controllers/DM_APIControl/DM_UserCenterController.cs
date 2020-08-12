@@ -48,6 +48,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (dm_UserEntity.phone.IsEmpty() || dm_UserEntity.phone.Length != 11)
+                {
+                    return Fail("手机号不能为空或格式错误!");
+                }
+                if (dm_UserEntity.pwd.IsEmpty())
+                    return Fail("密码不能为空!");
                 string appid = dm_UserEntity.appid = CheckAPPID();
                 dm_userEntity loginInfo = dm_userIBLL.Login(dm_UserEntity);
                 if (loginInfo == null)
@@ -280,13 +286,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="id">用户id</param>
         /// <returns></returns>
 
-        public ActionResult GetPersonInfo(int User_ID)
+        public ActionResult GetPersonInfo(int User_ID = 0)
         {
             try
             {
                 if (User_ID <= 0)
                     return FailNoLogin();
-                return Success("获取成功", dm_userIBLL.GetEntityByCache(User_ID));
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
+                return Success("获取成功", dm_UserEntity);
             }
             catch (Exception ex)
             {

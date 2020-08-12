@@ -505,7 +505,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 commonOrderEntity.image = item.item_img.StartsWith("//") ? ("http:" + item.item_img) : item.item_img;
                                 commonOrderEntity.product_num = item.item_num;
                                 commonOrderEntity.product_price = item.item_price;
-                                commonOrderEntity.payment_price = item.pay_price;
+                                commonOrderEntity.payment_price = item.alipay_total_price;
                                 commonOrderEntity.estimated_effect = item.pub_share_fee;//结算预估收入(包含补贴金额)
                                 commonOrderEntity.estimated_income = item.pub_share_pre_fee;//付款的预估佣金金额
                                 commonOrderEntity.commission_rate = item.total_commission_rate;//佣金比例

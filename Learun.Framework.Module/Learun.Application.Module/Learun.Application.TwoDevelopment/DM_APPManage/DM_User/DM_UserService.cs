@@ -1282,7 +1282,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             if (!dm_UserEntity.IsEmpty())
             {
                 string cacheKey = Md5Helper.Hash("SingleUserList" + dm_UserEntity.id);
-                string singleUser_Token = redisCache.Read<string>(cacheKey, 7);
                 string token = Guid.NewGuid().ToString();
                 redisCache.Write(cacheKey, token, 7);
                 dm_UserEntity.token = token;

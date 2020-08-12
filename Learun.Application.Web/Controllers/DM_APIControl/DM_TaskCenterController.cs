@@ -68,22 +68,35 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 #endregion
 
-                string queryDiction = "";
-                if (TaskType == "-1")
+                string cacheKey = Md5Helper.Hash(PageNo.ToString() + PageSize.ToString() + TaskType + sort.ToString() + appid);
+                DataTable taskList = redisCache.Read(cacheKey, 7);
+                if (taskList == null)
                 {
-                    queryDiction = "{\"appid\":\"" + appid + "\"}";
+                    string queryDiction = "";
+                    if (TaskType == "-1")
+                    {
+                        queryDiction = "{\"appid\":\"" + appid + "\"}";
+                    }
+                    else
+                    {
+                        queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\"}";
+                    }
+
+                    taskList = dm_TaskIBLL.GetPageListByDataTable(new Pagination
+                    {
+                        page = PageNo,
+                        rows = PageSize,
+                        sidx = sidx,
+                        sord = sord
+                    }, queryDiction, true);
+
+                    if (taskList.Rows.Count > 0)
+                    {
+                        redisCache.Write(cacheKey, taskList, DateTime.Now.AddMinutes(2), 7);
+                    }
                 }
-                else
-                {
-                    queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\"}";
-                }
-                return SuccessList("获取成功!", dm_TaskIBLL.GetPageListByDataTable(new Pagination
-                {
-                    page = PageNo,
-                    rows = PageSize,
-                    sidx = sidx,
-                    sord = sord
-                }, queryDiction, true));
+
+                return SuccessList("获取成功!", taskList);
             }
             catch (Exception ex)
             {
@@ -243,7 +256,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 DataTable dataTable = redisCache.Read(cacheKey, 7);
                 if (dataTable == null)
                 {
-                    dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(User_ID, TaskStatus, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
+                    dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(User_ID, TaskStatus, new Pagination { page = PageNo, rows = PageSize, sidx = "revice_time", sord = "desc" });
                     /* 接受任务需要试试显示  此处先把缓存去掉 2020-08-04
                      * int datarow = dataTable.Rows.Count;
                     if (datarow > 0)
