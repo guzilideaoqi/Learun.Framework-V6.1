@@ -373,6 +373,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             mysonchildcount = 0;
             mypartnerscount = 0;
             isrelation_beian = 0;
+            partners = 0;
+            partnersstatus = 0;
         }
 
         public void Modify(int? keyValue)
