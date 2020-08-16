@@ -1,4 +1,5 @@
-﻿$(function () {
+﻿var OpenNav;
+$(function () {
     "use strict";
     var page = {
         init: function () {
@@ -195,6 +196,20 @@
     $(".lr-desktop-panel").mCustomScrollbar({ // 优化滚动条
         theme: "minimal-dark"
     });
+
+    OpenNav = function (moduleid) {
+        var _module = top.learun.clientdata.get(['modulesMap', moduleid]);
+        switch (_module.F_Target) {
+            case 'iframe':// 窗口
+                if (top.learun.validator.isNotNull(_module.F_UrlAddress).code) {
+                    top.learun.frameTab.open(_module);
+                }
+                else {
+
+                }
+                break;
+        }
+    }
 
     page.init();
 });

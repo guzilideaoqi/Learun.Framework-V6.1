@@ -262,7 +262,6 @@ var bootstrap = function ($, learun) {
             meuns.openApplist();
         }
     };
-
     
     meuns.init();
 };

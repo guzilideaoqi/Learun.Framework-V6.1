@@ -220,6 +220,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                  */
                 dm_alipay_recordEntity dm_Alipay_RecordEntity_old = this.BaseRepository("dm_data").FindEntity<dm_alipay_recordEntity>(t => t.out_trade_no == dm_Alipay_RecordEntity.out_trade_no);
 
+                ///如果老的记录是已支付状态则不需要再执行修改和返利
+                if (!dm_Alipay_RecordEntity_old.alipay_status.IsEmpty() && dm_Alipay_RecordEntity_old.alipay_status.ToUpper() == "TRADE_SUCCESS")
+                    return;
+
                 if (dm_Alipay_RecordEntity_old.templateid == 99)//余额充值
                 {
                     dm_userEntity dm_UserEntity = dM_UserService.GetEntity(dm_Alipay_RecordEntity_old.user_id);
@@ -231,9 +235,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     dm_accountdetailEntity dm_AccountdetailEntity = GeneralAccountDetail(dm_Alipay_RecordEntity_old.user_id, 21, "余额充值", "账户充值", (decimal)dm_Alipay_RecordEntity_old.total_amount, dm_UserEntity.accountprice);
 
+                    dm_Alipay_RecordEntity.Modify(dm_Alipay_RecordEntity_old.id);
+
                     db = BaseRepository("dm_data").BeginTrans();
                     db.Update(dm_UserEntity);
                     db.Insert(dm_AccountdetailEntity);
+                    db.Update(dm_Alipay_RecordEntity);//优化支付成功未更改支付状态  造成金额多次修改
                     db.Commit();
                 }
                 else
@@ -245,9 +252,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     dm_userEntity currentUser = null, one_User = null, two_User = null, one_partners = null, two_partners = null;
 
-                    ///如果老的记录是已支付状态则不需要再执行修改和返利
-                    if (!dm_Alipay_RecordEntity_old.alipay_status.IsEmpty() && dm_Alipay_RecordEntity_old.alipay_status.ToUpper() == "TRADE_SUCCESS")
-                        return;
+
 
                     if (dm_Alipay_RecordEntity_old.IsEmpty())
                         throw new Exception("根据外部交易单号未能查询到支付记录,当前传入外部交易单号" + dm_Alipay_RecordEntity.out_trade_no);
