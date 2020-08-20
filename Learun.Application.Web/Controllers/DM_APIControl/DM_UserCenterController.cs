@@ -302,6 +302,27 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 注销账户
+        /// <summary>
+        /// 注销账户
+        /// </summary>
+        /// <param name="User_ID"></param>
+        /// <returns></returns>
+        public ActionResult CloseAccount(int User_ID = 0)
+        {
+            try
+            {
+                if (User_ID <= 0)
+                    return FailNoLogin();
+                return Success("注销成功", "");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 获取效果收益报表
         /// <summary>
         /// 获取效果收益报表

@@ -13,5 +13,9 @@ namespace Learun.Application.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult CloseAccount() {
+            return View();
+        }
     }
 }

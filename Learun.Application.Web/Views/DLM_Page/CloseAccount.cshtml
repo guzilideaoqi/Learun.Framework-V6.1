@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账号注销</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+</head>
+<body>
+    <div class="container body-content">
+        <div>
+            <h4 style="text-align:center;padding:15px 0 10px 0;font-weight:600;color:#474747;opacity:0.8">很抱歉,我们在这里见面</h4>
+            <p style="text-align:center;color:#A5A5A5">如果您是误操作,请取消申请</p>
+            <div style="background-color:#ffffff;padding:10px;">
+                <p style="font-weight:bold;">注销提示:</p>
+                <p style="font-weight:bold;">一旦账号注销成功</p>
+                <ul style="line-height:25px;font-size:12px;">
+                    <li>您账号将无法登录使用</li>
+                    <li>您的账号信息与会员权益将会永久清除且无法恢复</li>
+                    <li>您的收益、粉丝与成长值将被永久清空且无法恢复</li>
+                    <li>您的账号所关联的订单将无法查询与找回</li>
+                    <li>您在哆来米购买的物品将无法进行售后</li>
+                    <li>
+                        您在哆来米的账号信息及会员权益将会永久清除且无
+                        法恢复
+                    </li>
+                    <li style="color:red;">
+                        您所绑定的手机号3个月内将无法再次注册哆来米
+                    </li>
+                </ul>
+            </div>
+            <div style="margin-top:80px">
+                <div style="border-radius:20px;background-color:#E3E3E3;color:#8A8A8A;width:34%;text-align:center;padding:10px 0;float:left;margin-left:30px;">继续注销</div>
+                <div style="border-radius:20px;background-color:#DC4D45;color:white;width:34%;text-align:center;padding:10px 0;float:left;margin-left:30px;">暂不注销</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+<script>
+    alert(fGetQuery("user_id"));
+    function fGetQuery(name) {
+        var sUrl = window.location.search.substr(1);
+        var r = sUrl.match(new RegExp("(^|&)" + name + "=([^&]*)(&|$)"));
+        return (r == null ? null : unescape(r[2]));
+
+    }
+</script>
+
+
+
+

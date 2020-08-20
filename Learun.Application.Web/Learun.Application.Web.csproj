@@ -2384,6 +2384,7 @@
     <Content Include="Views\DLM_Page\Index.cshtml" />
     <Content Include="Views\Shared\_dlm_Form.cshtml" />
     <Content Include="Content\dlm\sy.woff" />
+    <Content Include="Views\DLM_Page\CloseAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

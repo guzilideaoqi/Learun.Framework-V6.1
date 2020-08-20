@@ -218,7 +218,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                string queryChildSql = "select u.nickname,u.headpic,u.phone,u.userlevel,u.createtime,ur.user_id,ur.ordercount,ur.taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.parent_id=" + user_id;
+                string queryChildSql = "select u.nickname,u.headpic,u.phone,u.userlevel,u.createtime,ur.user_id,ur.ordercount,ur.ReviceTaskCount taskcount,ur.partners_id from dm_user_relation ur left join dm_user u on ur.user_id=u.id where ur.parent_id=" + user_id;
                 return BaseRepository("dm_data").FindTable(queryChildSql, new Pagination { page = PageNo, rows = PageSize, sidx = "createtime", sord = "desc" });
             }
             catch (Exception ex)

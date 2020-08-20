@@ -267,9 +267,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_Apply_CashrecordEntity.status = 0;
                     #endregion
 
+                    #region 增加余额变更明细(2020-08-20)
+                    dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity();
+                    dm_AccountdetailEntity.currentvalue = dm_Apply_CashrecordEntity.currentprice;
+                    dm_AccountdetailEntity.stepvalue = dm_Apply_CashrecordEntity.price;
+                    dm_AccountdetailEntity.type = 11;
+                    dm_AccountdetailEntity.title = "提现";
+                    dm_AccountdetailEntity.remark = "账户余额提现";
+                    dm_AccountdetailEntity.user_id = dm_Apply_CashrecordEntity.user_id;
+                    dm_AccountdetailEntity.createtime = DateTime.Now;
+                    #endregion
+
                     db = BaseRepository("dm_data").BeginTrans();
                     db.Update(dm_UserEntity);
                     db.Insert(dm_Apply_CashrecordEntity);
+                    db.Insert(dm_AccountdetailEntity);
 
                     db.Commit();
                 }
@@ -308,18 +320,20 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_Apply_CashrecordEntity.status = 1;
                 dm_Apply_CashrecordEntity.checktime = DateTime.Now;
 
-                dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity();
+                /*
+                 * 余额明细在提现列表返回
+                 * dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity();
                 dm_AccountdetailEntity.currentvalue = dm_Apply_CashrecordEntity.currentprice;
                 dm_AccountdetailEntity.stepvalue = dm_Apply_CashrecordEntity.price;
                 dm_AccountdetailEntity.type = 11;
                 dm_AccountdetailEntity.title = "提现";
                 dm_AccountdetailEntity.remark = "账户余额提现";
                 dm_AccountdetailEntity.user_id = dm_Apply_CashrecordEntity.user_id;
-                dm_AccountdetailEntity.createtime = DateTime.Now;
+                dm_AccountdetailEntity.createtime = DateTime.Now;*/
 
                 db = BaseRepository("dm_data").BeginTrans();
                 db.Update(dm_Apply_CashrecordEntity);
-                db.Insert(dm_AccountdetailEntity);
+                //db.Insert(dm_AccountdetailEntity);
                 db.Commit();
             }
             catch (Exception ex)

@@ -14,7 +14,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
 {
     public class VerificationAPIAttribute : AuthorizeAttribute
     {
-        string[] actionNameList = new string[] { "dm_login", "dm_register", "paycallback", "authorcallback", "callback", "authorresult", "getgoodtypebycache", "getrankinglist", "gettodaygood", "commonsearchgood", "getsuperserachgood", "getdtksearchgood", "getrecommendgoodbytb", "getopgood", "getactivitygoodlist", "gettopiccatalogue", "gettopicgoodlist", "gettbtopiclist", "get_jd_goodlist", "get_jd_searchgoodlist", "get_pdd_goodlist", "getrecommendgoodbypdd", "getgoodimagedetail", "getgooddetailbytb", "getbannerlist", "getgoodsmallcate", "getpersoninfo" };
+        string[] actionNameList = new string[] { "dm_login", "dm_register", "paycallback", "authorcallback", "callback", "authorresult", "getgoodtypebycache", "getrankinglist", "gettodaygood", "commonsearchgood", "getsuperserachgood", "getdtksearchgood", "getrecommendgoodbytb", "getopgood", "getactivitygoodlist", "gettopiccatalogue", "gettopicgoodlist", "gettbtopiclist", "get_jd_goodlist", "get_jd_searchgoodlist", "get_pdd_goodlist", "getrecommendgoodbypdd", "getgoodimagedetail", "getgooddetailbytb", "getbannerlist", "getgoodsmallcate", "getpersoninfo", "getverification", "resetpwd" };
         private ICache redisCache = CacheFactory.CaChe();
         private FilterMode _customMode;
         /// <summary>默认构造</summary>
