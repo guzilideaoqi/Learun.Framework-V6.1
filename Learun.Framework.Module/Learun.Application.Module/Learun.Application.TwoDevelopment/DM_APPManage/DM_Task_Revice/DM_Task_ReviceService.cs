@@ -519,6 +519,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 decimal do_task_commission = 0, one_agent_commission = 0, two_agent_commission = 0, one_partners_commission = 0, two_partners_commission = 0;
 
                 dm_userEntity currentUser = null, one_User = null, two_User = null, one_partners = null, two_partners = null;
+                string currentNickName = "";
 
                 dm_task_reviceEntity dm_Task_ReviceEntity = GetEntity(revice_id);
                 if (dm_Task_ReviceEntity.status == 4)
@@ -563,6 +564,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 #region 做任务人返佣
                 currentUser = userList.Where(t => t.id == dm_Task_ReviceEntity.user_id).FirstOrDefault();
+                currentNickName = currentUser.nickname;//记录下接单人的昵称  防止丢失
                 if (currentUser.IsEmpty())
                     throw new Exception("用户信息异常!");
                 if (currentUser.userlevel == 0)
@@ -595,7 +597,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         if (one_agent_commission > 0)
                         {
                             one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
-                            dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 15, "下级做任务", "您的下级《" + currentUser.nickname + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_agent_commission, one_User.accountprice));
+                            dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 15, "下级做任务", "您的下级《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_agent_commission, one_User.accountprice));
                         }
                     }
 
@@ -611,7 +613,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             if (two_agent_commission > 0)
                             {
                                 two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 16, "下下级做任务", "您的二级《" + currentUser.nickname + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 16, "下下级做任务", "您的二级《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_agent_commission, two_User.accountprice));
                             }
                         }
                     }
@@ -627,7 +629,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     if (one_partners_commission > 0)
                     {
                         one_partners = CalculateComission(one_partners.id, one_partners_commission, one_partners.accountprice);
-                        dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 17, "团队成员做任务", "您的团队成员《" + currentUser.nickname + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_partners_commission, one_partners.accountprice));
+                        dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 17, "团队成员做任务", "您的团队成员《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_partners_commission, one_partners.accountprice));
                     }
 
                     #region 二级合伙人
@@ -642,7 +644,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             if (two_partners_commission > 0)
                             {
                                 two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 18, "下级团队成员做任务", "您的下级团队成员《" + currentUser.nickname + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_partners_commission, two_partners.accountprice));
+                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 18, "下级团队成员做任务", "您的下级团队成员《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_partners_commission, two_partners.accountprice));
                             }
                         }
                     }
