@@ -344,7 +344,31 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw ExceptionEx.ThrowServiceException(ex);
                 }
             }
+        }
 
+        /// <summary>
+        /// 任务下架
+        /// </summary>
+        /// <param name="id"></param>
+        public void DownTask(int id)
+        {
+            try
+            {
+                dm_taskEntity entity = GetEntity(id);
+                entity.task_status = 3;
+                this.BaseRepository("dm_data").Update(entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
         }
 
         #endregion

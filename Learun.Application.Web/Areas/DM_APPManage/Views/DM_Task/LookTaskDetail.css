@@ -1,0 +1,17 @@
+﻿input {
+    border: 0px !important;
+    outline: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+.lr-layout-body {
+    padding: 10px;
+}
+
+.task_title {
+    margin: 5px;
+    font-weight: 600;
+}
+img {
+width:260px;
+height:360px;margin:5px;
+}

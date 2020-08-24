@@ -339,6 +339,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
                 if (dm_TaskEntity.IsEmpty())
                     throw new Exception("任务id错误!");
+                if (dm_TaskEntity.task_status == -2)
+                    throw new Exception("任务正在审核中，暂时无法接受!");
+                if (dm_TaskEntity.task_status == 1)
+                    throw new Exception("您来晚了一步,当前任务已抢光!");
+                if (dm_TaskEntity.task_status == 2)
+                    throw new Exception("当前任务已取消,您可接受其他任务!");
+                if (dm_TaskEntity.task_status == 3)
+                    throw new Exception("当前任务已下架,您可接受其他任务!");
                 /*一个任务可重复接受  2020-07-27*/
                 /*dm_task_reviceEntity reviceEntity = GetReviceEntity(dm_Task_ReviceEntity.user_id, dm_Task_ReviceEntity.task_id);
                 if (!reviceEntity.IsEmpty())

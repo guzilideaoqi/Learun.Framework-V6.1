@@ -2,25 +2,19 @@
     ViewBag.Title = "套餐模板";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
-<div class="lr-layout lr-layout-left-center" id="lr_layout">
-    <div class="lr-layout-left">
-        <div class="lr-layout-wrap">
-            <div class="lr-layout-title">树形目录</div>
-            <div id="tree" class="lr-layout-body"></div>
-        </div>
-    </div>
+<div class="lr-layout lr-layout-center" id="lr_layout">
     <div class="lr-layout-center">
         <div class="lr-layout-wrap">
-            <div class="lr-layout-title">标题</div>
+            <div class="lr-layout-title">套餐列表</div>
             <div class="lr-layout-tool">
-                <div class="lr-layout-tool-left">
+                @*<div class="lr-layout-tool-left">
                     <div class="lr-layout-tool-item">
                         <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" />
                     </div>
                     <div class="lr-layout-tool-item">
                         <a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</a>
                     </div>
-                </div>
+                </div>*@
                 <div class="lr-layout-tool-right">
                     <div class=" btn-group btn-group-sm">
                         <a id="lr_refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>

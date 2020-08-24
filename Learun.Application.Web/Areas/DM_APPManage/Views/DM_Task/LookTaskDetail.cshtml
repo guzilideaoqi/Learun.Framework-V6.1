@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "任务详情";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@Html.AppendCssFile("/Areas/DM_APPManage/Views/DM_Task/LookTaskDetail.css")
+<div class="step-pane" id="step-3" style="overflow-y: scroll;">
+    <ul class="nav nav-tabs lr-form-tab" id="nav_tabs">
+        <li class="active"><a data-value="entityCodediv">基本信息</a></li>
+        <li><a data-value="mapCodediv">操作预览</a></li>
+        <li><a data-value="serviceCodediv">任务要求</a></li>
+        @*<li><a data-value="ibllCodediv">订单数据</a></li>*@
+    </ul>
+    <div class="tab-content" id="tab_content">
+        <div id="entityCodediv" class="tab-pane active">
+            <div id="entityCode">
+                <div class="lr-form-wrap" id="form">
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">任务编号<font face="宋体">*</font></div>
+                        <input id="task_no" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">任务状态<font face="宋体">*</font></div>
+                        <input id="task_status" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">任务总佣金<font face="宋体">*</font></div>
+                        <input id="totalcommission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">服务费<font face="宋体">*</font></div>
+                        <input id="servicefee" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">初级佣金<font face="宋体">*</font></div>
+                        <input id="juniorcommission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">高级佣金<font face="宋体">*</font></div>
+                        <input id="seniorcommission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">每一单佣金<font face="宋体">*</font></div>
+                        <input id="singlecommission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">需求人数<font face="宋体">*</font></div>
+                        <input id="needcount" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">当前接受人数<font face="宋体">*</font></div>
+                        <input id="revicecount" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-6 lr-form-item">
+                        <div class="lr-form-item-title">当前完成人数<font face="宋体">*</font></div>
+                        <input id="finishcount" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-12 lr-form-item">
+                        <div class="lr-form-item-title">任务标题<font face="宋体">*</font></div>
+                        <input id="task_title" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+                    <div class="col-xs-12 lr-form-item">
+                        <div class="lr-form-item-title">任务描述<font face="宋体">*</font></div>
+                        <input id="task_description" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                    </div>
+
+                    @*<div class="col-xs-12 lr-form-item">
+                            <div class="lr-form-item-title">任务操作<font face="宋体">*</font></div>
+                            <input id="task_operate" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+                        </div>
+                        <div class="col-xs-12 lr-form-item">
+                            <div class="lr-form-item-title">任务提交数据<font face="宋体">*</font></div>
+                            <input id="submit_data" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+                        </div>*@
+
+                </div>
+            </div>
+        </div>
+        <div id="mapCodediv" class="tab-pane"><div id="task_operate" class="lr-layout-body"></div></div>
+        <div id="serviceCodediv" class="tab-pane"><div id="submit_data" class="lr-layout-body"></div></div>
+    </div>
+</div>
+
+
+
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_Task/LookTaskDetail.js")

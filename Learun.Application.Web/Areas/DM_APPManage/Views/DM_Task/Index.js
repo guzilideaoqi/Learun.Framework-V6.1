@@ -7,7 +7,9 @@
 var selectedRow;
 var refreshGirdData;
 var LookReviceDetail;
+var LookTaskDetail;
 var CheckTask;
+var DownTask;
 var bootstrap = function ($, learun) {
     "use strict";
     var page = {
@@ -81,34 +83,45 @@ var bootstrap = function ($, learun) {
                 headData: [
                     //{ label: 'id', name: 'id', width: 200, align: "left" },
                     { label: '任务编号', name: 'task_no', width: 200, align: "left" },
-                    { label: 'task_title', name: 'task_title', width: 200, align: "left" },
+                    {
+                        label: '任务标题', name: 'task_title', width: 200, align: "left", formatter: function (cellvalue, rowData, options) {
+                            var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'");
+                            return "<a onclick=\"LookTaskDetail(" + tempJsonStr + ");\" href=\"#\">" + cellvalue + "</a>";
+                        } },
                     //{ label: '任务类型', name: 'task_type', width: 200, align: "left" },
                     {
-                        label: '任务状态', name: 'task_status', width: 80, align: "left", formatter: function (cellvalue, rowData, options) {
+                        label: '任务状态', name: 'task_status', width: 80, align: "center", formatter: function (cellvalue, rowData, options) {
                             var status = "";
                             switch (cellvalue) {
                                 case -2:
-                                    var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
+                                    var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'");
                                     status = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;margin-left:8px;\" onclick=\"CheckTask(" + tempJsonStr + ");\"><i class=\"fa fa-edit\"></i>&nbsp;审核</a>";
                                     break;
                                 case 0:
-                                    status = "未进行";
+                                    var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'");
+                                    status = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;margin-left:8px;\" onclick=\"DownTask(" + tempJsonStr + ");\"><i class=\"fa fa-edit\"></i>&nbsp;下架</a>";
+                                    //status = "进行中";
                                     break;
                                 case 1:
-                                    status = "进行中";
-                                    break;
-                                case 2:
                                     status = "已完成";
                                     break;
-                                case 3:
+                                case 2:
                                     status = "已取消";
+                                    break;
+                                case 3:
+                                    status = "已下架";
                                     break;
                             }
 
                             return status;
                         }
                     },
-                    { label: '任务描述', name: 'task_description', width: 200, align: "left" },
+                    {
+                        label: '任务描述', name: 'task_description', width: 200, align: "left", formatter: function (cellvalue, rowData, options) {
+                            var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'");
+                            return "<a onclick=\"LookTaskDetail(" + tempJsonStr + ");\" href=\"#\">" + cellvalue + "</a>";
+                        }
+                    },
                     //{ label: '任务操作', name: 'task_operate', width: 200, align: "left" },
                     {
                         label: '任务来源', name: 'plaform', width: 80, align: "left", formatter: function (cellvalue, rowData, options) {
@@ -136,8 +149,8 @@ var bootstrap = function ($, learun) {
                     {
                         label: '操作', name: 'id', width: 200, align: "left", formatter: function (cellvalue, rowData, options) {
                             var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'");
-                            //var btnList = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"LookUserDetail(" + tempJsonStr + ");\"><i class=\"fa fa-search\"></i>&nbsp;任务详情</a>";
-                            var btnList = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;margin-left:8px;\" onclick=\"LookReviceDetail(" + tempJsonStr + ");\"><i class=\"fa fa-edit\"></i>&nbsp;接单人信息</a>";
+                            var btnList = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"LookTaskDetail(" + tempJsonStr + ");\"><i class=\"fa fa-search\"></i>&nbsp;任务详情</a>";
+                            btnList += "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;margin-left:8px;\" onclick=\"LookReviceDetail(" + tempJsonStr + ");\"><i class=\"fa fa-edit\"></i>&nbsp;接单人信息</a>";
 
                             return btnList;
                         }
@@ -175,11 +188,36 @@ var bootstrap = function ($, learun) {
             }
         });
     };
+    LookTaskDetail = function (rowData) {
+        selectedRow = rowData;
+        learun.layerForm({
+            id: 'LookTaskDetail',
+            title: '任务详情',
+            url: top.$.rootUrl + '/DM_APPManage/DM_Task/LookTaskDetail?TaskID=' + selectedRow.id,
+            width: 600,
+            height: 700,
+            btn: ["关闭"],
+            callBack: function (id) {
+                return top[id].acceptClick(refreshGirdData);
+            }
+        });
+    };
     CheckTask = function (rowData) {
         selectedRow = rowData;
         learun.layerConfirm('审核通过之后任务将会在APP端展示,如果任务需要取消,请联系发布者在APP端任务详情中操作,是否继续？', function (res) {
             if (res) {
                 learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Task/CheckTaskByWeb', { keyValue: selectedRow.id }, function () {
+                    refreshGirdData();
+                });
+            }
+        })
+    };
+
+    DownTask = function (rowData) {
+        selectedRow = rowData;
+        learun.layerConfirm('任务下架后将无法在APP展示,已经接受任务的不影响返佣,是否继续操作？', function (res) {
+            if (res) {
+                learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Task/DownTask', { keyValue: selectedRow.id }, function () {
                     refreshGirdData();
                 });
             }

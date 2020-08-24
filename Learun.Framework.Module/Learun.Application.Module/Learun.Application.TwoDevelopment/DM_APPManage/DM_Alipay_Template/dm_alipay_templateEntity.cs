@@ -78,6 +78,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public void Modify(int? keyValue)
         {
             this.id = keyValue;
+            this.updatetime = DateTime.Now;
         }
         #endregion
     }

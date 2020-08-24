@@ -67,6 +67,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="id"></param>
         void CheckTaskByWeb(int id);
+
+        /// <summary>
+        /// 下架任务
+        /// </summary>
+        /// <param name="id"></param>
+        void DownTask(int id);
         #endregion
 
 

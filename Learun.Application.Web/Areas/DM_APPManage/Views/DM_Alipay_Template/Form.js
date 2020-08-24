@@ -11,6 +11,7 @@ var bootstrap = function ($, learun) {
     var selectedRow = learun.frameTab.currentIframe().selectedRow;
     var page = {
         init: function () {
+            page.initData();
         },
         bind: function () {
         },

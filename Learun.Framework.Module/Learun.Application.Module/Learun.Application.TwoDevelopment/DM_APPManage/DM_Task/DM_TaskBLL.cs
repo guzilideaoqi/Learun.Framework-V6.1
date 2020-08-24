@@ -205,6 +205,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        /// <summary>
+        /// 下架任务
+        /// </summary>
+        /// <param name="id"></param>
+        public void DownTask(int id) {
+            try
+            {
+                dM_TaskService.DownTask(id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
 
         #region Method Extend

@@ -23,7 +23,7 @@ var bootstrap = function ($, learun) {
                 text: 'name'
             });
 
-            $("#PubTask").bind("click", function () {
+            $("#PubTask").bind("click", function (callBack) {
                 if (!$('#form').lrValidform()) {
                     return false;
                 }
@@ -32,10 +32,10 @@ var bootstrap = function ($, learun) {
                 keyValue = (keyValue == null || keyValue == "") ? 0 : keyValue;
                 $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Task/PubNewTask?keyValue=' + keyValue, postData, function (res) {
                     // 保存成功后才回调
-                    if (!!callBack) {
-                        callBack();
-                    }
-                    learun.alert.success('发布成功');
+                    //if (!!callBack) {
+                    //    callBack();
+                    //}
+                    //learun.alert.success('发布成功');
                 });
             });
         },

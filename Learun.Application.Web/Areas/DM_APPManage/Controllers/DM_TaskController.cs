@@ -51,6 +51,16 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         {
             return View();
         }
+
+        /// <summary>
+        /// 获取任务详情
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult LookTaskDetail(string TaskID) {
+            return View();
+        }
         #endregion
 
         #region 获取数据
@@ -161,7 +171,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         public ActionResult PubNewTask(int keyValue, dm_taskEntity entity)
         {
             dM_TaskIBLL.ReleaseTaskByWeb(entity);
-            return Success("保存成功！");
+            return Success("发布成功！");
         }
 
         /// <summary>
@@ -176,6 +186,20 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         {
             dM_TaskIBLL.CheckTaskByWeb(keyValue);
             return Success("审核成功！");
+        }
+
+        /// <summary>
+        /// 后台审核发布任务
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult DownTask(int keyValue)
+        {
+            dM_TaskIBLL.DownTask(keyValue);
+            return Success("任务下架成功！");
         }
         #endregion
 

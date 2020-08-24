@@ -41,6 +41,7 @@ var bootstrap = function ($, learun) {
             $('#lr_edit').on('click', function () {
                 var keyValue = $('#girdtable').jfGridValue('id');
                 selectedRow = $('#girdtable').jfGridGet('rowdata');
+                console.log(selectedRow)
                 if (learun.checkrow(keyValue)) {
                     learun.layerForm({
                         id: 'form',
@@ -71,11 +72,18 @@ var bootstrap = function ($, learun) {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_Alipay_Template/GetPageList',
                 headData: [
-                        { label: 'id', name: 'id', width: 200, align: "left" },
+                        //{ label: 'id', name: 'id', width: 200, align: "left" },
                         { label: '套餐名称', name: 'name', width: 200, align: "left" },
                         { label: '套餐原价', name: 'goodprice', width: 200, align: "left" },
-                        { label: '套餐优惠价', name: 'finishprice', width: 200, align: "left" },
-                        { label: '是否为活动状态  0否  1是', name: 'isactive', width: 200, align: "left" },
+                    { label: '套餐优惠价', name: 'finishprice', width: 200, align: "left" },
+                    {
+                        label: '是否为活动状态', name: 'isactive', width: 200, align: "left", formatter: function (cellvalue, rowData, options) {
+                            if (cellvalue == 1)
+                                return "是";
+                            else
+                                return "否";
+                        }
+                    },
                         { label: '创建时间', name: 'createtime', width: 200, align: "left" },
                         { label: '修改时间', name: 'updatetime', width: 200, align: "left" },
                 ],
