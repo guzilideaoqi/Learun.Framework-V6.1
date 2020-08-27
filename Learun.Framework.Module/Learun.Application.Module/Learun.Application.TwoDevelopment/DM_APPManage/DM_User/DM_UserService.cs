@@ -80,6 +80,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         private static int s = 6;
 
+        const string SingleLogin = "SingleLogin_";
+
         public DM_UserService()
         {
             fieldSql = "    t.id,    t.realname,    t.identitycard,    t.isreal,    t.phone,    t.token,    t.pwd,    t.nickname,    t.accountprice,    t.invitecode,    t.partners,    t.partnersstatus,    t.tb_pid,    t.tb_relationid,    t.tb_orderrelationid,    t.jd_pid,    t.pdd_pid,    t.userlevel,    t.createtime,    t.updatetime,    t.appid,    t.province,    t.city,    t.down,    t.address,t.tb_nickname,t.isrelation_beian";
@@ -257,16 +259,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             #endregion
                         }
                     }
+
+                    if (!dm_UserEntity.IsEmpty())
+                    {
+                        #region 当前登录的token
+                        string cacheKey_token = SingleLogin + dm_UserEntity.id;
+                        string singleUser_Token = redisCache.Read<string>(cacheKey_token, 7);
+                        dm_UserEntity.token = singleUser_Token;
+                        #endregion
+                    }
                 }
 
-                if (!dm_UserEntity.IsEmpty())
-                {
-                    #region 当前登录的token
-                    string cacheKey_token = Md5Helper.Hash("SingleUserList" + dm_UserEntity.id);
-                    string singleUser_Token = redisCache.Read<string>(cacheKey_token, 7);
-                    dm_UserEntity.token = singleUser_Token;
-                    #endregion
-                }
+
 
                 return dm_UserEntity;
             }
@@ -1281,7 +1285,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             if (!dm_UserEntity.IsEmpty())
             {
-                string cacheKey = Md5Helper.Hash("SingleUserList" + dm_UserEntity.id);
+                string cacheKey = SingleLogin + dm_UserEntity.id;
                 string token = Guid.NewGuid().ToString();
                 redisCache.Write(cacheKey, token, 7);
                 dm_UserEntity.token = token;
