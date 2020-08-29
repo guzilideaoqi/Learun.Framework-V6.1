@@ -1892,6 +1892,9 @@
     <Content Include="Areas\LR_WorkFlowModule\Views\WfScheme\Form.cshtml" />
     <Content Include="Areas\LR_WorkFlowModule\Views\WfScheme\HistoryForm.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Hyg.Common\HYG.CommonHelper.dll" />
+    <Content Include="Hyg.Common\HYG.DTK.Helper.dll" />
+    <Content Include="Hyg.Common\TopSdk.dll" />
     <Content Include="mgkj_15.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
