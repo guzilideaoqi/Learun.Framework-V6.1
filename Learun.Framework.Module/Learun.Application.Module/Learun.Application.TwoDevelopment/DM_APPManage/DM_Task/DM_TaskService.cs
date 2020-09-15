@@ -169,6 +169,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     strSql.Append(" and t.task_title like '%" + queryParam["txt_title"].ToString() + "%'");
                 }
+                if (!queryParam["ischeckmode"].IsEmpty())
+                {
+                    strSql.Append(" and t.ischeckmode = '" + queryParam["ischeckmode"].ToString() + "'");
+                }
 
                 if (IsApi)
                 {

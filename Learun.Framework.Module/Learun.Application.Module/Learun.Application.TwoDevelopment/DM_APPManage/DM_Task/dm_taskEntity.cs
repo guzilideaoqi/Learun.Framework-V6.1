@@ -157,6 +157,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("TASK_TIME_LIMIT")]
         public int task_time_limit { get; set; }
+
+        /// <summary>
+        /// 审核模式  1是  0否
+        /// </summary>
+        [Column("ISCHECKMODE")]
+        public int ischeckmode { get; set; }
         #endregion
 
         #region 扩展操作
@@ -171,6 +177,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             this.revicecount = 0;
             this.createmonth = int.Parse(this.createtime.ToString("yyyyMM"));
             this.createdate = int.Parse(this.createtime.ToString("yyyyMMdd"));
+            this.ischeckmode = 0;
         }
         /// <summary>
         /// 编辑调用

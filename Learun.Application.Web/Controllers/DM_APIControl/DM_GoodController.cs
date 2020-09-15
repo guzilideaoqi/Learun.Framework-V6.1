@@ -104,7 +104,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Super_CategoryRequest dTK_Super_CategoryRequest = new DTK_Super_CategoryRequest();
-                    dTK_Super_CategoryRequest.version = "v1.1.0";
                     DTK_Super_CategoryResponse dTK_Super_CategoryResponse = dTK_ApiManage.GetSuperCategory(dTK_Super_CategoryRequest);
                     if (dTK_Super_CategoryResponse.code != 0)
                     {
@@ -135,7 +134,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Top100_Request dTK_Top100_Request = new DTK_Top100_Request();
-                    dTK_Top100_Request.version = "v1.0.1";
                     DTK_Top100_Response dTK_Top100_Response = dTK_ApiManage.GetTop100(dTK_Top100_Request);
                     if (dTK_Top100_Response.code != 0)
                     {
@@ -174,7 +172,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Ranking_ListRequest dTK_Ranking_ListRequest = new DTK_Ranking_ListRequest();
-                    dTK_Ranking_ListRequest.version = "v1.1.2";
                     dTK_Ranking_ListRequest.rankType = RandType;
                     //dTK_Ranking_ListRequest.cid = cateid;
                     DTK_Ranking_ListResponse dTK_Ranking_ListResponse = dTK_ApiManage.GetRankingList(dTK_Ranking_ListRequest);
@@ -264,7 +261,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (true)
                     {//数据切换  此处先定死
                         DTK_OP_ListRequest dTK_OP_ListRequest = new DTK_OP_ListRequest();
-                        dTK_OP_ListRequest.version = "v1.2.2";
                         dTK_OP_ListRequest.nineCid = "1";
                         dTK_OP_ListRequest.pageId = "1";
                         dTK_OP_ListRequest.pageSize = 10;
@@ -281,7 +277,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     else
                     {
                         DTK_Ranking_ListRequest dTK_Ranking_ListRequest = new DTK_Ranking_ListRequest();
-                        dTK_Ranking_ListRequest.version = "v1.1.2";
                         dTK_Ranking_ListRequest.rankType = 7;
                         DTK_Ranking_ListResponse dTK_Ranking_ListResponse = dTK_ApiManage.GetRankingList(dTK_Ranking_ListRequest);
                         if (dTK_Ranking_ListResponse.code != 0)
@@ -324,7 +319,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         if (dm_BasesettingEntity.goodsource == 0)
                         {
                             DTK_TB_Service_GoodRequest dTK_TB_Service_GoodRequest = new DTK_TB_Service_GoodRequest();
-                            dTK_TB_Service_GoodRequest.version = "v2.0.0";
                             dTK_TB_Service_GoodRequest.pageNo = PageNo;
                             dTK_TB_Service_GoodRequest.pageSize = PageSize;
                             dTK_TB_Service_GoodRequest.keyWords = GetNumid(KeyWords);
@@ -342,7 +336,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         else
                         {
                             DTK_Super_GoodRequest dTK_Super_GoodRequest = new DTK_Super_GoodRequest();
-                            dTK_Super_GoodRequest.version = "v1.2.1";
                             dTK_Super_GoodRequest.type = 0;
                             dTK_Super_GoodRequest.pageId = PageNo;
                             dTK_Super_GoodRequest.pageSize = PageSize;
@@ -478,7 +471,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Super_GoodRequest dTK_Super_GoodRequest = new DTK_Super_GoodRequest();
-                    dTK_Super_GoodRequest.version = "v1.2.1";
                     dTK_Super_GoodRequest.type = type;
                     dTK_Super_GoodRequest.pageId = pageId;
                     dTK_Super_GoodRequest.pageSize = pageSize;
@@ -521,7 +513,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Get_dtk_Search_GoodRequest dtk_Get_dtk_Search_GoodRequest = new DTK_Get_dtk_Search_GoodRequest();
-                    dtk_Get_dtk_Search_GoodRequest.version = "v2.1.2";
                     dtk_Get_dtk_Search_GoodRequest.pageId = pageId.ToString();
                     dtk_Get_dtk_Search_GoodRequest.pageSize = pageSize;
                     if (subcid > -1)
@@ -581,7 +572,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         int? min_price = dm_BasesettingEntity.min_price, max_price = dm_BasesettingEntity.max_price, min_tk_rate = dm_BasesettingEntity.min_tk_rate, max_tk_rate = dm_BasesettingEntity.max_tk_rate;
 
                         DTK_TB_Service_GoodRequest dTK_TB_Service_GoodRequest = new DTK_TB_Service_GoodRequest();
-                        dTK_TB_Service_GoodRequest.version = "v2.0.0";
                         dTK_TB_Service_GoodRequest.pageNo = PageNo;
                         dTK_TB_Service_GoodRequest.pageSize = PageSize;
                         dTK_TB_Service_GoodRequest.keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname.Substring(0, 1));
@@ -605,7 +595,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     {
                         CategoryItem categoryItem = categoryItems.Where(t => t.cid == dm_BasesettingEntity.super_coupon_goodtype).FirstOrDefault();
                         DTK_Get_dtk_Search_GoodRequest dtk_Get_dtk_Search_GoodRequest = new DTK_Get_dtk_Search_GoodRequest();
-                        dtk_Get_dtk_Search_GoodRequest.version = "v2.1.2";
                         dtk_Get_dtk_Search_GoodRequest.pageId = PageNo.ToString();
                         dtk_Get_dtk_Search_GoodRequest.pageSize = PageSize;
                         dtk_Get_dtk_Search_GoodRequest.keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname);
@@ -672,7 +661,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_OP_ListRequest dTK_OP_ListRequest = new DTK_OP_ListRequest();
-                    dTK_OP_ListRequest.version = "v1.1.0";
                     dTK_OP_ListRequest.nineCid = nineCid;
                     dTK_OP_ListRequest.pageId = pageId;
                     dTK_OP_ListRequest.pageSize = pageSize;
@@ -714,7 +702,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Search_SuggestionRequest dTK_Search_SuggestionRequest = new DTK_Search_SuggestionRequest();
-                    dTK_Search_SuggestionRequest.version = "v1.0.2";
                     dTK_Search_SuggestionRequest.type = type;
                     dTK_Search_SuggestionRequest.keyWords = keyWords;
                     DTK_Search_SuggestionResponse dTK_Search_SuggestionResponse = dTK_ApiManage.GetSearchSuggestion(dTK_Search_SuggestionRequest);
@@ -751,7 +738,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Activity_CatalogueRequest dTK_Activity_CatalogueRequest = new DTK_Activity_CatalogueRequest();
-                    dTK_Activity_CatalogueRequest.version = "v1.1.0";
                     DTK_Activity_CatalogueResponse dTK_Activity_CatalogueResponse = dTK_ApiManage.GetActivityCatalogueList(dTK_Activity_CatalogueRequest);
                     if (dTK_Activity_CatalogueResponse.code != 0)
                     {
@@ -796,7 +782,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Activity_GoodListRequest dTK_Activity_GoodListRequest = new DTK_Activity_GoodListRequest();
-                    dTK_Activity_GoodListRequest.version = "v1.2.2";
                     dTK_Activity_GoodListRequest.pageId = pageId;
                     dTK_Activity_GoodListRequest.pageSize = pageSize;
                     if (cid > -1)
@@ -837,7 +822,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Topic_CatalogueRequest dTK_Topic_CatalogueRequest = new DTK_Topic_CatalogueRequest();
-                    dTK_Topic_CatalogueRequest.version = "v1.1.0";
                     DTK_Topic_CatalogueResponse dTK_Topic_CatalogueResponse = dTK_ApiManage.GetTopicCatalogue(dTK_Topic_CatalogueRequest);
                     if (dTK_Topic_CatalogueResponse.code != 0)
                     {
@@ -883,7 +867,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Topic_GoodListRequest dTK_Topic_GoodListRequest = new DTK_Topic_GoodListRequest();
-                    dTK_Topic_GoodListRequest.version = "v1.2.0";
                     dTK_Topic_GoodListRequest.pageId = pageId;
                     dTK_Topic_GoodListRequest.pageSize = pageSize;
                     dTK_Topic_GoodListRequest.topicId = topicId;
@@ -923,7 +906,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_TB_Topic_ListRequest dTK_TB_Topic_ListRequest = new DTK_TB_Topic_ListRequest();
-                    dTK_TB_Topic_ListRequest.version = "v1.2.0";
                     dTK_TB_Topic_ListRequest.type = type;
                     dTK_TB_Topic_ListRequest.pageId = pageId;
                     dTK_TB_Topic_ListRequest.pageSize = pageSize;
@@ -987,7 +969,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                     DTK_Privilege_LinkRequest dTK_Privilege_LinkRequest = new DTK_Privilege_LinkRequest();
-                    dTK_Privilege_LinkRequest.version = "v1.1.1";
                     dTK_Privilege_LinkRequest.goodsId = originid;
                     dTK_Privilege_LinkRequest.pid = dm_BasesettingEntity.tb_relation_pid;
                     dTK_Privilege_LinkRequest.channelId = dm_UserEntity.tb_relationid.ToString();
@@ -1031,7 +1012,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
                 DTK_Get_Good_DetailsRequest dTK_Get_Good_DetailsRequest = new DTK_Get_Good_DetailsRequest();
                 dTK_Get_Good_DetailsRequest.goodsId = goodid;
-                dTK_Get_Good_DetailsRequest.version = "v1.2.2";
                 DTK_Get_Good_DetailsResponse dTK_Get_Good_DetailsResponse = dTK_ApiManage.GetGoodDetail(dTK_Get_Good_DetailsRequest);
                 if (dTK_Get_Good_DetailsResponse.code == 0)
                     return dTK_Get_Good_DetailsResponse.data;

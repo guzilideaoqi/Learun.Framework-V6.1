@@ -68,19 +68,32 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 #endregion
 
-                string cacheKey = Md5Helper.Hash(PageNo.ToString() + PageSize.ToString() + TaskType + sort.ToString() + appid);
+                int status = 1;
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                GetPreviewVersion(dm_BasesettingEntity, ref status);
+
+
+                string cacheKey = Md5Helper.Hash(PageNo.ToString() + PageSize.ToString() + TaskType + sort.ToString() + appid + status);
                 DataTable taskList = redisCache.Read(cacheKey, 7);
                 if (taskList == null)
                 {
                     string queryDiction = "";
-                    if (TaskType == "-1")
-                    {
-                        queryDiction = "{\"appid\":\"" + appid + "\"}";
+                    if (status == 2)
+                    {//获取审核模式下的任务
+                        queryDiction = "{\"appid\":\"" + appid + "\",\"ischeckmode\":\"1\"}";
                     }
                     else
                     {
-                        queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\"}";
+                        if (TaskType == "-1")
+                        {
+                            queryDiction = "{\"appid\":\"" + appid + "\"}";
+                        }
+                        else
+                        {
+                            queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\"}";
+                        }
                     }
+
 
                     taskList = dm_TaskIBLL.GetPageListByDataTable(new Pagination
                     {
@@ -458,6 +471,35 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 throw new Exception("缺少参数appid");
             }
             return base.Request.Headers["appid"].ToString();
+        }
+
+        public string CheckPlaform()
+        {
+            if (base.Request.Headers["platform"].IsEmpty())
+            {
+                throw new Exception("缺少参数platform");
+            }
+            return base.Request.Headers["platform"].ToString();
+        }
+
+        public string CheckVersion()
+        {
+            if (base.Request.Headers["version"].IsEmpty())
+            {
+                throw new Exception("缺少参数version");
+            }
+            return base.Request.Headers["version"].ToString();
+        }
+
+        public void GetPreviewVersion(dm_basesettingEntity dm_BasesettingEntity, ref int Status)
+        {
+            if (dm_BasesettingEntity.openchecked == "1")
+            { //开启审核模式
+                string version = CheckVersion();
+                string platform = CheckPlaform();
+                if ((platform == "ios" && version == dm_BasesettingEntity.previewversion) || (platform == "android" && version == dm_BasesettingEntity.previewversionandroid))
+                    Status = 2;
+            }
         }
     }
 }
