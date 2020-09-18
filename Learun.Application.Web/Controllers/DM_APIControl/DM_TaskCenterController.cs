@@ -429,11 +429,22 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                return SuccessList("获取成功", dM_ReadTaskIBLL.GetPageListByCache(new Pagination
+
+                int status = 1;
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                GetPreviewVersion(dm_BasesettingEntity, ref status);
+
+                IEnumerable<dm_readtaskEntity> dm_ReadtaskList = dM_ReadTaskIBLL.GetPageListByCache(new Pagination
                 {
                     page = PageNo,
                     rows = PageSize
-                }, appid), new { HeadImage = "http://dlm-appmanage.oss-cn-beijing.aliyuncs.com/20200523/81ce199c-a046-494f-8101-57a9da4e0724.png" });
+                }, appid);
+
+                if (status == 2) {
+                    dm_ReadtaskList = dm_ReadtaskList.Where(t => t.ischeckmode == 1);
+                }
+
+                return SuccessList("获取成功", dm_ReadtaskList, new { HeadImage = "http://dlm-appmanage.oss-cn-beijing.aliyuncs.com/20200523/81ce199c-a046-494f-8101-57a9da4e0724.png" });
             }
             catch (Exception ex)
             {

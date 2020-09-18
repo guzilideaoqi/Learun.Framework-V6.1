@@ -19,7 +19,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public DM_ReadTaskService()
 		{
-			fieldSql = "    t.id,    t.tasktitle,    t.taskremark,    t.taskurl,    t.taskimage,    t.peoplecount,    t.createtime,    t.createcode,    t.updatetime,    t.appid";
+			fieldSql = "    t.id,    t.tasktitle, t.ischeckmode,   t.taskremark,    t.taskurl,    t.taskimage,    t.peoplecount,    t.createtime,    t.createcode,    t.updatetime,    t.appid";
 		}
 
 		public IEnumerable<dm_readtaskEntity> GetList(string queryJson)

@@ -77,7 +77,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
-		public void Create()
+        /// <summary>
+        /// 是否为审核模式 1=是 0=否
+        /// </summary>
+        [Column("ISCHECKMODE")]
+        public int? ischeckmode { get; set; }
+
+
+        public void Create()
 		{
 			UserInfo userInfo = LoginUserInfo.Get();
 			createtime = DateTime.Now;
