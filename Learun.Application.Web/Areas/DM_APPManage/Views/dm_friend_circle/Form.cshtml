@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "官推文案";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .image_div {
+        float: left;
+        position: relative;
+    }
+
+    .remove_span {
+        position: absolute;
+        right: -5px;
+        top: -7px;
+        background: red;
+        padding: 2px;
+        color: white;
+        border-radius: 10px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .image_div img {
+        width: 100px;
+        height: 100px;
+        margin: 5px;
+    }
+</style>
+@*<link href="/Areas/DM_APPManage/Views/dm_friend_circle/zepto.css" rel="stylesheet" />*@
+@Html.AppendCssFile("/Areas/DM_APPManage/Views/dm_friend_circle/zepto.css")
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">文案内容<font face="宋体">*</font></div>
+        <input id="t_content" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">图片链接数组<font face="宋体">*</font></div>
+        <div class="weui-uploader__bd">
+            <ul class="weui-uploader__files weui-uploader__file_status" id="uploaderFiles">
+                @*<li class="weui-uploader__file" style="background-image:url(t.png)"></li>*@
+            </ul>
+            <div class="weui-uploader__input-box">
+                <input id="uploaderInput" class="weui-uploader__input" accept="image/*" multiple="" type="file">
+            </div>
+        </div>
+
+
+        @*<div class="file">
+                <div class="image_div"><img src="/Content/images/head/on-boy.jpg" id="uploadPreview" onerror="loaddfimg()"> <input style="position:absolute;left:5px;top:5px;width:100px;height:100px" type="file" name="uploadFile" id="uploadFile" multiple="multiple" maxFileCount="9"></div>
+
+            </div>*@
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">排序<font face="宋体">*</font></div>
+        <input id="t_sort" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@*<script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>*@
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_friend_circle/zepto.min.js", "/Areas/DM_APPManage/Views/dm_friend_circle/lrz.min.js")
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_friend_circle/Form.js")

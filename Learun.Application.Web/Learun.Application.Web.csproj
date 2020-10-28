@@ -300,6 +300,7 @@
     <Compile Include="Areas\DM_APPManage\Controllers\DM_Task_TypeController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\DM_MeetingListController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_business_cooperationController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_friend_circleController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -311,6 +312,9 @@
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\Index.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\JPushManage.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\CheckCertficaRecord.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\lrz.min.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\zepto.css" />
+    <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\zepto.min.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeGood\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeRecord\SendExpressNumber.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Order\Index.js" />
@@ -2391,6 +2395,10 @@
     <Content Include="Views\Shared\_dlm_Form.cshtml" />
     <Content Include="Content\dlm\sy.woff" />
     <Content Include="Views\DLM_Page\CloseAccount.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />
