@@ -44,6 +44,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("T_SORT")]
         public int? t_sort { get; set; }
+
+        /// <summary>
+        /// 文案状态  0待审核  1已审核  2已下架
+        /// </summary>
+        [Column("T_STATUS")]
+        public int? t_status { get; set; }
         /// <summary>
         /// 创建人
         /// </summary>

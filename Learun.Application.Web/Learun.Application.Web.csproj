@@ -313,6 +313,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\JPushManage.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\CheckCertficaRecord.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\lrz.min.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\PreviewCircle.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\zepto.css" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\zepto.min.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_IntergralChangeGood\Form.css" />
@@ -1915,6 +1916,7 @@
     <Content Include="Content\dlm\swiper.min.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\SetInviteCode.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\PreviewCircle.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

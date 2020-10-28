@@ -153,7 +153,7 @@
             });
         },
 
-        deleteForm:function (url, param, callback) {
+        deleteForm: function (url, param, callback) {
             learun.loading(true, '正在删除数据');
             learun.httpAsyncPost(url, param, function (res) {
                 learun.loading(false);
@@ -170,7 +170,7 @@
                 top.layer.close(top.layer.index);
             });
         },
-        postForm:function (url, param, callback) {
+        postForm: function (url, param, callback) {
             learun.loading(true, '正在提交数据');
             learun.httpAsyncPost(url, param, function (res) {
                 learun.loading(false);
@@ -188,7 +188,7 @@
             });
         },
         excuteOperate: function (url, param, callback) {
-            learun.loading(true, '正在执行操作...');
+            learun.loading(true, param.loading || '正在执行操作...');
             learun.httpAsyncPost(url, param, function (res) {
                 learun.loading(false);
                 if (res.code == learun.httpCode.success) {

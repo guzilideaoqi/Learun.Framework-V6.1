@@ -5,11 +5,12 @@
 <div class="lr-layout lr-layout-center" id="lr_layout">
     <div class="lr-layout-center">
         <div class="lr-layout-wrap">
-            <div class="lr-layout-title">标题</div>
+            <div class="lr-layout-title">后台发布文案均为官推类型</div>
             <div class="lr-layout-tool">
                 <div class="lr-layout-tool-left">
                     <div class="lr-layout-tool-item">
-                        <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" />
+                        <div id="t_type" class="form-control"><ul><li data-value="0">普通文案</li><li data-value="1">官推文案</li></ul></div>
+                        <div id="t_status" class="form-control"><ul><li data-value="0">未上架</li><li data-value="1">上架成功</li><li data-value="2">已下架</li></ul></div>
                     </div>
                     <div class="lr-layout-tool-item">
                         <a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</a>
@@ -20,8 +21,9 @@
                         <a id="lr_refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>
                     </div>
                     <div class=" btn-group btn-group-sm" learun-authorize="yes">
-                        <a id="lr_add"   class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;新增</a>
-                        <a id="lr_edit"  class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+                        <a id="lr_add" class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;新增</a>
+                        <a id="lr_up" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;上架</a>
+                        <a id="lr_down" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;下架</a>
                         <a id="lr_delete" class="btn btn-default"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
                     </div>
                 </div>

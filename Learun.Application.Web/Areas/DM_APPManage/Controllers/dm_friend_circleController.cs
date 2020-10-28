@@ -1,5 +1,10 @@
-﻿using Learun.Application.TwoDevelopment.DM_APPManage;
+﻿using HYG.CommonHelper.Common;
+using Learun.Application.TwoDevelopment.Common;
+using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Util;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
@@ -14,6 +19,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
     public class dm_friend_circleController : MvcControllerBase
     {
         private dm_friend_circleIBLL dm_friend_circleIBLL = new dm_friend_circleBLL();
+        private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
 
         #region 视图功能
 
@@ -24,7 +30,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
         /// <summary>
         /// 表单页
@@ -33,7 +39,12 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-             return View();
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult PreviewCircle() {
+            return View();
         }
         #endregion
 
@@ -45,7 +56,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList( string queryJson )
+        public ActionResult GetList(string queryJson)
         {
             var data = dm_friend_circleIBLL.GetList(queryJson);
             return Success(data);
@@ -98,6 +109,38 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             dm_friend_circleIBLL.DeleteEntity(keyValue);
             return Success("删除成功！");
         }
+
+        /// <summary>
+        /// 上架
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult Up(int keyValue)
+        {
+            dm_friend_circleEntity dm_Friend_CircleEntity = dm_friend_circleIBLL.GetEntity(keyValue);
+            dm_Friend_CircleEntity.t_status = 1;
+            dm_friend_circleIBLL.SaveEntity(keyValue, dm_Friend_CircleEntity);
+            return Success("上架成功!");
+        }
+
+
+        /// <summary>
+        /// 下架
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult Down(int keyValue)
+        {
+            dm_friend_circleEntity dm_Friend_CircleEntity = dm_friend_circleIBLL.GetEntity(keyValue);
+            dm_Friend_CircleEntity.t_status = 2;
+            dm_friend_circleIBLL.SaveEntity(keyValue, dm_Friend_CircleEntity);
+            return Success("下架成功!");
+        }
+
         /// <summary>
         /// 保存实体数据（新增、修改）
         /// <param name="keyValue">主键</param>
@@ -106,12 +149,48 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(int keyValue,dm_friend_circleEntity entity)
+        public ActionResult SaveForm(int keyValue, dm_friend_circleEntity entity)
         {
             dm_friend_circleIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
         }
         #endregion
 
+
+        [HttpPost]
+        public ActionResult UploadFile(int keyValue, string ImgBase64, dm_friend_circleEntity entity)
+        {
+            string[] files = ImgBase64.Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+            if (files.Length > 0)
+            {
+                UserInfo userInfo = LoginUserInfo.Get();
+                userInfo.companyId = "e2b3ec3a-310b-4ab8-aa81-b563ac8f3006";
+
+                List<CircleImage> imageList = new List<CircleImage>();
+                for (int i = 0; i < files.Length; i++)
+                {
+                    string image = OSSHelper.PutBase64(dM_BaseSettingIBLL.GetEntityByCache(userInfo.companyId), "", files[i]);
+                    imageList.Add(new CircleImage
+                    {
+                        Image = image,
+                        ThumbnailImage = image + "?x-oss-process=image/resize,w_100,m_lfit"//
+                    });
+                }
+
+                entity.createcode = userInfo.userId;
+                entity.t_status = 1;
+                entity.t_type = 1;
+                entity.t_images = Newtonsoft.Json.JsonConvert.SerializeObject(imageList);
+                dm_friend_circleIBLL.SaveEntity(keyValue, entity);
+            }
+            return Success("保存成功。");
+        }
+    }
+
+    public class CircleImage
+    {
+        public string Image { get; set; }
+
+        public string ThumbnailImage { get; set; }
     }
 }

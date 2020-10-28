@@ -32,6 +32,7 @@ namespace Learun.Application.TwoDevelopment.Common
                     key = DateTime.Now.ToString("yyyyMMdd") + "/" + Guid.NewGuid().ToString() + Path.GetExtension(pic_file.FileName);
 
                 PutObjectResult putObjectResult = client.PutObject(dm_BasesettingEntity.oss_buketname, key, pic_file.InputStream);
+
                 //var uri = client.GeneratePresignedUri(bucketName, key);
                 //return uri.ToString();
                 return string.Format("http://{0}.{2}/{1}", dm_BasesettingEntity.oss_buketname, key, dm_BasesettingEntity.oss_endpoint);
@@ -60,6 +61,27 @@ namespace Learun.Application.TwoDevelopment.Common
             {
                 throw new Exception("阿里云请求异常", ex);
                 //LogHelper.LogException<OssException>($"Msg:{ex.Message};Code:{ex.ErrorCode};RequestID:{ex.RequestId};HostID:{ex.HostId}");
+            }
+        }
+
+        public static string PutBase64(dm_basesettingEntity dm_BasesettingEntity, string key, string base64_str)
+        {
+            var client = new OssClient(dm_BasesettingEntity.oss_endpoint, dm_BasesettingEntity.oss_accesskeyid, dm_BasesettingEntity.oss_accesskeysecret);
+            try
+            {
+                if (key.IsEmpty())
+                    key = DateTime.Now.ToString("yyyyMMdd") + "/" + Guid.NewGuid().ToString() + ".png";
+
+                byte[] arr = System.Convert.FromBase64String(base64_str);
+                System.IO.MemoryStream ms = new System.IO.MemoryStream(arr);
+
+                PutObjectResult res = client.PutObject(dm_BasesettingEntity.oss_buketname, key, ms);//new ObjectMetadata() { ContentType = "image/png" }
+
+                return string.Format("http://{0}.{2}/{1}", dm_BasesettingEntity.oss_buketname, key, dm_BasesettingEntity.oss_endpoint);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("阿里云请求异常", ex);
             }
         }
     }

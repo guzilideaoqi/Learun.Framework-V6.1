@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "官推文案";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@Html.AppendCssFile("/Areas/DM_APPManage/Views/dm_friend_circle/zepto.css")
+<style>
+    .image_div {
+        float: left;
+        position: relative;
+    }
+
+        .image_div img {
+            width: 100px;
+            height: 100px;
+            margin: 5px;
+        }
+</style>
+<div>
+    <div class="lr-form-wrap" id="form">
+
+        <div class="col-xs-12 lr-form-item">
+            <div class="lr-form-item-title">图片<font face="宋体">*</font></div>
+            <div class="weui-uploader__bd">
+                <ul class="weui-uploader__files weui-uploader__file_status" id="uploaderFiles">
+                </ul>
+            </div>
+        </div>
+        <div class="col-xs-12 lr-form-item">
+            <div class="lr-form-item-title">文案内容<font face="宋体">*</font></div>
+            <textarea id="t_content" type="text" rows="6" class="form-control" readonly></textarea>
+        </div>
+    </div>
+</div>
+
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_friend_circle/PreviewCircle.js")

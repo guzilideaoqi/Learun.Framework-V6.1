@@ -22,12 +22,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         private string fieldSql;
         public dm_friend_circleService()
         {
-            fieldSql=@"
+            fieldSql = @"
                 t.id,
                 t.t_content,
                 t.t_type,
                 t.t_images,
                 t.t_sort,
+t.t_status,
                 t.createcode,
                 t.createtime
             ";
@@ -40,7 +41,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_friend_circleEntity> GetList( string queryJson )
+        public IEnumerable<dm_friend_circleEntity> GetList(string queryJson)
         {
             try
             {
@@ -77,10 +78,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
+                var queryParam = queryJson.ToJObject();
                 var strSql = new StringBuilder();
                 strSql.Append("SELECT ");
                 strSql.Append(fieldSql);
-                strSql.Append(" FROM dm_friend_circle t ");
+                strSql.Append(" FROM dm_friend_circle t where 1=1 ");
+
+                if (!queryParam["t_type"].IsEmpty())
+                {
+                    strSql.Append(" and t_type='" + queryParam["t_type"].ToString() + "'");
+                }
+
+                if (!queryParam["t_status"].IsEmpty())
+                {
+                    strSql.Append(" and t_status='" + queryParam["t_status"].ToString() + "'");
+                }
+
                 return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(strSql.ToString(), pagination);
             }
             catch (Exception ex)
@@ -133,7 +146,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                this.BaseRepository("dm_data").Delete<dm_friend_circleEntity>(t=>t.id == keyValue);
+                this.BaseRepository("dm_data").Delete<dm_friend_circleEntity>(t => t.id == keyValue);
             }
             catch (Exception ex)
             {
@@ -157,7 +170,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                if (keyValue>0)
+                if (keyValue > 0)
                 {
                     entity.Modify(keyValue);
                     this.BaseRepository("dm_data").Update(entity);
