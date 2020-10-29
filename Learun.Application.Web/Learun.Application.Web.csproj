@@ -247,6 +247,7 @@
     <Compile Include="Controllers\DM_APIControl\A_PayController.cs" />
     <Compile Include="Controllers\DM_APIControl\BannerInfo.cs" />
     <Compile Include="Controllers\DM_APIControl\CommonGoodInfo.cs" />
+    <Compile Include="Controllers\DM_APIControl\DM_CircleController.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_ExtendOperateController.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_GoodController.cs" />
     <Compile Include="Controllers\DM_APIControl\DM_TaskCenterController.cs" />
@@ -2409,6 +2410,7 @@
     <Folder Include="Areas\LR_WebChatModule\Views\User\" />
     <Folder Include="Areas\LR_WorkFlowModule\Views\WfEngine\" />
     <Folder Include="Views\A_Pay\" />
+    <Folder Include="Views\DM_Circle\" />
     <Folder Include="Views\TencentMeeting\" />
   </ItemGroup>
   <ItemGroup>

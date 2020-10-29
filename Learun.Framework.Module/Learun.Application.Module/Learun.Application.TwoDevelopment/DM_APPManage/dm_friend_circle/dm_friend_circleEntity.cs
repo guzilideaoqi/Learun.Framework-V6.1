@@ -62,6 +62,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("CREATETIME")]
         public DateTime? createtime { get; set; }
+
+        /// <summary>
+        /// 站长id
+        /// </summary>
+        [Column("APPID")]
+        public string appid { get; set; }
         #endregion
 
         #region 扩展操作
@@ -71,6 +77,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public void Create()
         {
             this.createtime = DateTime.Now;
+
+            UserInfo userInfo = LoginUserInfo.Get();
+            if (!userInfo.IsEmpty()) {
+                this.appid = userInfo.companyId;
+            }
         }
         /// <summary>
         /// 编辑调用

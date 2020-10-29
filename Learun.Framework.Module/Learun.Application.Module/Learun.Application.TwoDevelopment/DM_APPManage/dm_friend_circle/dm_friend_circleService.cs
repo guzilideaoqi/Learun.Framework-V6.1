@@ -196,5 +196,143 @@ t.t_status,
 
         #endregion
 
+        #region API EXTEND METHOD
+        /// <summary>
+        /// 获取官推任务
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dm_friend_circleEntity> GetCircleByGovernment(Pagination pagination, string appid)
+        {
+            try
+            {
+
+                return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.appid == appid && t.t_type == 1, pagination);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取普通任务
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        public DataTable GetCircleByGeneral(Pagination pagination, string appid)
+        {
+            try
+            {
+                DataTable dataTable = this.BaseRepository("dm_data").FindTable("select  f.*,u.nickname,u.headpic from dm_friend_circle f left join dm_user u on f.createcode=u.id where f.appid='" + appid + "'", pagination);
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取单条哆米圈任务
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public dm_friend_circleEntity GetSingleCircle(int id)
+        {
+            try
+            {
+                dm_friend_circleEntity dm_Friend_CircleEntity = this.BaseRepository("dm_data").FindEntity<dm_friend_circleEntity>(id);
+                return dm_Friend_CircleEntity;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取我的哆米圈
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="User_ID"></param>
+        /// <returns></returns>
+        public DataTable GetMyCircle(Pagination pagination, string User_ID)
+        {
+            try
+            {
+                DataTable dataTable = this.BaseRepository("dm_data").FindTable("select  f.*,u.nickname,u.headpic from dm_friend_circle f left join dm_user u on f.createcode=u.id where u.id=" + User_ID, pagination);
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 发布哆米圈文章
+        /// </summary>
+        /// <param name="AppID">站长id</param>
+        /// <param name="Content">文章内容</param>
+        /// <param name="Images">图片信息</param>
+        /// <param name="User_ID">用户信息</param>
+        public void PubCircle(string AppID, string Content, string Images, string User_ID)
+        {
+            try
+            {
+                dm_friend_circleEntity dm_Friend_CircleEntity = new dm_friend_circleEntity();
+                dm_Friend_CircleEntity.createcode = User_ID;
+                dm_Friend_CircleEntity.t_type = 0;
+                dm_Friend_CircleEntity.t_status = 0;
+                dm_Friend_CircleEntity.appid = AppID;
+                dm_Friend_CircleEntity.t_content = Content;
+                dm_Friend_CircleEntity.t_images = Images;
+                dm_Friend_CircleEntity.Create();
+
+                SaveEntity(0, dm_Friend_CircleEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Learun.Util;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -47,6 +48,46 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// <returns></returns>
         void SaveEntity(int keyValue, dm_friend_circleEntity entity);
+        #endregion
+
+        #region API EXTEND METHOD
+        /// <summary>
+        /// 获取官推任务
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<dm_friend_circleEntity> GetCircleByGovernment(Pagination pagination, string appid);
+
+        /// <summary>
+        /// 获取普通任务
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        DataTable GetCircleByGeneral(Pagination pagination, string appid);
+
+        /// <summary>
+        /// 获取单条哆米圈任务
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        dm_friend_circleEntity GetSingleCircle(int id);
+
+        /// <summary>
+        /// 获取我的哆米圈
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="User_ID"></param>
+        /// <returns></returns>
+        DataTable GetMyCircle(Pagination pagination, string User_ID);
+
+        /// <summary>
+        /// 发布哆米圈文章
+        /// </summary>
+        /// <param name="AppID">站长id</param>
+        /// <param name="Content">文章内容</param>
+        /// <param name="Images">图片信息</param>
+        /// <param name="User_ID">用户信息</param>
+        void PubCircle(string AppID, string Content, string Images, string User_ID);
         #endregion
 
     }

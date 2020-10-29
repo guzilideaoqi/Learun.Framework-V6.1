@@ -1,6 +1,7 @@
 ﻿using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -140,6 +141,126 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        #endregion
+
+        #region API EXTEND METHOD
+        /// <summary>
+        /// 获取官推任务
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dm_friend_circleEntity> GetCircleByGovernment(Pagination pagination, string appid) {
+            try
+            {
+                return dm_friend_circleService.GetCircleByGovernment(pagination, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取普通任务
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        public DataTable GetCircleByGeneral(Pagination pagination, string appid) {
+            try
+            {
+                return dm_friend_circleService.GetCircleByGeneral(pagination, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取单条哆米圈任务
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public dm_friend_circleEntity GetSingleCircle(int id) {
+            try
+            {
+                return dm_friend_circleService.GetSingleCircle(id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取我的哆米圈
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="User_ID"></param>
+        /// <returns></returns>
+        public DataTable GetMyCircle(Pagination pagination, string User_ID) {
+            try
+            {
+               return dm_friend_circleService.GetMyCircle(pagination, User_ID);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 发布哆米圈文章
+        /// </summary>
+        /// <param name="AppID">站长id</param>
+        /// <param name="Content">文章内容</param>
+        /// <param name="Images">图片信息</param>
+        /// <param name="User_ID">用户信息</param>
+        public void PubCircle(string AppID, string Content, string Images, string User_ID) {
+            try
+            {
+                dm_friend_circleService.PubCircle(AppID, Content, Images, User_ID);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
 
     }
