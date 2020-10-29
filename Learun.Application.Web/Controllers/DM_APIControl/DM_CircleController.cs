@@ -108,12 +108,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 发布哆米圈文章
-        public ActionResult PubCircle(string Content, string Images, string User_ID)
+        public ActionResult PubCircle(string Content, string Images, int User_ID)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
                 string appid = CheckAPPID();
-                dm_Friend_CircleIBLL.PubCircle(appid, Content, Images, User_ID);
+                dm_Friend_CircleIBLL.PubCircle(appid, Content, Images, User_ID.ToString());
 
                 return Success("发布成功!");
             }
@@ -125,10 +126,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取我的哆米圈文章
-        public ActionResult GetMyCircle(string User_ID, int PageNo = 1, int PageSize = 20)
+        public ActionResult GetMyCircle(int User_ID, int PageNo = 1, int PageSize = 20)
         {
             try
             {
+                if (User_ID <= 0) return FailNoLogin();
                 Pagination pagination = new Pagination
                 {
                     page = PageNo,
@@ -136,12 +138,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     sidx = "createtime",
                     sord = "desc"
                 };
-                string appid = CheckAPPID();
-                string cacheKey = Md5Helper.Hash("GetMyCircle" + pagination.ToJson() + appid);
+                string cacheKey = Md5Helper.Hash("GetMyCircle" + pagination.ToJson() + User_ID);
                 DataTable dataTable = redisCache.Read(cacheKey, 7);
                 if (dataTable == null)
                 {
-                    dataTable = dm_Friend_CircleIBLL.GetMyCircle(pagination, appid);
+                    dataTable = dm_Friend_CircleIBLL.GetMyCircle(pagination, User_ID.ToString());
                     if (dataTable.Rows.Count > 0)
                     {
                         redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(2), 7);
@@ -155,6 +156,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 return FailException(ex);
             }
         }
+        #endregion
+
+        #region 分享之后增加分享次数
+
         #endregion
         public string CheckAPPID()
         {

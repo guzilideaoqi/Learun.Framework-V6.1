@@ -206,7 +206,7 @@ t.t_status,
             try
             {
 
-                return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.appid == appid && t.t_type == 1, pagination);
+                return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.appid == appid && t.t_type == 1 && t.t_status == 2, pagination);
             }
             catch (Exception ex)
             {
@@ -231,7 +231,7 @@ t.t_status,
         {
             try
             {
-                DataTable dataTable = this.BaseRepository("dm_data").FindTable("select  f.*,u.nickname,u.headpic from dm_friend_circle f left join dm_user u on f.createcode=u.id where f.appid='" + appid + "'", pagination);
+                DataTable dataTable = this.BaseRepository("dm_data").FindTable("select  f.*,u.nickname,u.headpic from dm_friend_circle f left join dm_user u on f.createcode=u.id where f.t_type=0 and f.t_status=1 and f.appid='" + appid + "'", pagination);
                 return dataTable;
             }
             catch (Exception ex)
