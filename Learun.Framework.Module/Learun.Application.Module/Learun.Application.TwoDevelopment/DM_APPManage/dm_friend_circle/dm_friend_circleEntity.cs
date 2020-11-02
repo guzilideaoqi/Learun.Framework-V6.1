@@ -11,14 +11,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 日 期：2020-10-28 10:06
     /// 描 述：官推文案
     /// </summary>
-    public class dm_friend_circleEntity 
+    public class dm_friend_circleEntity
     {
         #region 实体成员
         /// <summary>
         /// 朋友圈文案id
         /// </summary>
         /// <returns></returns>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("ID")]
         public int? id { get; set; }
         /// <summary>
         /// 文案内容
@@ -68,6 +69,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("APPID")]
         public string appid { get; set; }
+
+        /// <summary>
+        /// 封面图片
+        /// </summary>
+        [Column("T_TITLE_PAGE")]
+        public string t_title_page { get; set; }
+
+        /// <summary>
+        /// 是否为精华帖
+        /// </summary>
+        [Column("ISCREAM")]
+        public int iscream { get; set; }
         #endregion
 
         #region 扩展操作
@@ -79,7 +92,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             this.createtime = DateTime.Now;
 
             UserInfo userInfo = LoginUserInfo.Get();
-            if (!userInfo.IsEmpty()) {
+            if (!userInfo.IsEmpty())
+            {
                 this.appid = userInfo.companyId;
             }
         }

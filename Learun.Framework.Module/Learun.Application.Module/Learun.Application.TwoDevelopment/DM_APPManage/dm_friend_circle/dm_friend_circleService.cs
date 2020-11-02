@@ -29,6 +29,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 t.t_images,
                 t.t_sort,
 t.t_status,
+t.iscream,
                 t.createcode,
                 t.createtime
             ";

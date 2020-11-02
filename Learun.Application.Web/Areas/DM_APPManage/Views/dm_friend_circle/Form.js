@@ -18,8 +18,17 @@ var bootstrap = function ($, learun) {
             $("li.weui-uploader__file").addClass("weui-uploader__file_status");
         },
         bind: function () {
+            function uploadImg() {
+                var f = document.getElementById('uploadFile').files[0]
+                var src = window.URL.createObjectURL(f);
+                document.getElementById('uploadPreview').src = src;
+            };
+
+            $('#uploadFile').on('change', uploadImg);
         },
         initData: function () {
+            var headimg;
+
             if (!!selectedRow) {
                 $('#form').lrSetFormData(selectedRow);
             }
@@ -28,6 +37,20 @@ var bootstrap = function ($, learun) {
                 //console.log("回调函数");
                 //console.log(getImgFilesData("uploaderFiles"));//多张图片中以逗号分隔
             });
+
+
+            ///初始化图片控件
+            $('.file').prepend('<img src="' + top.$.rootUrl + headimg + '" id="uploadPreview" onerror="loaddfimg()"  style="max-height:200px;max-width:400px;">');
+            if (true) {
+                headimg = top.$.rootUrl + '/Content/images/head/on-boy.jpg';
+            }
+            else {
+                headimg = top.$.rootUrl + '/Content/images/head/on-girl.jpg';
+            }
+
+            loaddfimg = function () {
+                document.getElementById('uploadPreview').src = headimg;
+            }
         }
     };
     // 保存数据
@@ -40,31 +63,30 @@ var bootstrap = function ($, learun) {
         if (!!ImgBase64) {
             postData["ImgBase64"] = ImgBase64;
             //learun.loading(true, '正在保存...');
-            $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/dm_friend_circle/UploadFile?keyValue=' + keyValue, postData, function (res) {
-                // 保存成功后才回调
-                if (!!callBack) {
-                    callBack();
-                }
-            });
-
-
-            //$.ajaxFileUpload({
-            //    url: "/DM_APPManage/dm_friend_circle/UploadFile?keyValue=" + keyValue,
-            //    secureuri: false,
-            //    fileElementId: 'uploadFile',
-            //    dataType: 'json',
-            //    data: postData,
-            //    success: function (data) {
-            //        learun.loading(false);
-            //        if (data.code == 200) {
-            //            learun.alert.success('保存成功');
-            //            learun.layerClose('form');
-            //            if (!!callBack) {
-            //                callBack();
-            //            }
-            //        }
+            //$.lrSaveForm(top.$.rootUrl + '/DM_APPManage/dm_friend_circle/UploadFile?keyValue=' + keyValue, postData, function (res) {
+            //    // 保存成功后才回调
+            //    if (!!callBack) {
+            //        callBack();
             //    }
             //});
+
+            $.ajaxFileUpload({
+                url: "/DM_APPManage/dm_friend_circle/UploadFile?keyValue=" + keyValue,
+                secureuri: false,
+                fileElementId: 'uploadFile',
+                dataType: 'json',
+                data: postData,
+                success: function (data) {
+                    learun.loading(false);
+                    if (data.code == 200) {
+                        learun.alert.success('保存成功');
+                        learun.layerClose('form');
+                        if (!!callBack) {
+                            callBack();
+                        }
+                    }
+                }
+            });
         } else {
             learun.alert.error('请选择需要上传的图片');
         }

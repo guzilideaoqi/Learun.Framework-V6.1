@@ -4,6 +4,7 @@ using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Util;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 
@@ -43,7 +44,8 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         }
 
         [HttpGet]
-        public ActionResult PreviewCircle() {
+        public ActionResult PreviewCircle()
+        {
             return View();
         }
         #endregion
@@ -147,7 +149,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <summary>
         /// <returns></returns>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [AjaxOnly]
         public ActionResult SaveForm(int keyValue, dm_friend_circleEntity entity)
         {
@@ -158,7 +160,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
 
 
         [HttpPost]
-        public ActionResult UploadFile(int keyValue, string ImgBase64, dm_friend_circleEntity entity)
+        public ActionResult UploadFile1(int keyValue, string ImgBase64, dm_friend_circleEntity entity)
         {
             string[] files = ImgBase64.Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
             if (files.Length > 0)
@@ -184,6 +186,47 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
                 dm_friend_circleIBLL.SaveEntity(keyValue, entity);
             }
             return Success("保存成功。");
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult UploadFile(int keyValue, string ImgBase64, dm_friend_circleEntity entity)
+        {
+            HttpFileCollection files = System.Web.HttpContext.Current.Request.Files;
+            if (files.Count > 0)
+            {
+                if (files[0].ContentLength == 0 || string.IsNullOrEmpty(files[0].FileName))
+                {
+                    return HttpNotFound();
+                }
+
+                UserInfo userInfo = LoginUserInfo.Get();
+
+                string[] files_base64 = ImgBase64.Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+                List<CircleImage> imageList = new List<CircleImage>();
+                for (int i = 0; i < files_base64.Length; i++)
+                {
+                    string image = OSSHelper.PutBase64(dM_BaseSettingIBLL.GetEntityByCache(userInfo.companyId), "", files_base64[i]);
+                    imageList.Add(new CircleImage
+                    {
+                        Image = image,
+                        ThumbnailImage = image + "?x-oss-process=image/resize,w_100,m_lfit"//
+                    });
+                }
+
+                entity.t_title_page = OSSHelper.PutObject(dM_BaseSettingIBLL.GetEntityByCache(userInfo.companyId), "", files[0]);
+
+                entity.createcode = userInfo.userId;
+                entity.t_status = 1;
+                entity.t_type = 1;
+                entity.t_images = Newtonsoft.Json.JsonConvert.SerializeObject(imageList);
+                dm_friend_circleIBLL.SaveEntity(keyValue, entity);
+                return Success("保存成功。");
+            }
+            else
+            {
+                return Fail("请上传封面图片!");
+            }
         }
     }
 

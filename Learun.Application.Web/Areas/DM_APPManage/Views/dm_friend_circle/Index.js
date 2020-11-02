@@ -59,7 +59,7 @@ var bootstrap = function ($, learun) {
             $('#lr_delete').on('click', function () {
                 var keyValue = $('#girdtable').jfGridValue('id');
                 if (learun.checkrow(keyValue)) {
-                    learun.layerConfirm('是否确认删除该项！', function (res) {
+                    learun.layerConfirm('是否确认删除该项？', function (res) {
                         if (res) {
                             learun.deleteForm(top.$.rootUrl + '/DM_APPManage/dm_friend_circle/DeleteForm', { keyValue: keyValue }, function () {
                             });
@@ -72,7 +72,7 @@ var bootstrap = function ($, learun) {
             $('#lr_up').on('click', function () {
                 var keyValue = $('#girdtable').jfGridValue('id');
                 if (learun.checkrow(keyValue)) {
-                    learun.layerConfirm('是否确认上架该文章！', function (res) {
+                    learun.layerConfirm('是否确认上架该文章？', function (res) {
                         if (res) {
                             learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/dm_friend_circle/Up', { loading: "正在上架文章...", keyValue: keyValue }, function () {
                                 page.search();
@@ -86,7 +86,7 @@ var bootstrap = function ($, learun) {
             $('#lr_down').on('click', function () {
                 var keyValue = $('#girdtable').jfGridValue('id');
                 if (learun.checkrow(keyValue)) {
-                    learun.layerConfirm('是否确认下架该文章！', function (res) {
+                    learun.layerConfirm('是否确认下架该文章？', function (res) {
                         if (res) {
                             learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/dm_friend_circle/Down', { loading: "正在下架文章...", keyValue: keyValue }, function () {
                                 page.search();
@@ -96,12 +96,42 @@ var bootstrap = function ($, learun) {
                 }
             });
 
+            $("#lr_up_cream").on('click', function () {
+                var keyValue = $('#girdtable').jfGridValue('id');
+                if (learun.checkrow(keyValue)) {
+                    learun.layerConfirm('是否确认把该文章置为精华？', function (res) {
+                        if (res) {
+                            learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/dm_friend_circle/SaveForm', { keyValue: keyValue, iscream: 1 }, function () {
+                                page.search();
+                            })
+                        }
+                    })
+                }
+            })
+
+            $("#lr_down_cream").on('click', function () {
+                var keyValue = $('#girdtable').jfGridValue('id');
+                if (learun.checkrow(keyValue)) {
+                    learun.layerConfirm('是否确认把该文章取消精华？', function (res) {
+                        if (res) {
+                            learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/dm_friend_circle/SaveForm', { keyValue: keyValue, iscream: 0 }, function () {
+                                page.search();
+                            })
+                        }
+                    })
+                }
+            })
+
             $('#t_status').lrselect({
                 width: 200, placeholder: "请选择状态"
             });
 
             $('#t_type').lrselect({
                 width: 200, placeholder: "请选择文案类型"
+            });
+
+            $('#iscream').lrselect({
+                width: 200, placeholder: "请选择类型"
             });
         },
         initGird: function () {
@@ -130,6 +160,15 @@ var bootstrap = function ($, learun) {
                             }
                         }
                     },
+                    {
+                        label: '精华帖', name: 'iscream', width: 80, align: "left", formatter: function (cellvalue, rowData, options) {
+                            if (cellvalue == 0)
+                                return "<span style='color:red;'>否</span>";
+                            else if (cellvalue == 1) {
+                                return "<span style='color:green;'>是</span>";
+                            }
+                        }
+                    },
                     //{ label: '图片链接数组', name: 't_images', width: 200, align: "left" },
                     { label: '排序', name: 't_sort', width: 200, align: "left" },
                     { label: '创建人', name: 'createcode', width: 200, align: "left" },
@@ -148,7 +187,7 @@ var bootstrap = function ($, learun) {
             page.search();
         },
         search: function (param) {
-            param = param || { t_type: $("#t_type").lrselectGet(), t_status: $("#t_status").lrselectGet() };
+            param = param || { t_type: $("#t_type").lrselectGet(), t_status: $("#t_status").lrselectGet(), iscream: $("#iscream").lrselectGet() };
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
     };
