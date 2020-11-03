@@ -95,6 +95,10 @@ t.iscream,
                     strSql.Append(" and t_status='" + queryParam["t_status"].ToString() + "'");
                 }
 
+                if (!queryParam["iscream"].IsEmpty()) {
+                    strSql.Append(" and iscream='" + queryParam["iscream"].ToString() + "'");
+                }
+
                 return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(strSql.ToString(), pagination);
             }
             catch (Exception ex)
@@ -317,6 +321,7 @@ t.iscream,
                 dm_Friend_CircleEntity.appid = AppID;
                 dm_Friend_CircleEntity.t_content = Content;
                 dm_Friend_CircleEntity.t_images = Images;
+                dm_Friend_CircleEntity.iscream = 0;
                 dm_Friend_CircleEntity.Create();
 
                 SaveEntity(0, dm_Friend_CircleEntity);

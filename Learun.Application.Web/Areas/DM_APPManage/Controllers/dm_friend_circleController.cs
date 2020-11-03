@@ -201,12 +201,14 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
                 }
 
                 UserInfo userInfo = LoginUserInfo.Get();
+                userInfo.companyId = "e2b3ec3a-310b-4ab8-aa81-b563ac8f3006";
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(userInfo.companyId);
 
                 string[] files_base64 = ImgBase64.Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
                 List<CircleImage> imageList = new List<CircleImage>();
                 for (int i = 0; i < files_base64.Length; i++)
                 {
-                    string image = OSSHelper.PutBase64(dM_BaseSettingIBLL.GetEntityByCache(userInfo.companyId), "", files_base64[i]);
+                    string image = OSSHelper.PutBase64(dm_BasesettingEntity, "", files_base64[i]);
                     imageList.Add(new CircleImage
                     {
                         Image = image,
@@ -214,7 +216,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
                     });
                 }
 
-                entity.t_title_page = OSSHelper.PutObject(dM_BaseSettingIBLL.GetEntityByCache(userInfo.companyId), "", files[0]);
+                entity.t_title_page = OSSHelper.PutObject(dm_BasesettingEntity, "", files[0]);
 
                 entity.createcode = userInfo.userId;
                 entity.t_status = 1;
