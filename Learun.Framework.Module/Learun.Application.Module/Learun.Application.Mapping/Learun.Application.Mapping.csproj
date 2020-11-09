@@ -143,6 +143,7 @@
     <Compile Include="DM_APPManage\dm_meetinglistMap.cs" />
     <Compile Include="DM_APPManage\dm_business_cooperationMap.cs" />
     <Compile Include="DM_APPManage\dm_friend_circleMap.cs" />
+    <Compile Include="DM_APPManage\dm_friend_thumb_recordMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

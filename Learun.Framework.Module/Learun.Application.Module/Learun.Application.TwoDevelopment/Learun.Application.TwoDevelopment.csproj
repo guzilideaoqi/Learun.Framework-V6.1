@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CacheHelper.cs" />
     <Compile Include="Common\CommonConfig.cs" />
     <Compile Include="Common\CommonSMSHelper.cs" />
     <Compile Include="Common\JSMSClient.cs" />
@@ -223,6 +224,10 @@
     <Compile Include="DM_APPManage\dm_friend_circle\dm_friend_circleService.cs" />
     <Compile Include="DM_APPManage\dm_friend_circle\dm_friend_circleIBLL.cs" />
     <Compile Include="DM_APPManage\dm_friend_circle\dm_friend_circleBLL.cs" />
+    <Compile Include="DM_APPManage\dm_friend_thumb_record\dm_friend_thumb_recordEntity.cs" />
+    <Compile Include="DM_APPManage\dm_friend_thumb_record\dm_friend_thumb_recordService.cs" />
+    <Compile Include="DM_APPManage\dm_friend_thumb_record\dm_friend_thumb_recordIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_friend_thumb_record\dm_friend_thumb_recordBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

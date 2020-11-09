@@ -8,7 +8,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Text;
-
+using Learun.Application.TwoDevelopment.Common;
+using Learun.Application.TwoDevelopment.DM_APPManage;
 
 namespace Learun.Application.Web.App_Start._01_Handler
 {
@@ -17,7 +18,6 @@ namespace Learun.Application.Web.App_Start._01_Handler
         string[] actionNameList = new string[] { "dm_login", "dm_register", "paycallback", "authorcallback", "callback", "authorresult", "getgoodtypebycache", "getrankinglist", "gettodaygood", "commonsearchgood", "getsuperserachgood", "getdtksearchgood", "getrecommendgoodbytb", "getopgood", "getactivitygoodlist", "gettopiccatalogue", "gettopicgoodlist", "gettbtopiclist", "get_jd_goodlist", "get_jd_searchgoodlist", "get_pdd_goodlist", "getrecommendgoodbypdd", "getgoodimagedetail", "getgooddetailbytb", "getbannerlist", "getgoodsmallcate", "getpersoninfo", "getverification", "resetpwd" };
         private ICache redisCache = CacheFactory.CaChe();
         private FilterMode _customMode;
-        const string SingleLogin = "SingleLogin_";
         /// <summary>默认构造</summary>
         /// <param name="Mode">认证模式</param>
         public VerificationAPIAttribute(FilterMode Mode)
@@ -78,12 +78,31 @@ namespace Learun.Application.Web.App_Start._01_Handler
             }
 
             #region 校验当前用户是否在线
-            string user_id = "";
+            if (token.IsEmpty())
+            {
+                modelResult.code = ResponseCode.NoLogin;
+                modelResult.info = "请登录后操作!";
+                filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
+                return;
+            }
+            else
+            {
+                dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfo(filterContext.HttpContext.Request.Headers);
+                if (dm_UserEntity.IsEmpty())
+                {
+                    modelResult.code = ResponseCode.LoginExpire;
+                    modelResult.info = "您的账号在另一台设备登录。如非本人操作，请注意账户安全!";
+                    filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
+                    return;
+                }
+            }
+
+            /*string user_id = "";
             if (filterContext.HttpContext.Request.Params.AllKeys.Contains("User_ID"))
             {
                 user_id = filterContext.HttpContext.Request.Params["User_ID"];
             }
-            
+
             if (filterContext.HttpContext.Request.Params.AllKeys.Contains("user_id"))
             {
                 user_id = filterContext.HttpContext.Request.Params["user_id"];
@@ -139,8 +158,8 @@ namespace Learun.Application.Web.App_Start._01_Handler
                         filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
                         return;
                     }
-                }*/
-            }
+                }
+            }*/
             #endregion
         }
     }

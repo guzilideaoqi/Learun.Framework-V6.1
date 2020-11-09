@@ -20,7 +20,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("ID")]
-        public int? id { get; set; }
+        public int id { get; set; }
         /// <summary>
         /// 文案内容
         /// </summary>
@@ -101,7 +101,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 编辑调用
         /// </summary>
         /// <param name="keyValue"></param>
-        public void Modify(int? keyValue)
+        public void Modify(int keyValue)
         {
             this.id = keyValue;
         }

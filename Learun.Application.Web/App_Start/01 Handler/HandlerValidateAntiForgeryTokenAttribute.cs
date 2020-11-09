@@ -11,7 +11,7 @@ namespace Learun.Application.Web
     /// 日 期：2017.03.08
     /// 描 述：防伪验证
     /// </summary>
-    public class HandlerValidateAntiForgeryTokenAttribute:AuthorizeAttribute
+    public class HandlerValidateAntiForgeryTokenAttribute : AuthorizeAttribute
     {
         /// <summary>
         /// 拦截器
