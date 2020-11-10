@@ -70,6 +70,8 @@ var bootstrap = function ($, learun) {
 
             $("#showcommission").lrselect();//显示佣金类型
 
+            $("#miquan_allowclickpraise").lrselect();//米圈普通用户点赞开关
+
             //商品类型
             $("#goodtype").lrselect({
                 url: top.$.rootUrl + "/DM_Good/GetGoodTypeByCache",

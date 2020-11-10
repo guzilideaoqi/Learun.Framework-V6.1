@@ -172,7 +172,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <param name="appid"></param>
         /// <returns></returns>
-        public DataTable GetCircleByGeneral(Pagination pagination, string appid) {
+        public IEnumerable<dm_friend_circleEntity> GetCircleByGeneral(Pagination pagination, string appid) {
             try
             {
                 return dm_friend_circleService.GetCircleByGeneral(pagination, appid);
@@ -219,7 +219,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <param name="User_ID"></param>
         /// <returns></returns>
-        public DataTable GetMyCircle(Pagination pagination, string User_ID) {
+        public IEnumerable<dm_friend_circleEntity> GetMyCircle(Pagination pagination, string User_ID) {
             try
             {
                return dm_friend_circleService.GetMyCircle(pagination, User_ID);

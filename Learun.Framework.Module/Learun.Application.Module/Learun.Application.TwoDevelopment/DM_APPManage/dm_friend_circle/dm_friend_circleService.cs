@@ -95,7 +95,8 @@ t.iscream,
                     strSql.Append(" and t_status='" + queryParam["t_status"].ToString() + "'");
                 }
 
-                if (!queryParam["iscream"].IsEmpty()) {
+                if (!queryParam["iscream"].IsEmpty())
+                {
                     strSql.Append(" and iscream='" + queryParam["iscream"].ToString() + "'");
                 }
 
@@ -211,7 +212,7 @@ t.iscream,
             try
             {
 
-                return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.appid == appid && t.t_type == 1 && t.t_status == 2, pagination);
+                return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.appid == appid && t.t_type == 1 && t.t_status == 1, pagination);
             }
             catch (Exception ex)
             {
@@ -232,12 +233,14 @@ t.iscream,
         /// <param name="pagination"></param>
         /// <param name="appid"></param>
         /// <returns></returns>
-        public DataTable GetCircleByGeneral(Pagination pagination, string appid)
+        public IEnumerable<dm_friend_circleEntity> GetCircleByGeneral(Pagination pagination, string appid)
         {
             try
             {
-                DataTable dataTable = this.BaseRepository("dm_data").FindTable("select  f.*,u.nickname,u.headpic from dm_friend_circle f left join dm_user u on f.createcode=u.id where f.t_type=0 and f.t_status=1 and f.appid='" + appid + "'", pagination);
-                return dataTable;
+                return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.appid == appid && t.t_type == 0 && t.t_status == 1, pagination);
+
+                //DataTable dataTable = this.BaseRepository("dm_data").FindTable("select  f.*,u.nickname,u.headpic from dm_friend_circle f left join dm_user u on f.createcode=u.id where f.t_type=0 and f.t_status=1 and f.appid='" + appid + "'", pagination);
+                //return dataTable;
             }
             catch (Exception ex)
             {
@@ -283,12 +286,13 @@ t.iscream,
         /// <param name="pagination"></param>
         /// <param name="User_ID"></param>
         /// <returns></returns>
-        public DataTable GetMyCircle(Pagination pagination, string User_ID)
+        public IEnumerable<dm_friend_circleEntity> GetMyCircle(Pagination pagination, string User_ID)
         {
             try
             {
-                DataTable dataTable = this.BaseRepository("dm_data").FindTable("select  f.*,u.nickname,u.headpic from dm_friend_circle f left join dm_user u on f.createcode=u.id where u.id=" + User_ID, pagination);
-                return dataTable;
+                return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.createcode == User_ID, pagination);
+                //DataTable dataTable = this.BaseRepository("dm_data").FindTable("select  f.*,u.nickname,u.headpic from dm_friend_circle f left join dm_user u on f.createcode=u.id where u.id=" + User_ID, pagination);
+                //return dataTable;
             }
             catch (Exception ex)
             {

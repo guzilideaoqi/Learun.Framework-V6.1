@@ -530,5 +530,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
         #endregion
+
+        #region 根据ID集合获取用户列表
+        public IEnumerable<dm_userEntity> GetUserListByIDS(List<string> ids)
+        {
+            try
+            {
+                return dM_UserService.GetUserListByIDS(ids);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
     }
 }

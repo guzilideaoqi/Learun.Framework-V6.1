@@ -63,7 +63,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <param name="appid"></param>
         /// <returns></returns>
-        DataTable GetCircleByGeneral(Pagination pagination, string appid);
+        IEnumerable<dm_friend_circleEntity> GetCircleByGeneral(Pagination pagination, string appid);
 
         /// <summary>
         /// 获取单条哆米圈任务
@@ -78,7 +78,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <param name="User_ID"></param>
         /// <returns></returns>
-        DataTable GetMyCircle(Pagination pagination, string User_ID);
+        IEnumerable<dm_friend_circleEntity> GetMyCircle(Pagination pagination, string User_ID);
 
         /// <summary>
         /// 发布哆米圈文章

@@ -189,14 +189,51 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="dm_Friend_Thumb_RecordEntity"></param>
         public void ClickPraise(dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity)
         {
+            IRepository db = null;
             try
             {
                 dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity_Exist = this.BaseRepository("dm_data").FindEntity<dm_friend_thumb_recordEntity>(t => t.user_id == dm_Friend_Thumb_RecordEntity.user_id && t.friend_id == dm_Friend_Thumb_RecordEntity.friend_id);
                 if (dm_Friend_Thumb_RecordEntity_Exist.IsEmpty())
                 {//不存在点赞记录
-                    dm_Friend_Thumb_RecordEntity.status = 1;
-                    dm_Friend_Thumb_RecordEntity.Create();
-                    this.BaseRepository("dm_data").Insert<dm_friend_thumb_recordEntity>(dm_Friend_Thumb_RecordEntity);
+                    #region 首次点赞成功之后给发布人赠送积分
+                    dm_friend_circleEntity dm_Friend_CircleEntity = new dm_friend_circleService().GetEntity((int)dm_Friend_Thumb_RecordEntity.friend_id);
+                    dm_userEntity dm_UserEntity = new DM_UserService().GetEntity(int.Parse(dm_Friend_CircleEntity.createcode));
+                    dm_basesettingEntity dm_BasesettingEntity = new DM_BaseSettingService().GetEntityByCache(dm_UserEntity.appid);
+                    #endregion
+
+                    if ((dm_UserEntity.userlevel == 0 && dm_BasesettingEntity.miquan_allowclickpraise == 1) || dm_UserEntity.userlevel == 1 || dm_UserEntity.userlevel == 2)
+                    {
+                        db = this.BaseRepository("dm_data").BeginTrans();
+
+                        #region 构造赠送积分的信息
+                        int intergral_value = dm_BasesettingEntity.miquan_integral;
+                        dm_UserEntity.integral += intergral_value;
+                        dm_intergraldetailEntity dm_IntergraldetailEntity = new dm_intergraldetailEntity()
+                        {
+                            currentvalue = dm_UserEntity.integral,
+                            stepvalue = intergral_value,
+                            user_id = dm_UserEntity.id,
+                            type = 5,
+                            title = "米圈点赞",
+                            remark = "米圈文案被其他用户点赞所得奖励"
+                        };
+                        dm_IntergraldetailEntity.Create();
+                        #endregion
+
+                        dm_Friend_Thumb_RecordEntity.status = 1;
+                        dm_Friend_Thumb_RecordEntity.Create();
+
+                        db.Insert(dm_IntergraldetailEntity);//添加积分获取记录
+                        db.Insert(dm_Friend_Thumb_RecordEntity);//添加点赞记录
+                        db.Update(dm_UserEntity);//修改用户信息
+                        db.Commit();
+                    }
+                    else
+                    {
+                        dm_Friend_Thumb_RecordEntity.status = 1;
+                        dm_Friend_Thumb_RecordEntity.Create();
+                        this.BaseRepository("dm_data").Insert(dm_Friend_Thumb_RecordEntity);
+                    }
                 }
                 else
                 {
@@ -207,6 +244,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
             catch (Exception ex)
             {
+                if (db != null)
+                    db.Rollback();
                 if (ex is ExceptionEx)
                 {
                     throw;

@@ -62,7 +62,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("CREATETIME")]
-        public DateTime? createtime { get; set; }
+        public DateTime createtime { get; set; }
 
         /// <summary>
         /// 站长id

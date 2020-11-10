@@ -1271,6 +1271,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        #region 根据ID集合获取用户列表
+        public IEnumerable<dm_userEntity> GetUserListByIDS(List<string> ids)
+        {
+            try
+            {
+                return this.BaseRepository("dm_data").FindList<dm_userEntity>(t => ids.Contains(t.id.ToString()));
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
         #region 检测单点登录
         void CheckSingleLogin(ref dm_userEntity dm_UserEntity)
         {

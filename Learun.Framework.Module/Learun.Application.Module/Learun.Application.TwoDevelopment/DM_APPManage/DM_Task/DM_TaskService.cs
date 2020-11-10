@@ -431,6 +431,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (entity.needcount <= 0)
                     throw new Exception("任务参与数不能小于0!");
                 dm_userEntity dm_UserEntity = dm_UserService.GetEntity(entity.user_id);
+
                 entity.totalcommission = entity.singlecommission * entity.needcount;//需要从用户账户扣除的金额
                 if (dm_UserEntity.accountprice < entity.totalcommission)
                     throw new Exception("账户余额不足，请充值后重新发布!");

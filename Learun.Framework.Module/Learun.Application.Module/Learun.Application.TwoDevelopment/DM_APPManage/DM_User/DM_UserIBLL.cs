@@ -106,5 +106,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         List<SignRecord> GetSignData(int User_ID, ref int sign_Count, ref int finish_sign);
         #endregion
 
+        #region 根据ID集合获取用户列表
+        IEnumerable<dm_userEntity> GetUserListByIDS(List<string> ids);
+        #endregion
     }
 }

@@ -41,10 +41,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
-		/// <summary>
-		/// 类型  1新用户注册  2签到  3邀请好友奖励 4进度任务
-		/// </summary>
-		[Column("TYPE")]
+        /// <summary>
+        /// 类型  1新用户注册  2签到  3邀请好友奖励 4进度任务 5米圈被人点赞获得
+        /// </summary>
+        [Column("TYPE")]
 		public int? type
 		{
 			get;
@@ -74,6 +74,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public void Create()
 		{
+            this.createtime = DateTime.Now;
 		}
 
 		public void Modify(int? keyValue)
