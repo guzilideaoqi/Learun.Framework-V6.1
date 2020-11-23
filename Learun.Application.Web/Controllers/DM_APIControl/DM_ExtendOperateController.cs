@@ -176,6 +176,50 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 获取合伙人页面各等级说明
+        public ActionResult GetLevelRemark()
+        {
+            try
+            {
+                string appid = CheckAPPID();
+
+                List<LevelRemark> JuniorRemark = new List<LevelRemark> {
+                    new LevelRemark{Remark="自购分享加倍",SubRemark="" },
+                    new LevelRemark{Remark="来米收益",SubRemark="" },
+                    new LevelRemark{Remark="徒弟分红",SubRemark="" },
+                    new LevelRemark{Remark="积分特权",SubRemark="" }
+                };
+
+                List<LevelRemark> SeniorRemark = new List<LevelRemark> {
+                    new LevelRemark{Remark="收益提升62%",SubRemark="" },
+                    new LevelRemark{Remark="来米收益",SubRemark="" },
+                    new LevelRemark{Remark="徒弟分红",SubRemark="" },
+                    new LevelRemark{Remark="积分特权",SubRemark="" },
+                    new LevelRemark{Remark="发布任务",SubRemark="" },
+                    new LevelRemark{Remark="合伙人权益",SubRemark="" }
+                };
+
+                List<LevelRemark> PartnerRemark = new List<LevelRemark> {
+                    new LevelRemark{Remark="收益提升35倍",SubRemark="" },
+                    new LevelRemark{Remark="粉丝出单",SubRemark="收益提升160%" },
+                    new LevelRemark{Remark="粉丝分红",SubRemark="收益提升120%" },
+                    new LevelRemark{Remark="团队收益",SubRemark="额外收益提升20倍" },
+                    new LevelRemark{Remark="团队数据系统",SubRemark="独立数据 清晰运营" },
+                    new LevelRemark{Remark="靓号邀请码",SubRemark="可自定义邀请码" },
+                    new LevelRemark{Remark="线下活动",SubRemark="公司制订境内外旅行" },
+                    new LevelRemark{Remark="免手续费",SubRemark="提现0手续费" },
+                    new LevelRemark{Remark="线下体验店",SubRemark="创立线下分公司" }
+                };
+
+                return Success("获取成功", new { JuniorRemark = JuniorRemark, SeniorRemark = SeniorRemark, PartnerRemark = PartnerRemark });
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 执行返利
         /// <summary>
         /// 执行返利
@@ -488,5 +532,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
         #endregion
+    }
+
+    public class LevelRemark
+    {
+        public string Remark { get; set; }
+        public string SubRemark { get; set; }
     }
 }

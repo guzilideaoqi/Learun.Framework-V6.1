@@ -495,6 +495,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        #region 补全没有邀请码的用户信息
+        public void BatchGeneralInviteCode() {
+            try
+            {
+                dM_UserService.BatchGeneralInviteCode();
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
         #region 生成融云Token
         public string GeneralRongTokne(int User_ID, string appid)
         {

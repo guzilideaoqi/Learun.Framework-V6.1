@@ -98,6 +98,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         bool NoExistRelationID(string relationid);
         #endregion
 
+        #region 补全没有邀请码的用户信息
+        void BatchGeneralInviteCode();
+        #endregion
+
         #region 生成融云Token
         string GeneralRongTokne(int User_ID, string appid);
         #endregion

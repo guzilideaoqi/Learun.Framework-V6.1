@@ -264,7 +264,7 @@ namespace Learun.Application.Web.Areas.LR_SystemModule.Controllers
                             }
 
                             UserInfo userInfo = LoginUserInfo.Get();
-                            if (dm_UserBLL.ImportUserInfo(userInfo.companyId, Phone, RealName, NickName, CardNo, UserLevel, Province, City, Down, DetailAddress, WeChat, dm_User_RelationEntity.parent_id.ToString(), dm_User_RelationEntity.parent_nickname, partner_id.ToString()))
+                            if (dm_UserBLL.ImportUserInfo(userInfo.companyId, Phone, RealName, NickName, CardNo, UserLevel, Province, City, Down, DetailAddress, WeChat, dm_UserEntity.id.ToString(), dm_UserEntity.nickname, partner_id.ToString()))
                             {
                                 snum++;
                             }
@@ -277,6 +277,10 @@ namespace Learun.Application.Web.Areas.LR_SystemModule.Controllers
                         else
                             continue;
                     }
+
+                    #region 用户导入成功之后修复没有邀请码的用户
+                    dm_UserBLL.BatchGeneralInviteCode();
+                    #endregion
 
                     var data = new
                     {

@@ -1203,6 +1203,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        #region 补全没有邀请码的用户信息
+        public void BatchGeneralInviteCode() {
+            IEnumerable<dm_userEntity> dm_UserList = this.BaseRepository("dm_data").FindList<dm_userEntity>(t => t.invitecode.IsEmpty());
+            List<dm_userEntity> userList = new List<dm_userEntity>();
+            foreach (dm_userEntity item in dm_UserList)
+            {
+                item.invitecode = EncodeInviteCode(item.id);
+                userList.Add(item);
+            }
+            this.BaseRepository("dm_data").Update(userList);
+        }
+        #endregion
+
         #region 生成融云Token
         /**
          * 此处替换成您的appKey
