@@ -854,6 +854,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_AccountdetailEntity.stepvalue = updateprice;
                 dm_AccountdetailEntity.currentvalue = dm_UserEntity.accountprice;
                 dm_AccountdetailEntity.Create();
+                dm_UserEntity.Modify(dm_UserEntity.id);
 
                 db = BaseRepository("dm_data").BeginTrans();
 
