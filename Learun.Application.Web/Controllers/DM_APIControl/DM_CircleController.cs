@@ -176,6 +176,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 删除哆米圈文章
+        public ActionResult DeleteCircleByID(int id) {
+            try
+            {
+                dm_Friend_CircleIBLL.DeleteEntity(id);
+                return Success("删除成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 构造点赞信息
         List<FriendCircleEntity> GeneralPraise(IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities, bool IsGovernment = false)
         {
