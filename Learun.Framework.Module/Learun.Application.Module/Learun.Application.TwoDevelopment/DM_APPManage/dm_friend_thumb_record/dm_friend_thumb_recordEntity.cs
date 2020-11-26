@@ -50,12 +50,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("UPDATETIME")]
         public DateTime? updatetime { get; set; }
-
-        /// <summary>
-        /// 头像列表
-        /// </summary>
-        [Column("HEADPICLIST")]
-        public string headpiclist { get; set; }
         #endregion
 
         #region 扩展操作
