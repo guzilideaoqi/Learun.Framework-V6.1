@@ -28,6 +28,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_ArticleIBLL dm_ArticleIBLL = new DM_ArticleBLL();
 
+        private dm_level_remarkIBLL dm_Level_RemarkIBLL = new dm_level_remarkBLL();
+
         private AreaIBLL areaIBLL = new AreaBLL();
 
         #region 获取平台设置
@@ -183,8 +185,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string appid = CheckAPPID();
 
-                List<LevelRemark> JuniorRemark = new List<LevelRemark> {
-                    new LevelRemark{Remark="自购分享加倍",SubRemark="" },
+                string cacheKey = "LevelRemark";
+
+                IEnumerable<dm_level_remarkEntity> dm_Level_RemarkEntities = redisCache.Read<IEnumerable<dm_level_remarkEntity>>(cacheKey, 7);
+                if (dm_Level_RemarkEntities.IsEmpty() || dm_Level_RemarkEntities.Count() <= 0)
+                {
+                    dm_Level_RemarkEntities = dm_Level_RemarkIBLL.GetList("");
+                    if (dm_Level_RemarkEntities.Count() > 0)
+                    {
+                        redisCache.Write(cacheKey, dm_Level_RemarkEntities, DateTime.Now.AddMinutes(5));
+                    }
+                }
+
+                /*List<LevelRemark> JuniorRemark = new List<LevelRemark> {
+                    new LevelRemark{Remark="自购分享加倍",SubRemark="",RemarkImage="" },
                     new LevelRemark{Remark="来米收益",SubRemark="" },
                     new LevelRemark{Remark="徒弟分红",SubRemark="" },
                     new LevelRemark{Remark="积分特权",SubRemark="" }
@@ -209,9 +223,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     new LevelRemark{Remark="线下活动",SubRemark="公司制订境内外旅行" },
                     new LevelRemark{Remark="免手续费",SubRemark="提现0手续费" },
                     new LevelRemark{Remark="线下体验店",SubRemark="创立线下分公司" }
-                };
+                };*/
 
-                return Success("获取成功", new { JuniorRemark = JuniorRemark, SeniorRemark = SeniorRemark, PartnerRemark = PartnerRemark });
+                return Success("获取成功", new { JuniorRemark = dm_Level_RemarkEntities.Where(t => t.RemarkType == 0), SeniorRemark = dm_Level_RemarkEntities.Where(t => t.RemarkType == 1), PartnerRemark = dm_Level_RemarkEntities.Where(t => t.RemarkType == 2) });
             }
             catch (Exception ex)
             {
@@ -538,5 +552,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
     {
         public string Remark { get; set; }
         public string SubRemark { get; set; }
+
+        public string RemarkImage { get; set; }
     }
 }

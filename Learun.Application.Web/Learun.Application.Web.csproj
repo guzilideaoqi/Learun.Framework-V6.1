@@ -303,6 +303,7 @@
     <Compile Include="Areas\DM_APPManage\Controllers\dm_business_cooperationController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_friend_circleController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_friend_thumb_recordController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_level_remarkController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -2407,6 +2408,10 @@
     <Content Include="Areas\DM_APPManage\Views\dm_friend_thumb_record\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_thumb_record\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_thumb_record\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_level_remark\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_level_remark\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_level_remark\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_level_remark\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

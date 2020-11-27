@@ -192,7 +192,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             IRepository db = null;
             try
             {
-                dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity_Exist = this.BaseRepository("dm_data").FindEntity<dm_friend_thumb_recordEntity>(t => t.user_id == dm_Friend_Thumb_RecordEntity.user_id && t.friend_id == dm_Friend_Thumb_RecordEntity.friend_id);
+                dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity_Exist = this.BaseRepository("dm_data").FindEntity<dm_friend_thumb_recordEntity>(t => t.user_id == dm_Friend_Thumb_RecordEntity.user_id && t.friend_id == dm_Friend_Thumb_RecordEntity.friend_id && t.operatetype == 0);
                 if (dm_Friend_Thumb_RecordEntity_Exist.IsEmpty())
                 {//不存在点赞记录
                     #region 首次点赞成功之后给发布人赠送积分
@@ -221,6 +221,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         #endregion
 
                         dm_Friend_Thumb_RecordEntity.status = 1;
+                        dm_Friend_Thumb_RecordEntity.operatetype = 0;//点赞
                         dm_Friend_Thumb_RecordEntity.Create();
 
                         db.Insert(dm_IntergraldetailEntity);//添加积分获取记录
@@ -231,6 +232,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     else
                     {
                         dm_Friend_Thumb_RecordEntity.status = 1;
+                        dm_Friend_Thumb_RecordEntity.operatetype = 0;//点赞
                         dm_Friend_Thumb_RecordEntity.Create();
                         this.BaseRepository("dm_data").Insert(dm_Friend_Thumb_RecordEntity);
                     }
@@ -265,7 +267,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                dm_Friend_Thumb_RecordEntity = this.BaseRepository("dm_data").FindEntity<dm_friend_thumb_recordEntity>(t => t.user_id == dm_Friend_Thumb_RecordEntity.user_id && t.friend_id == dm_Friend_Thumb_RecordEntity.friend_id);
+                dm_Friend_Thumb_RecordEntity = this.BaseRepository("dm_data").FindEntity<dm_friend_thumb_recordEntity>(t => t.user_id == dm_Friend_Thumb_RecordEntity.user_id && t.friend_id == dm_Friend_Thumb_RecordEntity.friend_id && t.operatetype == 0);
                 if (dm_Friend_Thumb_RecordEntity.IsEmpty())
                 {
                     throw new Exception("未找到点赞记录");
@@ -299,7 +301,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                return this.BaseRepository("dm_data").FindTable("select ft.friend_id,u.headpic from dm_friend_thumb_record ft LEFT JOIN dm_user u on ft.user_id=u.id where ft.friend_id in (" + string.Join(",", friend_ids) + ") and ft.status=1");
+                return this.BaseRepository("dm_data").FindTable("select ft.friend_id,u.headpic from dm_friend_thumb_record ft LEFT JOIN dm_user u on ft.user_id=u.id where ft.friend_id in (" + string.Join(",", friend_ids) + ") and ft.status=1 and ft.operatetype=0");
             }
             catch (Exception ex)
             {
@@ -324,10 +326,84 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                return this.BaseRepository("dm_data").FindList<dm_friend_thumb_recordEntity>("select friend_id,user_id,status from dm_friend_thumb_record where user_id=" + User_ID + " and friend_id in (" + string.Join(",", friend_ids) + ") and status=1");
+                return this.BaseRepository("dm_data").FindList<dm_friend_thumb_recordEntity>("select friend_id,user_id,status from dm_friend_thumb_record where user_id=" + User_ID + " and friend_id in (" + string.Join(",", friend_ids) + ") and status=1 and operatetype=0");
             }
             catch (Exception ex)
             {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 分享扩展
+        public void ClickShare(dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity)
+        {
+            IRepository db = null;
+            try
+            {
+                dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity_Exist = this.BaseRepository("dm_data").FindEntity<dm_friend_thumb_recordEntity>(t => t.user_id == dm_Friend_Thumb_RecordEntity.user_id && t.friend_id == dm_Friend_Thumb_RecordEntity.friend_id && t.operatetype == 1);
+                if (dm_Friend_Thumb_RecordEntity_Exist.IsEmpty())
+                {//不存在点赞记录
+                    #region 首次点赞成功之后给发布人赠送积分
+                    dm_friend_circleEntity dm_Friend_CircleEntity = new dm_friend_circleService().GetEntity((int)dm_Friend_Thumb_RecordEntity.friend_id);
+                    dm_userEntity dm_UserEntity = new DM_UserService().GetEntity(int.Parse(dm_Friend_CircleEntity.createcode));
+                    dm_basesettingEntity dm_BasesettingEntity = new DM_BaseSettingService().GetEntityByCache(dm_UserEntity.appid);
+                    #endregion
+
+                    if ((dm_UserEntity.userlevel == 0 && dm_BasesettingEntity.miquan_allowclickpraise == 1) || dm_UserEntity.userlevel == 1 || dm_UserEntity.userlevel == 2)
+                    {
+                        db = this.BaseRepository("dm_data").BeginTrans();
+
+                        #region 构造赠送积分的信息
+                        int intergral_value = dm_BasesettingEntity.miquan_share_integral;
+                        dm_UserEntity.integral += intergral_value;
+                        dm_intergraldetailEntity dm_IntergraldetailEntity = new dm_intergraldetailEntity()
+                        {
+                            currentvalue = dm_UserEntity.integral,
+                            stepvalue = intergral_value,
+                            user_id = dm_UserEntity.id,
+                            type = 5,
+                            title = "米圈分享",
+                            remark = "米圈文案被其他用户分享所得奖励"
+                        };
+                        dm_IntergraldetailEntity.Create();
+                        #endregion
+
+                        dm_Friend_Thumb_RecordEntity.status = 1;
+                        dm_Friend_Thumb_RecordEntity.operatetype = 1;//分享
+                        dm_Friend_Thumb_RecordEntity.Create();
+
+                        db.Insert(dm_IntergraldetailEntity);//添加积分获取记录
+                        db.Insert(dm_Friend_Thumb_RecordEntity);//添加点赞记录
+                        db.Update(dm_UserEntity);//修改用户信息
+                        db.Commit();
+                    }
+                    else
+                    {
+                        dm_Friend_Thumb_RecordEntity.status = 1;
+                        dm_Friend_Thumb_RecordEntity.operatetype = 1;//分享
+                        dm_Friend_Thumb_RecordEntity.Create();
+                        this.BaseRepository("dm_data").Insert(dm_Friend_Thumb_RecordEntity);
+                    }
+                }
+                else
+                {
+                    dm_Friend_Thumb_RecordEntity_Exist.status = 1;
+                    dm_Friend_Thumb_RecordEntity_Exist.Modify(dm_Friend_Thumb_RecordEntity_Exist.id);
+                    this.BaseRepository("dm_data").Update(dm_Friend_Thumb_RecordEntity_Exist);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
                 if (ex is ExceptionEx)
                 {
                     throw;

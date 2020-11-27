@@ -78,5 +78,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         IEnumerable<dm_friend_thumb_recordEntity> GetPraiseRecord(List<int> friend_ids, int User_ID);
         #endregion
+
+        #region 分享扩展
+        void ClickShare(dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity);
+        #endregion
     }
 }

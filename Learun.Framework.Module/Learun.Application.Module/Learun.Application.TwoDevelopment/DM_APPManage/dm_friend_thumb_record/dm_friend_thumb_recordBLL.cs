@@ -235,5 +235,25 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
         #endregion
+
+        #region 分享扩展
+        public void ClickShare(dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity) {
+            try
+            {
+                dm_friend_thumb_recordService.ClickShare(dm_Friend_Thumb_RecordEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

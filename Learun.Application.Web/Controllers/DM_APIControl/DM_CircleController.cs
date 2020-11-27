@@ -23,6 +23,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_UserIBLL dM_UserIBLL = new DM_UserBLL();
 
+        const string _cache_key_list = "CircleCacheKeyList";
+
         #region 获取哆米圈官推文章
         public ActionResult GetCircleByGovernment(int PageNo = 1, int PageSize = 20)
         {
@@ -42,7 +44,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (friendCircleEntities == null)
                 {
                     IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities = dm_Friend_CircleIBLL.GetCircleByGovernment(pagination, appid);
-                    friendCircleEntities = GeneralPraise(dm_Friend_CircleEntities, true);
+                    friendCircleEntities = GeneralPraise(dm_Friend_CircleEntities, cacheKey, true);
                     if (friendCircleEntities.Count > 0)
                     {
                         redisCache.Write<List<FriendCircleEntity>>(cacheKey, friendCircleEntities, DateTime.Now.AddMinutes(2), 7);
@@ -77,10 +79,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (friendCircleEntities == null)
                 {
                     IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities = dm_Friend_CircleIBLL.GetCircleByGeneral(pagination, appid);
-                    friendCircleEntities = GeneralPraise(dm_Friend_CircleEntities);
+                    friendCircleEntities = GeneralPraise(dm_Friend_CircleEntities, cacheKey);
                     if (friendCircleEntities.Count > 0)
                     {
                         redisCache.Write<List<FriendCircleEntity>>(cacheKey, friendCircleEntities, DateTime.Now.AddMinutes(2), 7);
+
+                        ManageRedisCache(cacheKey);
                     }
                 }
 
@@ -94,20 +98,23 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取单条哆米圈文章
-        public ActionResult GetSingleCircle(int id)
+        public ActionResult GetSingleCircle(int id, string cacheKey)
         {
             try
             {
-                string cacheKey = "SingleCircle" + id;
-                dm_friend_circleEntity dm_Friend_CircleEntity = redisCache.Read<dm_friend_circleEntity>(cacheKey, 7);
-                if (dm_Friend_CircleEntity.IsEmpty())
+                FriendCircleEntity friendCircleEntity = null;
+                List<FriendCircleEntity> friendCircleEntities = redisCache.Read<List<FriendCircleEntity>>(cacheKey, 7);
+                if (friendCircleEntities.IsEmpty() || friendCircleEntities.Count <= 0)
                 {
-                    dm_Friend_CircleEntity = dm_Friend_CircleIBLL.GetSingleCircle(id);
-                    if (!dm_Friend_CircleEntity.IsEmpty())
-                        redisCache.Write<dm_friend_circleEntity>(cacheKey, dm_Friend_CircleEntity, DateTime.Now.AddMinutes(2), 7);
+                    List<dm_friend_circleEntity> dm_Friend_CircleEntities = new List<dm_friend_circleEntity>();
+                    dm_Friend_CircleEntities.Add(dm_Friend_CircleIBLL.GetSingleCircle(id));
+
+                    friendCircleEntities = GeneralPraise(dm_Friend_CircleEntities, cacheKey);
                 }
 
-                return Success("获取成功!", dm_Friend_CircleEntity);
+                if (!friendCircleEntities.IsEmpty() && friendCircleEntities.Count > 0)
+                    friendCircleEntity = friendCircleEntities.Where(t => t.TemplateDetail.id == id).FirstOrDefault();
+                return Success("获取成功!", friendCircleEntity);
             }
             catch (Exception ex)
             {
@@ -127,7 +134,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     string appid = CheckAPPID();
                     dm_Friend_CircleIBLL.PubCircle(appid, Content, Images, dm_UserEntity.id.ToString());
-
+                    RemoveAllCache();
                     return Success("发布成功!");
                 }
                 else
@@ -160,10 +167,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (friendCircleEntities == null)
                 {
                     IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities = dm_Friend_CircleIBLL.GetMyCircle(pagination, dm_UserEntity.id.ToString());
-                    friendCircleEntities = GeneralPraise(dm_Friend_CircleEntities);
+                    friendCircleEntities = GeneralPraise(dm_Friend_CircleEntities, cacheKey);
                     if (friendCircleEntities.Count > 0)
                     {
                         redisCache.Write<List<FriendCircleEntity>>(cacheKey, friendCircleEntities, DateTime.Now.AddMinutes(2), 7);
+
+                        ManageRedisCache(cacheKey);
                     }
                 }
 
@@ -177,7 +186,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 删除哆米圈文章
-        public ActionResult DeleteCircleByID(int id) {
+        public ActionResult DeleteCircleByID(int id)
+        {
             try
             {
                 dm_Friend_CircleIBLL.DeleteEntity(id);
@@ -191,7 +201,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 构造点赞信息
-        List<FriendCircleEntity> GeneralPraise(IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities, bool IsGovernment = false)
+        List<FriendCircleEntity> GeneralPraise(IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities, string cacheKey, bool IsGovernment = false)
         {
             //获取用户信息
             dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfo(base.Request.Headers);
@@ -263,7 +273,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     TemplateDetail = item,
                     PraiseRecord = headPicList,
                     MyPariseStatus = MyPariseStatus,
-                    Pub_UserInfo = new PubUserInfo { NickName = NickName, HeadPic = HeadPic, PubTime = TimeConvert(item.createtime) }
+                    Pub_UserInfo = new PubUserInfo { NickName = NickName, HeadPic = HeadPic, PubTime = TimeConvert(item.createtime) },
+                    CacheKey = cacheKey
                 });
             }
             #endregion
@@ -333,6 +344,53 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 分享扩展
+        public ActionResult ClickShare(dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity)
+        {
+            try
+            {
+                dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfo(base.Request.Headers);
+
+                dm_Friend_Thumb_RecordEntity.user_id = dm_UserEntity.id;
+                dm_Friend_Thumb_RecordIBLL.ClickShare(dm_Friend_Thumb_RecordEntity);
+                return Success("分享成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 缓存key存储
+        void ManageRedisCache(string cacheKey)
+        {
+            List<string> cacheKeyList = redisCache.Read<List<string>>(_cache_key_list, 7);
+            if (!cacheKeyList.IsEmpty())
+            {
+                if (!cacheKeyList.Contains(cacheKey))
+                {
+                    cacheKeyList.Add(cacheKey);
+                }
+            }
+            else
+            {
+                cacheKeyList = new List<string>();
+                cacheKeyList.Add(cacheKey);
+            }
+            redisCache.Write<List<string>>(_cache_key_list, cacheKeyList, 7);
+        }
+
+        void RemoveAllCache()
+        {
+            List<string> cacheKeyList = redisCache.Read<List<string>>(_cache_key_list, 7);
+            for (int i = 0; i < cacheKeyList.Count; i++)
+            {
+                redisCache.Remove(cacheKeyList[i], 7);
+            }
+            redisCache.Remove(_cache_key_list, 7);
+        }
+        #endregion
         public string CheckAPPID()
         {
             if (base.Request.Headers["appid"].IsEmpty())
@@ -364,6 +422,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// 发布人信息
         /// </summary>
         public PubUserInfo Pub_UserInfo { get; set; }
+
+        /// <summary>
+        /// 缓存中的key值
+        /// </summary>
+        public string CacheKey { get; set; }
     }
 
     public class PubUserInfo

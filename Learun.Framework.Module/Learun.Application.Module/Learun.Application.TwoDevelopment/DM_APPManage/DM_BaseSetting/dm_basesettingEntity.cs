@@ -546,6 +546,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public int miquan_integral { get; set; }
 
         /// <summary>
+        /// 米圈分享增加积分限制
+        /// </summary>
+        public int miquan_share_integral { get; set; }
+
+        /// <summary>
         /// 允许普通用户点赞加积分 0不加积分  1加积分
         /// </summary>
         public int miquan_allowclickpraise { get; set; }

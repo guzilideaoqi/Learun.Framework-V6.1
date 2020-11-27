@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "等级描述";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<link href="~/Content/webuploader/webuploader.css" rel="stylesheet" />
+@Html.AppendCssFile("/Areas/DM_APPManage/Views/DM_Banner/Form.css")
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">描述<font face="宋体">*</font></div>
+        <input id="Remark" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">二级描述<font face="宋体">*</font></div>
+        <input id="SubRemark" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">描述类型<font face="宋体">*</font></div>
+        <div id="RemarkType"><ul><li data-value="0">初级代理</li><li data-value="1">高级代理</li><li data-value="2">合伙人</li></ul></div>
+    </div>
+    <div class="lr-wrap col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">任务图片<font face="宋体">*</font></div>
+        <div class="file">
+            <input type="file" name="uploadFile" id="uploadFile">
+        </div>
+    </div>
+</div>
+<script src="~/Content/webuploader/webuploader.nolog.min.js"></script>
+@Html.AppendJsFile("/Views/LR_Content/script/lr-fileupload.js", "/Areas/DM_APPManage/Views/dm_level_remark/Form.js")

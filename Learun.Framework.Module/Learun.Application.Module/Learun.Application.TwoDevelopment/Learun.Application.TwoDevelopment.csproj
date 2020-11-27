@@ -228,6 +228,10 @@
     <Compile Include="DM_APPManage\dm_friend_thumb_record\dm_friend_thumb_recordService.cs" />
     <Compile Include="DM_APPManage\dm_friend_thumb_record\dm_friend_thumb_recordIBLL.cs" />
     <Compile Include="DM_APPManage\dm_friend_thumb_record\dm_friend_thumb_recordBLL.cs" />
+    <Compile Include="DM_APPManage\dm_level_remark\dm_level_remarkEntity.cs" />
+    <Compile Include="DM_APPManage\dm_level_remark\dm_level_remarkService.cs" />
+    <Compile Include="DM_APPManage\dm_level_remark\dm_level_remarkIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_level_remark\dm_level_remarkBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">
