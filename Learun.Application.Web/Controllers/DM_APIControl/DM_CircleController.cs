@@ -191,6 +191,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 dm_Friend_CircleIBLL.DeleteEntity(id);
+                RemoveAllCache();
                 return Success("删除成功!");
             }
             catch (Exception ex)
@@ -303,10 +304,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
-        #region 分享之后增加分享次数
-
-        #endregion
-
         #region 点赞
         public ActionResult ClickPraise(dm_friend_thumb_recordEntity dm_Friend_Thumb_RecordEntity)
         {
@@ -316,6 +313,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_Friend_Thumb_RecordEntity.user_id = dm_UserEntity.id;
                 dm_Friend_Thumb_RecordIBLL.ClickPraise(dm_Friend_Thumb_RecordEntity);
+                RemoveAllCache();
                 return Success("点赞成功!");
             }
             catch (Exception ex)
@@ -335,6 +333,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 dm_Friend_Thumb_RecordEntity.user_id = dm_UserEntity.id;
 
                 dm_Friend_Thumb_RecordIBLL.CanclePraise(dm_Friend_Thumb_RecordEntity);
+                RemoveAllCache();
                 return Success("已取消!");
             }
             catch (Exception ex)

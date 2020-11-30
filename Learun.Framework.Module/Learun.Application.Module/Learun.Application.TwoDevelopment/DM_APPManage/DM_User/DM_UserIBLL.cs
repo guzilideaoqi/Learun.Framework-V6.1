@@ -44,7 +44,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         dm_userEntity Login(dm_userEntity entity);
 
+        #region 用户注册
+        /// <summary>
+        /// 手机号+验证码
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        /// <param name="VerifiCode"></param>
+        /// <param name="ParentInviteCode"></param>
+        /// <param name="appid"></param>
+        /// <param name="SmsMessageID"></param>
+        /// <returns></returns>
         dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string ParentInviteCode, string appid, string SmsMessageID);
+
+        /// <summary>
+        /// 手机号快捷登录
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        /// <param name="ParentInviteCode"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        dm_userEntity QuickLogin(dm_userEntity dm_UserEntity, string ParentInviteCode, string appid);
+        #endregion
 
         string EncodeInviteCode(int? id);
 

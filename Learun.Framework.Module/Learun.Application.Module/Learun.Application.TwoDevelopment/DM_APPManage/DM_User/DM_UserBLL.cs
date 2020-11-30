@@ -206,6 +206,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        #region 用户注册
+        /// <summary>
+        /// 手机号+验证码注册
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        /// <param name="VerifiCode"></param>
+        /// <param name="ParentInviteCode"></param>
+        /// <param name="appid"></param>
+        /// <param name="SmsMessageID"></param>
+        /// <returns></returns>
         public dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string ParentInviteCode, string appid, string SmsMessageID)
         {
             try
@@ -221,6 +231,29 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 throw ExceptionEx.ThrowBusinessException(ex);
             }
         }
+
+        /// <summary>
+        /// 手机号快捷登录
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        /// <param name="ParentInviteCode"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        public dm_userEntity QuickLogin(dm_userEntity dm_UserEntity, string ParentInviteCode, string appid) {
+            try
+            {
+                return dM_UserService.QuickLogin(dm_UserEntity, ParentInviteCode, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
 
         public string EncodeInviteCode(int? id)
         {

@@ -229,6 +229,41 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        #region 手机号快捷登陆
+        public ActionResult GetUserInfoByPhone(string Phone)
+        {
+            try
+            {
+                string appid = CheckAPPID(); bool IsNewUser = false;
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByPhone(Phone, appid);
+                if (dm_UserEntity.IsEmpty())
+                    IsNewUser = true;
+
+                return Success("获取成功!", new
+                {
+                    UserEntity = dm_UserEntity,
+                    IsNewUser = IsNewUser
+                });
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
+        public ActionResult QuickRegister(dm_userEntity dm_UserEntity,string ParentInviteCode) {
+            try
+            {
+                string appid = CheckAPPID();
+                return Success("注册成功!", dm_userIBLL.QuickLogin(dm_UserEntity, ParentInviteCode, appid));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
         #region 重置密码
         /// <summary>
         /// 重置密码

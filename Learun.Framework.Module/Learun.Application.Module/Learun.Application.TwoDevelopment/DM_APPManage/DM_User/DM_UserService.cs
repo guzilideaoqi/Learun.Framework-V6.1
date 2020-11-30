@@ -200,7 +200,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 CheckSingleLogin(ref dm_UserEntity);
                 #endregion
                 return dm_UserEntity;
-
             }
             catch (Exception ex)
             {
@@ -260,9 +259,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     CheckSingleLogin(ref dm_UserEntity);
                 }
-
-
-
                 return dm_UserEntity;
             }
             catch (Exception ex)
@@ -404,7 +400,34 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        #region 用户注册
         public dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string ParentInviteCode, string appid, string SmsMessageID)
+        {
+            lock (lockObject)
+            {
+                try
+                {
+                    if (!CommonSMSHelper.IsPassVerification(SmsMessageID, VerifiCode, appid))
+                    {
+                        throw new Exception("验证码错误!");
+                    }
+
+                    return CommonRegister(dm_UserEntity, ParentInviteCode, appid);
+                }
+                catch (Exception ex)
+                {
+
+
+                    if (ex is ExceptionEx)
+                    {
+                        throw;
+                    }
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        dm_userEntity CommonRegister(dm_userEntity dm_UserEntity, string ParentInviteCode, string appid)
         {
             lock (lockObject)
             {
@@ -428,10 +451,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         throw new Exception("该手机号已注册!");
                     }
 
-                    if (!CommonSMSHelper.IsPassVerification(SmsMessageID, VerifiCode, appid))
-                    {
-                        throw new Exception("验证码错误!");
-                    }
+
 
                     dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
                     dm_UserEntity.pwd = Md5Helper.Encrypt(dm_UserEntity.pwd, 16);
@@ -489,21 +509,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     dm_userEntity dm_UserEntity_New = GetEntity(id.ToInt());
                     CheckSingleLogin(ref dm_UserEntity_New);
+
                     return dm_UserEntity_New;
                 }
                 catch (Exception ex)
                 {
                     if (db != null)
                         db.Rollback();
+
                     string[] obj = new string[6]
-                    {
+                        {
                         "上下级绑定失败,当前用户",
                         null,
                         null,
                         null,
                         null,
                         null
-                    };
+                        };
                     int? num2 = id;
                     obj[1] = num2.ToString();
                     obj[2] = ",上级用户";
@@ -512,6 +534,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     obj[4] = ex.Message;
                     obj[5] = ex.StackTrace;
                     log.Error(string.Concat(obj));
+
                     if (ex is ExceptionEx)
                     {
                         throw;
@@ -520,6 +543,30 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
         }
+
+        /// <summary>
+        /// 快捷登陆
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        /// <param name="ParentInviteCode"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        public dm_userEntity QuickLogin(dm_userEntity dm_UserEntity, string ParentInviteCode, string appid)
+        {
+            try
+            {
+                return CommonRegister(dm_UserEntity, ParentInviteCode, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
 
         public dynamic SignIn(int userid)
         {
@@ -587,6 +634,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 if (db != null)
                     db.Rollback();
+
                 if (ex is ExceptionEx)
                 {
                     throw;
@@ -1205,7 +1253,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 补全没有邀请码的用户信息
-        public void BatchGeneralInviteCode() {
+        public void BatchGeneralInviteCode()
+        {
             IEnumerable<dm_userEntity> dm_UserList = this.BaseRepository("dm_data").FindList<dm_userEntity>(t => t.invitecode.IsEmpty());
             List<dm_userEntity> userList = new List<dm_userEntity>();
             foreach (dm_userEntity item in dm_UserList)
