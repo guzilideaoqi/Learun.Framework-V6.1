@@ -197,6 +197,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {//不存在点赞记录
                     #region 首次点赞成功之后给发布人赠送积分
                     dm_friend_circleEntity dm_Friend_CircleEntity = new dm_friend_circleService().GetEntity((int)dm_Friend_Thumb_RecordEntity.friend_id);
+                    if (dm_Friend_CircleEntity.IsEmpty() || dm_Friend_CircleEntity.t_status != 1)
+                        throw new Exception("该文章已下架!");
                     dm_userEntity dm_UserEntity = new DM_UserService().GetEntity(int.Parse(dm_Friend_CircleEntity.createcode));
                     dm_basesettingEntity dm_BasesettingEntity = new DM_BaseSettingService().GetEntityByCache(dm_UserEntity.appid);
                     #endregion

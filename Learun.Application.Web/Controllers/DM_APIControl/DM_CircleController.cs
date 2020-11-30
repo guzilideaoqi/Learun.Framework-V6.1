@@ -70,7 +70,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     page = PageNo,
                     rows = PageSize,
-                    sidx = "createtime",
+                    sidx = "createtime,iscream",
                     sord = "desc"
                 };
                 string appid = CheckAPPID();
@@ -293,7 +293,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 return PubTime.ToString("HH:mm");
             }
-            else if (days > 3)
+            else if (days > 3 && days < 8)
             {
                 return days + "天前";
             }
