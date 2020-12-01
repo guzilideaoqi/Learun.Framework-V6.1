@@ -60,7 +60,7 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerConfirm('是否确认删除该项！', function (res) {
                         if (res) {
-                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/dm_level_remark/DeleteForm', { keyValue: keyValue}, function () {
+                            learun.deleteForm(top.$.rootUrl + '/DM_APPManage/dm_level_remark/DeleteForm', { keyValue: keyValue }, function () {
                             });
                         }
                     });
@@ -71,14 +71,28 @@ var bootstrap = function ($, learun) {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/dm_level_remark/GetPageList',
                 headData: [
-                        { label: 'id', name: 'id', width: 200, align: "left" },
-                        { label: '等级描述', name: 'Remark', width: 200, align: "left" },
-                        { label: '二级描述', name: 'SubRemark', width: 200, align: "left" },
-                        { label: '描述图片', name: 'RemarkImage', width: 200, align: "left" },
-                        { label: '创建时间', name: 'CreateTime', width: 200, align: "left" },
-                        { label: '修改时间', name: 'UpdateTime', width: 200, align: "left" },
+                    //{ label: 'id', name: 'id', width: 200, align: "left" },
+                    { label: '等级描述', name: 'Remark', width: 200, align: "left" },
+                    { label: '二级描述', name: 'SubRemark', width: 200, align: "left" },
+                    {
+                        label: '描述图片', name: 'RemarkImage', width: 200, align: "left", formatter: function (cellvalue, rowdata, options) {
+                            return "<img src='" + cellvalue + "' style=\"width:20px;height:20px\">";
+                        }
+                    },
+                    {
+                        label: '描述类型', name: 'RemarkType', width: 200, align: "left", formatter: function (cellvalue, rowdata, options) {
+                            if (cellvalue == 0)
+                                return "初级代理";
+                            else if (cellvalue == 1)
+                                return "高级代理";
+                            else if (cellvalue == 2)
+                                return "合伙人";
+                        }
+                    },
+                    { label: '创建时间', name: 'CreateTime', width: 200, align: "left" },
+                    { label: '修改时间', name: 'UpdateTime', width: 200, align: "left" },
                 ],
-                mainId:'id',
+                mainId: 'id',
                 reloadSelected: true,
                 isPage: true
             });

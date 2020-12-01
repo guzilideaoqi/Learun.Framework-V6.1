@@ -1302,10 +1302,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// <param name="pageSize">每页显示数量</param>
         /// <param name="sort">排序方式:0-综合排序;1-按佣金比率升序;2-按佣金比例降序;3-按价格升序;4-按价格降序;5-按销量升序;6-按销量降序;7-优惠券金额排序升序;8-优惠券金额排序降序;9-券后价升序排序;10-券后价降序排序;11-按照加入多多进宝时间升序;12-按照加入多多进宝时间降序;13-按佣金金额升序排序;14-按佣金金额降序排序;15-店铺描述评分升序;16-店铺描述评分降序;17-店铺物流评分升序;18-店铺物流评分降序;19-店铺服务评分升序;20-店铺服务评分降序;27-描述评分击败同类店铺百分比升序，28-描述评分击败同类店铺百分比降序，29-物流评分击败同类店铺百分比升序，30-物流评分击败同类店铺百分比降序，31-服务评分击败同类店铺百分比升序，32-服务评分击败同类店铺百分比降序</param>
         /// <returns></returns>
-        public ActionResult Get_PDD_GoodList(int user_id = 0, string keyWord = "女装", int pageIndex = 1, int pageSize = 20, int sort = 0, bool with_coupon = false, int cat_id = 1)
+        public ActionResult Get_PDD_GoodList(int user_id = 0, string keyWord = "", int pageIndex = 1, int pageSize = 20, int sort = 0, bool with_coupon = false, int cat_id = 1)
         {
             try
             {
+                keyWord = "";//不传空的话需要备案
                 string appid = CheckAPPID();
                 string cacheKey = Md5Helper.Hash("PDDGoodList" + keyWord + pageIndex + pageSize + sort + with_coupon + cat_id);
                 List<CommonGoodInfo> goodItems = redisCache.Read<List<CommonGoodInfo>>(cacheKey, 7L);
@@ -1315,6 +1316,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (goodItems == null)
                 {
                     PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
+                    //goodItems = ConvertCommonGoodEntityByPDD(pDDApi.GetRecommendGood(4, user_id.ToString(), pageSize, pageIndex.ToString(), pageSize, dm_UserEntity.pdd_pid, cat_id), dm_UserEntity, dm_BasesettingEntity, cacheKey);// (keyWord, pageIndex, pageSize, sort, with_coupon, cat_id), dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     goodItems = ConvertCommonGoodEntityByPDD(pDDApi.SearchGood(keyWord, pageIndex, pageSize, sort, with_coupon, cat_id), dm_UserEntity, dm_BasesettingEntity, cacheKey);
 
                     if (goodItems.Count > 0)

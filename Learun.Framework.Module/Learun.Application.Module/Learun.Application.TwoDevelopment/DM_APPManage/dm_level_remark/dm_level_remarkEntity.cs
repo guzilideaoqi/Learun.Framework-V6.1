@@ -64,6 +64,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         public void Create()
         {
+            this.CreateTime = DateTime.Now;
         }
         /// <summary>
         /// 编辑调用
