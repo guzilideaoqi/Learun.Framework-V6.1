@@ -384,11 +384,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         void RemoveAllCache()
         {
             List<string> cacheKeyList = redisCache.Read<List<string>>(_cache_key_list, 7);
-            for (int i = 0; i < cacheKeyList.Count; i++)
+            if (!cacheKeyList.IsEmpty())
             {
-                redisCache.Remove(cacheKeyList[i], 7);
+                for (int i = 0; i < cacheKeyList.Count; i++)
+                {
+                    redisCache.Remove(cacheKeyList[i], 7);
+                }
+                redisCache.Remove(_cache_key_list, 7);
             }
-            redisCache.Remove(_cache_key_list, 7);
         }
         #endregion
         public string CheckAPPID()
