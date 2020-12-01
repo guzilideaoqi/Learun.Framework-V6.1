@@ -285,13 +285,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 时间处理
-        string TimeConvert(DateTime PubTime)
+        string TimeConvert(DateTime? PubTime)
         {
+            DateTime pubTime = (DateTime)PubTime;
             DateTime currentTime = DateTime.Now;
-            int days = (currentTime - PubTime).Days;
+            int days = (currentTime - pubTime).Days;
             if (days == 0)
             {
-                return PubTime.ToString("HH:mm");
+                return pubTime.ToString("HH:mm");
             }
             else if (days > 3 && days < 8)
             {
@@ -299,7 +300,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             else
             {
-                return PubTime.ToString("MM月dd日");
+                return pubTime.ToString("MM月dd日");
             }
         }
         #endregion

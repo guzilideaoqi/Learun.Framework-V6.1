@@ -62,7 +62,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("CREATETIME")]
-        public DateTime createtime { get; set; }
+        public DateTime? createtime { get; set; }
 
         /// <summary>
         /// 站长id
@@ -80,7 +80,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 是否为精华帖
         /// </summary>
         [Column("ISCREAM")]
-        public int iscream { get; set; }
+        public int? iscream { get; set; }
         #endregion
 
         #region 扩展操作
