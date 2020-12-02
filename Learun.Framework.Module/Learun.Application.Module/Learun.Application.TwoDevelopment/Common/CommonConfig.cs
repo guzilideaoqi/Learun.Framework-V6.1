@@ -12,5 +12,7 @@ namespace Learun.Application.TwoDevelopment.Common
         /// 图片的前缀
         /// </summary>
         //public static string ImageQianZhui = "";
+
+        public const string tb_auth_address = "http://dlaimi.cn/TBUserInfoController/AuthorCallBack";
     }
 }

@@ -25,6 +25,7 @@ using System.Text.RegularExpressions;
 using System.Net;
 using System.Text;
 using System.IO;
+using Learun.Application.TwoDevelopment.Common;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -1658,7 +1659,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
 
-                string authorAddress = "https://oauth.taobao.com/authorize?response_type=code&client_id=" + dm_BasesettingEntity.tb_appkey + "&redirect_uri=http://wx.sqgsq.cn/TBUserInfoController/AuthorCallBack&state=" + user_id + "&view=wap";
+                string authorAddress = "https://oauth.taobao.com/authorize?response_type=code&client_id=" + dm_BasesettingEntity.tb_appkey + "&redirect_uri="+ CommonConfig.tb_auth_address + "&state=" + user_id + "&view=wap";
 
                 return Success("获取成功!", new { authoraddress = authorAddress, isbeian = dm_UserEntity.isrelation_beian, tb_nickname = dm_UserEntity.tb_nickname });
             }

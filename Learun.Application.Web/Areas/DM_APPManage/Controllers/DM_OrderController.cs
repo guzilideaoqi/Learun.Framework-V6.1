@@ -83,5 +83,13 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             int effectCount = dM_OrderIBLL.SyncOrder(plaform, timetype, status, startTime, endTime);
             return Success("本次执行完成,共同步" + effectCount + "条数据!");
         }
+
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult ExcuteSubCommission() {
+            UserInfo userInfo = LoginUserInfo.Get();
+            dM_OrderIBLL.ExcuteSubCommission(userInfo.companyId);
+            return Success("返利成功!");
+        }
     }
 }

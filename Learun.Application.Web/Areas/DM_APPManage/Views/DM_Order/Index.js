@@ -119,6 +119,11 @@ var bootstrap = function ($, learun) {
                     }
                 });
             });
+
+            //执行返佣
+            $("#lr_excuterate").on('click', function () {
+                learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Order/ExcuteSubCommission', {});
+            })
         },
         initGird: function () {
             $('#girdtable').lrAuthorizeJfGrid({

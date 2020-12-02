@@ -1,4 +1,5 @@
-﻿using Learun.Application.TwoDevelopment.DM_APPManage;
+﻿using Learun.Application.TwoDevelopment.Common;
+using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Application.TwoDevelopment.Hyg_RobotModule;
 using Learun.Application.Web.App_Start._01_Handler;
 using Learun.Loger;
@@ -99,7 +100,7 @@ namespace Learun.Application.Web.Controllers
                 pout.Add("client_id", dm_BasesettingEntity.tb_appkey);
                 pout.Add("client_secret", dm_BasesettingEntity.tb_appsecret);
                 pout.Add("code", code);
-                pout.Add("redirect_uri", HttpUtility.UrlEncode("http://wx.sqgsq.cn/TBUserInfoController/AuthorCallBack"));
+                pout.Add("redirect_uri", HttpUtility.UrlEncode(CommonConfig.tb_auth_address));
                 string output = webUtils.DoPost("http://oauth.taobao.com/token", pout);
 
                 log.Error(output);
@@ -166,7 +167,7 @@ namespace Learun.Application.Web.Controllers
                 pout.Add("client_id", "29236073");
                 pout.Add("client_secret", "29de7a8560d773736ef5bf568a7961bd");
                 pout.Add("code", code);
-                pout.Add("redirect_uri", HttpUtility.UrlEncode("http://wx.sqgsq.cn/TBUserInfoController/AuthorCallBack"));
+                pout.Add("redirect_uri", HttpUtility.UrlEncode(CommonConfig.tb_auth_address));
                 string output = webUtils.DoPost("http://oauth.taobao.com/token", pout);
 
                 #region 获取出来用户信息
