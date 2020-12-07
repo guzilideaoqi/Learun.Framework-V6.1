@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using System.Linq;
 using System.Data;
 using Learun.Application.TwoDevelopment.Common;
+using System.Web.UI.WebControls;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -1201,6 +1202,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (User_ID <= 0) return FailNoLogin();
 
                 return SuccessList("获取成功", dm_userIBLL.GeneralRongTokne(User_ID, appid));
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
+        public ActionResult LoginTokenVerify(string loginToken) {
+            try
+            {
+                string appid = CheckAPPID();
+                return Success("验证成功", dm_userIBLL.LoginTokenVerify(loginToken, appid));
             }
             catch (Exception ex)
             {

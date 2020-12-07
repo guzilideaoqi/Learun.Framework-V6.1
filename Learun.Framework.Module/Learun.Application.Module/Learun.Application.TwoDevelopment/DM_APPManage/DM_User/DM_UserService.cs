@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using io.rong;
 using System.Data.Common;
+using io.rong.util;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -1330,6 +1331,25 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             catch (Exception)
             {
                 return "";
+            }
+        }
+
+        public string LoginTokenVerify(string loginToken,string appid) {
+            try
+            {
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
+
+                string returnContent = RongHttpClient.ExecutePost(dm_BasesettingEntity.rongcloud_appkey, dm_BasesettingEntity.rongcloud_appsecret, string.Format("loginToken={0}&exID={1}", loginToken, "test"), "https://api.verification.jpush.cn/v1/web/loginTokenVerify", "application/json");
+
+                return returnContent;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
             }
         }
         #endregion

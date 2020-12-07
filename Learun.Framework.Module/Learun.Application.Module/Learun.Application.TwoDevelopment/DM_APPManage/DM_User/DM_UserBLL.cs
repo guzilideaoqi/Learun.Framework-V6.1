@@ -561,6 +561,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 throw ExceptionEx.ThrowBusinessException(ex);
             }
         }
+
+        public string LoginTokenVerify(string loginToken, string appid) {
+            try
+            {
+                return dM_UserService.LoginTokenVerify(loginToken, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
         #endregion
 
         #region 获取签到数据

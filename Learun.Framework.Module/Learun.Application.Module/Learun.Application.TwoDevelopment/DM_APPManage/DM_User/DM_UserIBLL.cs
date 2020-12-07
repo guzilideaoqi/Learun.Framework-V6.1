@@ -124,6 +124,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #region 生成融云Token
         string GeneralRongTokne(int User_ID, string appid);
+
+        string LoginTokenVerify(string loginToken, string appid);
         #endregion
 
         #region 获取签到数据
