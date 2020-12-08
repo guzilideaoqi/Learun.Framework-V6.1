@@ -44,21 +44,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         private static object lockObject = new object();
 
-        const string jiguang_privatekey = @"MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAL+i2pvwy4OSBXG3
-quf2i0FeOGK1KNxVWcgxJF7W0zdk75yabRDqaJgT1fdG7A3cijoKorw3QXENVCDI
-dnUUkdtU4qBLAaX/1QDRswYW5BnmMNA0c4zq/BgY3hcBewmDakqpilJ/HUv448LG
-0jx5xqP6M3ZLmN5MmUlfx9epcam7AgMBAAECgYBGaADFNiyvRCC37PDflFcJRyKU
-MVa3zKvVvyhLp8WmHnFiKeJUSqru5KrB1M65MQOf23R6jhp+/JSiDsRms436Uahm
-HQPfqEQR8Ka1H4COUd2eabSxVBpgZkCkbzYjk5eKq7RjE35xUKU9p0iOo5u7kCRy
-xavMxtdObOXdkRdaMQJBAPQva8YCIyeCrNp08uSYM+NliM56157ioo3EUWqTPWug
-dKdkUcmYj8wYU37H3jysMa9Q1CetpUQklN+63e6zLj0CQQDI6InLmG+vOILTEK2i
-5Nqb2scN/VqjsJ8F7tpzhARh1v7oUosDSXEZx05mvmnDG0Nn/vKU47unAEUds1eE
-Cu9XAkEAoPLEyb3M6BUE0/UzyCLeSKs7EkX763kche75bxLf8BnR6ieAlS1e0rrS
-BgW9YSZqlVDklcap4RFvo0wrTlOCTQJBAIkdIsW/YCGOiMJxdH9ifsu1UPp8OTrT
-1IPhEleZ9r+rUkbN5q+0lKrKOfim5VlRpvw3o+j3T19XMNRnTEgCinsCQBeKR76m
-GaJksnQ5gFhGQ0clgJgFMdJdATQVryyU9Uc3vM6RxWBFs1Pcv/u1amgKBMtCXiRI
-1crAZWOOK91l4As=";
-
         private static char[] r = new char[32]
         {
             'Q',
@@ -1373,7 +1358,7 @@ GaJksnQ5gFhGQ0clgJgFMdJdATQVryyU9Uc3vM6RxWBFs1Pcv/u1amgKBMtCXiRI
                 {
                     RSATool rSATool = new RSATool();
 
-                    string phone = rSATool.DecryptByPublicKey(rongyun_Response.phone, jiguang_privatekey, false);
+                    string phone = rSATool.DecryptByPublicKey(rongyun_Response.phone, dm_BasesettingEntity.jg_privatekey, false);
                     dm_UserEntity = GetEntityByPhone(phone, appid);
                 }
                 else
