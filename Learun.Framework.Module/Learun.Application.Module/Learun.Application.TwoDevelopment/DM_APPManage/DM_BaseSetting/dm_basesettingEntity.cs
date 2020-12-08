@@ -369,6 +369,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public string jg_appsecret { get; set; }
 
         /// <summary>
+        /// 极光认证私钥
+        /// </summary>
+        [Column("JG_PRIVATEKEY")]
+        public string jg_privatekey { get; set; }
+
+        /// <summary>
         /// 短信签名ID
         /// </summary>
         [Column("SMS_SIGN_ID")]

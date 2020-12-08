@@ -1213,7 +1213,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                return Success("验证成功", dm_userIBLL.LoginTokenVerify(loginToken, appid));
+                dm_userEntity dm_UserEntity = dm_userIBLL.LoginTokenVerify(loginToken, appid);
+                if (dm_UserEntity.IsEmpty())
+                    return Fail("该用户不存在!");
+                return Success("验证成功", dm_UserEntity);
             }
             catch (Exception ex)
             {

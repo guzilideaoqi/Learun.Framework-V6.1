@@ -22,6 +22,11 @@ using System.Text;
 using io.rong;
 using System.Data.Common;
 using io.rong.util;
+using HYG.CommonHelper.Common;
+using System.Security.Cryptography;
+using System.Net;
+using Aop.Api.Util;
+using Learun.Util.Security;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -38,6 +43,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         private string fieldSql;
 
         private static object lockObject = new object();
+
+        const string jiguang_privatekey = @"MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAL+i2pvwy4OSBXG3
+quf2i0FeOGK1KNxVWcgxJF7W0zdk75yabRDqaJgT1fdG7A3cijoKorw3QXENVCDI
+dnUUkdtU4qBLAaX/1QDRswYW5BnmMNA0c4zq/BgY3hcBewmDakqpilJ/HUv448LG
+0jx5xqP6M3ZLmN5MmUlfx9epcam7AgMBAAECgYBGaADFNiyvRCC37PDflFcJRyKU
+MVa3zKvVvyhLp8WmHnFiKeJUSqru5KrB1M65MQOf23R6jhp+/JSiDsRms436Uahm
+HQPfqEQR8Ka1H4COUd2eabSxVBpgZkCkbzYjk5eKq7RjE35xUKU9p0iOo5u7kCRy
+xavMxtdObOXdkRdaMQJBAPQva8YCIyeCrNp08uSYM+NliM56157ioo3EUWqTPWug
+dKdkUcmYj8wYU37H3jysMa9Q1CetpUQklN+63e6zLj0CQQDI6InLmG+vOILTEK2i
+5Nqb2scN/VqjsJ8F7tpzhARh1v7oUosDSXEZx05mvmnDG0Nn/vKU47unAEUds1eE
+Cu9XAkEAoPLEyb3M6BUE0/UzyCLeSKs7EkX763kche75bxLf8BnR6ieAlS1e0rrS
+BgW9YSZqlVDklcap4RFvo0wrTlOCTQJBAIkdIsW/YCGOiMJxdH9ifsu1UPp8OTrT
+1IPhEleZ9r+rUkbN5q+0lKrKOfim5VlRpvw3o+j3T19XMNRnTEgCinsCQBeKR76m
+GaJksnQ5gFhGQ0clgJgFMdJdATQVryyU9Uc3vM6RxWBFs1Pcv/u1amgKBMtCXiRI
+1crAZWOOK91l4As=";
 
         private static char[] r = new char[32]
         {
@@ -1334,14 +1354,77 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public string LoginTokenVerify(string loginToken,string appid) {
+        public dm_userEntity LoginTokenVerify(string loginToken, string appid)
+        {
+            dm_userEntity dm_UserEntity = null;
             try
             {
+
                 dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
 
-                string returnContent = RongHttpClient.ExecutePost(dm_BasesettingEntity.rongcloud_appkey, dm_BasesettingEntity.rongcloud_appsecret, string.Format("loginToken={0}&exID={1}", loginToken, "test"), "https://api.verification.jpush.cn/v1/web/loginTokenVerify", "application/json");
+                Dictionary<string, string> dicParam = new Dictionary<string, string>();
+                byte[] bytes = Encoding.Default.GetBytes(dm_BasesettingEntity.jg_appkey + ":" + dm_BasesettingEntity.jg_appsecret);
+                string base64Str = Convert.ToBase64String(bytes);
+                dicParam.Add("Authorization", "Basic " + base64Str);
+                string resultContent = HttpPost("https://api.verification.jpush.cn/v1/web/loginTokenVerify", "{\"loginToken\":\"" + loginToken + "\",\"exID\":\"\"}", dicParam);
 
-                return returnContent;
+                rongyun_response rongyun_Response = JsonConvert.JsonDeserialize<rongyun_response>(resultContent);
+                if (rongyun_Response.code == 8000)
+                {
+                    RSATool rSATool = new RSATool();
+
+                    string phone = rSATool.DecryptByPublicKey(rongyun_Response.phone, jiguang_privatekey, false);
+                    dm_UserEntity = GetEntityByPhone(phone, appid);
+                }
+                else
+                {
+                    throw new Exception(rongyun_Response.content);
+                }
+
+                return dm_UserEntity;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+
+        string HttpPost(string Url, string postDataStr, Dictionary<string, string> header = null, string cookie = "")
+        {
+            try
+            {
+                HttpWebResponse httpWebResponse = null;
+                ServicePointManager.Expect100Continue = false;
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(Url);
+                httpWebRequest.Method = "POST";
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)";
+                if (header == null)
+                {
+                    header = new Dictionary<string, string>();
+                }
+                foreach (KeyValuePair<string, string> item in header)
+                {
+                    httpWebRequest.Headers.Add(item.Key, item.Value);
+                }
+                byte[] bytes = Encoding.UTF8.GetBytes(postDataStr);
+                int num = bytes.Length;
+                httpWebRequest.ContentLength = num;
+                Stream requestStream = httpWebRequest.GetRequestStream();
+                requestStream.Write(bytes, 0, num);
+                requestStream.Close();
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                string text = httpWebResponse.ContentEncoding;
+                if (text == null || text.Length < 1)
+                {
+                    text = "UTF-8";
+                }
+                StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding(text));
+                return streamReader.ReadToEnd();
             }
             catch (Exception ex)
             {
@@ -1391,5 +1474,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public int? SignIntegral { get; set; }
         public string DetailDate { get; set; }
         public int IsFinish { get; set; }
+    }
+
+    public class rongyun_response
+    {
+        public string id { get; set; }
+
+        public int code { get; set; }
+
+        public string content { get; set; }
+
+        public string exID { get; set; }
+        public string phone { get; set; }
     }
 }

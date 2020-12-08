@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\..\..\Learun.Application.Web\bin\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="EcmaScript.NET">
       <HintPath>..\..\..\packages\EcmaScript.Net.1.0.1.0\lib\net20\EcmaScript.NET.dll</HintPath>
     </Reference>
@@ -78,6 +81,8 @@
     <Compile Include="DataBase\FieldValueParam.cs" />
     <Compile Include="DataBase\DbWhere.cs" />
     <Compile Include="Model\jfGridModel.cs" />
+    <Compile Include="Security\RsaHelper.cs" />
+    <Compile Include="Security\RSATool.cs" />
     <Compile Include="Tree\TreeDataMake.cs" />
     <Compile Include="Tree\TreeModelEx.cs" />
     <Compile Include="Ueditor\UeditorConfig.cs" />

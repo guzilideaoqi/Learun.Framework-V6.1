@@ -562,7 +562,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public string LoginTokenVerify(string loginToken, string appid) {
+        public dm_userEntity LoginTokenVerify(string loginToken, string appid) {
             try
             {
                 return dM_UserService.LoginTokenVerify(loginToken, appid);
