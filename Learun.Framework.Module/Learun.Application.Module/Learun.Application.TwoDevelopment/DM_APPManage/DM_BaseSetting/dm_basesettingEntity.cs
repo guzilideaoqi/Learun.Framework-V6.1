@@ -544,22 +544,34 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// 显示佣金类型  0显示低佣金   1显示高佣金
         /// </summary>
+        [Column("SHOWCOMMISSION")]
         public int? showcommission { get; set; }
 
         /// <summary>
         /// 米圈点赞增加积分限制
         /// </summary>
+        [Column("MIQUAN_INTEGRAL")]
         public int miquan_integral { get; set; }
 
         /// <summary>
         /// 米圈分享增加积分限制
         /// </summary>
+        [Column("MIQUAN_SHARE_INTEGRAL")]
         public int miquan_share_integral { get; set; }
 
         /// <summary>
         /// 允许普通用户点赞加积分 0不加积分  1加积分
         /// </summary>
+        [Column("MIQUAN_ALLOWCLICKPRAISE")]
         public int miquan_allowclickpraise { get; set; }
+
+        /// <summary>
+        /// 米圈积分说明
+        /// </summary>
+        [Column("MIQUAN_REMARK")]
+        public string miquan_remark { get; set; }
+
+
         public void Create()
         {
             UserInfo userInfo = LoginUserInfo.Get();

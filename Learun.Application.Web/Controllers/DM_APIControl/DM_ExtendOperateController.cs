@@ -120,7 +120,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     //previewversion = dm_BasesettingEntity.previewversion,
                     ischecked = Status,  //dm_BasesettingEntity.openchecked,
                     welcomenewperson = dm_BasesettingEntity.welcomenewperson,
-                    showcommission = dm_BasesettingEntity.showcommission
+                    showcommission = dm_BasesettingEntity.showcommission,
+                    miquan_remark=dm_BasesettingEntity.miquan_remark
                 });
             }
             catch (Exception ex)
