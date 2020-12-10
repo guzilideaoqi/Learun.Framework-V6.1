@@ -241,7 +241,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 dm_UserEntity.upmonthreceiveeffect = dm_User_RelationEntity.UpMonthReceiveEffect;
                             }
 
-                            redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddMinutes(10), 7L);
+                            redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddSeconds(30), 7L);
 
                             #region 判断用户是否有邀请码  没有时再重新创建
                             if (dm_UserEntity.invitecode.IsEmpty())

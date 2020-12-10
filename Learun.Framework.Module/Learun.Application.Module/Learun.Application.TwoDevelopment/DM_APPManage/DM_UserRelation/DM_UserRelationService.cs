@@ -87,7 +87,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_User_RelationEntity = BaseRepository("dm_data").FindEntity((dm_user_relationEntity t) => t.user_id == id);
                     if (!dm_User_RelationEntity.IsEmpty())
                     {
-                        redisCache.Write(cacheKey, dm_User_RelationEntity, DateTime.Now.AddMinutes(10), 7L);
+                        redisCache.Write(cacheKey, dm_User_RelationEntity, DateTime.Now.AddSeconds(30), 7L);
                     }
                 }
                 return dm_User_RelationEntity;

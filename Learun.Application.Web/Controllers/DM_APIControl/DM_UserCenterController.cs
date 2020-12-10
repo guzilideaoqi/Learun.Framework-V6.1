@@ -721,7 +721,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     messageRecordList = dm_MessageRecordIBLL.GetPageList(new Pagination { rows = pageSize, page = pageNo, sidx = "createtime", sord = "desc" }, "{\"user_id\":\"" + User_ID + "\"}");
                     if (messageRecordList != null)
                     {
-                        redisCache.Write<IEnumerable<dm_messagerecordEntity>>(cacheKey, messageRecordList, DateTime.Now.AddMinutes(10), 7);
+                        redisCache.Write<IEnumerable<dm_messagerecordEntity>>(cacheKey, messageRecordList, DateTime.Now.AddSeconds(30), 7);
                     }
                 }
 
@@ -806,7 +806,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                     if (accountDetailList.Count() > 0)
                     {
-                        redisCache.Write<IEnumerable<dm_accountdetailEntity>>(cacheKey, accountDetailList, DateTime.Now.AddMinutes(10), 7);
+                        redisCache.Write<IEnumerable<dm_accountdetailEntity>>(cacheKey, accountDetailList, DateTime.Now.AddSeconds(30), 7);
                     }
                 }
 
@@ -848,7 +848,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                     if (intergralchangegoodList.Count() > 0)
                     {
-                        redisCache.Write<IEnumerable<dm_intergraldetailEntity>>(cacheKey, intergralchangegoodList, DateTime.Now.AddMinutes(10), 7);
+                        redisCache.Write<IEnumerable<dm_intergraldetailEntity>>(cacheKey, intergralchangegoodList, DateTime.Now.AddSeconds(30), 7);
                     }
                 }
 
@@ -877,7 +877,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     totalTask = dm_Task_Person_SettingIBLL.GetPersonProcess(User_ID, appid);
 
-                    redisCache.Write<IEnumerable<dm_task_person_settingEntity>>(cacheKey, totalTask, DateTime.Now.AddMinutes(10), 7);
+                    redisCache.Write<IEnumerable<dm_task_person_settingEntity>>(cacheKey, totalTask, DateTime.Now.AddSeconds(30), 7);
                 }
 
                 List<int?> today_ids = new int?[] { 1, 6 }.ToList();
