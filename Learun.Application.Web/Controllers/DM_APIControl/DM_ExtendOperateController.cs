@@ -32,6 +32,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private AreaIBLL areaIBLL = new AreaBLL();
 
+        private DM_OrderIBLL dM_OrderIBLL = new DM_OrderBLL();
+
         #region 获取平台设置
         public ActionResult GetPlaformSetting()
         {
@@ -246,6 +248,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
+                dM_OrderIBLL.ExcuteSubCommission(AppID);
                 return Success("返利执行成功");
             }
             catch (Exception ex)
