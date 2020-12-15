@@ -56,7 +56,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
             "getverification",
             "resetpwd",
             "getplaformsetting",
-            "excutesubcommission","gettasktype","gettasklist","logintokenverify" };
+            "excutesubcommission","gettasktype","gettasklist","logintokenverify","getcommonsetting" };
         private ICache redisCache = CacheFactory.CaChe();
         private FilterMode _customMode;
         /// <summary>默认构造</summary>
