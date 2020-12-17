@@ -123,7 +123,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     ischecked = Status,  //dm_BasesettingEntity.openchecked,
                     welcomenewperson = dm_BasesettingEntity.welcomenewperson,
                     showcommission = dm_BasesettingEntity.showcommission,
-                    miquan_remark=dm_BasesettingEntity.miquan_remark
+                    miquan_remark = dm_BasesettingEntity.miquan_remark,
+                    task_remark = "http://dlaimi.cn/dm_appmanage/dm_article/lookarticle?id=16"
                 });
             }
             catch (Exception ex)
