@@ -257,9 +257,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     {
                         //获取今日是否签到
                         dm_intergraldetailEntity dm_IntergraldetailEntity = dm_IntergralDetailService.GetLastSignData(user_id);
-                        item.finishcount = dm_IntergraldetailEntity.createtime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") ? 1 : 0;
-                        item.finishstatus = item.finishcount == 1 ? 2 : 0;
-                        item.btntext = item.finishstatus == 0 ? "签到" : "已完成";
+                        if (dm_IntergraldetailEntity.IsEmpty())
+                        {
+                            item.finishcount = 0;
+                            item.finishstatus = 0;
+                            item.btntext = "签到";
+                        }
+                        else {
+                            item.finishcount = dm_IntergraldetailEntity.createtime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") ? 1 : 0;
+                            item.finishstatus = item.finishcount == 1 ? 2 : 0;
+                            item.btntext = item.finishstatus == 0 ? "签到" : "已完成";
+                        }
                     }
                     else if (item.s_type == 2)
                     {//邀请粉丝任务
