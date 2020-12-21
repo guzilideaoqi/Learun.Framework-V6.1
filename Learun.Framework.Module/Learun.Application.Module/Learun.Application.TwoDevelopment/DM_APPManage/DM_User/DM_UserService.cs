@@ -202,9 +202,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == phone && t.appid == appid);
-                #region 增加单点登录记录
                 CheckSingleLogin(ref dm_UserEntity);
-                #endregion
                 return dm_UserEntity;
             }
             catch (Exception ex)
@@ -262,8 +260,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             #endregion
                         }
                     }
-
-                    CheckSingleLogin(ref dm_UserEntity);
                 }
                 return dm_UserEntity;
             }
@@ -391,9 +387,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 entity.pwd = Md5Helper.Encrypt(entity.pwd, 16);
 
                 dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == entity.phone && t.appid == entity.appid && t.pwd == entity.pwd);
-                #region 增加单点登录记录
-                CheckSingleLogin(ref dm_UserEntity);
-                #endregion
+
+                if (!dm_UserEntity.IsEmpty()) {
+                    CacheHelper.ClearUserInfo(dm_UserEntity.token);
+
+                    dm_UserEntity.last_logintime = DateTime.Now;
+                    dm_UserEntity.token = GeneralToken();
+                    SaveEntity((int)dm_UserEntity.id, dm_UserEntity);
+
+                    #region 增加单点登录记录
+                    CheckSingleLogin(ref dm_UserEntity);
+                    #endregion
+                }
+
                 return dm_UserEntity;
             }
             catch (Exception ex)
@@ -462,6 +468,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
                     dm_UserEntity.pwd = Md5Helper.Encrypt(dm_UserEntity.pwd, 16);
                     dm_UserEntity.token = Guid.NewGuid().ToString();
+                    dm_UserEntity.last_logintime = DateTime.Now;
                     dm_UserEntity.Create();
 
                     int effectCount = BaseRepository("dm_data").Insert(dm_UserEntity);
@@ -1445,11 +1452,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             if (!dm_UserEntity.IsEmpty())
             {
-                string token = Guid.NewGuid().ToString();
-                dm_UserEntity.token = token;
-
-                CacheHelper.SaveUserInfo(token, dm_UserEntity);
+                CacheHelper.SaveUserInfo(dm_UserEntity.token, dm_UserEntity);
             }
+        }
+        #endregion
+
+        #region 生成token
+        string GeneralToken() {
+            return Guid.NewGuid().ToString();
         }
         #endregion
     }

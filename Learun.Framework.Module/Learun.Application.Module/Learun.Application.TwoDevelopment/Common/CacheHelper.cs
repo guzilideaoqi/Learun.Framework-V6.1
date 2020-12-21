@@ -60,5 +60,10 @@ namespace Learun.Application.TwoDevelopment.Common
                 return null;
             }
         }
+
+        public static void ClearUserInfo(string token) {
+            string cacheKey = SingleLogin + token;
+            redisCache.Remove(cacheKey, 7);
+        }
     }
 }

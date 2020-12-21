@@ -358,6 +358,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("RONGCLOUD_TOKEN")]
         public string rongcloud_token { get; set; }
+
+        /// <summary>
+        /// 最后登录时间
+        /// </summary>
+        [Column("LAST_LOGINTIME")]
+        public DateTime last_logintime { get; set; }
         public void Create()
         {
             userlevel = 0;

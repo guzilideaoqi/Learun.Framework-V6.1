@@ -874,7 +874,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Topic_GoodListResponse dTK_Topic_GoodListResponse = dTK_ApiManage.GetTopicGoodList(dTK_Topic_GoodListRequest);
                     if (dTK_Topic_GoodListResponse.code != 0)
                     {
-                        return Fail(dTK_Topic_GoodListResponse.msg);
+                        //return Fail(dTK_Topic_GoodListResponse.msg);
+                        return Fail("我也是有底线的");
                     }
                     topicGoodItems = ConvertCommonGoodEntityByTopicGood(dTK_Topic_GoodListResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, topicGoodItems, DateTime.Now.AddHours(2.0), 7L);
