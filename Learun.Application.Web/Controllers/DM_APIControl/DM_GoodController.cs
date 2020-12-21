@@ -138,7 +138,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Top100_Response dTK_Top100_Response = dTK_ApiManage.GetTop100(dTK_Top100_Request);
                     if (dTK_Top100_Response.code != 0)
                     {
-                        return Fail(dTK_Top100_Response.msg);
+                        //return Fail(dTK_Top100_Response.msg);
+                        return Fail("我也是有底线的");
                     }
                     top100List = dTK_Top100_Response.data.hotWords;
                     redisCache.Write(cacheKey, top100List, DateTime.Now.AddDays(1.0), 7L);
@@ -178,7 +179,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Ranking_ListResponse dTK_Ranking_ListResponse = dTK_ApiManage.GetRankingList(dTK_Ranking_ListRequest);
                     if (dTK_Ranking_ListResponse.code != 0)
                     {
-                        return Fail(dTK_Ranking_ListResponse.msg);
+                        //return Fail(dTK_Ranking_ListResponse.msg);
+                        return Fail("我也是有底线的");
                     }
                     RankingList = ConvertCommonGoodEntityByRank(dTK_Ranking_ListResponse.data, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, RankingList, DateTime.Now.AddHours(4.0), 7L);
@@ -269,7 +271,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                         if (dTK_OP_ListResponse.code != 0)
                         {
-                            return Fail(dTK_OP_ListResponse.msg);
+                            //return Fail(dTK_OP_ListResponse.msg);
+                            return Fail("我也是有底线的");
                         }
 
 
@@ -347,7 +350,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                             DTK_Super_GoodResponse dTK_Super_GoodResponse = dTK_ApiManage.GetSuperGood(dTK_Super_GoodRequest);
                             if (dTK_Super_GoodResponse.code != 0)
                             {
-                                return Fail(dTK_Super_GoodResponse.msg);
+                                //return Fail(dTK_Super_GoodResponse.msg);
+                                return Fail("我也是有底线的");
                             }
                             superGoodItems = ConvertCommonGoodEntityBySuperGood(dTK_Super_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                         }
@@ -482,7 +486,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Super_GoodResponse dTK_Super_GoodResponse = dTK_ApiManage.GetSuperGood(dTK_Super_GoodRequest);
                     if (dTK_Super_GoodResponse.code != 0)
                     {
-                        return Fail(dTK_Super_GoodResponse.msg);
+                        //return Fail(dTK_Super_GoodResponse.msg);
+                        return Fail("我也是有底线的");
                     }
                     superGoodItems = ConvertCommonGoodEntityBySuperGood(dTK_Super_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -530,7 +535,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Get_dtk_Search_GoodResponse dTK_Get_dtk_Search_GoodResponse = dTK_ApiManage.GetDtkSearchGood(dtk_Get_dtk_Search_GoodRequest);
                     if (dTK_Get_dtk_Search_GoodResponse.code != 0)
                     {
-                        return Fail(dTK_Get_dtk_Search_GoodResponse.msg);
+                        //return Fail(dTK_Get_dtk_Search_GoodResponse.msg);
+                        return Fail("我也是有底线的");
                     }
                     superGoodItems = ConvertCommonGoodEntityByDTK_SearchGoodItem(dTK_Get_dtk_Search_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -589,7 +595,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         DTK_TB_Service_GoodResponse dTK_TB_Service_GoodResponse = dTK_ApiManage.GetDTK_TBServiceGood(dTK_TB_Service_GoodRequest);
 
                         if (dTK_TB_Service_GoodResponse.code != 0)
-                            return Fail(dTK_TB_Service_GoodResponse.msg);
+                            //return Fail(dTK_TB_Service_GoodResponse.msg);
+                            return Fail("我也是有底线的");
                         superGoodItems = ConvertCommonGoodEntityByTBServiceGood(dTK_TB_Service_GoodResponse.data, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
                     else if (ChannelType == "chaojiquan")//使用大淘客搜索
@@ -612,7 +619,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         DTK_Get_dtk_Search_GoodResponse dTK_Get_dtk_Search_GoodResponse = dTK_ApiManage.GetDtkSearchGood(dtk_Get_dtk_Search_GoodRequest);
                         if (dTK_Get_dtk_Search_GoodResponse.code != 0)
                         {
-                            return Fail(dTK_Get_dtk_Search_GoodResponse.msg);
+                            //return Fail(dTK_Get_dtk_Search_GoodResponse.msg);
+                            return Fail("我也是有底线的");
                         }
 
                         superGoodItems = ConvertCommonGoodEntityByDTK_SearchGoodItem(dTK_Get_dtk_Search_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
@@ -668,7 +676,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_OP_ListResponse dTK_OP_ListResponse = dTK_ApiManage.GetOPGood(dTK_OP_ListRequest);
                     if (dTK_OP_ListResponse.code != 0)
                     {
-                        return Fail(dTK_OP_ListResponse.msg);
+                        //return Fail(dTK_OP_ListResponse.msg);
+                        return Fail("我也是有底线的");
                     }
                     oPGoodItems = ConvertCommonGoodEntityByOPGood(dTK_OP_ListResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, oPGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -708,7 +717,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Search_SuggestionResponse dTK_Search_SuggestionResponse = dTK_ApiManage.GetSearchSuggestion(dTK_Search_SuggestionRequest);
                     if (dTK_Search_SuggestionResponse.code != 0)
                     {
-                        return Fail(dTK_Search_SuggestionResponse.msg);
+                        //return Fail(dTK_Search_SuggestionResponse.msg);
+                        return Fail("我也是有底线的");
                     }
                     SuggestionList = dTK_Search_SuggestionResponse.data;
                     redisCache.Write(cacheKey, SuggestionList, DateTime.Now.AddDays(1.0), 7L);
@@ -742,7 +752,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Activity_CatalogueResponse dTK_Activity_CatalogueResponse = dTK_ApiManage.GetActivityCatalogueList(dTK_Activity_CatalogueRequest);
                     if (dTK_Activity_CatalogueResponse.code != 0)
                     {
-                        return Fail(dTK_Activity_CatalogueResponse.msg);
+                        //return Fail(dTK_Activity_CatalogueResponse.msg);
+                        return Fail("我也是有底线的");
                     }
                     activityCatalogueItems = dTK_Activity_CatalogueResponse.data;
                     redisCache.Write(cacheKey, activityCatalogueItems, DateTime.Now.AddDays(1.0), 7L);
@@ -915,7 +926,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_TB_Topic_ListResponse dTK_TB_Topic_ListResponse = dTK_ApiManage.GettTBTopicList(dTK_TB_Topic_ListRequest);
                     if (dTK_TB_Topic_ListResponse.code != 0)
                     {
-                        return Fail(dTK_TB_Topic_ListResponse.msg);
+                        //return Fail(dTK_TB_Topic_ListResponse.msg);
+                        return Fail("我也是有底线的");
                     }
                     tB_TopicItems = dTK_TB_Topic_ListResponse.data;
                     redisCache.Write(cacheKey, tB_TopicItems, DateTime.Now.AddDays(1.0), 7L);
@@ -978,7 +990,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     DTK_Privilege_LinkResponse dTK_Privilege_LinkResponse = dTK_ApiManage.GetPrivilegeLink(dTK_Privilege_LinkRequest);
                     if (dTK_Privilege_LinkResponse.code != 0)
                     {
-                        return Fail(dTK_Privilege_LinkResponse.msg);
+                        //return Fail(dTK_Privilege_LinkResponse.msg);
+                        return Fail("我也是有底线的");
                     }
                     ConvertLinkResult = dTK_Privilege_LinkResponse.data;
                     /*DTK_Good_DetailsItem dTK_Good_DetailsItem = GetGoodDetail(appid, originid);
