@@ -388,7 +388,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == entity.phone && t.appid == entity.appid && t.pwd == entity.pwd);
 
-                if (!dm_UserEntity.IsEmpty()) {
+                if (!dm_UserEntity.IsEmpty())
+                {
                     CacheHelper.ClearUserInfo(dm_UserEntity.token);
 
                     dm_UserEntity.last_logintime = DateTime.Now;
@@ -1367,6 +1368,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     string phone = rSATool.DecryptByPublicKey(rongyun_Response.phone, dm_BasesettingEntity.jg_privatekey, false);
                     dm_UserEntity = GetEntityByPhone(phone, appid);
+
+                    #region 一键登录之后退出原有账号
+                    CacheHelper.ClearUserInfo(dm_UserEntity.token);
+                    dm_UserEntity.token = GeneralToken();
+                    dm_UserEntity.last_logintime = DateTime.Now;
+                    this.BaseRepository("dm_data").Update(dm_UserEntity);
+                    CacheHelper.SaveUserInfo(dm_UserEntity.token, dm_UserEntity);
+                    #endregion
                 }
                 else
                 {
@@ -1458,7 +1467,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 生成token
-        string GeneralToken() {
+        string GeneralToken()
+        {
             return Guid.NewGuid().ToString();
         }
         #endregion
