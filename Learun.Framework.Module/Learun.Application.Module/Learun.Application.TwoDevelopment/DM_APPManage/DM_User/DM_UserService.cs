@@ -1269,7 +1269,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 补全没有邀请码的用户信息
         public void BatchGeneralInviteCode()
         {
-            IEnumerable<dm_userEntity> dm_UserList = this.BaseRepository("dm_data").FindList<dm_userEntity>(t => t.invitecode.IsEmpty());
+            IEnumerable<dm_userEntity> dm_UserList = this.BaseRepository("dm_data").IQueryable<dm_userEntity>(t => t.invitecode == "" || t.invitecode == null);
             List<dm_userEntity> userList = new List<dm_userEntity>();
             foreach (dm_userEntity item in dm_UserList)
             {

@@ -363,7 +363,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 最后登录时间
         /// </summary>
         [Column("LAST_LOGINTIME")]
-        public DateTime last_logintime { get; set; }
+        public DateTime? last_logintime { get; set; }
         public void Create()
         {
             userlevel = 0;
