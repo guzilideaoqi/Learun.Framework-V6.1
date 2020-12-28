@@ -61,3 +61,19 @@
 【异常位置】=>   在 Hyg.Common.OtherTools.DataConvertHelper.ToJsonObject[T](String str)
    在 Hyg.Common.DTKTools.DTK_ApiManage.GetDTK_ExplosiveGoods(DTK_Explosive_Goods_ListRequest dTK_Explosive_Goods_ListRequest)
 
+【时间】=>2020-12-28 21:42:01 455
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=getpersoninfo&token=93cb768c-619d-4f08-8088-8239f2ea9454&platform=android
+【异常位置】=>
+
+【时间】=>2020-12-28 21:42:03 065
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=getpersoninfo&token=93cb768c-619d-4f08-8088-8239f2ea9454&platform=android
+【异常位置】=>
+

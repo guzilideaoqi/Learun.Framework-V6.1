@@ -233,40 +233,73 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                         if (!dm_UserEntity.IsEmpty())
                         {
-                            dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(id);
-
-                            if (!dm_User_RelationEntity.IsEmpty())
-                            {
-                                dm_UserEntity.currentmontheffect = dm_User_RelationEntity.CurrentMonthEffect;
-                                dm_UserEntity.currentmonthreceiveeffect = dm_User_RelationEntity.CurrentMonthReceiveEffect;
-                                dm_UserEntity.upmonthreceiveeffect = dm_User_RelationEntity.UpMonthReceiveEffect;
-                            }
-
                             redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddSeconds(30), 7L);
-
-                            #region 判断用户是否有邀请码  没有时再重新创建
-                            if (dm_UserEntity.invitecode.IsEmpty())
-                            {
-                                dm_UserEntity.invitecode = EncodeInviteCode(dm_UserEntity.id);
-                                dm_UserEntity.Modify(dm_UserEntity.id);
-                                BaseRepository("dm_data").Update(dm_UserEntity);
-                            }
-                            #endregion
-
-                            #region 生成融云token
-                            if (dm_UserEntity.rongcloud_token.IsEmpty())
-                            {
-                                dm_UserEntity.rongcloud_token = GeneralRongTokne((int)dm_UserEntity.id, dm_UserEntity.appid);
-                                dm_UserEntity.Modify(dm_UserEntity.id);
-                                BaseRepository("dm_data").Update(dm_UserEntity);
-                            }
-                            #endregion
-
-                            CacheHelper.UpdateUserInfo(dm_UserEntity);
                         }
                     }
                 }
                 return dm_UserEntity;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+
+        public dm_userEntity GetPersonInfo(string token)
+        {
+            try
+            {
+                string cacheKey = "TempTimeKey" + token;
+                string tempTimeKey = redisCache.Read<string>(cacheKey, 7);
+                dm_userEntity dm_UserEntity = new dm_userEntity();
+                if (tempTimeKey.IsEmpty())
+                {
+                    dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.token == token);//从数据库获取
+                    if (!dm_UserEntity.IsEmpty())
+                    {
+                        dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(dm_UserEntity.id);
+
+                        if (!dm_User_RelationEntity.IsEmpty())
+                        {
+                            dm_UserEntity.currentmontheffect = dm_User_RelationEntity.CurrentMonthEffect;
+                            dm_UserEntity.currentmonthreceiveeffect = dm_User_RelationEntity.CurrentMonthReceiveEffect;
+                            dm_UserEntity.upmonthreceiveeffect = dm_User_RelationEntity.UpMonthReceiveEffect;
+                        }
+
+                        #region 判断用户是否有邀请码  没有时再重新创建
+                        if (dm_UserEntity.invitecode.IsEmpty())
+                        {
+                            dm_UserEntity.invitecode = EncodeInviteCode(dm_UserEntity.id);
+                            dm_UserEntity.Modify(dm_UserEntity.id);
+                            BaseRepository("dm_data").Update(dm_UserEntity);
+                        }
+                        #endregion
+
+                        #region 生成融云token
+                        if (dm_UserEntity.rongcloud_token.IsEmpty())
+                        {
+                            dm_UserEntity.rongcloud_token = GeneralRongTokne((int)dm_UserEntity.id, dm_UserEntity.appid);
+                            dm_UserEntity.Modify(dm_UserEntity.id);
+                            BaseRepository("dm_data").Update(dm_UserEntity);
+                        }
+                        #endregion
+                    }
+
+
+                    redisCache.Write<string>(cacheKey, "1", DateTime.Now.AddSeconds(30), 7);
+                }
+                else
+                {
+                    dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
+                }
+
+                Hyg.Common.OtherTools.LogHelper.WriteDebugLog("刷新用户信息", dm_UserEntity.ToJson());
+                return dm_UserEntity;
+
             }
             catch (Exception ex)
             {
@@ -526,7 +559,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             stepvalue = dm_BasesettingEntity.new_people,
                             type = 1,
                             user_id = id,
-                            profitLoss=1
+                            profitLoss = 1
                         });
                         parent_UserEntity.integral += dm_BasesettingEntity.new_people_parent;
                         db.Update(parent_UserEntity);
@@ -538,7 +571,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             stepvalue = dm_BasesettingEntity.new_people_parent,
                             type = 3,
                             user_id = parent_UserEntity.id,
-                            profitLoss=1
+                            profitLoss = 1
                         });
                         dm_user_relationEntity dm_User_RelationEntity = new dm_user_relationEntity
                         {
@@ -673,9 +706,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     remark = signCount.ToString(),
                     type = 2,
                     createtime = DateTime.Now,
-                    profitLoss=1
+                    profitLoss = 1
                 });
                 db.Commit();
+
                 return new
                 {
                     CurrentIntegral = currentIntegral,

@@ -252,7 +252,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
 
-        public ActionResult QuickRegister(dm_userEntity dm_UserEntity,string ParentInviteCode) {
+        public ActionResult QuickRegister(dm_userEntity dm_UserEntity, string ParentInviteCode)
+        {
             try
             {
                 string appid = CheckAPPID();
@@ -326,10 +327,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                if (User_ID <= 0)
-                    return FailNoLogin();
-
-                dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
+                string token = base.Request.Headers["token"];
+                dm_userEntity dm_UserEntity = dm_userIBLL.GetPersonInfo(token);
                 return Success("获取成功", dm_UserEntity);
             }
             catch (Exception ex)
@@ -1210,7 +1209,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
 
-        public ActionResult LoginTokenVerify(string loginToken) {
+        public ActionResult LoginTokenVerify(string loginToken)
+        {
             try
             {
                 string appid = CheckAPPID();

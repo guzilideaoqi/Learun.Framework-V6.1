@@ -34,7 +34,8 @@ namespace Learun.Application.TwoDevelopment.Common
         public static void SaveUserInfo(string oldToken, dm_userEntity dm_UserEntity)
         {
             #region 移除用户信息
-            if (!oldToken.IsEmpty()) {
+            if (!oldToken.IsEmpty())
+            {
                 string old_cacheKey = SingleLogin + oldToken;
                 redisCache.Remove(old_cacheKey, 7);
             }
@@ -60,8 +61,7 @@ namespace Learun.Application.TwoDevelopment.Common
             {
                 string token = header["token"].ToString();
 
-                string cacheKey = SingleLogin + token;
-                dm_userEntity dm_UserEntity = redisCache.Read<dm_userEntity>(cacheKey, 7);
+                dm_userEntity dm_UserEntity = ReadUserInfoByToken(token);
 
                 return dm_UserEntity;
             }
@@ -69,6 +69,14 @@ namespace Learun.Application.TwoDevelopment.Common
             {
                 return null;
             }
+        }
+
+        public static dm_userEntity ReadUserInfoByToken(string token)
+        {
+            string cacheKey = SingleLogin + token;
+            dm_userEntity dm_UserEntity = redisCache.Read<dm_userEntity>(cacheKey, 7);
+
+            return dm_UserEntity;
         }
 
         /// <summary>

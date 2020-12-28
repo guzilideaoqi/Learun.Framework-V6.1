@@ -105,6 +105,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public dm_userEntity GetPersonInfo(string token) {
+            try
+            {
+                return dM_UserService.GetPersonInfo(token);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+
         /// <summary>
         /// 通过邀请码获取实体信息
         /// </summary>

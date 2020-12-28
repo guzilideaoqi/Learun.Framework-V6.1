@@ -17,6 +17,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         dm_userEntity GetEntityByCache(int id);
 
+        dm_userEntity GetPersonInfo(string token);
+
         dm_userEntity GetEntityByInviteCode(string InviteCode, ref dm_user_relationEntity dm_User_RelationEntity);
 
         /// <summary>
