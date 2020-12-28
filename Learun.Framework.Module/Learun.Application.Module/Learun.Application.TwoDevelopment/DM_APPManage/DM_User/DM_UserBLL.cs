@@ -206,6 +206,21 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public dm_userEntity LoginByPhone(string phone, string appid) {
+            try
+            {
+                return dM_UserService.LoginByPhone(phone, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+
         #region 用户注册
         /// <summary>
         /// 手机号+验证码注册

@@ -131,8 +131,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 备用邀请码
         /// </summary>
         [Column("BY_INVITECODE")]
-        public string by_invitecode {
-            get;set;
+        public string by_invitecode
+        {
+            get; set;
         }
         /// <summary>
         /// 合伙人id
@@ -386,9 +387,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public void Modify(int? keyValue)
         {
             id = keyValue;
-            int? num = keyValue;
-            string cacheKey = "UserInfo" + num.ToString();
-            CacheFactory.CaChe().Remove(cacheKey, 7L);
         }
     }
 }

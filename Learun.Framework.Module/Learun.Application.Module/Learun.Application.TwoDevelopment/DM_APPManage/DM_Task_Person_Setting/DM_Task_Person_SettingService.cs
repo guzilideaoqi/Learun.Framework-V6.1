@@ -389,6 +389,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             int stepvalue = int.Parse(dm_Task_Person_SettingEntity.rewardcount.ToString());//积分无小数
                             dm_intergraldetailEntity dm_IntergraldetailEntity = new dm_intergraldetailEntity();
                             dm_IntergraldetailEntity.type = 4;
+                            dm_IntergraldetailEntity.profitLoss = 1;
                             dm_IntergraldetailEntity.user_id = user_id;
                             dm_IntergraldetailEntity.createtime = DateTime.Now;
                             dm_IntergraldetailEntity.currentvalue = dm_UserEntity.integral + stepvalue;

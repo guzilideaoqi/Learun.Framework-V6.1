@@ -1,0 +1,63 @@
+【时间】=>2020-12-28 11:46:32 888
+【错误类型】=>Exception
+【方法名称】=>GetDTK_ExplosiveGoods
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未能加载文件或程序集“Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+【异常位置】=>   在 Hyg.Common.OtherTools.DataConvertHelper.ToJsonObject[T](String str)
+   在 Hyg.Common.DTKTools.DTK_ApiManage.GetDTK_ExplosiveGoods(DTK_Explosive_Goods_ListRequest dTK_Explosive_Goods_ListRequest)
+
+【时间】=>2020-12-28 11:46:36 290
+【错误类型】=>Exception
+【方法名称】=>GetDTK_ExplosiveGoods
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未能加载文件或程序集“Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+【异常位置】=>   在 Hyg.Common.OtherTools.DataConvertHelper.ToJsonObject[T](String str)
+   在 Hyg.Common.DTKTools.DTK_ApiManage.GetDTK_ExplosiveGoods(DTK_Explosive_Goods_ListRequest dTK_Explosive_Goods_ListRequest)
+
+【时间】=>2020-12-28 11:46:38 872
+【错误类型】=>Exception
+【方法名称】=>GetDTK_ExplosiveGoods
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未能加载文件或程序集“Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+【异常位置】=>   在 Hyg.Common.OtherTools.DataConvertHelper.ToJsonObject[T](String str)
+   在 Hyg.Common.DTKTools.DTK_ApiManage.GetDTK_ExplosiveGoods(DTK_Explosive_Goods_ListRequest dTK_Explosive_Goods_ListRequest)
+
+【时间】=>2020-12-28 11:47:23 511
+【错误类型】=>Exception
+【方法名称】=>GetDTK_ExplosiveGoods
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未能加载文件或程序集“Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+【异常位置】=>   在 Hyg.Common.OtherTools.DataConvertHelper.ToJsonObject[T](String str)
+   在 Hyg.Common.DTKTools.DTK_ApiManage.GetDTK_ExplosiveGoods(DTK_Explosive_Goods_ListRequest dTK_Explosive_Goods_ListRequest)
+
+【时间】=>2020-12-28 11:53:04 981
+【错误类型】=>Exception
+【方法名称】=>GetDTK_ExplosiveGoods
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未能加载文件或程序集“Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+【异常位置】=>   在 Hyg.Common.OtherTools.DataConvertHelper.ToJsonObject[T](String str)
+   在 Hyg.Common.DTKTools.DTK_ApiManage.GetDTK_ExplosiveGoods(DTK_Explosive_Goods_ListRequest dTK_Explosive_Goods_ListRequest)
+
+【时间】=>2020-12-28 11:53:40 068
+【错误类型】=>Exception
+【方法名称】=>GetDTK_ExplosiveGoods
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未能加载文件或程序集“Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+【异常位置】=>   在 Hyg.Common.OtherTools.DataConvertHelper.ToJsonObject[T](String str)
+   在 Hyg.Common.DTKTools.DTK_ApiManage.GetDTK_ExplosiveGoods(DTK_Explosive_Goods_ListRequest dTK_Explosive_Goods_ListRequest)
+
+【时间】=>2020-12-28 11:53:42 529
+【错误类型】=>Exception
+【方法名称】=>GetDTK_ExplosiveGoods
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未能加载文件或程序集“Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+【异常位置】=>   在 Hyg.Common.OtherTools.DataConvertHelper.ToJsonObject[T](String str)
+   在 Hyg.Common.DTKTools.DTK_ApiManage.GetDTK_ExplosiveGoods(DTK_Explosive_Goods_ListRequest dTK_Explosive_Goods_ListRequest)
+

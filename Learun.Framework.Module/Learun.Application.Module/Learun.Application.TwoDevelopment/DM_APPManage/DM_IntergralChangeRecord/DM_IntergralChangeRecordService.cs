@@ -137,8 +137,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     throw new Exception("账户积分不足!");
                 }
-                db.Insert(dm_IntergralchangerecordEntity);
+
                 dm_UserEntity.integral -= dm_IntergralchangegoodEntity.needintergral;
+                dm_intergraldetailEntity dm_IntergraldetailEntity = new dm_intergraldetailEntity()
+                {
+                    currentvalue = dm_UserEntity.integral,
+                    stepvalue = dm_IntergralchangegoodEntity.needintergral,
+                    user_id = dm_UserEntity.id,
+                    type = 6,
+                    title = "兑换商品",
+                    remark = "使用积分兑换商品--" + dm_IntergralchangegoodEntity.goodtitle,
+                    profitLoss = 2
+                };
+                dm_IntergraldetailEntity.Create();
+
+                db.Insert(dm_IntergraldetailEntity);
+                db.Insert(dm_IntergralchangerecordEntity);
                 dm_UserEntity.Modify(dm_UserEntity.id);
                 db.Update(dm_UserEntity);
                 db.Commit();

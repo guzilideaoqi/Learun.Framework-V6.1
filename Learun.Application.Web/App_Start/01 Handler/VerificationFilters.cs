@@ -52,7 +52,6 @@ namespace Learun.Application.Web.App_Start._01_Handler
             "getbannerlist",
             "getintergralchangegood",
             "getgoodsmallcate",
-            "getpersoninfo",
             "getverification",
             "resetpwd",
             "getplaformsetting",
@@ -137,70 +136,6 @@ namespace Learun.Application.Web.App_Start._01_Handler
                     return;
                 }
             }
-
-            /*string user_id = "";
-            if (filterContext.HttpContext.Request.Params.AllKeys.Contains("User_ID"))
-            {
-                user_id = filterContext.HttpContext.Request.Params["User_ID"];
-            }
-
-            if (filterContext.HttpContext.Request.Params.AllKeys.Contains("user_id"))
-            {
-                user_id = filterContext.HttpContext.Request.Params["user_id"];
-            }
-            if (filterContext.HttpContext.Request.Params.AllKeys.Contains("userid"))
-            {
-                user_id = filterContext.HttpContext.Request.Params["userid"];
-            }
-            if (filterContext.HttpContext.Request.Params.AllKeys.Contains("USER_ID"))
-            {
-                user_id = filterContext.HttpContext.Request.Params["USER_ID"];
-            }
-
-
-            if (!user_id.IsEmpty() && user_id != "0")// && platform == "android"
-            {
-                int userID = int.Parse(user_id);
-                if (!token.IsEmpty() && userID > 0)
-                {
-                    string cacheKey = SingleLogin + userID;
-                    string exist_token = redisCache.Read<string>(cacheKey, 7);
-                    //传入的token和用户的token不一致
-                    if (exist_token != token)
-                    {
-                        modelResult.code = ResponseCode.LoginExpire;
-                        modelResult.info = "您的账号在另一台设备登录。如非本人操作，请注意账户安全!";
-                        filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
-                        return;
-                    }
-                }
-                else
-                {
-                    modelResult.code = ResponseCode.NoLogin;
-                    modelResult.info = "请登录后操作!";
-                    filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
-                    return;
-                }
-                /*if (token.IsEmpty())
-                {
-                    modelResult.code = ResponseCode.NoLogin;
-                    modelResult.info = "请登录后操作!";
-                    filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
-                    return;
-                }
-                else
-                {
-                    string cacheKey = Md5Helper.Hash("SingleUserList" + user_id);
-                    string exist_token = redisCache.Read<string>(cacheKey, 7);
-                    if (exist_token != token)
-                    {
-                        modelResult.code = ResponseCode.LoginExpire;
-                        modelResult.info = "您的账号在另一台设备登录。如非本人操作，请注意账户安全!";
-                        filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
-                        return;
-                    }
-                }
-            }*/
             #endregion
         }
     }

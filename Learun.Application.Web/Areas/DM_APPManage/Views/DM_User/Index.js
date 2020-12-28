@@ -173,6 +173,7 @@ var bootstrap = function ($, learun) {
                     },
                     { label: '创建时间', name: 'createtime', width: 135, align: "left" },
                     { label: '修改时间', name: 'updatetime', width: 135, align: "left" },
+                    { label: '最后登录时间', name: 'last_logintime', width: 135, align: "left" },
                     {
                         label: '操作', name: 'id', width: 300, align: "left", formatter: function (cellvalue, rowData, option) {
                             var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")

@@ -86,9 +86,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         private static int s = 6;
 
+        /*
+         * 共有三种登录方式 1、手机号加验证码  2、账号加密码  3、快捷登录
+         */
+
         public DM_UserService()
         {
-            fieldSql = "    t.id,    t.realname,    t.identitycard,    t.isreal,    t.phone,    t.token,    t.pwd,    t.nickname,    t.accountprice,    t.invitecode,    t.partners,    t.partnersstatus,    t.tb_pid,    t.tb_relationid,    t.tb_orderrelationid,    t.jd_pid,    t.pdd_pid,    t.userlevel,    t.createtime,    t.updatetime,    t.appid,    t.province,    t.city,    t.down,    t.address,t.tb_nickname,t.isrelation_beian";
+            fieldSql = "    t.id,    t.realname,    t.identitycard,    t.isreal,    t.phone,    t.token,    t.pwd,    t.nickname,    t.accountprice,    t.invitecode,    t.partners,    t.partnersstatus,    t.tb_pid,    t.tb_relationid,    t.tb_orderrelationid,    t.jd_pid,    t.pdd_pid,    t.userlevel,    t.createtime,    t.updatetime,    t.appid,    t.province,    t.city,    t.down,    t.address,t.tb_nickname,t.isrelation_beian,t.rongcloud_token,t.last_logintime";
         }
 
         public IEnumerable<dm_userEntity> GetList(string queryJson)
@@ -202,7 +206,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == phone && t.appid == appid);
-                CheckSingleLogin(ref dm_UserEntity);
                 return dm_UserEntity;
             }
             catch (Exception ex)
@@ -258,6 +261,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 BaseRepository("dm_data").Update(dm_UserEntity);
                             }
                             #endregion
+
+                            CacheHelper.UpdateUserInfo(dm_UserEntity);
                         }
                     }
                 }
@@ -390,15 +395,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 if (!dm_UserEntity.IsEmpty())
                 {
-                    CacheHelper.ClearUserInfo(dm_UserEntity.token);
-
+                    string old_user_token = dm_UserEntity.token;
                     dm_UserEntity.last_logintime = DateTime.Now;
                     dm_UserEntity.token = GeneralToken();
                     SaveEntity((int)dm_UserEntity.id, dm_UserEntity);
 
-                    #region 增加单点登录记录
-                    CheckSingleLogin(ref dm_UserEntity);
-                    #endregion
+                    CacheHelper.SaveUserInfo(old_user_token, dm_UserEntity);
                 }
 
                 return dm_UserEntity;
@@ -413,6 +415,32 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+
+        public dm_userEntity LoginByPhone(string phone, string appid)
+        {
+            try
+            {
+                dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == phone && t.appid == appid);
+                if (!dm_UserEntity.IsEmpty())
+                {
+                    string old_user_token = dm_UserEntity.token;
+                    dm_UserEntity.last_logintime = DateTime.Now;
+                    dm_UserEntity.token = GeneralToken();
+                    SaveEntity((int)dm_UserEntity.id, dm_UserEntity);
+
+                    CacheHelper.SaveUserInfo(old_user_token, dm_UserEntity);
+                }
+                return dm_UserEntity;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
         #region 用户注册
         public dm_userEntity Register(dm_userEntity dm_UserEntity, string VerifiCode, string ParentInviteCode, string appid, string SmsMessageID)
         {
@@ -492,7 +520,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             title = "新用户注册奖励",
                             stepvalue = dm_BasesettingEntity.new_people,
                             type = 1,
-                            user_id = id
+                            user_id = id,
+                            profitLoss=1
                         });
                         parent_UserEntity.integral += dm_BasesettingEntity.new_people_parent;
                         db.Update(parent_UserEntity);
@@ -503,14 +532,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             title = "邀请好友奖励",
                             stepvalue = dm_BasesettingEntity.new_people_parent,
                             type = 3,
-                            user_id = parent_UserEntity.id
+                            user_id = parent_UserEntity.id,
+                            profitLoss=1
                         });
                         dm_user_relationEntity dm_User_RelationEntity = new dm_user_relationEntity
                         {
                             user_id = id,
                             parent_id = (int)parent_UserEntity.id,
                             parent_nickname = parent_UserEntity.nickname,
-                            partners_id = parent_UserEntity.partnersstatus == 1 ? parent_UserEntity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
+                            partners_id = parent_UserEntity.partnersstatus == 2 ? parent_UserEntity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
                         };
                         dm_User_RelationEntity.Create();
                         db.Insert(dm_User_RelationEntity);
@@ -522,7 +552,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     }
 
                     dm_userEntity dm_UserEntity_New = GetEntity(id.ToInt());
-                    CheckSingleLogin(ref dm_UserEntity_New);
+                    CacheHelper.SaveUserInfo("", dm_UserEntity_New);
 
                     return dm_UserEntity_New;
                 }
@@ -635,7 +665,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     title = "签到奖励",
                     remark = signCount.ToString(),
                     type = 2,
-                    createtime = DateTime.Now
+                    createtime = DateTime.Now,
+                    profitLoss=1
                 });
                 db.Commit();
                 return new
@@ -1369,13 +1400,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     string phone = rSATool.DecryptByPublicKey(rongyun_Response.phone, dm_BasesettingEntity.jg_privatekey, false);
                     dm_UserEntity = GetEntityByPhone(phone, appid);
 
-                    #region 一键登录之后退出原有账号
-                    CacheHelper.ClearUserInfo(dm_UserEntity.token);
-                    dm_UserEntity.token = GeneralToken();
-                    dm_UserEntity.last_logintime = DateTime.Now;
-                    this.BaseRepository("dm_data").Update(dm_UserEntity);
-                    CacheHelper.SaveUserInfo(dm_UserEntity.token, dm_UserEntity);
-                    #endregion
+                    if (!dm_UserEntity.IsEmpty())
+                    {
+                        #region 一键登录之后退出原有账号
+                        string old_user_token = dm_UserEntity.token;
+                        dm_UserEntity.token = GeneralToken();
+                        dm_UserEntity.last_logintime = DateTime.Now;
+                        this.BaseRepository("dm_data").Update(dm_UserEntity);
+                        CacheHelper.SaveUserInfo(old_user_token, dm_UserEntity);
+                        #endregion
+                    }
                 }
                 else
                 {
@@ -1452,16 +1486,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw;
                 }
                 throw ExceptionEx.ThrowServiceException(ex);
-            }
-        }
-        #endregion
-
-        #region 检测单点登录
-        void CheckSingleLogin(ref dm_userEntity dm_UserEntity)
-        {
-            if (!dm_UserEntity.IsEmpty())
-            {
-                CacheHelper.SaveUserInfo(dm_UserEntity.token, dm_UserEntity);
             }
         }
         #endregion

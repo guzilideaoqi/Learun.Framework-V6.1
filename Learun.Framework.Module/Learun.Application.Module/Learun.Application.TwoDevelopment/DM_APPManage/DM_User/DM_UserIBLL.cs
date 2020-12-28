@@ -44,6 +44,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         dm_userEntity Login(dm_userEntity entity);
 
+        dm_userEntity LoginByPhone(string phone, string appid);
+
         #region 用户注册
         /// <summary>
         /// 手机号+验证码

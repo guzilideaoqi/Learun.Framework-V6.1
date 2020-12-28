@@ -29,15 +29,24 @@ namespace Learun.Application.TwoDevelopment.Common
         /// <summary>
         /// 写入用户信息
         /// </summary>
-        /// <param name="token"></param>
-        /// <param name="dm_UserEntity"></param>
-        public static void SaveUserInfo(string token, dm_userEntity dm_UserEntity)
+        /// <param name="oldToken">原有用户信息的token</param>
+        /// <param name="dm_UserEntity">里面的token是最新的</param>
+        public static void SaveUserInfo(string oldToken, dm_userEntity dm_UserEntity)
         {
+            #region 移除用户信息
+            if (!oldToken.IsEmpty()) {
+                string old_cacheKey = SingleLogin + oldToken;
+                redisCache.Remove(old_cacheKey, 7);
+            }
+            #endregion
+
+            #region 重新构造用户缓存信息
             if (!dm_UserEntity.IsEmpty())
             {
-                string cacheKey = SingleLogin + token;
+                string cacheKey = SingleLogin + dm_UserEntity.token;
                 redisCache.Write<dm_userEntity>(cacheKey, dm_UserEntity, 7);
             }
+            #endregion
         }
 
         /// <summary>
@@ -56,14 +65,20 @@ namespace Learun.Application.TwoDevelopment.Common
 
                 return dm_UserEntity;
             }
-            else {
+            else
+            {
                 return null;
             }
         }
 
-        public static void ClearUserInfo(string token) {
-            string cacheKey = SingleLogin + token;
-            redisCache.Remove(cacheKey, 7);
+        /// <summary>
+        /// 更新缓存中的用户信息
+        /// </summary>
+        /// <param name="dm_UserEntity"></param>
+        public static void UpdateUserInfo(dm_userEntity dm_UserEntity)
+        {
+            string cacheKey = SingleLogin + dm_UserEntity.token;
+            redisCache.Write<dm_userEntity>(cacheKey, dm_UserEntity, 7);
         }
     }
 }

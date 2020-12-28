@@ -157,7 +157,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 }
                 else
                 {//如果是老用户  直接根据手机号查询出用户信息
-                    dm_userEntity dm_new_UserEntity = dm_userIBLL.GetEntityByPhone(dm_UserEntity.phone, appid);
+                    dm_userEntity dm_new_UserEntity = dm_userIBLL.LoginByPhone(dm_UserEntity.phone, appid);
                     return Success("登录成功!", dm_new_UserEntity);
                 }
             }
@@ -328,6 +328,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 if (User_ID <= 0)
                     return FailNoLogin();
+
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
                 return Success("获取成功", dm_UserEntity);
             }

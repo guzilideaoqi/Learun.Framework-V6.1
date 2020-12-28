@@ -42,7 +42,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		}
 
         /// <summary>
-        /// 类型  1新用户注册  2签到  3邀请好友奖励 4进度任务 5米圈被人点赞获得
+        /// 类型  1新用户注册  2签到  3邀请好友奖励 4进度任务 5米圈被人点赞获得  6兑换使用积分
         /// </summary>
         [Column("TYPE")]
 		public int? type
@@ -51,7 +51,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
-		[Column("REMARK")]
+        /// <summary>
+        /// 积分修改符号  1加号  2减号
+        /// </summary>
+        [Column("PROFITLOSS")]
+        public int? profitLoss {
+            get;set;
+        }
+
+        [Column("REMARK")]
 		public string remark
 		{
 			get;

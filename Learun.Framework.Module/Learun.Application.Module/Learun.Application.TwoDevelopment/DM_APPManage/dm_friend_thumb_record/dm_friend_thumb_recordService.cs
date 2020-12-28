@@ -219,7 +219,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 user_id = dm_UserEntity.id,
                                 type = 5,
                                 title = "米圈点赞",
-                                remark = "米圈文案被其他用户点赞所得奖励"
+                                remark = "米圈文案被其他用户点赞所得奖励",
+                                profitLoss=1
                             };
                             dm_IntergraldetailEntity.Create();
                             #endregion
@@ -385,7 +386,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 user_id = dm_UserEntity.id,
                                 type = 5,
                                 title = "米圈分享",
-                                remark = "米圈文案被其他用户分享所得奖励"
+                                remark = "米圈文案被其他用户分享所得奖励",
+                                profitLoss=1
                             };
                             dm_IntergraldetailEntity.Create();
                             #endregion
