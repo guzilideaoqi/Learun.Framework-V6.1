@@ -43,6 +43,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Hyg.Common">
+      <HintPath>..\..\..\Learun.Application.Web\bin\Hyg.Common.dll</HintPath>
+    </Reference>
     <Reference Include="HYG.CommonHelper">
       <HintPath>..\..\..\Learun.Application.Web\bin\HYG.CommonHelper.dll</HintPath>
     </Reference>

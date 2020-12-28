@@ -130,6 +130,13 @@ namespace Learun.Application.Web.App_Start._01_Handler
                 dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfo(filterContext.HttpContext.Request.Headers);
                 if (dm_UserEntity.IsEmpty())
                 {
+                    string header = "";
+                    foreach (KeyValuePair<string,string> item in filterContext.HttpContext.Request.Headers)
+                    {
+                        header += item.Key + ":" + item.Value;
+                    }
+                    Hyg.Common.OtherTools.LogHelper.WriteDebugLog("测试token", header);
+                    
                     modelResult.code = ResponseCode.LoginExpire;
                     modelResult.info = "您的账号在另一台设备登录。如非本人操作，请注意账户安全!";
                     filterContext.Result = new ContentResult { Content = modelResult.ToJson() };

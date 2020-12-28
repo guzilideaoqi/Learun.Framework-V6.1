@@ -398,7 +398,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     string old_user_token = dm_UserEntity.token;
                     dm_UserEntity.last_logintime = DateTime.Now;
                     dm_UserEntity.token = GeneralToken();
-                    SaveEntity((int)dm_UserEntity.id, dm_UserEntity);
+                    BaseRepository("dm_data").Update(dm_UserEntity);
+                    //SaveEntity((int)dm_UserEntity.id, dm_UserEntity);
+
+                    Hyg.Common.OtherTools.LogHelper.WriteDebugLog("手机号密码登录", dm_UserEntity.ToJson());
 
                     CacheHelper.SaveUserInfo(old_user_token, dm_UserEntity);
                 }
@@ -426,7 +429,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     string old_user_token = dm_UserEntity.token;
                     dm_UserEntity.last_logintime = DateTime.Now;
                     dm_UserEntity.token = GeneralToken();
-                    SaveEntity((int)dm_UserEntity.id, dm_UserEntity);
+                    BaseRepository("dm_data").Update(dm_UserEntity);
+
+                    Hyg.Common.OtherTools.LogHelper.WriteDebugLog("手机号登录", dm_UserEntity.ToJson());
 
                     CacheHelper.SaveUserInfo(old_user_token, dm_UserEntity);
                 }
@@ -553,6 +558,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     dm_userEntity dm_UserEntity_New = GetEntity(id.ToInt());
                     CacheHelper.SaveUserInfo("", dm_UserEntity_New);
+
+                    Hyg.Common.OtherTools.LogHelper.WriteDebugLog("测试注册", dm_UserEntity_New.ToJson());
 
                     return dm_UserEntity_New;
                 }
@@ -1403,12 +1410,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     if (!dm_UserEntity.IsEmpty())
                     {
                         #region 一键登录之后退出原有账号
-                        string old_user_token = dm_UserEntity.token;
-                        dm_UserEntity.token = GeneralToken();
-                        dm_UserEntity.last_logintime = DateTime.Now;
-                        this.BaseRepository("dm_data").Update(dm_UserEntity);
-                        CacheHelper.SaveUserInfo(old_user_token, dm_UserEntity);
+                        string old_user_token = dm_UserEntity.token;//获取用户当前的token(登录之前)
+                        dm_UserEntity.token = GeneralToken();//生成新的token
+                        dm_UserEntity.last_logintime = DateTime.Now;//记录登录时间
+
+                        this.BaseRepository("dm_data").Update(dm_UserEntity);//更新用户信息
+                        CacheHelper.SaveUserInfo(old_user_token, dm_UserEntity);//清除原有token里面的用户信息   把新的用户信息添加到缓存中
                         #endregion
+
+                        Hyg.Common.OtherTools.LogHelper.WriteDebugLog("测试登录", dm_UserEntity.ToJson());
                     }
                 }
                 else
