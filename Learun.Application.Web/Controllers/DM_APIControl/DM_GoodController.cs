@@ -141,12 +141,68 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dTK_Top100_Response.code != 0)
                     {
                         //return Fail(dTK_Top100_Response.msg);
-                        return Fail("我也是有底线的");
+                        return Fail(CommonConfig.NoDataTip);
                     }
                     top100List = dTK_Top100_Response.data.hotWords;
                     redisCache.Write(cacheKey, top100List, DateTime.Now.AddDays(1.0), 7L);
                 }
                 return SuccessList("获取成功", top100List);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 获取猜你喜欢
+        public ActionResult GetGuessGood(int PageNo)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfo(base.Request.Headers);
+
+                string imei = base.Request.Headers["IMEI_Code"];
+                string platform = base.Request.Headers["platform"];
+
+                string cacheKey = Md5Helper.Hash(imei + PageNo);
+                List<CommonGoodInfoEntity> commonGoodInfoEntities = redisCache.Read<List<CommonGoodInfoEntity>>(cacheKey, 7);
+                if (commonGoodInfoEntities.IsEmpty())
+                {
+                    ITopClient client = new DefaultTopClient(CommonConfig.tb_api_url, "24625691", "9f852d35d2dc24028be48f99bf9bcf8a");
+                    TbkDgOptimusMaterialRequest req = new TbkDgOptimusMaterialRequest();
+                    req.PageSize = 10L;
+                    req.AdzoneId = 141890944;
+                    req.PageNo = PageNo;
+                    req.MaterialId = 6708;
+                    //req.DeviceValue = "ab307116f4d176b32a41df086c216cd7";//我的
+                    req.DeviceValue = Md5Helper.Encrypt(imei, 32);//安卓的
+                    req.DeviceEncrypt = "MD5";
+                    req.DeviceType = platform == "IOS" ? "IDFA" : "IMEI";
+                    //req.ContentId = 323L;
+                    //req.ContentSource = "xxx";
+                    //req.ItemId = 33243L;
+                    //req.FavoritesId = "123445";
+                    TbkDgOptimusMaterialResponse rsp = client.Execute(req);
+
+                    if (rsp.IsError)
+                    {
+                        throw new Exception(rsp.SubErrMsg);
+                    }
+                    else
+                    {
+                        commonGoodInfoEntities = GuessGoodConvert(rsp.ResultList, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+
+                        if (commonGoodInfoEntities.Count > 0)
+                            redisCache.Write<List<CommonGoodInfoEntity>>(cacheKey, commonGoodInfoEntities, DateTime.Now.AddHours(2), 7);
+                        else
+                            return Fail(CommonConfig.NoDataTip);
+                    }
+                }
+
+                return SuccessList("获取成功", CheckPreviewOutGood(cacheKey, dm_BasesettingEntity, dm_UserEntity, commonGoodInfoEntities));
             }
             catch (Exception ex)
             {
@@ -167,35 +223,64 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                string cacheKey = "RankingList" + RandType.ToString() + PageNo + cateid + PageSize;
+                string imei = base.Request.Headers["IMEI_Code"];
+
+                string cacheKey = "RankingList" + RandType.ToString() + PageNo + cateid + PageSize + imei;
                 List<CommonGoodInfoEntity> RankingList = redisCache.Read<List<CommonGoodInfoEntity>>(cacheKey, 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
 
-                if (RankingList == null)
+                if (RankingList.IsEmpty())
                 {
-                    DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
-                    DTK_Ranking_ListRequest dTK_Ranking_ListRequest = new DTK_Ranking_ListRequest();
-                    dTK_Ranking_ListRequest.rankType = RandType;
-                    dTK_Ranking_ListRequest.pageId = PageNo;
-                    dTK_Ranking_ListRequest.pageSize = PageSize;
-                    //dTK_Ranking_ListRequest.cid = cateid;
-                    dTK_Ranking_ListRequest.IsReturnCommonInfo = true;
-                    DTK_Ranking_ListResponse dTK_Ranking_ListResponse = dTK_ApiManage.GetRankingList(dTK_Ranking_ListRequest);
-                    if (dTK_Ranking_ListResponse.code != 0)
+                    //猜你喜欢
+                    if (RandType == 3)
                     {
-                        //return Fail(dTK_Ranking_ListResponse.msg);
-                        return Fail("我也是有底线的");
-                    }
-                    RankingList = dTK_Ranking_ListResponse.CommonGoodInfoList;
-                    redisCache.Write(cacheKey, RankingList, DateTime.Now.AddHours(4.0), 7L);
-                }
+                        string platform = base.Request.Headers["platform"];
+                        ITopClient client = new DefaultTopClient(CommonConfig.tb_api_url, "24625691", "9f852d35d2dc24028be48f99bf9bcf8a");
+                        TbkDgOptimusMaterialRequest req = new TbkDgOptimusMaterialRequest();
+                        req.PageSize = PageSize;
+                        req.AdzoneId = 141890944;
+                        req.PageNo = PageNo;
+                        req.MaterialId = 6708;
+                        //req.DeviceValue = "ab307116f4d176b32a41df086c216cd7";//我的
+                        req.DeviceValue = Md5Helper.Encrypt(imei, 32);//安卓的
+                        req.DeviceEncrypt = "MD5";
+                        req.DeviceType = platform == "IOS" ? "IDFA" : "IMEI";
+                        TbkDgOptimusMaterialResponse rsp = client.Execute(req);
 
-                //List<CommonGoodInfoEntity> rankItemList = null;
-                //if (RankingList != null)
-                //{
-                //    rankItemList = RankingList.Skip((PageNo - 1) * PageSize).Take(PageSize).ToList();
-                //}
+                        if (rsp.IsError)
+                        {
+                            throw new Exception(rsp.SubErrMsg);
+                        }
+                        else
+                        {
+                            RankingList = GuessGoodConvert(rsp.ResultList, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+
+                            if (RankingList.Count > 0)
+                                redisCache.Write<List<CommonGoodInfoEntity>>(cacheKey, RankingList, DateTime.Now.AddHours(2), 7);
+                            else
+                                return Fail(CommonConfig.NoDataTip);
+                        }
+                    }
+                    else
+                    {
+                        DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
+                        DTK_Ranking_ListRequest dTK_Ranking_ListRequest = new DTK_Ranking_ListRequest();
+                        dTK_Ranking_ListRequest.rankType = RandType;
+                        dTK_Ranking_ListRequest.pageId = PageNo;
+                        dTK_Ranking_ListRequest.pageSize = PageSize;
+                        //dTK_Ranking_ListRequest.cid = cateid;
+                        dTK_Ranking_ListRequest.IsReturnCommonInfo = true;
+                        DTK_Ranking_ListResponse dTK_Ranking_ListResponse = dTK_ApiManage.GetRankingList(dTK_Ranking_ListRequest);
+                        if (dTK_Ranking_ListResponse.code != 0)
+                        {
+                            //return Fail(dTK_Ranking_ListResponse.msg);
+                            return Fail(CommonConfig.NoDataTip);
+                        }
+                        RankingList = dTK_Ranking_ListResponse.CommonGoodInfoList;
+                        redisCache.Write(cacheKey, RankingList, DateTime.Now.AddHours(4.0), 7L);
+                    }
+                }
 
                 return SuccessList("获取成功!", CheckPreviewOutGood(cacheKey, dm_BasesettingEntity, dm_UserEntity, RankingList));
             }
@@ -280,7 +365,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         if (dTK_Explosive_Goods_ListResponse.code != 0)
                         {
                             //return Fail(dTK_OP_ListResponse.msg);
-                            return Fail("我也是有底线的");
+                            return Fail(CommonConfig.NoDataTip);
                         }
 
 
@@ -359,7 +444,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                             if (dTK_Super_GoodResponse.code != 0)
                             {
                                 //return Fail(dTK_Super_GoodResponse.msg);
-                                return Fail("我也是有底线的");
+                                return Fail(CommonConfig.NoDataTip);
                             }
                             superGoodItems = ConvertCommonGoodEntityBySuperGood(dTK_Super_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                         }
@@ -495,7 +580,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dTK_Super_GoodResponse.code != 0)
                     {
                         //return Fail(dTK_Super_GoodResponse.msg);
-                        return Fail("我也是有底线的");
+                        return Fail(CommonConfig.NoDataTip);
                     }
                     superGoodItems = ConvertCommonGoodEntityBySuperGood(dTK_Super_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -544,7 +629,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dTK_Get_dtk_Search_GoodResponse.code != 0)
                     {
                         //return Fail(dTK_Get_dtk_Search_GoodResponse.msg);
-                        return Fail("我也是有底线的");
+                        return Fail(CommonConfig.NoDataTip);
                     }
                     superGoodItems = ConvertCommonGoodEntityByDTK_SearchGoodItem(dTK_Get_dtk_Search_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -604,7 +689,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                         if (dTK_TB_Service_GoodResponse.code != 0)
                             //return Fail(dTK_TB_Service_GoodResponse.msg);
-                            return Fail("我也是有底线的");
+                            return Fail(CommonConfig.NoDataTip);
                         superGoodItems = ConvertCommonGoodEntityByTBServiceGood(dTK_TB_Service_GoodResponse.data, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
                     else if (ChannelType == "chaojiquan")//使用大淘客搜索
@@ -628,7 +713,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         if (dTK_Get_dtk_Search_GoodResponse.code != 0)
                         {
                             //return Fail(dTK_Get_dtk_Search_GoodResponse.msg);
-                            return Fail("我也是有底线的");
+                            return Fail(CommonConfig.NoDataTip);
                         }
 
                         superGoodItems = ConvertCommonGoodEntityByDTK_SearchGoodItem(dTK_Get_dtk_Search_GoodResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
@@ -693,7 +778,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dTK_OP_ListResponse.code != 0)
                     {
                         //return Fail(dTK_OP_ListResponse.msg);
-                        return Fail("我也是有底线的");
+                        return Fail(CommonConfig.NoDataTip);
                     }
                     oPGoodItems = ConvertCommonGoodEntityByOPGood(dTK_OP_ListResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, oPGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -734,7 +819,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dTK_Search_SuggestionResponse.code != 0)
                     {
                         //return Fail(dTK_Search_SuggestionResponse.msg);
-                        return Fail("我也是有底线的");
+                        return Fail(CommonConfig.NoDataTip);
                     }
                     SuggestionList = dTK_Search_SuggestionResponse.data;
                     redisCache.Write(cacheKey, SuggestionList, DateTime.Now.AddDays(1.0), 7L);
@@ -769,7 +854,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dTK_Activity_CatalogueResponse.code != 0)
                     {
                         //return Fail(dTK_Activity_CatalogueResponse.msg);
-                        return Fail("我也是有底线的");
+                        return Fail(CommonConfig.NoDataTip);
                     }
                     activityCatalogueItems = dTK_Activity_CatalogueResponse.data;
                     redisCache.Write(cacheKey, activityCatalogueItems, DateTime.Now.AddDays(1.0), 7L);
@@ -903,7 +988,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dTK_Topic_GoodListResponse.code != 0)
                     {
                         //return Fail(dTK_Topic_GoodListResponse.msg);
-                        return Fail("我也是有底线的");
+                        return Fail(CommonConfig.NoDataTip);
                     }
                     topicGoodItems = ConvertCommonGoodEntityByTopicGood(dTK_Topic_GoodListResponse.data.list, dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     redisCache.Write(cacheKey, topicGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -944,7 +1029,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dTK_TB_Topic_ListResponse.code != 0)
                     {
                         //return Fail(dTK_TB_Topic_ListResponse.msg);
-                        return Fail("我也是有底线的");
+                        return Fail(CommonConfig.NoDataTip);
                     }
                     tB_TopicItems = dTK_TB_Topic_ListResponse.data;
                     redisCache.Write(cacheKey, tB_TopicItems, DateTime.Now.AddDays(1.0), 7L);
@@ -2126,6 +2211,43 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             return CommonGoodInfoEntityList;
         }
 
+        List<CommonGoodInfoEntity> GuessGoodConvert(List<TbkDgOptimusMaterialResponse.MapDataDomain> resultList, dm_userEntity dm_UserEntity, dm_basesettingEntity dm_BasesettingEntity, string cacheKey)
+        {
+            List<CommonGoodInfoEntity> CommonGoodInfoEntityList = new List<CommonGoodInfoEntity>();
+            foreach (TbkDgOptimusMaterialResponse.MapDataDomain item in resultList)
+            {
+                string[] images = GetImages(item.SmallImages);
+                double coupon_after_price = Math.Round((double.Parse(item.ZkFinalPrice) - double.Parse(item.CouponAmount <= 0 ? "0" : item.CouponAmount.ToString())), 2);
+                CommonGoodInfoEntityList.Add(new CommonGoodInfoEntity
+                {
+                    skuid = item.ItemId.ToString(),
+                    title = item.Title,
+                    shopId = item.SellerId.ToString(),
+                    shopLogo = "https://wwc.alicdn.com/avatar/getAvatar.do?userId=" + item.SellerId.ToString(),
+                    shopName = item.ShopTitle,
+                    coupon_after_price = coupon_after_price.ToString(),
+                    coupon_price = item.CouponAmount.ToString(),
+                    origin_price = item.ZkFinalPrice,
+                    coupon_end_time = item.CouponEndTime,
+                    coupon_start_time = item.CouponStartTime,
+                    detail_images = images,
+                    images = images,
+                    image = GetImage(item.PictUrl),
+                    month_sales = item.Volume,
+                    TotalCommission = Math.Round((coupon_after_price * double.Parse(item.CommissionRate)) / 100, 2),
+                    PlaformType = 1,
+                    afterServiceScore = GetScore(null),
+                    logisticsLvyueScore = GetScore(null),
+                    userEvaluateScore = GetScore(null),
+                    remark = item.ShortTitle,
+                    coupon_link = item.CouponClickUrl,
+                    cacheKey = cacheKey
+                });
+            }
+
+            return CommonGoodInfoEntityList;
+        }
+
         string GetScore(string score)
         {
             if (score == null)
@@ -2160,6 +2282,17 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 img = "http:" + img;
             }
             return img;
+        }
+
+        string[] GetImages(List<string> Images)
+        {
+            List<string> imageList = new List<string>();
+            for (int i = 0; i < Images.Count; i++)
+            {
+                imageList.Add(GetImage(Images[i]));
+            }
+
+            return imageList.ToArray();
         }
         #endregion
 

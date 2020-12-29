@@ -55,7 +55,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 积分修改符号  1加号  2减号
         /// </summary>
         [Column("PROFITLOSS")]
-        public int? profitLoss {
+        public int profitLoss {
             get;set;
         }
 

@@ -408,6 +408,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity();
                             dm_AccountdetailEntity.user_id = user_id;
                             dm_AccountdetailEntity.type = 10;
+                            dm_AccountdetailEntity.profitLoss = CommonHelper.GetProfitLoss(10);
                             dm_AccountdetailEntity.createtime = DateTime.Now;
                             dm_AccountdetailEntity.currentvalue = dm_UserEntity.accountprice + dm_Task_Person_SettingEntity.rewardcount;
                             dm_AccountdetailEntity.stepvalue = dm_Task_Person_SettingEntity.rewardcount;

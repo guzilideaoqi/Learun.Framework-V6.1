@@ -127,5 +127,21 @@ namespace Learun.Util
             return str;
         }
         #endregion
+
+        #region 获取余额变更明细类型
+        public static int GetProfitLoss(int? type)
+        {
+            int profitLoss = 0;
+            if (new List<int?> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 21 }.Contains(type))
+            {
+                profitLoss = 1;
+            }
+            else if (new List<int?> { 11, 12, 20 }.Contains(type))
+            {
+                profitLoss = 2;
+            }
+            return profitLoss;
+        }
+        #endregion
     }
 }

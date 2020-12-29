@@ -272,6 +272,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_AccountdetailEntity.currentvalue = dm_Apply_CashrecordEntity.currentprice;
                     dm_AccountdetailEntity.stepvalue = dm_Apply_CashrecordEntity.price;
                     dm_AccountdetailEntity.type = 11;
+                    dm_AccountdetailEntity.profitLoss = CommonHelper.GetProfitLoss(11);
                     dm_AccountdetailEntity.title = "提现";
                     dm_AccountdetailEntity.remark = "账户余额提现";
                     dm_AccountdetailEntity.user_id = dm_Apply_CashrecordEntity.user_id;

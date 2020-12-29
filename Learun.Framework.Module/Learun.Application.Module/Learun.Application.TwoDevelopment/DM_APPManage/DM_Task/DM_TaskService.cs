@@ -467,6 +467,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     currentvalue = dm_UserEntity.accountprice,
                     title = "发布任务",
                     type = 12,
+                    profitLoss=CommonHelper.GetProfitLoss(12),
                     user_id = entity.user_id
                 };
 
@@ -548,6 +549,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     currentvalue = dm_UserEntity.accountprice,
                     title = "取消发布任务",
                     type = 13,
+                    profitLoss=CommonHelper.GetProfitLoss(13),
                     user_id = dm_TaskEntity.user_id
                 };
 

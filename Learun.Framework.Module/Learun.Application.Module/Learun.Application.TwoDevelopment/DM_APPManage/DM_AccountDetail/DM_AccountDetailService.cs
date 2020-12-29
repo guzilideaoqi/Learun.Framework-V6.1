@@ -12,7 +12,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		public DM_AccountDetailService()
 		{
-			fieldSql = "    t.id,    t.currentvalue,    t.stepvalue,    t.user_id,    t.title,    t.type,    t.remark,    t.createtime,    t.createcode";
+			fieldSql = "    t.id,    t.currentvalue,    t.stepvalue,    t.user_id,    t.title,    t.type,    t.remark,    t.createtime,    t.createcode,t.profitLoss";
 		}
 
 		public IEnumerable<dm_accountdetailEntity> GetList(string queryJson)

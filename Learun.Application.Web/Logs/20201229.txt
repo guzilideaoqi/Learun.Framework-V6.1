@@ -1,0 +1,16 @@
+【时间】=>2020-12-29 14:52:34 268
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=getguessgood&token=1&platform=android
+【异常位置】=>
+
+【时间】=>2020-12-29 14:53:08 536
+【错误类型】=>Debug
+【方法名称】=>手机号密码登录
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>{"id":1002,"realname":"张三","zfb":"123456789","identitycard":null,"frontcard":"http://dlm-appmanage.oss-cn-beijing.aliyuncs.com/20200820/0a2d04be-e4b1-4f9e-9990-8d078c50a7ba.png","facecard":"http://dlm-appmanage.oss-cn-beijing.aliyuncs.com/20200820/7ed7b951-d524-47f0-960f-0d2b876e9673.png","isreal":1,"phone":"17329303057","token":"bc90033c-0a2f-4569-8afd-c17ebbb6419a","pwd":"49ba59abbe56e057","nickname":"dlm_1591657176","headpic":"http://dlm-appmanage.oss-cn-beijing.aliyuncs.com/20200608/7e24c269-bd1a-4d3b-9733-f7b30663b8fc.png","accountprice":98234.96,"invitecode":"HCXF82","by_invitecode":null,"partners":0,"partnersstatus":0,"tb_pid":null,"tb_relationid":null,"tb_orderrelationid":null,"jd_site":"3000646610","jd_pid":"3000677010","pdd_pid":"9842456_135184067","userlevel":2,"createtime":"2020-06-08 22:59:36","updatetime":null,"appid":"e2b3ec3a-310b-4ab8-aa81-b563ac8f3006","province":"浙江省","city":"杭州市","down":"西湖区","address":"123456","integral":239,"isvoice":1,"isenable":1,"mywechat":"318617848","currentmontheffect":0.00,"currentmonthreceiveeffect":0.00,"upmonthreceiveeffect":2.78,"mychildcount":0,"mysonchildcount":0,"mypartnerscount":0,"tb_nickname":null,"isrelation_beian":0,"rongcloud_token":"t6VmoGshP0m4F0OOaye/cPeFQ+qKYdYboCOpgG8WudA=@2dsg.cn.rongnav.com;2dsg.cn.rongcfg.com","last_logintime":"2020-12-29 14:53:08"}
+【异常位置】=>
+

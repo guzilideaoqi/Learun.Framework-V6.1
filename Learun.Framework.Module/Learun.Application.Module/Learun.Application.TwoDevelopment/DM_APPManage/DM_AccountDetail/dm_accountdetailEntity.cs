@@ -72,7 +72,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 			set;
 		}
 
-		public void Create()
+        /// <summary>
+        /// 1¼ÓºÅ  2¼õºÅ
+        /// </summary>
+        [Column("PROFITLOSS")]
+        public int profitLoss { get; set; }
+
+
+        public void Create()
 		{
 			this.createtime = DateTime.Now;
 		}

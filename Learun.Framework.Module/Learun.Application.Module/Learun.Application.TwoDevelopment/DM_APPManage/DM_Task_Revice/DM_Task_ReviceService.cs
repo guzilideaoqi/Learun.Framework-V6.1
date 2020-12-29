@@ -720,7 +720,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 currentvalue = currentaccountprice,
                 title = title,
                 type = type,
-                user_id = user_id
+                user_id = user_id,
+                profitLoss=CommonHelper.GetProfitLoss(type)
             };
         }
 

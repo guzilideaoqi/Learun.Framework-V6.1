@@ -14,5 +14,15 @@ namespace Learun.Application.TwoDevelopment.Common
         //public static string ImageQianZhui = "";
 
         public const string tb_auth_address = "http://dlaimi.cn/TBUserInfoController/AuthorCallBack";
+
+        /// <summary>
+        /// 淘宝官方接口地址
+        /// </summary>
+        public const string tb_api_url = "http://gw.api.taobao.com/router/rest";
+
+        /// <summary>
+        /// 无数据提示
+        /// </summary>
+        public const string NoDataTip = "我也是有底线的";
     }
 }

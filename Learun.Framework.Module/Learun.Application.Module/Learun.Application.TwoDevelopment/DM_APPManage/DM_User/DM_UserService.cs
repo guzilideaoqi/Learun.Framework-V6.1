@@ -977,12 +977,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_AccountdetailEntity.title = "余额扣除";
                     dm_UserEntity.accountprice -= updateprice;
                     dm_AccountdetailEntity.type = 20;
+                    dm_AccountdetailEntity.profitLoss = CommonHelper.GetProfitLoss(20);
                 }
                 else
                 {
                     dm_AccountdetailEntity.title = "余额返还";
                     dm_UserEntity.accountprice += updateprice;
                     dm_AccountdetailEntity.type = 19;
+                    dm_AccountdetailEntity.profitLoss = CommonHelper.GetProfitLoss(19);
                 }
                 dm_AccountdetailEntity.remark = remark;
                 dm_AccountdetailEntity.stepvalue = updateprice;
