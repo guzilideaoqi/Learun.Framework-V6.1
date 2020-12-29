@@ -243,7 +243,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         req.PageNo = PageNo;
                         req.MaterialId = 6708;
                         //req.DeviceValue = "ab307116f4d176b32a41df086c216cd7";//我的
-                        req.DeviceValue = Md5Helper.Encrypt(imei, 32);//安卓的
+                        if (!imei.IsEmpty())
+                            req.DeviceValue = Md5Helper.Encrypt(imei, 32);//安卓的
                         req.DeviceEncrypt = "MD5";
                         req.DeviceType = platform == "IOS" ? "IDFA" : "IMEI";
                         TbkDgOptimusMaterialResponse rsp = client.Execute(req);
@@ -303,8 +304,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     smallCateList = new List<SmallCate>();
                     smallCateList.Add(new SmallCate
                     {
-                        Title = "推荐",
-                        SubTitle = "为您推荐",
+                        Title = "猜你喜欢",
+                        SubTitle = "智能推荐",
                         SmallType = 3
                     });
                     smallCateList.Add(new SmallCate
