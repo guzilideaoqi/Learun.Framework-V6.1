@@ -429,6 +429,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public string task_rule { get; set; }
 
         /// <summary>
+        /// 任务提交说明
+        /// </summary>
+        [Column("TASK_SUBMIT_REMARK")]
+        public string task_submit_remark { get; set; }
+
+        /// <summary>
         /// 任务审核  1开启  0关闭
         /// </summary>
         [Column("TASKCHECKED")]

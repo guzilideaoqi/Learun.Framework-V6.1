@@ -224,10 +224,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string appid = CheckAPPID();
                 string imei = base.Request.Headers["IMEI_Code"];
+                string platform = base.Request.Headers["platform"];
 
-                string cacheKey = "RankingList" + RandType.ToString() + PageNo + cateid + PageSize + imei;
+                string cacheKey = "RankingList" + RandType.ToString() + PageNo + cateid + PageSize + imei+ platform;
                 List<CommonGoodInfoEntity> RankingList = redisCache.Read<List<CommonGoodInfoEntity>>(cacheKey, 7L);
-                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
 
                 if (RankingList.IsEmpty())
@@ -235,7 +236,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     //猜你喜欢
                     if (RandType == 3)
                     {
-                        string platform = base.Request.Headers["platform"];
                         ITopClient client = new DefaultTopClient(CommonConfig.tb_api_url, "24625691", "9f852d35d2dc24028be48f99bf9bcf8a");
                         TbkDgOptimusMaterialRequest req = new TbkDgOptimusMaterialRequest();
                         req.PageSize = PageSize;
@@ -246,7 +246,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         if (!imei.IsEmpty())
                             req.DeviceValue = Md5Helper.Encrypt(imei, 32);//安卓的
                         req.DeviceEncrypt = "MD5";
-                        req.DeviceType = platform == "IOS" ? "IDFA" : "IMEI";
+                        req.DeviceType = platform.ToUpper() == "IOS" ? "IDFA" : "IMEI";
                         TbkDgOptimusMaterialResponse rsp = client.Execute(req);
 
                         if (rsp.IsError)
@@ -304,8 +304,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     smallCateList = new List<SmallCate>();
                     smallCateList.Add(new SmallCate
                     {
-                        Title = "猜你喜欢",
-                        SubTitle = "智能推荐",
+                        Title = "推荐",
+                        SubTitle = "猜你喜欢",
                         SmallType = 3
                     });
                     smallCateList.Add(new SmallCate

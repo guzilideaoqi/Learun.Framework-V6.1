@@ -922,7 +922,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (User_ID <= 0) return FailNoLogin();
 
                 string appid = CheckAPPID();
-                return Success("领取成功!", dm_Task_Person_SettingIBLL.GetPartnersProcess(User_ID, appid));
+                return Success("获取成功!", dm_Task_Person_SettingIBLL.GetPartnersProcess(User_ID, appid));
             }
             catch (Exception ex)
             {
@@ -1214,9 +1214,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID();
-                dm_userEntity dm_UserEntity = dm_userIBLL.LoginTokenVerify(loginToken, appid);
+                string phone = "";
+                dm_userEntity dm_UserEntity = dm_userIBLL.LoginTokenVerify(loginToken, appid, ref phone);
                 if (dm_UserEntity.IsEmpty())
-                    return Fail("该用户不存在!");
+                {
+                    if (!phone.IsEmpty())
+                    {
+                        return FailNoExistUser(new { phone = phone });
+                    }
+                    else
+                    {
+                        return Fail("快捷登录失败,请检查token是否正确!");
+                    }
+                }
+
                 return Success("验证成功", dm_UserEntity);
             }
             catch (Exception ex)

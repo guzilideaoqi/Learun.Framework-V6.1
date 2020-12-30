@@ -1,0 +1,8 @@
+【时间】=>2020-12-30 11:05:18 730
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=getguessgood&token=1&platform=ios
+【异常位置】=>
+

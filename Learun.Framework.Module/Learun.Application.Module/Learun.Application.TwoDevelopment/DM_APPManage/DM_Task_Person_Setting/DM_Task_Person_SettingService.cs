@@ -355,8 +355,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             IRepository db = null;
             try
             {
-
-
                 #region 获取任务记录
                 dm_task_person_settingEntity dm_Task_Person_SettingEntity = GetEntity(task_id);
                 #endregion
@@ -366,6 +364,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
                 else
                 {
+                    dm_userEntity dm_UserEntity = dm_UserService.GetEntityByCache(user_id);
+
+                    if (dm_Task_Person_SettingEntity.s_type == 4)
+                    {
+                        dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(user_id);
+                        if (dm_User_RelationEntity.ordercount < dm_Task_Person_SettingEntity.needcount)
+                            throw new Exception("请完成购物任务后再来领取!");
+                    }
+                    else if (dm_Task_Person_SettingEntity.s_type == 2) {
+                        if (dm_UserEntity.mychildcount < dm_Task_Person_SettingEntity.needcount)
+                            throw new Exception("请完成邀请任务后再来领取!");
+                    }
+
                     dm_task_person_recordEntity dm_Task_Person_RecordEntity = dm_Task_Person_RecordService.GetMyPersonRecord(user_id, task_id);
                     if (dm_Task_Person_RecordEntity.IsEmpty())
                     {
@@ -377,9 +388,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         dm_Task_Person_RecordEntity.status = 1;
                         #endregion
 
-
-
-                        dm_userEntity dm_UserEntity = dm_UserService.GetEntityByCache(user_id);
 
                         db = BaseRepository("dm_data").BeginTrans();
                         //积分任务
@@ -464,10 +472,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     if (item.s_type == 3)
                     {//邀请粉丝任务
                         item.finishcount = dm_UserRelationService.GetMyChildCount(user_id);
+                        item.remark += string.Format("({0}/{1})", item.finishcount, item.needcount);
                     }
                     else if (item.s_type == 5)
                     {//购物任务
                         item.finishcount = dm_OrderService.GetMyOrderCount(user_id);
+                        item.remark += string.Format("({0}/{1})", item.finishcount, item.needcount);
                     }
                     item.finishstatus = item.finishcount >= item.needcount ? 1 : 0;
                 }

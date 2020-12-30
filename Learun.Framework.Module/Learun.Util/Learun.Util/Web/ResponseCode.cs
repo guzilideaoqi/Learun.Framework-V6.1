@@ -21,6 +21,9 @@
         /// 异常
         /// </summary>
         exception = 500,
+        /// <summary>
+        /// 用户未授权
+        /// </summary>
         NoRelation = 101,
         /// <summary>
         /// 未登录
@@ -30,8 +33,21 @@
         /// 登录失效
         /// </summary>
         LoginExpire = 402,
+        /// <summary>
+        /// 账户余额不足
+        /// </summary>
         NoMoney = 102,
+        /// <summary>
+        /// 未绑定支付宝
+        /// </summary>
         NoBindAliPay = 103,
-        NoRealName = 104
+        /// <summary>
+        /// 未实名
+        /// </summary>
+        NoRealName = 104,
+        /// <summary>
+        /// 不存在的用户
+        /// </summary>
+        NoExistUser = 105
     }
 }

@@ -533,9 +533,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 
                     dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
+                    if (dm_UserEntity.pwd.IsEmpty())
+                        dm_UserEntity.pwd = "123456";
                     dm_UserEntity.pwd = Md5Helper.Encrypt(dm_UserEntity.pwd, 16);
                     dm_UserEntity.token = Guid.NewGuid().ToString();
                     dm_UserEntity.last_logintime = DateTime.Now;
+                    dm_UserEntity.appid = appid;
                     dm_UserEntity.Create();
 
                     int effectCount = BaseRepository("dm_data").Insert(dm_UserEntity);
@@ -1421,7 +1424,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity LoginTokenVerify(string loginToken, string appid)
+        public dm_userEntity LoginTokenVerify(string loginToken, string appid, ref string phone)
         {
             dm_userEntity dm_UserEntity = null;
             try
@@ -1440,7 +1443,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     RSATool rSATool = new RSATool();
 
-                    string phone = rSATool.DecryptByPublicKey(rongyun_Response.phone, dm_BasesettingEntity.jg_privatekey, false);
+                    phone = rSATool.DecryptByPublicKey(rongyun_Response.phone, dm_BasesettingEntity.jg_privatekey, false);
                     dm_UserEntity = GetEntityByPhone(phone, appid);
 
                     if (!dm_UserEntity.IsEmpty())

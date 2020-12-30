@@ -146,6 +146,11 @@ namespace Learun.Application.Web.App_Start._01_Handler
             return Content(new ResParameter { code = ResponseCode.NoLogin, info = "用户未登录!" }.ToJson());
         }
 
+        protected virtual ActionResult FailNoExistUser(object data)
+        {
+            return Content(new ResParameter { code = ResponseCode.NoExistUser, info = "用户信息不存在，请输入上级邀请码完成注册!", data = data }.ToJson());
+        }
+
         protected virtual ActionResult FailNoPrice(string info)
         {
             return Content(new ResParameter { code = ResponseCode.NoMoney, info = info }.ToJson());

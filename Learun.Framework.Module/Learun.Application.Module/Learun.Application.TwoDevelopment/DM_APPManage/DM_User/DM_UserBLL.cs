@@ -592,10 +592,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity LoginTokenVerify(string loginToken, string appid) {
+        public dm_userEntity LoginTokenVerify(string loginToken, string appid, ref string phone) {
             try
             {
-                return dM_UserService.LoginTokenVerify(loginToken, appid);
+                return dM_UserService.LoginTokenVerify(loginToken, appid,ref phone);
             }
             catch (Exception ex)
             {
