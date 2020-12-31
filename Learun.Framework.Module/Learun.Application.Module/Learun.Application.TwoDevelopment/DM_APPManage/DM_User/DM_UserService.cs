@@ -1336,9 +1336,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="relationid"></param>
         /// <returns></returns>
-        public bool NoExistRelationID(string relationid)
+        public bool NoExistRelationID(string relationid, int user_id)
         {
             dm_userEntity dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.tb_relationid == relationid);
+
+            if (!dm_UserEntity.IsEmpty() && dm_UserEntity.id == user_id)
+                return true;
+
             return dm_UserEntity.IsEmpty();
         }
         #endregion

@@ -1,0 +1,16 @@
+【时间】=>2020-12-31 14:45:52 978
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=getguessgood&token=1&platform=android
+【异常位置】=>
+
+【时间】=>2020-12-31 14:46:17 022
+【错误类型】=>Debug
+【方法名称】=>手机号密码登录
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>{"id":2,"realname":"dengzq","zfb":"15019488355","identitycard":null,"frontcard":"/Resource/CardImage/1a58e961-f4d6-4d1b-afa4-79246e5d6bc4.jpg","facecard":"/Resource/CardImage/2a966f33-9272-4574-b674-a7f20e95eeef.jpg","isreal":1,"phone":"13858094294","token":"832a4ee0-3d53-45b6-995b-b37945ad4cbe","pwd":"49ba59abbe56e057","nickname":"甄子丹12222222222222222","headpic":"http://dlm-appmanage.oss-cn-beijing.aliyuncs.com/20200916/41b907b5-6b28-4525-a435-698404e517b0.jpg","accountprice":94570.51,"invitecode":"EX3LFY","by_invitecode":null,"partners":20002,"partnersstatus":1,"tb_pid":"110091950136","tb_relationid":"2561524242","tb_orderrelationid":null,"jd_site":"3000646610","jd_pid":"3000676442","pdd_pid":"9842456_135184065","userlevel":2,"createtime":"2020-03-19 22:45:51","updatetime":"2020-05-11 10:07:03","appid":"e2b3ec3a-310b-4ab8-aa81-b563ac8f3006","province":"山西省","city":"晋城市","down":"陵川县","address":"123","integral":1576,"isvoice":1,"isenable":1,"mywechat":"318617525","currentmontheffect":0.00,"currentmonthreceiveeffect":0.00,"upmonthreceiveeffect":0.00,"mychildcount":28,"mysonchildcount":28,"mypartnerscount":0,"tb_nickname":"tb3120132665","isrelation_beian":0,"rongcloud_token":"fsRlmUKMXrr90gSep4n4B4KZdhTCeRa+@2dsg.cn.rongnav.com;2dsg.cn.rongcfg.com","last_logintime":"2020-12-31 14:46:16"}
+【异常位置】=>
+

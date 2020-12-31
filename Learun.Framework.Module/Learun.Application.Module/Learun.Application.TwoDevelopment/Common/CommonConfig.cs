@@ -23,6 +23,6 @@ namespace Learun.Application.TwoDevelopment.Common
         /// <summary>
         /// 无数据提示
         /// </summary>
-        public const string NoDataTip = "我也是有底线的";
+        public const string NoDataTip = "人家也是有底线的";
     }
 }

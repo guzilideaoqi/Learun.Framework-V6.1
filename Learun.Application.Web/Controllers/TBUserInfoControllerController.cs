@@ -124,7 +124,7 @@ namespace Learun.Application.Web.Controllers
                 else
                 {
                     string relation_id = rsp.Data.RelationId.ToString();
-                    if (dm_userIBLL.NoExistRelationID(relation_id))
+                    if (dm_userIBLL.NoExistRelationID(relation_id, user_id))
                     {
                         string[] pids = dm_BasesettingEntity.tb_relation_pid.Split('_');
                         dm_UserEntity.tb_pid = pids.Length == 4 ? pids[3] : "";

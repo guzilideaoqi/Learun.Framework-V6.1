@@ -329,7 +329,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 string token = base.Request.Headers["token"];
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetPersonInfo(token);
-                return Success("获取成功", dm_UserEntity);
+
+                if (!dm_UserEntity.IsEmpty())
+                {
+                    if (dm_UserEntity.id != User_ID)
+                        dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
+                    return Success("获取成功", dm_UserEntity);
+                }
+                else
+                {
+                    return Fail("用户信息异常!");
+                }
+
             }
             catch (Exception ex)
             {

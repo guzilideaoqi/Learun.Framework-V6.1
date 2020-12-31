@@ -125,7 +125,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     showcommission = dm_BasesettingEntity.showcommission,
                     miquan_remark = dm_BasesettingEntity.miquan_remark,
                     task_remark = "http://dlaimi.cn/dm_appmanage/dm_article/lookarticle?id=16",
-                    task_submit_remark = dm_BasesettingEntity.task_submit_remark
+                    task_submit_remark_title="任务提交小建议",
+                    task_submit_remark = dm_BasesettingEntity.task_submit_remark,
+                    nodatatip = CommonConfig.NoDataTip
                 });
             }
             catch (Exception ex)

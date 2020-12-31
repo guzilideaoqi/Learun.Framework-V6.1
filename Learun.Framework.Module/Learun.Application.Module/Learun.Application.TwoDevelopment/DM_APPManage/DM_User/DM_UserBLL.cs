@@ -541,11 +541,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region ÅÐ¶ÏÇþµÀIDÊÇ·ñ´æÔÚ
-        public bool NoExistRelationID(string relationid)
+        public bool NoExistRelationID(string relationid,int user_id)
         {
             try
             {
-                return dM_UserService.NoExistRelationID(relationid);
+                return dM_UserService.NoExistRelationID(relationid,user_id);
             }
             catch (Exception ex)
             {

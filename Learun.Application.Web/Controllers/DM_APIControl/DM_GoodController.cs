@@ -178,9 +178,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     req.PageNo = PageNo;
                     req.MaterialId = 6708;
                     //req.DeviceValue = "ab307116f4d176b32a41df086c216cd7";//我的
-                    req.DeviceValue = Md5Helper.Encrypt(imei, 32);//安卓的
-                    req.DeviceEncrypt = "MD5";
-                    req.DeviceType = platform == "IOS" ? "IDFA" : "IMEI";
+                    if (platform.ToUpper() == "IOS")
+                    {
+                        if (!imei.IsEmpty())
+                            req.DeviceValue = Md5Helper.Encrypt(imei, 32);//苹果
+                        req.DeviceEncrypt = "MD5";
+                        req.DeviceType = "IDFA";
+                    }
+                    else
+                    {
+                        req.DeviceValue = imei;//安卓的
+                        req.DeviceType = "UTDID";
+                    }
                     //req.ContentId = 323L;
                     //req.ContentSource = "xxx";
                     //req.ItemId = 33243L;
@@ -226,9 +235,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string imei = base.Request.Headers["IMEI_Code"];
                 string platform = base.Request.Headers["platform"];
 
-                string cacheKey = "RankingList" + RandType.ToString() + PageNo + cateid + PageSize + imei+ platform;
+                string cacheKey = "RankingList" + RandType.ToString() + PageNo + cateid + PageSize + imei + platform;
                 List<CommonGoodInfoEntity> RankingList = redisCache.Read<List<CommonGoodInfoEntity>>(cacheKey, 7L);
-                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
 
                 if (RankingList.IsEmpty())
@@ -243,10 +252,20 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         req.PageNo = PageNo;
                         req.MaterialId = 6708;
                         //req.DeviceValue = "ab307116f4d176b32a41df086c216cd7";//我的
-                        if (!imei.IsEmpty())
-                            req.DeviceValue = Md5Helper.Encrypt(imei, 32);//安卓的
-                        req.DeviceEncrypt = "MD5";
-                        req.DeviceType = platform.ToUpper() == "IOS" ? "IDFA" : "IMEI";
+                        if (platform.ToUpper() == "IOS")
+                        {
+                            if (!imei.IsEmpty())
+                                req.DeviceValue = Md5Helper.Encrypt(imei, 32);//苹果
+                            req.DeviceEncrypt = "MD5";
+                            req.DeviceType = "IDFA";
+                        }
+                        else
+                        {
+                            req.DeviceValue = imei;//安卓的
+                            req.DeviceType = "UTDID";
+                        }
+
+
                         TbkDgOptimusMaterialResponse rsp = client.Execute(req);
 
                         if (rsp.IsError)
@@ -1089,7 +1108,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dTK_Privilege_LinkRequest.goodsId = originid;
                     dTK_Privilege_LinkRequest.pid = dm_BasesettingEntity.tb_relation_pid;
                     dTK_Privilege_LinkRequest.channelId = dm_UserEntity.tb_relationid.ToString();
-                    dTK_Privilege_LinkRequest.couponId = couponid;
+                    dTK_Privilege_LinkRequest.couponId = couponid.Contains("//") ? "" : couponid;
                     DTK_Privilege_LinkResponse dTK_Privilege_LinkResponse = dTK_ApiManage.GetPrivilegeLink(dTK_Privilege_LinkRequest);
                     if (dTK_Privilege_LinkResponse.code != 0)
                     {

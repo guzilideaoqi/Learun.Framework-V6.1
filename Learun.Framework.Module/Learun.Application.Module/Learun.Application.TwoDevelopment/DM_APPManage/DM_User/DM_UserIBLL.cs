@@ -119,7 +119,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 判断渠道ID是否存在
-        bool NoExistRelationID(string relationid);
+        bool NoExistRelationID(string relationid,int user_id);
         #endregion
 
         #region 补全没有邀请码的用户信息
