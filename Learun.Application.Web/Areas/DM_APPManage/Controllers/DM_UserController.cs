@@ -204,5 +204,27 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             };
             return Success(data);
         }
+
+
+        /// <summary>
+        /// 清除淘宝授权
+        /// </summary>
+        /// <param name="User_ID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult Clear_TB_Relation_Auth(int User_ID)
+        {
+            try
+            {
+                dM_UserIBLL.Clear_TB_Relation_Auth(User_ID);
+
+                return Success("授权清除成功!");
+            }
+            catch (System.Exception ex)
+            {
+                return Fail(ex.InnerException.Message);
+            }
+        }
     }
 }

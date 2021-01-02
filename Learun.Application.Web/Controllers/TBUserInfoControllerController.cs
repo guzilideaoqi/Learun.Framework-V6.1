@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Top.Api;
@@ -135,7 +136,10 @@ namespace Learun.Application.Web.Controllers
                     }
                     else
                     {
-                        throw new Exception("当前淘宝账号已在其他账号下备案,请更换账号!");
+                        string otherAccount = "其他账号";
+                        if (!dm_UserEntity.IsEmpty() && !dm_UserEntity.phone.IsEmpty() && dm_UserEntity.phone.Length > 10)
+                            otherAccount="账号"+ Regex.Replace(dm_UserEntity.phone, "(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+                        throw new Exception("当前淘宝账号已在" + otherAccount + "下授权,请更换账号!");
                     }
                 }
 

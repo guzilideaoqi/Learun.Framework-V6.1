@@ -575,6 +575,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        #region 清除淘宝授权信息
+        public void Clear_TB_Relation_Auth(int User_ID) {
+            try
+            {
+                dM_UserService.Clear_TB_Relation_Auth(User_ID);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
         #region 生成融云Token
         public string GeneralRongTokne(int User_ID, string appid)
         {

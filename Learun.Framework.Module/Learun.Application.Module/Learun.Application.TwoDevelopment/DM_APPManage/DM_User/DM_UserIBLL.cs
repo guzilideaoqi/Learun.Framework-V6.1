@@ -126,6 +126,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void BatchGeneralInviteCode();
         #endregion
 
+        #region 清除淘宝授权信息
+        void Clear_TB_Relation_Auth(int User_ID);
+        #endregion
+
         #region 生成融云Token
         string GeneralRongTokne(int User_ID, string appid);
 

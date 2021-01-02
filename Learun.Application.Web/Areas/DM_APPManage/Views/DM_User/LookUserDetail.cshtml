@@ -59,7 +59,15 @@
 
                     <div class="col-xs-6 lr-form-item">
                         <div class="lr-form-item-title">渠道ID：</div>
-                        <input id="tb_relationid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                        <div class="d-flex flex-row">
+                            <div region="west" class="west" style="float:left;width:90px;">
+                                <input id="tb_relationid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                            </div>
+                            <div region="center" class="center flex-fill" style="float:left;padding:2px 0 0 0;display:none" id="clearauthbyn">
+                                <a id="lr_clear_auth" class="btn btn-success btn-xs"><i class="fa fa-close"></i>&nbsp;清除授权</a>
+                            </div>
+                        </div>
+                        <dlv style="clear:both;"></dlv>
                     </div>
                     <div class="col-xs-6 lr-form-item">
                         <div class="lr-form-item-title">京东PID：</div>

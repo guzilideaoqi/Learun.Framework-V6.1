@@ -1361,6 +1361,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        public void Clear_TB_Relation_Auth(int User_ID) {
+            dm_userEntity dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(User_ID);
+            dm_UserEntity.tb_pid = "";
+            dm_UserEntity.tb_relationid = "";
+            dm_UserEntity.isrelation_beian = 0;
+            dm_UserEntity.Modify(User_ID);
+            this.BaseRepository("dm_data").Update(dm_UserEntity);
+        }
+
         #region 生成融云Token
         /**
          * 此处替换成您的appKey

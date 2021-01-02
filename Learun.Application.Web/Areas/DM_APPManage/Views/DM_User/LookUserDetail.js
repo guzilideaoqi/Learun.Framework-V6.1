@@ -17,15 +17,31 @@ var bootstrap = function ($, learun) {
         bind: function () {
             // 代码查看
             $('#nav_tabs').lrFormTabEx();
+
+            $("#lr_clear_auth").on('click', function () {
+                var tip = "清除授权后用户在APP端将无法正常淘宝购物,是否继续？"
+                learun.layerConfirm(tip, function (res) {
+                    if (res) {
+                        learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_User/Clear_TB_Relation_Auth', { User_ID: selectedRow.id }, function () {
+                            learun.layerClose("LookUserDetail", "");
+                        });
+                    }
+                });
+            })
         },
         initData: function () {
             if (!!selectedRow) {
-                $('#form').lrSetFormData(selectedRow);
-            }
+                $.lrSetForm(top.$.rootUrl + '/DM_APPManage/DM_User/GetFormData?keyValue=' + selectedRow.id, function (data) {//
+                    $('#form').lrSetFormData(data);
 
-            page.accountpriceGrid(selectedRow.id);
-            page.initIntegralGird(selectedRow.id);
-            page.initMyChild(selectedRow.id);
+                    if (!!data.tb_relationid)
+                        $("#clearauthbyn").css("display", "block");
+                })
+
+                page.accountpriceGrid(selectedRow.id);
+                page.initIntegralGird(selectedRow.id);
+                page.initMyChild(selectedRow.id);
+            }
         },
         accountpriceGrid: function (user_id) {
             $('#accountpriceRecord').jfGrid({
@@ -112,7 +128,7 @@ var bootstrap = function ($, learun) {
             $('#accountpriceRecord').jfGridSet('reload', { param: param });
         },
         search_mysub: function (param) {
-            $('#mysubuser').jfGridSet('reload', { param: { userid: param }});
+            $('#mysubuser').jfGridSet('reload', { param: { userid: param } });
         }
     };
     // 保存数据
