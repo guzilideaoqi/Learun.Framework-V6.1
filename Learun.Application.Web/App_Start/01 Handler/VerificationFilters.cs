@@ -20,7 +20,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
             "getarticledetail",
             "decodeinvitecode",
             "dm_register",
-            "paycallback",
+            "paycallback","testpaycallback",
             "authorcallback",
             "callback",
             "authorresult",

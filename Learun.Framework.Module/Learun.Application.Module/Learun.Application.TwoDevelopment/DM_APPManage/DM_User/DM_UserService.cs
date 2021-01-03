@@ -1019,7 +1019,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                string querySql = "select * from dm_user where partners=" + partnersid + " and partnersstatus=1";
+                string querySql = "select * from dm_user where partners=" + partnersid + " and partnersstatus=2";
                 return BaseRepository("dm_data").FindEntity<dm_userEntity>(querySql, null);
             }
             catch (Exception ex)
@@ -1361,7 +1361,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
-        public void Clear_TB_Relation_Auth(int User_ID) {
+        public void Clear_TB_Relation_Auth(int User_ID)
+        {
             dm_userEntity dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(User_ID);
             dm_UserEntity.tb_pid = "";
             dm_UserEntity.tb_relationid = "";

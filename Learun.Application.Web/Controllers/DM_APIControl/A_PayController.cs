@@ -302,6 +302,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
+        public ActionResult TestPayCallBack() {
+            dM_Alipay_RecordIBLL.OpenAgent(dM_Alipay_RecordIBLL.GetEntity(198));
+            return Success("ok");
+        }
+
         public string CheckAPPID()
         {
             if (base.Request.Headers["appid"].IsEmpty())

@@ -306,8 +306,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
                     if (!one_User.IsEmpty())
                     {
-                        if (one_User.userlevel == 2)
-                        {//高级代理才能享受代理提成
+                        if (one_User.userlevel == 1 || one_User.userlevel == 2 || one_User.partnersstatus == 2)
+                        {//高级代理或合伙人才能享受代理提成  2021-01-03 业务逻辑调整 上级只要是付费用户都可以返佣金
                             one_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
                             if (one_agent_commission > 0)
                             {
@@ -328,7 +328,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 }
                             }
                             #endregion
-
                         }
                     }
                     #endregion
@@ -349,7 +348,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         two_partners = dM_UserService.GetEntityByCache(dm_User_RelationEntity_one_partners.parent_id);
                         if (!two_partners.IsEmpty())
                         {
-                            if (two_partners.partnersstatus == 1)
+                            if (two_partners.partnersstatus == 2)
                             {//二级用户为合伙人时才进行返利
                                 two_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_two_partners * dm_Alipay_RecordEntity_old.total_amount);
                                 if (two_partners_commission > 0)
@@ -410,7 +409,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 title = title,
                 type = type,
                 user_id = user_id,
-                profitLoss= CommonHelper.GetProfitLoss(type)
+                profitLoss = CommonHelper.GetProfitLoss(type)
             };
         }
 
