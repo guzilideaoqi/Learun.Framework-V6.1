@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Linq;
+using Learun.Application.TwoDevelopment.Common;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -242,6 +243,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     db.Insert(dm_AccountdetailEntity);
                     db.Update(dm_Alipay_RecordEntity);//优化支付成功未更改支付状态  造成金额多次修改
                     db.Commit();
+
+                    CacheHelper.UpdateUserInfo(dm_UserEntity);
                 }
                 else
                 {//代理开通
@@ -376,6 +379,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         db.Insert(dm_AccountdetailEntities);//增加账户余额明细
                         db.Update(calculateComissionEntities);//批量修改用户信息
                         db.Commit();
+
+                        CacheHelper.UpdateUserInfo(currentUser);
                     }
                 }
             }

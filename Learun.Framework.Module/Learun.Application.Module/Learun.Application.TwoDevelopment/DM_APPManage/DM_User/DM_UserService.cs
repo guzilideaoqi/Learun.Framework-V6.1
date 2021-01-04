@@ -261,15 +261,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.token == token);//从数据库获取
                     if (!dm_UserEntity.IsEmpty())
                     {
-                        dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(dm_UserEntity.id);
-
-                        if (!dm_User_RelationEntity.IsEmpty())
-                        {
-                            dm_UserEntity.currentmontheffect = dm_User_RelationEntity.CurrentMonthEffect;
-                            dm_UserEntity.currentmonthreceiveeffect = dm_User_RelationEntity.CurrentMonthReceiveEffect;
-                            dm_UserEntity.upmonthreceiveeffect = dm_User_RelationEntity.UpMonthReceiveEffect;
-                        }
-
                         #region 判断用户是否有邀请码  没有时再重新创建
                         if (dm_UserEntity.invitecode.IsEmpty())
                         {
@@ -287,8 +278,20 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             BaseRepository("dm_data").Update(dm_UserEntity);
                         }
                         #endregion
-                    }
 
+                        #region 统计信息放到更新用户信息之后  否则会同步到数据库
+                        dm_user_relationEntity dm_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(dm_UserEntity.id);
+
+                        if (!dm_User_RelationEntity.IsEmpty())
+                        {
+                            dm_UserEntity.currentmontheffect = dm_User_RelationEntity.CurrentMonthEffect;
+                            dm_UserEntity.currentmonthreceiveeffect = dm_User_RelationEntity.CurrentMonthReceiveEffect;
+                            dm_UserEntity.upmonthreceiveeffect = dm_User_RelationEntity.UpMonthReceiveEffect;
+                        }
+                        #endregion
+
+                        CacheHelper.UpdateUserInfo(dm_UserEntity);
+                    }
 
                     redisCache.Write<string>(cacheKey, "1", DateTime.Now.AddSeconds(30), 7);
                 }
