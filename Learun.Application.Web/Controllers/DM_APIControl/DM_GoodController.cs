@@ -403,8 +403,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         RankingList = ConvertCommonGoodEntityByRank(dTK_Ranking_ListResponse.data, dm_UserEntity, dm_BasesettingEntity, cacheKey);*/
                     }
 
-
-
                     redisCache.Write(cacheKey, RankingList, DateTime.Parse(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss")), 7L);
                 }
                 return SuccessList("获取成功!", CheckPreviewOutGood(cacheKey, dm_BasesettingEntity, dm_UserEntity, RankingList));
@@ -2248,8 +2246,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     coupon_after_price = coupon_after_price.ToString(),
                     coupon_price = item.CouponAmount.ToString(),
                     origin_price = item.ZkFinalPrice,
-                    coupon_end_time = item.CouponEndTime,
-                    coupon_start_time = item.CouponStartTime,
+                    coupon_end_time = item.CouponEndTime.IsEmpty() ? "" : Time.GetDateTimeFrom1970Ticks(long.Parse(item.CouponEndTime), true).ToString(),
+                    coupon_start_time = item.CouponStartTime.IsEmpty() ? "" : Time.GetDateTimeFrom1970Ticks(long.Parse(item.CouponStartTime), true).ToString(),
                     detail_images = images,
                     images = images,
                     image = GetImage(item.PictUrl),
@@ -2454,7 +2452,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 if (IsPreview(dm_BasesettingEntity))
                 {
-                    newGoodItemList = superGoodItems.Select(p => { p.SuperCommission = 0M; p.LevelCommission = 0M; return p; });
+                    newGoodItemList = superGoodItems.Select(p => { p.SuperCommission = 0M; p.LevelCommission = 0M;p.cacheKey = cacheKey; return p; });
                 }
                 else
                 {
