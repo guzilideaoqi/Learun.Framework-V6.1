@@ -308,6 +308,7 @@
     <Compile Include="Areas\DM_APPManage\Controllers\dm_friend_circleController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_friend_thumb_recordController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_level_remarkController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_versionController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -665,6 +666,7 @@
     <Content Include="Content\font\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\images\404.png" />
     <Content Include="Content\images\adminDefault.png" />
+    <Content Include="Content\images\Android.png" />
     <Content Include="Content\images\arrow1.png" />
     <Content Include="Content\images\bg.png" />
     <Content Include="Content\images\bk.png" />
@@ -719,6 +721,7 @@
     <Content Include="Content\images\arrow.png" />
     <Content Include="Content\images\datepicker_icon.png" />
     <Content Include="Content\images\iframebg.png" />
+    <Content Include="Content\images\iOS.png" />
     <Content Include="Content\images\learunim\emotion\emotion.css" />
     <Content Include="Content\images\learunim\emotion\emotion.html" />
     <Content Include="Content\images\learunim\emotion\emotion.js" />
@@ -2417,6 +2420,10 @@
     <Content Include="Areas\DM_APPManage\Views\dm_level_remark\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_level_remark\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_level_remark\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_version\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_version\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_version\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_version\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

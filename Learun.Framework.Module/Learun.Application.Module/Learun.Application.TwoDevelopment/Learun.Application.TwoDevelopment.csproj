@@ -238,6 +238,10 @@
     <Compile Include="DM_APPManage\dm_level_remark\dm_level_remarkService.cs" />
     <Compile Include="DM_APPManage\dm_level_remark\dm_level_remarkIBLL.cs" />
     <Compile Include="DM_APPManage\dm_level_remark\dm_level_remarkBLL.cs" />
+    <Compile Include="DM_APPManage\dm_version\dm_versionEntity.cs" />
+    <Compile Include="DM_APPManage\dm_version\dm_versionService.cs" />
+    <Compile Include="DM_APPManage\dm_version\dm_versionIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_version\dm_versionBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

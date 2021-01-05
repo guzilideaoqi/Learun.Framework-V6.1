@@ -7,7 +7,6 @@ $(function () {
         },
         bind: function () {
             top.learun.httpAsyncGet(top.$.rootUrl + '/DM_APPManage/DM_User/GetStaticData', function (res) {
-                console.log(res);
                 if (res.code == 200) {
                     page.initBaseCount(res.data.StaticData1[0]);
                     page.initOrder(res.data.StaticData2);

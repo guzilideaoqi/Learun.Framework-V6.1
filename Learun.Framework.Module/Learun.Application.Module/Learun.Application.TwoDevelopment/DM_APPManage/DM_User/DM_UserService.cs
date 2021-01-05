@@ -527,6 +527,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     }
 
                     dm_user_relationEntity dm_Parent_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(parent_UserEntity.id);
+                    if (dm_Parent_User_RelationEntity.IsEmpty()) {
+                        throw new Exception("邀请人信息异常!");
+                    }
+
                     dm_userEntity dm_UserEntity_exist = GetEntityByPhone(dm_UserEntity.phone, appid);
                     if (!dm_UserEntity_exist.IsEmpty())
                     {

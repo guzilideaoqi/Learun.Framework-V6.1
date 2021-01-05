@@ -42,14 +42,18 @@ namespace Learun.Application.TwoDevelopment.Common
 
             if (httpResponse.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception("短信接口验证错误" + httpResponse.Content);
+                SmsVerifityMsg smsVerifityMsg = JsonConvert.JsonDeserialize<SmsVerifityMsg>(httpResponse.Content);
+                if (!smsVerifityMsg.is_valid)
+                    throw new Exception(smsVerifityMsg.error.message);
+                return smsVerifityMsg.is_valid;
+                //throw new Exception("短信接口验证错误" + httpResponse.Content);
                 //return false;
             }
             else
             {
                 SmsVerifityMsg smsVerifityMsg = JsonConvert.JsonDeserialize<SmsVerifityMsg>(httpResponse.Content);
                 if (!smsVerifityMsg.is_valid)
-                    throw new Exception(httpResponse.Content);
+                    throw new Exception(smsVerifityMsg.error.message);
                 return smsVerifityMsg.is_valid;
             }
         }
@@ -79,5 +83,14 @@ namespace Learun.Application.TwoDevelopment.Common
     public class SmsVerifityMsg
     {
         public bool is_valid { get; set; }
+
+        public SmsMessageContent error { get; set; }
+    }
+
+    public class SmsMessageContent
+    {
+        public int code { get; set; }
+
+        public string message { get; set; }
     }
 }

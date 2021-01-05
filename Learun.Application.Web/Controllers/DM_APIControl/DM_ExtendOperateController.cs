@@ -34,6 +34,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private DM_OrderIBLL dM_OrderIBLL = new DM_OrderBLL();
 
+        private dm_versionIBLL dm_VersionIBLL = new dm_versionBLL();
+
         #region 获取平台设置
         public ActionResult GetPlaformSetting()
         {
@@ -125,7 +127,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     showcommission = dm_BasesettingEntity.showcommission,
                     miquan_remark = dm_BasesettingEntity.miquan_remark,
                     task_remark = "http://dlaimi.cn/dm_appmanage/dm_article/lookarticle?id=16",
-                    task_submit_remark_title="任务提交小建议",
+                    task_submit_remark_title = "任务提交小建议",
                     task_submit_remark = dm_BasesettingEntity.task_submit_remark,
                     nodatatip = CommonConfig.NoDataTip
                 });
@@ -493,8 +495,22 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
             catch (Exception)
             {
-
                 throw;
+            }
+        }
+        #endregion
+
+        #region 获取APP
+        public ActionResult GetVersionRecord()
+        {
+            try
+            {
+                dm_versionEntity dm_VersionEntity = dm_VersionIBLL.GetVersionRecord(CheckPlaform());
+                return Success("获取成功!", dm_VersionEntity);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
             }
         }
         #endregion
