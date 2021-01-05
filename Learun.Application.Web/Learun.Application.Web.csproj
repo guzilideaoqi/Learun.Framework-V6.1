@@ -1928,6 +1928,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_User\SetInviteCode.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\PreviewCircle.cshtml" />
+    <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -214,8 +214,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 /*
                  * 根据外部交易单号获取订单记录
                  * 更改用户状态并完成返利
-                 * 1、一级代理返利(代理等级为高级才可得到)
-                 * 2、二级代理返利(代理等级为高级才可得到)
+                 * 1、一级代理返利(代理等级为初级、高级、合伙人才可得到2021-01-06)
+                 * 2、二级代理返利(代理等级为初级、高级、合伙人才可得到2021-01-06)
+                 * 3、三级代理返利(代理等级为初级、高级、合伙人才可得到2021-01-06)
                  * 3、一级合伙人(不校验代理等级,可能为后台开通)
                  * 4、二级合伙人(不校验代理等级,可能为后台开通)
                  */
@@ -251,9 +252,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_AccountdetailEntities.Clear();
                     calculateComissionEntities.Clear();
 
-                    decimal one_agent_commission = 0, two_agent_commission = 0, one_partners_commission = 0, two_partners_commission = 0;
+                    decimal one_agent_commission = 0, two_agent_commission = 0, three_agent_commission = 0, one_partners_commission = 0, two_partners_commission = 0;
 
-                    dm_userEntity currentUser = null, one_User = null, two_User = null, one_partners = null, two_partners = null;
+                    dm_userEntity currentUser = null, one_User = null, two_User = null, three_User = null, one_partners = null, two_partners = null;
 
 
 
@@ -306,33 +307,63 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     #region 更改一级账户余额及明细
                     dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Alipay_RecordEntity_old.user_id).FirstOrDefault();
-                    one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
-                    if (!one_User.IsEmpty())
+                    if (!dm_User_RelationEntity_one.IsEmpty())
                     {
-                        if (one_User.userlevel == 1 || one_User.userlevel == 2 || one_User.partnersstatus == 2)
-                        {//高级代理或合伙人才能享受代理提成  2021-01-03 业务逻辑调整 上级只要是付费用户都可以返佣金
-                            one_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
-                            if (one_agent_commission > 0)
-                            {
-                                one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 6, "下级开通代理", "您的下级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_agent_commission, one_User.accountprice));
-                            }
-
-                            #region 更改二级账户余额及明细
-                            dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
-                            two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
-                            if (!two_User.IsEmpty())
-                            {
-                                two_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_two * dm_Alipay_RecordEntity_old.total_amount);
-                                if (two_agent_commission > 0)
+                        one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
+                        if (!one_User.IsEmpty())
+                        {
+                            if (one_User.userlevel == 1 || one_User.userlevel == 2 || one_User.partnersstatus == 2)
+                            {//高级代理或合伙人才能享受代理提成  2021-01-03 业务逻辑调整 上级只要是付费用户都可以返佣金
+                                one_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
+                                if (one_agent_commission > 0)
                                 {
-                                    two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
-                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 7, "二级开通代理", "您的二级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                    one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 6, "下级开通代理", "您的下级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_agent_commission, one_User.accountprice));
                                 }
+
+                                #region 更改二级账户余额及明细
+                                dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
+                                if (dm_User_RelationEntity_two.IsEmpty())
+                                {
+                                    two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
+                                    if (!two_User.IsEmpty())
+                                    {
+                                        if (two_User.userlevel == 1 || two_User.userlevel == 2 || two_User.partnersstatus == 2)
+                                        {
+                                            two_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_two * dm_Alipay_RecordEntity_old.total_amount);
+                                            if (two_agent_commission > 0)
+                                            {
+                                                two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
+                                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 7, "二级开通代理", "您的二级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                            }
+
+                                            #region 更改三级账户余额及明细
+                                            dm_user_relationEntity dm_User_RelationEntity_three = userRelationList.Where(t => t.user_id == two_User.id).FirstOrDefault();
+                                            if (!dm_User_RelationEntity_three.IsEmpty())
+                                            {
+                                                three_User = userList.Where(t => t.id == dm_User_RelationEntity_three.parent_id).FirstOrDefault();
+                                                if (!three_User.IsEmpty())
+                                                {
+                                                    if (three_User.userlevel == 1 || three_User.userlevel == 2 || three_User.partnersstatus == 2)
+                                                    {
+                                                        three_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_three * dm_Alipay_RecordEntity_old.total_amount);
+                                                        if (three_agent_commission > 0)
+                                                        {
+                                                            three_User = CalculateComission(three_User.id, three_agent_commission, three_User.accountprice);
+                                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(three_User.id, 22, "三级开通代理", "您的三级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", three_agent_commission, three_User.accountprice));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                }
+                                #endregion
                             }
-                            #endregion
                         }
                     }
+
                     #endregion
 
                     #region 获取当前用户所属合伙人(一级合伙人)

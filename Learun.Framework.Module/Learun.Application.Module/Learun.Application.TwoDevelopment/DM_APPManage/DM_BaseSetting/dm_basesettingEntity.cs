@@ -124,6 +124,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             set;
         }
 
+        /// <summary>
+        /// 开通代理三级提成
+        /// </summary>
+        [Column("OPENAGENT_THREE")]
+        public int openagent_three { get; set; }
+
         [Column("OPENAGENT_ONE_PARTNERS")]
         public int openagent_one_partners
         {
