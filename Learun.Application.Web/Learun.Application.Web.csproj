@@ -24,6 +24,7 @@
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
+    <ExcludeFilesFromDeployment>database.config</ExcludeFilesFromDeployment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -2553,6 +2554,9 @@
       <Project>{cf8ae293-88ab-436c-9720-a8386ba5d7b7}</Project>
       <Name>Learun.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="XmlConfig\database.config" CopyToPublishDirectory="Never" Condition="'$(Configuration)' == 'Release'"/>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
