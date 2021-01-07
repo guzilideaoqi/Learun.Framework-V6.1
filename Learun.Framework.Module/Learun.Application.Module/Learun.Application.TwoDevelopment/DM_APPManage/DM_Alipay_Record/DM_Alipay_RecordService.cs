@@ -323,7 +323,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                                 #region 更改二级账户余额及明细
                                 dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
-                                if (dm_User_RelationEntity_two.IsEmpty())
+                                if (!dm_User_RelationEntity_two.IsEmpty())
                                 {
                                     two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
                                     if (!two_User.IsEmpty())
