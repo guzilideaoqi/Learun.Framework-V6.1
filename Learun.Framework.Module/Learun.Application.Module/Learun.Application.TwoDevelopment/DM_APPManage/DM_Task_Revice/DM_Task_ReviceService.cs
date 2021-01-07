@@ -596,36 +596,41 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 #region 更改一级账户余额及明细
                 dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Task_ReviceEntity.user_id).FirstOrDefault();
-                one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
-                if (!one_User.IsEmpty())
+                if (!dm_User_RelationEntity_one.IsEmpty())
                 {
-                    if (one_User.userlevel > 0)
-                    {//做任务人为代理身份才会返佣
-                        one_agent_commission = ConvertComission(dm_BasesettingEntity.task_one * dm_TaskEntity.servicefee);
-                        if (one_agent_commission > 0)
-                        {
-                            one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
-                            dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 15, "下级做任务", "您的下级《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_agent_commission, one_User.accountprice));
-                        }
-                    }
-
-
-                    #region 更改二级账户余额及明细
-                    dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
-                    two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
-                    if (!two_User.IsEmpty())
+                    one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
+                    if (!one_User.IsEmpty())
                     {
-                        if (two_User.userlevel > 0)
-                        {
-                            two_agent_commission = ConvertComission(dm_BasesettingEntity.task_two * dm_TaskEntity.servicefee);
-                            if (two_agent_commission > 0)
+                        if (one_User.userlevel == 1 || one_User.userlevel == 2 || one_User.partnersstatus == 2)
+                        {//做任务人为代理身份才会返佣
+                            one_agent_commission = ConvertComission(dm_BasesettingEntity.task_one * dm_TaskEntity.servicefee);
+                            if (one_agent_commission > 0)
                             {
-                                two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 16, "下下级做任务", "您的二级《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
+                                dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 15, "下级做任务", "您的下级《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_agent_commission, one_User.accountprice));
                             }
+
+                            #region 更改二级账户余额及明细
+                            dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
+                            if (!dm_User_RelationEntity_two.IsEmpty())
+                            {
+                                two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
+                                if (!two_User.IsEmpty())
+                                {
+                                    if (two_User.userlevel == 1 || two_User.userlevel == 2 || two_User.partnersstatus == 2)
+                                    {
+                                        two_agent_commission = ConvertComission(dm_BasesettingEntity.task_two * dm_TaskEntity.servicefee);
+                                        if (two_agent_commission > 0)
+                                        {
+                                            two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
+                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 16, "下下级做任务", "您的二级《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                        }
+                                    }
+                                }
+                            }
+                            #endregion
                         }
                     }
-                    #endregion
                 }
                 #endregion
 
@@ -721,7 +726,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 title = title,
                 type = type,
                 user_id = user_id,
-                profitLoss=CommonHelper.GetProfitLoss(type)
+                profitLoss = CommonHelper.GetProfitLoss(type)
             };
         }
 
