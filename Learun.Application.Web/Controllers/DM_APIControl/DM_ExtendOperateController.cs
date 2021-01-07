@@ -129,7 +129,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     task_remark = "http://dlaimi.cn/dm_appmanage/dm_article/lookarticle?id=16",
                     task_submit_remark_title = "任务提交小建议",
                     task_submit_remark = dm_BasesettingEntity.task_submit_remark,
-                    nodatatip = CommonConfig.NoDataTip
+                    nodatatip = CommonConfig.NoDataTip,
+                    sign_rule = dm_BasesettingEntity.sign_rule
                 });
             }
             catch (Exception ex)

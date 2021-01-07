@@ -233,7 +233,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                         if (!dm_UserEntity.IsEmpty())
                         {
-                            redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddSeconds(30), 7L);
+                            redisCache.Write(cacheKey, dm_UserEntity, DateTime.Now.AddSeconds(5), 7L);
                         }
                     }
                 }
@@ -293,14 +293,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         CacheHelper.UpdateUserInfo(dm_UserEntity);
                     }
 
-                    redisCache.Write<string>(cacheKey, "1", DateTime.Now.AddSeconds(30), 7);
+                    redisCache.Write<string>(cacheKey, "1", DateTime.Now.AddSeconds(5), 7);
                 }
                 else
                 {
                     dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
                 }
 
-                Hyg.Common.OtherTools.LogHelper.WriteDebugLog("刷新用户信息", dm_UserEntity.ToJson());
+                //Hyg.Common.OtherTools.LogHelper.WriteDebugLog("刷新用户信息", dm_UserEntity.ToJson());
                 return dm_UserEntity;
 
             }
@@ -405,12 +405,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public bool ImportUserInfo(string AppID, string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id)
+        public bool ImportUserInfo(string AppID, string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id, string Integral)
         {
             bool returnStatus = false;
             try
             {
-                BaseRepository("dm_data").ExecuteBySql(string.Format("call ImportUserInfo('{0}','{1}','{2}','{3}',{4},'{5}','{6}','{7}','{8}','{9}',{10},'{11}',{12},'{13}')", Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id, AppID));
+                BaseRepository("dm_data").ExecuteBySql(string.Format("call ImportUserInfo('{0}','{1}','{2}','{3}',{4},'{5}','{6}','{7}','{8}','{9}',{10},'{11}',{12},'{13}','{14}')", Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id, AppID, Integral));
                 returnStatus = true;
             }
             catch (Exception ex)
@@ -527,7 +527,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     }
 
                     dm_user_relationEntity dm_Parent_User_RelationEntity = dm_UserRelationService.GetEntityByUserID(parent_UserEntity.id);
-                    if (dm_Parent_User_RelationEntity.IsEmpty()) {
+                    if (dm_Parent_User_RelationEntity.IsEmpty())
+                    {
                         throw new Exception("邀请人信息异常!");
                     }
 

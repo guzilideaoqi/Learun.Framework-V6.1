@@ -332,7 +332,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 if (!dm_UserEntity.IsEmpty())
                 {
-                    if (dm_UserEntity.id != User_ID)
+                    if (dm_UserEntity.id != User_ID && User_ID > 0)
                         dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
                     return Success("获取成功", dm_UserEntity);
                 }

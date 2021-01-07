@@ -249,6 +249,7 @@ namespace Learun.Application.Web.Areas.LR_SystemModule.Controllers
                         string Down = ConvertEmpty(dataRow[8]);//区域
                         string DetailAddress = ConvertEmpty(dataRow[9]);//详细地址
                         string WeChat = ConvertEmpty(dataRow[10]);//微信号
+                        string IntegralNum = ConvertEmpty(dataRow[11]);//积分数量
 
                         int? partner_id = 0;
                         dm_userEntity dm_UserEntity = dm_UserBLL.GetEntityByInviteCode(InviteCode, ref dm_User_RelationEntity);
@@ -264,7 +265,7 @@ namespace Learun.Application.Web.Areas.LR_SystemModule.Controllers
                             }
 
                             UserInfo userInfo = LoginUserInfo.Get();
-                            if (dm_UserBLL.ImportUserInfo(userInfo.companyId, Phone, RealName, NickName, CardNo, UserLevel, Province, City, Down, DetailAddress, WeChat, dm_UserEntity.id.ToString(), dm_UserEntity.nickname, partner_id.ToString()))
+                            if (dm_UserBLL.ImportUserInfo(userInfo.companyId, Phone, RealName, NickName, CardNo, UserLevel, Province, City, Down, DetailAddress, WeChat, dm_UserEntity.id.ToString(), dm_UserEntity.nickname, partner_id.ToString(), IntegralNum))
                             {
                                 snum++;
                             }

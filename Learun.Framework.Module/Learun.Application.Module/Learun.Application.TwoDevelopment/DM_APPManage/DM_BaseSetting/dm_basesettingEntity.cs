@@ -273,6 +273,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             set;
         }
 
+        /// <summary>
+        /// «©µΩπÊ‘Ú
+        /// </summary>
+        [Column("SIGN_RULE")]
+        public string sign_rule { get; set; }
+
         [Column("READTASK_MIN")]
         public int? readtask_min
         {

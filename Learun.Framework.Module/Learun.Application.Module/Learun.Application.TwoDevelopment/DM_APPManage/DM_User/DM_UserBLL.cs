@@ -158,11 +158,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="parent_nickname">上级昵称</param>
         /// <param name="partners_id">合伙人编号</param>
         /// <returns></returns>
-        public bool ImportUserInfo(string AppID, string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id)
+        public bool ImportUserInfo(string AppID, string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id, string Integral)
         {
             try
             {
-                return dM_UserService.ImportUserInfo(AppID, Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id);
+                return dM_UserService.ImportUserInfo(AppID, Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id,Integral);
             }
             catch (Exception ex)
             {

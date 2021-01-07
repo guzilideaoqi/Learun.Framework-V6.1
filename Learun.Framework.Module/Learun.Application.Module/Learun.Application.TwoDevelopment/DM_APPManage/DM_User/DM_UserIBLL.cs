@@ -38,7 +38,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="parent_nickname">上级昵称</param>
         /// <param name="partners_id">合伙人编号</param>
         /// <returns></returns>
-        bool ImportUserInfo(string AppID, string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id);
+        bool ImportUserInfo(string AppID, string Phone, string RealName, string NickName, string identitycard, string userlevel, string province, string city, string down, string address, string wechat, string parent_id, string parent_nickname, string partners_id, string Integral);
 
         void DeleteEntity(int keyValue);
 

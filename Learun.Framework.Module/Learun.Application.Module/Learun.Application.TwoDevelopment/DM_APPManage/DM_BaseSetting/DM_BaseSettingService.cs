@@ -17,7 +17,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         public DM_BaseSettingService()
         {
-            fieldSql = "    t.appid,    t.tb_accountid,    t.tb_appkey,    t.tb_appsecret,    t.tb_sessionkey,    t.tb_authorendtime,    t.jd_accountid,    t.jd_appkey,    t.jd_appsecret,    t.jd_sessionkey,    t.pdd_accountid,    t.pdd_clientid,    t.pdd_clientsecret,    t.openagent_one,    t.openagent_two,    t.openagent_partners,    t.task_do,    t.task_one,    t.task_two,    t.task_one_partners,    t.task_two_partners,    t.shopping_pay_junior,    t.shopping_pay_middle,    t.shopping_pay_senior,    t.shopping_one,    t.shopping_two,    t.shopping_one_partners,    t.shopping_two_partners,t.task_rule,t.task_submit_remark";
+            fieldSql = "    t.appid,    t.tb_accountid,    t.tb_appkey,    t.tb_appsecret,    t.tb_sessionkey,    t.tb_authorendtime,    t.jd_accountid,    t.jd_appkey,    t.jd_appsecret,    t.jd_sessionkey,    t.pdd_accountid,    t.pdd_clientid,    t.pdd_clientsecret,    t.openagent_one,    t.openagent_two,    t.openagent_partners,    t.task_do,    t.task_one,    t.task_two,    t.task_one_partners,    t.task_two_partners,    t.shopping_pay_junior,    t.shopping_pay_middle,    t.shopping_pay_senior,    t.shopping_one,    t.shopping_two,    t.shopping_one_partners,    t.shopping_two_partners,t.task_rule,t.task_submit_remark,t.sign_rule";
         }
 
         public IEnumerable<dm_basesettingEntity> GetList(string queryJson)

@@ -347,6 +347,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw new Exception("当前任务已取消,您可接受其他任务!");
                 if (dm_TaskEntity.task_status == 3)
                     throw new Exception("当前任务已下架,您可接受其他任务!");
+
+                if (dm_TaskEntity.revicecount >= dm_TaskEntity.needcount)
+                    throw new Exception("您来晚了一步,当前任务已抢光!");
+
                 /*一个任务可重复接受  2020-07-27*/
                 /*dm_task_reviceEntity reviceEntity = GetReviceEntity(dm_Task_ReviceEntity.user_id, dm_Task_ReviceEntity.task_id);
                 if (!reviceEntity.IsEmpty())
