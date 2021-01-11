@@ -18,6 +18,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     public class DM_Apply_CashRecordService : RepositoryFactory
     {
         private DM_UserIBLL dm_UserIBLL = new DM_UserBLL();
+        private DM_BaseSettingService dm_BaseSettingService = new DM_BaseSettingService();
         #region 构造函数和属性
 
         private string fieldSql;
@@ -235,24 +236,34 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 
         #region 申请提现
-        public void ApplyAccountCash(int user_id, decimal price, string remark)
+        public void ApplyAccountCash(int user_id, decimal price, string remark, string appid)
         {
             IRepository db = null;
             try
             {
                 dm_userEntity dm_UserEntity = dm_UserIBLL.GetEntity(user_id);//不从缓存取，此处需要验证账户余额
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
                 if (dm_UserEntity.IsEmpty())
                     throw new Exception("用户信息异常!");
-                if (dm_UserEntity.isreal == 0)
-                    throw new Exception("您的账号未实名，禁止提现!");
+                //if (dm_UserEntity.isreal == 0)  未实名认证也可以提现(2021-01-11)
+                //    throw new Exception("您的账号未实名，禁止提现!");
                 if (dm_UserEntity.zfb.IsEmpty())
                     throw new Exception("支付宝账号未绑定,禁止提现!");
+                if (price < dm_BasesettingEntity.cashrecord_min_price)
+                    throw new Exception(string.Format("最低提现金额不得小于{0}元!", dm_BasesettingEntity.cashrecord_min_price));
+
                 if (price > dm_UserEntity.accountprice)
                 {
                     throw new Exception("账户余额不足!");
                 }
                 else
                 {
+                    decimal predict_price = price;
+                    if (dm_BasesettingEntity.cashrecord_fee > 0)
+                        price = price * (1 - dm_BasesettingEntity.cashrecord_fee / 100);
+                    if (price <= 0)
+                        throw new Exception("提现数据异常,请联系官方客服!");
+
                     dm_UserEntity.accountprice -= price;
                     dm_UserEntity.Modify(user_id);
 
@@ -262,6 +273,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_Apply_CashrecordEntity.createtime = DateTime.Now;
                     dm_Apply_CashrecordEntity.paytype = 0;
                     dm_Apply_CashrecordEntity.price = price;
+                    dm_Apply_CashrecordEntity.predict_price = predict_price;
                     dm_Apply_CashrecordEntity.currentprice = dm_UserEntity.accountprice;
                     dm_Apply_CashrecordEntity.remark = remark;
                     dm_Apply_CashrecordEntity.status = 0;

@@ -242,6 +242,10 @@
     <Compile Include="DM_APPManage\dm_version\dm_versionService.cs" />
     <Compile Include="DM_APPManage\dm_version\dm_versionIBLL.cs" />
     <Compile Include="DM_APPManage\dm_version\dm_versionBLL.cs" />
+    <Compile Include="DM_APPManage\dm_basesetting_tip\dm_basesetting_tipEntity.cs" />
+    <Compile Include="DM_APPManage\dm_basesetting_tip\dm_basesetting_tipService.cs" />
+    <Compile Include="DM_APPManage\dm_basesetting_tip\dm_basesetting_tipIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_basesetting_tip\dm_basesetting_tipBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

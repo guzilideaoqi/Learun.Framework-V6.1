@@ -22,6 +22,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         DM_UserService dM_UserService = new DM_UserService();
         DM_UserRelationService dM_UserRelationService = new DM_UserRelationService();
         DM_BaseSettingService dM_BaseSettingService = new DM_BaseSettingService();
+        dm_basesetting_tipService dm_Basesetting_TipService = new dm_basesetting_tipService();
 
 
         #region 构造函数和属性
@@ -256,7 +257,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     dm_userEntity currentUser = null, one_User = null, two_User = null, three_User = null, one_partners = null, two_partners = null;
 
-
+                    string one_tip = "", two_tip = "", three_tip = "", one_parners_tip = "", two_parners_tip = "";
 
                     if (dm_Alipay_RecordEntity_old.IsEmpty())
                         throw new Exception("根据外部交易单号未能查询到支付记录,当前传入外部交易单号" + dm_Alipay_RecordEntity.out_trade_no);
@@ -305,6 +306,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(currentUser.appid);
 
+                    dm_basesetting_tipEntity dm_Basesetting_TipEntity = dm_Basesetting_TipService.GetEntityByAppID(currentUser.appid);
+
                     #region 更改一级账户余额及明细
                     dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Alipay_RecordEntity_old.user_id).FirstOrDefault();
                     if (!dm_User_RelationEntity_one.IsEmpty())
@@ -317,8 +320,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 one_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
                                 if (one_agent_commission > 0)
                                 {
+                                    one_tip = GetText(dm_Basesetting_TipEntity, dm_Alipay_RecordEntity_old.templateid, 1);
                                     one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
-                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 6, "下级开通代理", "您的下级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_agent_commission, one_User.accountprice));
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 6, one_tip, "您的" + one_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_agent_commission, one_User.accountprice));
                                 }
 
                                 #region 更改二级账户余额及明细
@@ -333,8 +337,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                             two_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_two * dm_Alipay_RecordEntity_old.total_amount);
                                             if (two_agent_commission > 0)
                                             {
+                                                two_tip = GetText(dm_Basesetting_TipEntity, dm_Alipay_RecordEntity_old.templateid, 2);
                                                 two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
-                                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 7, "二级开通代理", "您的二级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 7, two_tip, "您的" + two_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_agent_commission, two_User.accountprice));
                                             }
 
                                             #region 更改三级账户余额及明细
@@ -349,8 +354,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                                         three_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_three * dm_Alipay_RecordEntity_old.total_amount);
                                                         if (three_agent_commission > 0)
                                                         {
+                                                            three_tip = GetText(dm_Basesetting_TipEntity, dm_Alipay_RecordEntity_old.templateid, 3);
                                                             three_User = CalculateComission(three_User.id, three_agent_commission, three_User.accountprice);
-                                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(three_User.id, 22, "三级开通代理", "您的三级《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", three_agent_commission, three_User.accountprice));
+                                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(three_User.id, 22, three_tip, "您的" + three_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", three_agent_commission, three_User.accountprice));
                                                         }
                                                     }
                                                 }
@@ -373,8 +379,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         one_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_one_partners * dm_Alipay_RecordEntity_old.total_amount);
                         if (one_partners_commission > 0)
                         {
+                            one_parners_tip = GetText(dm_Basesetting_TipEntity, dm_Alipay_RecordEntity_old.templateid, 4);
                             one_partners = CalculateComission(one_partners.id, one_partners_commission, one_partners.accountprice);
-                            dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 8, "团队成员开通代理", "您的团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_partners_commission, one_partners.accountprice));
+                            dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 8, one_parners_tip, "您的" + one_parners_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_partners_commission, one_partners.accountprice));
                         }
 
                         #region 二级合伙人
@@ -387,8 +394,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 two_partners_commission = ConvertComission(dm_BasesettingEntity.openagent_two_partners * dm_Alipay_RecordEntity_old.total_amount);
                                 if (two_partners_commission > 0)
                                 {
+                                    two_parners_tip = GetText(dm_Basesetting_TipEntity, dm_Alipay_RecordEntity_old.templateid, 5);
                                     two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
-                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 9, "下级团队成员开通代理", "您的下级团队成员《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_partners_commission, two_partners.accountprice));
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 9, two_parners_tip, "您的" + two_parners_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_partners_commission, two_partners.accountprice));
                                 }
                             }
                         }
@@ -428,6 +436,54 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw ExceptionEx.ThrowServiceException(ex);
                 }
             }
+        }
+
+        string GetText(dm_basesetting_tipEntity dm_Basesetting_TipEntity, int? templateid, int level)
+        {
+            string text = "";
+            if (templateid == 3)
+            {
+                switch (level)
+                {
+                    case 1:
+                        text = dm_Basesetting_TipEntity.upgradegent_one_tip;
+                        break;
+                    case 2:
+                        text = dm_Basesetting_TipEntity.opengent_two_tip;
+                        break;
+                    case 3:
+                        text = dm_Basesetting_TipEntity.opengent_three_tip;
+                        break;
+                    case 4:
+                        text = dm_Basesetting_TipEntity.opengent_parners_one_tip;
+                        break;
+                    case 5:
+                        text = dm_Basesetting_TipEntity.opengent_parners_two_tip;
+                        break;
+                }
+            }
+            else
+            {
+                switch (level)
+                {
+                    case 1:
+                        text = dm_Basesetting_TipEntity.upgradegent_one_tip;
+                        break;
+                    case 2:
+                        text = dm_Basesetting_TipEntity.upgradegent_two_tip;
+                        break;
+                    case 3:
+                        text = dm_Basesetting_TipEntity.upgradegent_three_tip;
+                        break;
+                    case 4:
+                        text = dm_Basesetting_TipEntity.upgradegent_parners_one_tip;
+                        break;
+                    case 5:
+                        text = dm_Basesetting_TipEntity.upgradegent_parners_two_tip;
+                        break;
+                }
+            }
+            return text;
         }
         private decimal ConvertComission(decimal? comissionamount)
         {

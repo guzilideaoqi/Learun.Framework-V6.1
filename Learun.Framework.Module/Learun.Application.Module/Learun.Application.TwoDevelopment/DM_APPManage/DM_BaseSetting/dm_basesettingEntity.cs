@@ -589,6 +589,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("MIQUAN_REMARK")]
         public string miquan_remark { get; set; }
 
+        /// <summary>
+        /// 提现手续费
+        /// </summary>
+        [Column("CASHRECORD_FEE")]
+        public decimal cashrecord_fee { get; set; }
+
+        /// <summary>
+        /// 提现描述
+        /// </summary>
+        [Column("CASHRECORD_REMARK")]
+        public string cashrecord_remark { get; set; }
+
+        /// <summary>
+        /// 最小提现金额
+        /// </summary>
+        [Column("CASHRECORD_MIN_PRICE")]
+        public decimal? cashrecord_min_price { get; set; }
 
         public void Create()
         {

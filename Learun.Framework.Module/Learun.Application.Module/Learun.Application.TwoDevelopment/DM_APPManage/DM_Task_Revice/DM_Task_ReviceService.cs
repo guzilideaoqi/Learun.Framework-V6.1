@@ -26,6 +26,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         private DM_UserService dM_UserService = new DM_UserService();
         private DM_UserRelationService dM_UserRelationService = new DM_UserRelationService();
         private DM_BaseSettingService dM_BaseSettingService = new DM_BaseSettingService();
+        dm_basesetting_tipService dm_Basesetting_TipService = new dm_basesetting_tipService();
 
         #region 构造函数和属性
 
@@ -587,16 +588,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     do_task_commission = dm_TaskEntity.seniorcommission;
                 else
                     throw new Exception("用户无等级,返佣失败!");
+
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(dm_TaskEntity.appid);
+
+                dm_basesetting_tipEntity dm_Basesetting_TipEntity = dm_Basesetting_TipService.GetEntityByAppID(dm_TaskEntity.appid);
+
                 if (do_task_commission > 0)
                 {
                     dm_Task_ReviceEntity.comissionamount = do_task_commission;
                     currentUser = CalculateComission(currentUser.id, do_task_commission, currentUser.accountprice);
-                    dm_AccountdetailEntities.Add(GeneralAccountDetail(currentUser.id, 14, "做任务返佣", "您接受的任务编号" + dm_TaskEntity.task_no + "已返佣到账,请及时查收!", do_task_commission, currentUser.accountprice));
+                    dm_AccountdetailEntities.Add(GeneralAccountDetail(currentUser.id, 14, dm_Basesetting_TipEntity.task_do_tip, "您接受的任务编号" + dm_TaskEntity.task_no + "已返佣到账,请及时查收!", do_task_commission, currentUser.accountprice));
                 }
                 #endregion
                 dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity.id);//由于需要修改任务所得佣金  故修改放到此处
-
-                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(dm_TaskEntity.appid);
 
                 #region 更改一级账户余额及明细
                 dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Task_ReviceEntity.user_id).FirstOrDefault();
@@ -611,7 +615,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             if (one_agent_commission > 0)
                             {
                                 one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 15, "下级做任务", "您的下级《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_agent_commission, one_User.accountprice));
+                                dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 15, dm_Basesetting_TipEntity.task_one_tip, "您的"+ dm_Basesetting_TipEntity.task_one_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_agent_commission, one_User.accountprice));
                             }
 
                             #region 更改二级账户余额及明细
@@ -627,7 +631,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                         if (two_agent_commission > 0)
                                         {
                                             two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
-                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 16, "下下级做任务", "您的二级《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 16, dm_Basesetting_TipEntity.task_two_tip, "您的"+ dm_Basesetting_TipEntity.task_two_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_agent_commission, two_User.accountprice));
                                         }
                                     }
                                 }
@@ -646,7 +650,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     if (one_partners_commission > 0)
                     {
                         one_partners = CalculateComission(one_partners.id, one_partners_commission, one_partners.accountprice);
-                        dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 17, "团队成员做任务", "您的团队成员《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_partners_commission, one_partners.accountprice));
+                        dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 17, dm_Basesetting_TipEntity.task_parners_one_tip, "您的"+ dm_Basesetting_TipEntity.task_parners_one_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_partners_commission, one_partners.accountprice));
                     }
 
                     #region 二级合伙人
@@ -661,7 +665,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             if (two_partners_commission > 0)
                             {
                                 two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 18, "下级团队成员做任务", "您的下级团队成员《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_partners_commission, two_partners.accountprice));
+                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 18, dm_Basesetting_TipEntity.task_parners_two_tip, "您的"+ dm_Basesetting_TipEntity.task_parners_two_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_partners_commission, two_partners.accountprice));
                             }
                         }
                     }

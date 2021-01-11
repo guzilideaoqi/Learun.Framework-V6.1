@@ -44,8 +44,9 @@ var bootstrap = function ($, learun) {
             $.lrSetForm(top.$.rootUrl + '/DM_APPManage/DM_BaseSetting/GetFormData?keyValue=' + keyValue, function (data) {//
                 console.log(JSON.stringify(data));
                 if (data != null) {
-                    $('#lr_layout').lrSetFormData(data);
-                    keyValue = data.appid;
+                    $('#lr_layout').lrSetFormData(data.BaseSetting);
+                    $('#lr_layout').lrSetFormData(data.BaseSetting_Tip);
+                    keyValue = data.BaseSetting.appid;
                 }
             });
         },

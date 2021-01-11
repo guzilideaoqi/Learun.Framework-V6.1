@@ -542,7 +542,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                     dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
                     if (dm_UserEntity.pwd.IsEmpty())
-                        dm_UserEntity.pwd = "123456";
+                        dm_UserEntity.pwd = Guid.NewGuid().ToString();
                     dm_UserEntity.pwd = Md5Helper.Encrypt(dm_UserEntity.pwd, 16);
                     dm_UserEntity.token = Guid.NewGuid().ToString();
                     dm_UserEntity.last_logintime = DateTime.Now;

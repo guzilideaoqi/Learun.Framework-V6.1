@@ -102,7 +102,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 dm_UserEntity.appid = appid;
                 dm_UserEntity.nickname = "dlm_" + Time.GetTimeStamp();
-                dm_UserEntity.pwd = "123456";
+                dm_UserEntity.pwd = Guid.NewGuid().ToString();
                 return Success("注册成功!", dm_userIBLL.Register(dm_UserEntity, VerifiCode, ParentInviteCode, appid, SmsMessageID));
             }
             catch (Exception ex)
@@ -151,7 +151,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
 
                     dm_UserEntity.nickname = "dlm_" + Time.GetTimeStamp();
-                    dm_UserEntity.pwd = "123456";
+                    dm_UserEntity.pwd = Guid.NewGuid().ToString();
 
                     return Success("登录成功!", dm_userIBLL.Register(dm_UserEntity, VerifiCode, ParentInviteCode, appid, SmsMessageID));
                 }
@@ -1157,9 +1157,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 if (User_ID <= 0) return FailNoLogin();
-                if (Price < 10)
-                    return Fail("提现金额不能小于10元!");
-                dm_Apply_CashRecordIBLL.ApplyAccountCash(User_ID, Price, Remark);
+                string appid = CheckAPPID();
+                dm_Apply_CashRecordIBLL.ApplyAccountCash(User_ID, Price, Remark, appid);
                 return Success("提现成功!", new { });
             }
             catch (Exception ex)

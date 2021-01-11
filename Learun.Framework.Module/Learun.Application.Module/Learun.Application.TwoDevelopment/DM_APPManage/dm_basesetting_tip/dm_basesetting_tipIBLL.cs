@@ -1,6 +1,5 @@
 ﻿using Learun.Util;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -8,10 +7,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 版 本 Learun-ADMS V6.1.6.0 力软敏捷开发框架
     /// Copyright (c) 2013-2017 上海力软信息技术有限公司
     /// 创 建：超级管理员
-    /// 日 期：2020-04-14 17:35
-    /// 描 述：提现申请记录
+    /// 日 期：2021-01-11 11:36
+    /// 描 述：明细说明
     /// </summary>
-    public interface DM_Apply_CashRecordIBLL
+    public interface dm_basesetting_tipIBLL
     {
         #region 获取数据
 
@@ -19,21 +18,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        IEnumerable<dm_apply_cashrecordEntity> GetList( string queryJson );
+        IEnumerable<dm_basesetting_tipEntity> GetList( string queryJson );
         /// <summary>
         /// 获取列表分页数据
         /// <param name="pagination">分页参数</param>
         /// <summary>
         /// <returns></returns>
-        IEnumerable<dm_apply_cashrecordEntity> GetPageList(Pagination pagination, string queryJson);
-
-        DataTable GetPageListByDataTable(Pagination pagination, string queryJson);
+        IEnumerable<dm_basesetting_tipEntity> GetPageList(Pagination pagination, string queryJson);
         /// <summary>
         /// 获取实体数据
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        dm_apply_cashrecordEntity GetEntity(int keyValue);
+        dm_basesetting_tipEntity GetEntity(int keyValue);
         #endregion
 
         #region 提交数据
@@ -49,19 +46,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        void SaveEntity(int keyValue, dm_apply_cashrecordEntity entity);
+        void SaveEntity(int keyValue, dm_basesetting_tipEntity entity);
         #endregion
 
-        #region 申请提现
-        void ApplyAccountCash(int user_id, decimal price, string remark, string appid);
-        #endregion
+        void SaveEntityByAppID(string appid, dm_basesetting_tipEntity entity);
 
-        #region 审核提现记录
-        void CheckApplyCashRecord(int id, int paytype);
-        #endregion
-
-        #region 获取我的提现记录
-        IEnumerable<dm_apply_cashrecordEntity> GetMyCashRecord(int user_id, Pagination pagination);
-        #endregion
+        dm_basesetting_tipEntity GetEntityByAppID(string appid);
     }
 }

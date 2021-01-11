@@ -28,11 +28,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("USER_ID")]
         public int? user_id { get; set; }
         /// <summary>
-        /// 提现金额
+        /// 提现金额(扣除手续费之后)
         /// </summary>
         /// <returns></returns>
         [Column("PRICE")]
         public decimal? price { get; set; }
+
+        /// <summary>
+        /// 申请提现金额(不扣手续费)
+        /// </summary>
+        [Column("PREDICT_PRICE")]
+        public decimal? predict_price { get; set; }
 
         [Column("CURRENTPRICE")]
         public decimal? currentprice { get; set; }

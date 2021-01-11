@@ -188,7 +188,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 获取直属下级
         public int GetMyChildCount(int user_id)
         {
-            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation where parent_id=" + user_id).ToString());
+            return int.Parse(BaseRepository("dm_data").FindObject("select count(1) from dm_user_relation r LEFT JOIN dm_user u on r.user_id=u.id where u.userlevel!=0 and r.parent_id=" + user_id).ToString());
         }
         #endregion
 

@@ -146,6 +146,7 @@
     <Compile Include="DM_APPManage\dm_friend_thumb_recordMap.cs" />
     <Compile Include="DM_APPManage\dm_level_remarkMap.cs" />
     <Compile Include="DM_APPManage\dm_versionMap.cs" />
+    <Compile Include="DM_APPManage\dm_basesetting_tipMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

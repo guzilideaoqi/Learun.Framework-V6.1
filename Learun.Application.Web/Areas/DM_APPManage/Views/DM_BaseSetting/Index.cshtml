@@ -29,6 +29,8 @@
                     <li data-value="12">商品设置</li>
                     <li data-value="13">腾讯会议</li>
                     <li data-value="14">米圈配置</li>
+                    <li data-value="15">提现配置</li>
+                    <li data-value="16">明细提示配置</li>
                     <li data-value="6">其他配置</li>
                 </ul>
             </div>
@@ -393,9 +395,9 @@
                         <input id="rongcloud_appsecret" type="text" class="form-control" />
                     </div>
                     @*<div class="lr-form-item">
-                            <div class="lr-form-item-title">Token</div>
-                            <input id="rongcloud_token" type="text" class="form-control" />
-                        </div>*@
+                    <div class="lr-form-item-title">Token</div>
+                    <input id="rongcloud_token" type="text" class="form-control" />
+                </div>*@
                 </div>
             </div>
             <div class="lr-layout-wrap-item" id="lr_layout_item12">
@@ -506,6 +508,136 @@
                     <div class="lr-form-item">
                         <div class="lr-form-item-title">米圈积分说明</div>
                         <textarea id="miquan_remark" rows="5" cols="70"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item" id="lr_layout_item15">
+                <div class="title">
+                    <div>提现配置</div>
+                </div>
+                <div class="content" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">提现费率(%):</div>
+                        <input id="cashrecord_fee" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">提现说明</div>
+                        <textarea id="cashrecord_remark" rows="5" cols="70"></textarea>
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">最低提现金额</div>
+                        <textarea id="cashrecord_min_price" rows="5" cols="70"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item active" id="lr_layout_item16">
+                <div class="title">
+                    <div>开通代理提示设置</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级代理说明</div>
+                        <input id="opengent_one_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级代理说明</div>
+                        <input id="opengent_two_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">三级代理说明</div>
+                        <input id="opengent_three_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级合伙人说明</div>
+                        <input id="opengent_parners_one_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级合伙人说明</div>
+                        <input id="opengent_parners_two_tip" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>升级代理提示设置</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级代理说明</div>
+                        <input id="upgradegent_one_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级代理说明</div>
+                        <input id="upgradegent_two_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">三级代理说明</div>
+                        <input id="upgradegent_three_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级合伙人说明</div>
+                        <input id="upgradegent_parners_one_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级合伙人说明</div>
+                        <input id="upgradegent_parners_two_tip" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>来米任务提示设置</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">做任务人说明</div>
+                        <input id="task_do_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级用户说明</div>
+                        <input id="task_one_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级用户说明</div>
+                        <input id="task_two_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级合伙人说明</div>
+                        <input id="task_parners_one_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级合伙人说明</div>
+                        <input id="task_parners_two_tip" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>购物提示设置</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">购物说明</div>
+                        <input id="shop_pay_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级用户说明</div>
+                        <input id="shop_one_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级用户说明</div>
+                        <input id="shop_two_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">一级合伙人说明</div>
+                        <input id="shop_parners_one_tip" type="text" class="form-control" />
+                    </div>
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">二级合伙人说明</div>
+                        <input id="shop_parners_two_tip" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="title" style="position:relative;">
+                    <div>其他提示设置</div>
+                </div>
+                <div class="content1" style="padding-top:20px;">
+                    <div class="lr-form-item">
+                        <div class="lr-form-item-title">其他提示</div>
+                        <input id="other_tip" type="text" class="form-control" />
                     </div>
                 </div>
             </div>

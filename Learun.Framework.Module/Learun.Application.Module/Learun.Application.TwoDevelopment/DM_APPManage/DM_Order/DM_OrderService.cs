@@ -24,6 +24,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         private List<dm_userEntity> calculateComissionEntities = new List<dm_userEntity>();
 
+        dm_basesetting_tipService dm_Basesetting_TipService = new dm_basesetting_tipService();
+
         public DM_OrderService()
         {
             fieldSql = "    t.id,    t.appid,    t.order_sn,    t.sub_order_sn,    t.origin_id,    t.type_big,    t.type,    t.order_type,    t.title,    t.order_status,    t.rebate_status,    t.image,    t.product_num,    t.product_price,    t.payment_price,    t.estimated_effect,    t.income_ratio,    t.estimated_income,    t.commission_rate,    t.commission_amount,    t.subsidy_ratio,    t.subsidy_amount,    t.subsidy_type,    t.order_createtime,    t.order_settlement_at,    t.order_pay_time,    t.order_group_success_time,    t.createtime,    t.updatetime,    t.shopname,    t.category_name,    t.media_name,    t.media_id,    t.pid_name,    t.pid,    t.relation_id,    t.special_id,    t.protection_status,    t.insert_type,    t.order_type_new,    t.order_create_date,    t.order_create_month,    t.order_receive_date,    t.order_receive_month,    t.userid";
@@ -180,6 +182,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 IEnumerable<dm_orderEntity> orderList = BaseRepository("dm_data").FindList((dm_orderEntity t) => t.order_receive_month == (int?)upMonth && t.rebate_status == (int?)0 && t.order_type_new == (int?)2 && t.appid == appid);
                 IEnumerable<UserRelationEntity> userRelationEntities = BaseRepository("dm_data").FindList<UserRelationEntity>("select ur.user_id,ur.parent_id,ur.partners_id,u.partnersstatus,u.userlevel,u.accountprice from dm_user_relation ur LEFT JOIN dm_user u on ur.user_id=u.id");
                 dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
+                dm_basesetting_tipEntity dm_Basesetting_TipEntity = dm_Basesetting_TipService.GetEntityByAppID(appid);
                 decimal pay_comission = default(decimal);
                 decimal pay_one_comission2 = default(decimal);
                 decimal pay_two_comission2 = default(decimal);
@@ -220,7 +223,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         if (pay_comission > 0m)
                         {
                             calculateComissionEntity2 = CalculateComission(pay_user.user_id, pay_comission, pay_user.accountprice);
-                            dm_AccountdetailEntities.Add(GeneralAccountDetail(pay_user.user_id, 1, "订单返佣", "您的订单" + item.order_status.ToString() + "佣金已到账,请查收!", pay_comission, calculateComissionEntity2.accountprice));
+                            dm_AccountdetailEntities.Add(GeneralAccountDetail(pay_user.user_id, 1, dm_Basesetting_TipEntity.shop_pay_tip, "您的订单" + item.order_status.ToString() + "佣金已到账,请查收!", pay_comission, calculateComissionEntity2.accountprice));
                         }
                         if (pay_user.parent_id != -1 && pay_comission > 0m)
                         {
@@ -231,7 +234,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 if (pay_one_comission2 > 0m)
                                 {
                                     calculateComissionEntity_one2 = CalculateComission(one_user.user_id, pay_one_comission2, one_user.accountprice);
-                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_user.user_id, 2, "粉丝订单返佣", "您的下级订单提成已到账,请查收!", pay_one_comission2, calculateComissionEntity_one2.accountprice));
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_user.user_id, 2, dm_Basesetting_TipEntity.shop_one_tip, "您的" + dm_Basesetting_TipEntity.shop_one_tip + "有订单已结算,提成已到账,请查收!", pay_one_comission2, calculateComissionEntity_one2.accountprice));
                                 }
                                 if (one_user.parent_id != -1)
                                 {
@@ -242,7 +245,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                         if (pay_two_comission2 > 0m)
                                         {
                                             calculateComissionEntity_two2 = CalculateComission(two_user2.user_id, pay_two_comission2, two_user2.accountprice);
-                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(two_user2.user_id, 3, "粉丝订单返佣", "您的下下级订单提成已到账,请查收!", pay_two_comission2, calculateComissionEntity_two2.accountprice));
+                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(two_user2.user_id, 3, dm_Basesetting_TipEntity.shop_two_tip, "您的" + dm_Basesetting_TipEntity.shop_two_tip + "有订单已结算,提成已到账,请查收!", pay_two_comission2, calculateComissionEntity_two2.accountprice));
                                         }
                                     }
                                 }
@@ -257,7 +260,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 if (one_partners_comission2 > 0m)
                                 {
                                     calculateComissionEntity_one_partners2 = CalculateComission(one_partners_user.user_id, one_partners_comission2, one_partners_user.accountprice);
-                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners_user.user_id, 4, "团队订单返佣", "您的团队有订单已结算,提成已到账,请查收!", one_partners_comission2, calculateComissionEntity_one_partners2.accountprice));
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners_user.user_id, 4, dm_Basesetting_TipEntity.shop_parners_one_tip, "您的" + dm_Basesetting_TipEntity.shop_parners_one_tip + "有订单已结算,提成已到账,请查收!", one_partners_comission2, calculateComissionEntity_one_partners2.accountprice));
                                 }
                                 if (one_partners_user.parent_id != -1)
                                 {
@@ -270,7 +273,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                             if (two_partners_comission2 > 0m)
                                             {
                                                 calculateComissionEntity_two_partners2 = CalculateComission(two_partners_user2.user_id, two_partners_comission2, two_partners_user2.accountprice);
-                                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners_user2.user_id, 5, "下级团队订单返佣", "您的下级团队有订单已结算,提成已到账,请查收!", two_partners_comission2, calculateComissionEntity_two_partners2.accountprice));
+                                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners_user2.user_id, 5, dm_Basesetting_TipEntity.shop_parners_two_tip, "您的" + dm_Basesetting_TipEntity.shop_parners_two_tip + "有订单已结算,提成已到账,请查收!", two_partners_comission2, calculateComissionEntity_two_partners2.accountprice));
                                             }
                                         }
                                     }

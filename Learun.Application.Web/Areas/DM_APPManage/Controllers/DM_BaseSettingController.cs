@@ -12,6 +12,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
     public class DM_BaseSettingController : MvcControllerBase
     {
         private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
+        private dm_basesetting_tipIBLL dM_BaseSetting_tipIBLL = new dm_basesetting_tipBLL();
 
         [HttpGet]
         public ActionResult Index()
@@ -60,7 +61,14 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         public ActionResult GetFormData(string keyValue)
         {
             dm_basesettingEntity data = dM_BaseSettingIBLL.GetEntity(keyValue);
-            return Success(data);
+
+            dm_basesetting_tipEntity dm_Basesetting_TipEntity = null;
+            if (!data.IsEmpty())
+            {
+                dm_Basesetting_TipEntity = dM_BaseSetting_tipIBLL.GetEntityByAppID(data.appid);
+            }
+
+            return Success(new { BaseSetting = data, BaseSetting_Tip = dm_Basesetting_TipEntity });
         }
 
         [HttpPost]
@@ -73,16 +81,19 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
 
         [HttpPost]
         [AjaxOnly(false)]
-        public ActionResult SaveForm(string keyValue, dm_basesettingEntity entity)
+        public ActionResult SaveForm(string keyValue, dm_basesettingEntity entity, dm_basesetting_tipEntity dm_Basesetting_TipEntity)
         {
             dM_BaseSettingIBLL.SaveEntity(keyValue, entity);
+
+            dM_BaseSetting_tipIBLL.SaveEntityByAppID(entity.appid, dm_Basesetting_TipEntity);
+
             return Success("保存成功！");
         }
 
 
         [HttpPost]
         [AjaxOnly(false)]
-        public ActionResult ExcutePush(string ALERT, string TITLE, string MSG_CONTENT,int Plaform=0)
+        public ActionResult ExcutePush(string ALERT, string TITLE, string MSG_CONTENT, int Plaform = 0)
         {
             try
             {

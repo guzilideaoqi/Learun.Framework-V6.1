@@ -1,7 +1,6 @@
 ﻿using Learun.Util;
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -9,12 +8,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 版 本 Learun-ADMS V6.1.6.0 力软敏捷开发框架
     /// Copyright (c) 2013-2017 上海力软信息技术有限公司
     /// 创 建：超级管理员
-    /// 日 期：2020-04-14 17:35
-    /// 描 述：提现申请记录
+    /// 日 期：2021-01-11 11:36
+    /// 描 述：明细说明
     /// </summary>
-    public class DM_Apply_CashRecordBLL : DM_Apply_CashRecordIBLL
+    public class dm_basesetting_tipBLL : dm_basesetting_tipIBLL
     {
-        private DM_Apply_CashRecordService dM_Apply_CashRecordService = new DM_Apply_CashRecordService();
+        private dm_basesetting_tipService dm_basesetting_tipService = new dm_basesetting_tipService();
 
         #region 获取数据
 
@@ -22,11 +21,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_apply_cashrecordEntity> GetList(string queryJson)
+        public IEnumerable<dm_basesetting_tipEntity> GetList( string queryJson )
         {
             try
             {
-                return dM_Apply_CashRecordService.GetList(queryJson);
+                return dm_basesetting_tipService.GetList(queryJson);
             }
             catch (Exception ex)
             {
@@ -46,36 +45,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination">分页参数</param>
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_apply_cashrecordEntity> GetPageList(Pagination pagination, string queryJson)
+        public IEnumerable<dm_basesetting_tipEntity> GetPageList(Pagination pagination, string queryJson)
         {
             try
             {
-                return dM_Apply_CashRecordService.GetPageList(pagination, queryJson);
-            }
-            catch (Exception ex)
-            {
-                if (ex is ExceptionEx)
-                {
-                    throw;
-                }
-                else
-                {
-                    throw ExceptionEx.ThrowBusinessException(ex);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 获取提现记录
-        /// </summary>
-        /// <param name="pagination"></param>
-        /// <param name="queryJson"></param>
-        /// <returns></returns>
-        public DataTable GetPageListByDataTable(Pagination pagination, string queryJson)
-        {
-            try
-            {
-                return dM_Apply_CashRecordService.GetPageListByDataTable(pagination, queryJson);
+                return dm_basesetting_tipService.GetPageList(pagination, queryJson);
             }
             catch (Exception ex)
             {
@@ -95,11 +69,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public dm_apply_cashrecordEntity GetEntity(int keyValue)
+        public dm_basesetting_tipEntity GetEntity(int keyValue)
         {
             try
             {
-                return dM_Apply_CashRecordService.GetEntity(keyValue);
+                return dm_basesetting_tipService.GetEntity(keyValue);
             }
             catch (Exception ex)
             {
@@ -127,7 +101,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                dM_Apply_CashRecordService.DeleteEntity(keyValue);
+                dm_basesetting_tipService.DeleteEntity(keyValue);
             }
             catch (Exception ex)
             {
@@ -147,11 +121,49 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public void SaveEntity(int keyValue, dm_apply_cashrecordEntity entity)
+        public void SaveEntity(int keyValue, dm_basesetting_tipEntity entity)
         {
             try
             {
-                dM_Apply_CashRecordService.SaveEntity(keyValue, entity);
+                dm_basesetting_tipService.SaveEntity(keyValue, entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        public void SaveEntityByAppID(string appid, dm_basesetting_tipEntity entity)
+        {
+            try
+            {
+                dm_basesetting_tipService.SaveEntityByAppID(appid, entity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+
+        public dm_basesetting_tipEntity GetEntityByAppID(string appid)
+        {
+            try
+            {
+               return  dm_basesetting_tipService.GetEntityByAppID(appid);
             }
             catch (Exception ex)
             {
@@ -168,67 +180,5 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
-        #region 申请提现
-        public void ApplyAccountCash(int user_id, decimal price, string remark, string appid)
-        {
-            try
-            {
-                dM_Apply_CashRecordService.ApplyAccountCash(user_id, price, remark,appid);
-            }
-            catch (Exception ex)
-            {
-                if (ex is ExceptionEx)
-                {
-                    throw;
-                }
-                else
-                {
-                    throw ExceptionEx.ThrowBusinessException(ex);
-                }
-            }
-        }
-        #endregion
-
-        #region 审核提现记录
-        public void CheckApplyCashRecord(int id, int paytype)
-        {
-            try
-            {
-                dM_Apply_CashRecordService.CheckApplyCashRecord(id, paytype);
-            }
-            catch (Exception ex)
-            {
-                if (ex is ExceptionEx)
-                {
-                    throw;
-                }
-                else
-                {
-                    throw ExceptionEx.ThrowBusinessException(ex);
-                }
-            }
-        }
-        #endregion
-
-        #region 获取我的提现记录
-        public IEnumerable<dm_apply_cashrecordEntity> GetMyCashRecord(int user_id, Pagination pagination)
-        {
-            try
-            {
-                return dM_Apply_CashRecordService.GetMyCashRecord(user_id, pagination);
-            }
-            catch (Exception ex)
-            {
-                if (ex is ExceptionEx)
-                {
-                    throw;
-                }
-                else
-                {
-                    throw ExceptionEx.ThrowBusinessException(ex);
-                }
-            }
-        }
-        #endregion
     }
 }

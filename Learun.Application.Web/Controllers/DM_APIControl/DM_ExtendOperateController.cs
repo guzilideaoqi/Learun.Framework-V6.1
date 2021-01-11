@@ -130,7 +130,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     task_submit_remark_title = "任务提交小建议",
                     task_submit_remark = dm_BasesettingEntity.task_submit_remark,
                     nodatatip = CommonConfig.NoDataTip,
-                    sign_rule = dm_BasesettingEntity.sign_rule
+                    sign_rule = dm_BasesettingEntity.sign_rule,
+                    cashrecord_fee = dm_BasesettingEntity.cashrecord_fee,
+                    cashrecord_remark = dm_BasesettingEntity.cashrecord_remark
                 });
             }
             catch (Exception ex)

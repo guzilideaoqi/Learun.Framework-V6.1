@@ -310,6 +310,7 @@
     <Compile Include="Areas\DM_APPManage\Controllers\dm_friend_thumb_recordController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_level_remarkController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_versionController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_basesetting_tipController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -2426,6 +2427,10 @@
     <Content Include="Areas\DM_APPManage\Views\dm_version\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_version\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_version\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />
@@ -2556,7 +2561,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Update="XmlConfig\database.config" CopyToPublishDirectory="Never" Condition="'$(Configuration)' == 'Release'"/>
+    <Content Update="XmlConfig\database.config" CopyToPublishDirectory="Never" Condition="'$(Configuration)' == 'Release'" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
