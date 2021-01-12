@@ -449,27 +449,6 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         text = dm_Basesetting_TipEntity.upgradegent_one_tip;
                         break;
                     case 2:
-                        text = dm_Basesetting_TipEntity.opengent_two_tip;
-                        break;
-                    case 3:
-                        text = dm_Basesetting_TipEntity.opengent_three_tip;
-                        break;
-                    case 4:
-                        text = dm_Basesetting_TipEntity.opengent_parners_one_tip;
-                        break;
-                    case 5:
-                        text = dm_Basesetting_TipEntity.opengent_parners_two_tip;
-                        break;
-                }
-            }
-            else
-            {
-                switch (level)
-                {
-                    case 1:
-                        text = dm_Basesetting_TipEntity.upgradegent_one_tip;
-                        break;
-                    case 2:
                         text = dm_Basesetting_TipEntity.upgradegent_two_tip;
                         break;
                     case 3:
@@ -480,6 +459,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         break;
                     case 5:
                         text = dm_Basesetting_TipEntity.upgradegent_parners_two_tip;
+                        break;
+                }
+            }
+            else
+            {
+                switch (level)
+                {
+                    case 1:
+                        text = dm_Basesetting_TipEntity.opengent_one_tip;
+                        break;
+                    case 2:
+                        text = dm_Basesetting_TipEntity.opengent_two_tip;
+                        break;
+                    case 3:
+                        text = dm_Basesetting_TipEntity.opengent_three_tip;
+                        break;
+                    case 4:
+                        text = dm_Basesetting_TipEntity.opengent_parners_one_tip;
+                        break;
+                    case 5:
+                        text = dm_Basesetting_TipEntity.opengent_parners_two_tip;
                         break;
                 }
             }

@@ -1072,9 +1072,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     {
                         dataTable = dm_UserRelationIBLL.GetMyChildDetail(User_ID, PageNo, PageSize);
                         if (dataTable.Rows.Count >= PageSize)
-                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(3), 7);
-                        else
                             redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(5), 7);
+                        else
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddSeconds(30), 7);
                     }
                     return SuccessList("获取成功!", dataTable);
                 }
@@ -1103,9 +1103,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     {
                         dataTable = dm_UserRelationIBLL.GetMySonChildDetail(User_ID, PageNo, PageSize);
                         if (dataTable.Rows.Count >= PageSize)
-                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(3), 7);
-                        else
                             redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(5), 7);
+                        else
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddSeconds(30), 7);
                     }
                     return SuccessList("获取成功!", dataTable);
                 }
@@ -1137,9 +1137,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     {
                         dataTable = dm_UserRelationIBLL.GetPartnersChildDetail(dm_UserEntity.partners, PageNo, PageSize);
                         if (dataTable.Rows.Count >= PageSize)
-                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddHours(3), 7);
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(3), 7);
                         else
-                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddMinutes(5), 7);
+                            redisCache.Write(cacheKey, dataTable, DateTime.Now.AddSeconds(30), 7);
                     }
                     return SuccessList("获取成功!", dataTable);
                 }

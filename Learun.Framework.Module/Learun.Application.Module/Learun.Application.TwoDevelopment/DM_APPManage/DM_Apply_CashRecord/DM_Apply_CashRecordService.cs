@@ -264,7 +264,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     if (price <= 0)
                         throw new Exception("提现数据异常,请联系官方客服!");
 
-                    dm_UserEntity.accountprice -= price;
+                    dm_UserEntity.accountprice -= predict_price;
                     dm_UserEntity.Modify(user_id);
 
                     #region 增加提现记录
