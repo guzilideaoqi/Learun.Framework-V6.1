@@ -659,7 +659,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     //two_partners = dM_UserService.GetUserByPartnersID(dm_User_RelationEntity_one_partners.partners_id);
                     if (!two_partners.IsEmpty())
                     {
-                        if (two_partners.partnersstatus == 1)
+                        if (two_partners.partnersstatus == 2)
                         {//二级用户为合伙人时才进行返利
                             two_partners_commission = ConvertComission(dm_BasesettingEntity.task_two_partners * dm_TaskEntity.servicefee);
                             if (two_partners_commission > 0)

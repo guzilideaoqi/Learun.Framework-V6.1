@@ -267,7 +267,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                     two_partners_user2 = userRelationEntities.Where((UserRelationEntity t) => t.user_id == one_partners_user.parent_id).FirstOrDefault();
                                     if (!two_partners_user2.IsEmpty())
                                     {
-                                        if (two_partners_user2.partnersstatus == 1)
+                                        if (two_partners_user2.partnersstatus == 2)
                                         {//必须上级为合伙人
                                             two_partners_comission2 = ConvertComission(pay_comission * (decimal)dm_BasesettingEntity.shopping_two_partners);
                                             if (two_partners_comission2 > 0m)
