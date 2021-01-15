@@ -514,6 +514,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 DM_Task_ReviceService dm_Task_ReviceService = new DM_Task_ReviceService();
 
                 IEnumerable<dm_task_reviceEntity> dm_Task_ReviceEntities = dm_Task_ReviceService.GetReviceListByTaskID(task_id);
+                if (dm_Task_ReviceEntities.Where(t => t.status == 1).Count() > 0)
+                    throw new Exception("存在正在进行中的记录,当前任务无法取消!");
                 if (dm_Task_ReviceEntities.Where(t => t.status == 2).Count() > 0)
                     throw new Exception("当前存在未审核的资料,任务无法取消,请审核之后重试!");
                 dm_taskEntity dm_TaskEntity = GetEntity(task_id);
