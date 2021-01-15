@@ -11,6 +11,7 @@ using HYG.CommonHelper.Common;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
+    [VerificationAPI(FilterMode.Ignore)]
     public class TencentMeetingController : MvcAPIControllerBase
     {
         private DM_BaseSettingIBLL dm_BaseSettingIBLL = new DM_BaseSettingBLL();
@@ -18,6 +19,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private DM_UserIBLL dm_userIBLL = new DM_UserBLL();
 
         private DM_MeetingListIBLL dm_MeetingListIBLL = new DM_MeetingListBLL();
+
         /// <summary>
         /// 创建会议房间
         /// </summary>
@@ -182,6 +184,60 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 return FailException(ex);
             }
         }
+
+
+        public ActionResult GetMeetingUserDetail(string phone) {
+            try
+            {
+                string appid = CheckAPPID();
+
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+
+                MeetingAPI meetingAPI = new MeetingAPI()
+                {
+                    AppId = dm_BasesettingEntity.meeting_appid,
+                    SecretId = dm_BasesettingEntity.meeting_secretid,
+                    Secretkey = dm_BasesettingEntity.meeting_secretkey,
+                    SdkId = dm_BasesettingEntity.meeting_sdkid,
+                    //Registered = 1
+                };
+
+                string userdetail = meetingAPI.GetUserDetail(phone);
+
+                return Success("获取成功!", userdetail);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
+        public ActionResult GetMeetingDetail(string code,string userid,int instanceid) {
+            try
+            {
+                string appid = CheckAPPID();
+
+                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+
+                MeetingAPI meetingAPI = new MeetingAPI()
+                {
+                    AppId = dm_BasesettingEntity.meeting_appid,
+                    SecretId = dm_BasesettingEntity.meeting_secretid,
+                    Secretkey = dm_BasesettingEntity.meeting_secretkey,
+                    SdkId = dm_BasesettingEntity.meeting_sdkid,
+                    //Registered = 1
+                };
+
+
+                meetingAPI.GetMeetingsWithCode(code, userid, instanceid, null);
+                return Success("");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
         /// <summary>
         /// 创建用户
         /// </summary>
