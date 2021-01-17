@@ -74,8 +74,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     SecretId = dm_BasesettingEntity.meeting_secretid,
                     Secretkey = dm_BasesettingEntity.meeting_secretkey,
                     SdkId = dm_BasesettingEntity.meeting_sdkid,
-                    //Registered = 1
+                    Registered = 1
                 };
+
 
                 #region 创建用户(不管是否成功  都需要创建房间)
                 MeetingUser meetingUser = new MeetingUser()
@@ -225,11 +226,19 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     SecretId = dm_BasesettingEntity.meeting_secretid,
                     Secretkey = dm_BasesettingEntity.meeting_secretkey,
                     SdkId = dm_BasesettingEntity.meeting_sdkid,
-                    //Registered = 1
+                    Registered = 1
                 };
 
+                meetingAPI.GetUserList(1, 20, (int resultCode, dynamic resultMsg) =>
+                {
 
-                meetingAPI.GetMeetingsWithCode(code, userid, instanceid, null);
+                });
+
+                meetingAPI.GetMeetingsWithCode(code, userid, instanceid,(int resultCode, dynamic resultMsg) =>
+                {
+                    Console.WriteLine("创建用户结果：\nresultCode：" + resultCode + "：" + resultMsg);
+                });
+                //meetingAPI.GetMeetingsParticipants()
                 return Success("");
             }
             catch (Exception ex)
