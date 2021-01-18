@@ -2331,7 +2331,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         #region 解析淘口令
                         pwdContent = ParsePwd("http://cloud.jinglm.com/TB_OpenApi/TKL_Query", string.Format("PasswordContent={0}&AdzoneId={1}&SiteId={2}&AccountID={3}", keyWord, "110249350265", "967450311", "127267155"));
                         #endregion
-                        pwdContent = "https://item.taobao.com/item.htm?id=" + pwdContent;
+                        if (!pwdContent.IsEmpty())
+                            pwdContent = "https://item.taobao.com/item.htm?id=" + pwdContent;
                     }
                 }
                 else
@@ -2452,7 +2453,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 if (IsPreview(dm_BasesettingEntity))
                 {
-                    newGoodItemList = superGoodItems.Select(p => { p.SuperCommission = 0M; p.LevelCommission = 0M;p.cacheKey = cacheKey; return p; });
+                    newGoodItemList = superGoodItems.Select(p => { p.SuperCommission = 0M; p.LevelCommission = 0M; p.cacheKey = cacheKey; return p; });
                 }
                 else
                 {

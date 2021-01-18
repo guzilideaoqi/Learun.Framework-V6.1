@@ -488,58 +488,55 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     #region 淘宝订单处理
                     OrderData orderData = tbApi.GetOrder(queryType.ToString(), postion_index, pageSize.ToString(), "", startTime, endTime, "1", pageNo.ToString(), "2");
 
-                    if (orderData != null)
+                    if (!orderData.IsEmpty() && !orderData.results.IsEmpty() && orderData.results.publisher_order_dto != null)
                     {
-                        if (orderData.results.publisher_order_dto != null)
+                        foreach (tb_order item in orderData.results.publisher_order_dto)
                         {
-                            foreach (tb_order item in orderData.results.publisher_order_dto)
-                            {
-                                dm_orderEntity commonOrderEntity = new dm_orderEntity();
-                                commonOrderEntity.order_sn = item.trade_parent_id;//订单id
-                                commonOrderEntity.sub_order_sn = item.trade_id;//子订单id
-                                commonOrderEntity.origin_id = item.item_id;//商品id
-                                commonOrderEntity.id = Md5Helper.Hash(commonOrderEntity.order_sn + commonOrderEntity.sub_order_sn + commonOrderEntity.origin_id);//id通过
-                                commonOrderEntity.type_big = 1;
-                                commonOrderEntity.order_type = getordertype(item.order_type);
-                                commonOrderEntity.type = commonOrderEntity.order_type;
-                                commonOrderEntity.title = item.item_title;
-                                commonOrderEntity.order_status = item.tk_status;
-                                commonOrderEntity.order_type_new = gettbstatus(commonOrderEntity.order_status);
-                                commonOrderEntity.rebate_status = 0;
-                                commonOrderEntity.image = item.item_img.StartsWith("//") ? ("http:" + item.item_img) : item.item_img;
-                                commonOrderEntity.product_num = item.item_num;
-                                commonOrderEntity.product_price = item.item_price;
-                                commonOrderEntity.payment_price = item.alipay_total_price;
-                                commonOrderEntity.estimated_effect = item.pub_share_fee;//结算预估收入(包含补贴金额)
-                                commonOrderEntity.estimated_income = item.pub_share_pre_fee;//付款的预估佣金金额
-                                commonOrderEntity.commission_rate = item.total_commission_rate;//佣金比例
-                                commonOrderEntity.income_ratio = item.pub_share_rate;
-                                commonOrderEntity.commission_amount = 0;//保存返利成功的金额
-                                commonOrderEntity.subsidy_ratio = item.subsidy_rate;
-                                commonOrderEntity.subsidy_amount = item.subsidy_fee;
-                                commonOrderEntity.subsidy_type = item.subsidy_type;
-                                commonOrderEntity.order_createtime = Extensions.ToDateOrNull(item.tk_create_time);
-                                commonOrderEntity.order_settlement_at = Extensions.ToDateOrNull(item.tk_earning_time);
-                                commonOrderEntity.order_pay_time = Extensions.ToDateOrNull(item.tb_paid_time);
-                                commonOrderEntity.createtime = DateTime.Now;
-                                commonOrderEntity.updatetime = DateTime.Now;
-                                commonOrderEntity.shopname = item.seller_shop_title;
-                                commonOrderEntity.category_name = item.item_category_name;
-                                commonOrderEntity.media_id = item.site_id;
-                                commonOrderEntity.media_name = item.site_name;
-                                commonOrderEntity.pid = item.adzone_id;
-                                commonOrderEntity.pid_name = item.adzone_name;
-                                commonOrderEntity.relation_id = item.relation_id.ToString();
-                                commonOrderEntity.special_id = Extensions.ToString(item.special_id);
-                                commonOrderEntity.protection_status = item.refund_tag;
-                                commonOrderEntity.insert_type = 1;
-                                commonOrderEntity.order_create_date = ConvertDate(commonOrderEntity.order_createtime);
-                                commonOrderEntity.order_create_month = ConvertMonth(commonOrderEntity.order_createtime);
-                                commonOrderEntity.order_receive_date = ConvertDate(commonOrderEntity.order_settlement_at);
-                                commonOrderEntity.order_receive_month = ConvertMonth(commonOrderEntity.order_settlement_at);
+                            dm_orderEntity commonOrderEntity = new dm_orderEntity();
+                            commonOrderEntity.order_sn = item.trade_parent_id;//订单id
+                            commonOrderEntity.sub_order_sn = item.trade_id;//子订单id
+                            commonOrderEntity.origin_id = item.item_id;//商品id
+                            commonOrderEntity.id = Md5Helper.Hash(commonOrderEntity.order_sn + commonOrderEntity.sub_order_sn + commonOrderEntity.origin_id);//id通过
+                            commonOrderEntity.type_big = 1;
+                            commonOrderEntity.order_type = getordertype(item.order_type);
+                            commonOrderEntity.type = commonOrderEntity.order_type;
+                            commonOrderEntity.title = item.item_title;
+                            commonOrderEntity.order_status = item.tk_status;
+                            commonOrderEntity.order_type_new = gettbstatus(commonOrderEntity.order_status);
+                            commonOrderEntity.rebate_status = 0;
+                            commonOrderEntity.image = item.item_img.StartsWith("//") ? ("http:" + item.item_img) : item.item_img;
+                            commonOrderEntity.product_num = item.item_num;
+                            commonOrderEntity.product_price = item.item_price;
+                            commonOrderEntity.payment_price = item.alipay_total_price;
+                            commonOrderEntity.estimated_effect = item.pub_share_fee;//结算预估收入(包含补贴金额)
+                            commonOrderEntity.estimated_income = item.pub_share_pre_fee;//付款的预估佣金金额
+                            commonOrderEntity.commission_rate = item.total_commission_rate;//佣金比例
+                            commonOrderEntity.income_ratio = item.pub_share_rate;
+                            commonOrderEntity.commission_amount = 0;//保存返利成功的金额
+                            commonOrderEntity.subsidy_ratio = item.subsidy_rate;
+                            commonOrderEntity.subsidy_amount = item.subsidy_fee;
+                            commonOrderEntity.subsidy_type = item.subsidy_type;
+                            commonOrderEntity.order_createtime = Extensions.ToDateOrNull(item.tk_create_time);
+                            commonOrderEntity.order_settlement_at = Extensions.ToDateOrNull(item.tk_earning_time);
+                            commonOrderEntity.order_pay_time = Extensions.ToDateOrNull(item.tb_paid_time);
+                            commonOrderEntity.createtime = DateTime.Now;
+                            commonOrderEntity.updatetime = DateTime.Now;
+                            commonOrderEntity.shopname = item.seller_shop_title;
+                            commonOrderEntity.category_name = item.item_category_name;
+                            commonOrderEntity.media_id = item.site_id;
+                            commonOrderEntity.media_name = item.site_name;
+                            commonOrderEntity.pid = item.adzone_id;
+                            commonOrderEntity.pid_name = item.adzone_name;
+                            commonOrderEntity.relation_id = item.relation_id.ToString();
+                            commonOrderEntity.special_id = Extensions.ToString(item.special_id);
+                            commonOrderEntity.protection_status = item.refund_tag;
+                            commonOrderEntity.insert_type = 1;
+                            commonOrderEntity.order_create_date = ConvertDate(commonOrderEntity.order_createtime);
+                            commonOrderEntity.order_create_month = ConvertMonth(commonOrderEntity.order_createtime);
+                            commonOrderEntity.order_receive_date = ConvertDate(commonOrderEntity.order_settlement_at);
+                            commonOrderEntity.order_receive_month = ConvertMonth(commonOrderEntity.order_settlement_at);
 
-                                commonOrderList.Add(commonOrderEntity);
-                            }
+                            commonOrderList.Add(commonOrderEntity);
                         }
                     }
 

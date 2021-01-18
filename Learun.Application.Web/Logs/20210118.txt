@@ -1,0 +1,9 @@
+【时间】=>2021-01-18 10:25:27 249
+【日志内容】=> 2021-01-17 22:35:12至2021-01-17 22:55:12数据异常,原因The appkey 25552805 is only allowed to call from its ip white list, but the source ip 1.193.36.106 is not included   在 ShoppingAPI.TBApi.GetOrder(String query_type, String position_index, String page_size, String tk_status, String start_time, String end_time, String jump_type, String page_no, String order_scene)
+
+【时间】=>2021-01-18 10:25:48 106
+【日志内容】=> 2021-01-17 22:35:12至2021-01-17 22:55:12数据异常,原因The appkey 25552805 is only allowed to call from its ip white list, but the source ip 1.193.36.106 is not included   在 ShoppingAPI.TBApi.GetOrder(String query_type, String position_index, String page_size, String tk_status, String start_time, String end_time, String jump_type, String page_no, String order_scene)
+
+【时间】=>2021-01-18 10:29:47 612
+【日志内容】=> 2021-01-17 22:35:27至2021-01-17 22:55:27数据异常,原因The appkey 25552805 is only allowed to call from its ip white list, but the source ip 1.193.36.106 is not included   在 ShoppingAPI.TBApi.GetOrder(String query_type, String position_index, String page_size, String tk_status, String start_time, String end_time, String jump_type, String page_no, String order_scene)
+

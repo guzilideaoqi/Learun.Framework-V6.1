@@ -86,11 +86,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     {
                         if (TaskType == "-1")
                         {
-                            queryDiction = "{\"appid\":\"" + appid + "\"}";
+                            queryDiction = "{\"appid\":\"" + appid + "\",\"ischeckmode\":\"0\"}";
                         }
                         else
                         {
-                            queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\"}";
+                            queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\",\"ischeckmode\":\"0\"}";
                         }
                     }
 
