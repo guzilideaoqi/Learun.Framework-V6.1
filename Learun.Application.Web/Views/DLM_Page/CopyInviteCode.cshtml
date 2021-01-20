@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>哆来米</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<style>
+    .invitecode {
+        width: 50%;
+        height: 35px;
+        border: 0;
+        background: none;
+        float: left;
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+        padding-left: 10px;
+    }
+
+    .copy_btn {
+        width: 90px;
+        height: 35px;
+        border: 0;
+        background: none;
+        float: right;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        text-align: center;
+        background-image: linear-gradient(#ff5500, #e56688);
+        color: white;
+        padding: 10px 0px;
+    }
+
+    .divleft {
+        width: 70%;
+        height: 35px;
+        float: left;
+        border: 1px solid #ff5500;
+        border-radius: 25px;
+        margin: 1% 15%;
+        display:none;
+    }
+    .downloadurl {
+        width: 70%;
+        margin: 2% 15%;
+        height: 35px;
+        border: 1px solid #ff5500;
+        border-radius: 25px;
+        background-color: #ff5500;
+        line-height:35px;
+        text-align:center;
+        color:white;
+    }
+</style>
+<body>
+    <!-- 1. Define some markup -->
+    <image src="~/Content/dlm/bj.png" style="width: 80%;margin: 5% 10%;height:400px"></image>
+    <div class="divleft">
+        <input id="foo" type="text" value="@ViewBag.InviteCode" class="invitecode" disabled="disabled">
+        <button class="btn copy_btn" data-clipboard-action="copy" data-clipboard-text="@ViewBag.InviteCode">复制邀请码</button>
+    </div>
+
+    <div class="downloadurl" style="background-color: #e56688;" onclick="download_android()">
+        安卓下载
+    </div>
+    <div class="downloadurl" onclick="download_ios()">
+        IOS下载
+    </div>
+    <!-- 2. Include library -->
+    <script src="~/Scripts/clipboard.min.js"></script>
+
+
+    <!-- 3. Instantiate clipboard -->
+    <script>
+        var clipboard = new ClipboardJS('.btn');
+
+        clipboard.on('success', function (e) {
+            console.log(e);
+            document.getElementById('foo').style.color = "#e56688";
+            ismobile();
+        });
+
+        clipboard.on('error', function (e) {
+            console.log(e);
+        });
+
+        function ismobile() {
+            /**判定是否是微信端打开的**/
+            //var ua = window.navigator.userAgent.toLowerCase();
+            //if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+            //    return true; //是微信端
+            //} else {
+            //    return false; //不是微信端
+            //}
+            /**判定app下载，及操作系统是安卓ios**/
+            var u = navigator.userAgent, app = navigator.appVersion;
+            var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;//android端
+            var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+            if (isAndroid) {
+                window.location.href = "https://appgallery.huawei.com/#/app/C102874505";
+            }
+            if (isIOS) {
+                window.location.href = "https://apps.apple.com/cn/app/%E5%93%86%E6%9D%A5%E7%B1%B3/id1544018614?from=groupmessage"
+            }
+        }
+
+        function download_android() {
+            window.location.href = "https://appgallery.huawei.com/#/app/C102874505";
+        }
+
+        function download_ios() {
+            window.location.href = "https://apps.apple.com/cn/app/%E5%93%86%E6%9D%A5%E7%B1%B3/id1544018614?from=groupmessage"
+        }
+    </script>
+</body>
+</html>

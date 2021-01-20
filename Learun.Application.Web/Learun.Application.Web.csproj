@@ -581,6 +581,7 @@
     <Content Include="Content\datepicker\开发包\skin\whyGreen\bg.jpg" />
     <Content Include="Content\datepicker\开发包\skin\whyGreen\datepicker.css" />
     <Content Include="Content\datepicker\开发包\skin\whyGreen\img.gif" />
+    <Content Include="Content\dlm\bj.png" />
     <Content Include="Content\dlm\download.png" />
     <Content Include="Content\dlm\bootstrap.min.css" />
     <Content Include="Content\dlm\combined_shape copy.png" />
@@ -1932,6 +1933,7 @@
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\PreviewCircle.cshtml" />
     <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\clipboard.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -2431,6 +2433,7 @@
     <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Form.js" />
+    <Content Include="Views\DLM_Page\CopyInviteCode.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

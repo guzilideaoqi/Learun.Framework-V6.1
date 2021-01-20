@@ -17,5 +17,10 @@ namespace Learun.Application.Web.Controllers
         public ActionResult CloseAccount() {
             return View();
         }
+
+        public ActionResult CopyInviteCode(string InviteCode) {
+            ViewBag.InviteCode = InviteCode;
+            return View();
+        }
     }
 }
