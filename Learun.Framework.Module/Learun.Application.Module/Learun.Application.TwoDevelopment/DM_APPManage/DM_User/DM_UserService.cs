@@ -560,7 +560,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         id = updateEntity.id;
                         updateEntity.invitecode = EncodeInviteCode(updateEntity.id);
                         updateEntity.integral = dm_BasesettingEntity.new_people;
-                        updateEntity.rongcloud_token = rongyun_token(id, updateEntity.nickname, appid);
+                        updateEntity.rongcloud_token = rongyun_token(id, updateEntity.nickname, updateEntity.headpic, appid);
                         updateEntity.Modify(id);
                         db.Update(updateEntity);
                         db.Insert(new dm_intergraldetailEntity
@@ -1401,7 +1401,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (dm_UserEntity.IsEmpty())
                     throw new Exception("未找到该用户!");
 
-                dm_UserEntity.rongcloud_token = rongyun_token(User_ID, dm_UserEntity.nickname, appid);
+                dm_UserEntity.rongcloud_token = rongyun_token(User_ID, dm_UserEntity.nickname, dm_UserEntity.headpic, appid);
                 dm_UserEntity.Modify(dm_UserEntity.id);
 
                 BaseRepository("dm_data").Update(dm_UserEntity);
@@ -1416,7 +1416,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         }
 
-        string rongyun_token(int? User_ID, string nickname, string appid)
+        string rongyun_token(int? User_ID, string nickname, string headimage, string appid)
         {
             try
             {
@@ -1434,7 +1434,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     Id = User_ID.ToString(),
                     Name = nickname,
-                    Portrait = "http://www.rongcloud.cn/images/logo.png"
+                    Portrait = headimage ?? "http://www.dlaimi.cn/defaultlogo.png"
                 };
 
                 TokenResult result = User.Register(user);
