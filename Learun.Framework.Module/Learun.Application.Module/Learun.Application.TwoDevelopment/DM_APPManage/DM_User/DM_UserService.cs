@@ -547,6 +547,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_UserEntity.token = Guid.NewGuid().ToString();
                     dm_UserEntity.last_logintime = DateTime.Now;
                     dm_UserEntity.appid = appid;
+                    dm_UserEntity.nickname = dm_UserEntity.nickname ?? "dlm_" + Time.GetTimeStamp();
                     dm_UserEntity.Create();
 
                     int effectCount = BaseRepository("dm_data").Insert(dm_UserEntity);
