@@ -296,10 +296,58 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 return GetEntityByUserID(User_ID);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
 
-                throw;
+        #region 更改会员上级并重置两个会员的统计数据
+        /// <summary>
+        /// 更改会员上级并重置两个会员的统计数据
+        /// </summary>
+        /// <param name="UserID">需要设置上级的会员ID</param>
+        /// <param name="ParentID">需要设置到的会员ID</param>
+        public void UpdateUserParent(int UserID, int ParentID)
+        {
+            try
+            {
+                dm_user_relationEntity dm_User_RelationEntity = GetEntityByUserID(UserID);
+                if (dm_User_RelationEntity.IsEmpty())
+                    throw new Exception("当前会员信息异常!");
+                dm_user_relationEntity dm_User_ParentRelationEntity = GetEntityByUserID(UserID);
+                if (dm_User_ParentRelationEntity.IsEmpty())
+                    throw new Exception("上级会员信息异常!");
+
+                if (dm_User_RelationEntity.parent_id == ParentID)
+                    throw new Exception("当前用户已属于该邀请人，无需重复设置!");
+
+                if (dm_User_ParentRelationEntity.parent_id == UserID)
+                    throw new Exception("用户关系无法双向绑定!");
+
+                if (dm_User_RelationEntity.partners_id != dm_User_ParentRelationEntity.partners_id)
+                    throw new Exception("当前设置关系不在同一团队,无法操作!");
+
+                dm_User_RelationEntity.parent_id = ParentID;
+                dm_User_RelationEntity.Modify(UserID);
+                this.BaseRepository("dm_data").Update(dm_User_RelationEntity);
+
+                #region 重置统计信息
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
             }
         }
         #endregion
