@@ -40,7 +40,6 @@ var bootstrap = function ($, learun) {
             })
         },
         initData: function () {
-            debugger;
             $.lrSetForm(top.$.rootUrl + '/DM_APPManage/DM_BaseSetting/GetFormData?keyValue=' + keyValue, function (data) {//
                 console.log(JSON.stringify(data));
                 if (data != null) {

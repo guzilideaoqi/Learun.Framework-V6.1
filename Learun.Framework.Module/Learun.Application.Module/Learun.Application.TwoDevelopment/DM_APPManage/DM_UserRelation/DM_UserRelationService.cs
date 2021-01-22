@@ -318,8 +318,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 dm_user_relationEntity dm_User_RelationEntity = GetEntityByUserID(UserID);
+
+
                 if (dm_User_RelationEntity.IsEmpty())
                     throw new Exception("当前会员信息异常!");
+                int old_ParentUserID = dm_User_RelationEntity.parent_id;
+
                 dm_user_relationEntity dm_User_ParentRelationEntity = GetEntityByUserID(UserID);
                 if (dm_User_ParentRelationEntity.IsEmpty())
                     throw new Exception("上级会员信息异常!");
@@ -333,13 +337,53 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (dm_User_RelationEntity.partners_id != dm_User_ParentRelationEntity.partners_id)
                     throw new Exception("当前设置关系不在同一团队,无法操作!");
 
+                dm_userEntity parentUserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(ParentID);
+
                 dm_User_RelationEntity.parent_id = ParentID;
-                dm_User_RelationEntity.Modify(UserID);
+                dm_User_RelationEntity.parent_nickname = parentUserEntity.nickname;
+                dm_User_RelationEntity.Modify(dm_User_RelationEntity.id);
                 this.BaseRepository("dm_data").Update(dm_User_RelationEntity);
 
                 #region 重置统计信息
+                string excuteStatistic = "";
+                if (!parentUserEntity.IsEmpty())
+                {
+                    excuteStatistic += string.Format("CALL ResetStatistic({0},{1},{2});", ParentID, parentUserEntity.partnersstatus, parentUserEntity.partners ?? 0);
+                }
 
+
+                dm_userEntity oldParentUserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(old_ParentUserID);
+                if (!oldParentUserEntity.IsEmpty())
+                {
+                    excuteStatistic += string.Format("CALL ResetStatistic({0},{1},{2});", old_ParentUserID, oldParentUserEntity.partnersstatus, oldParentUserEntity.partners ?? 0);
+                }
+
+                if (!excuteStatistic.IsEmpty())
+                    this.BaseRepository("dm_data").ExecuteBySql(excuteStatistic);
                 #endregion
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
+
+        #region 更新用户统计信息
+        public void ResetUserStatistic(int UserID)
+        {
+            try
+            {
+                dm_userEntity userEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(UserID);
+                if (!userEntity.IsEmpty())
+                {
+                    string excuteStatistic = string.Format("CALL ResetStatistic({0},{1},{2});", UserID, userEntity.partnersstatus, userEntity.partners);
+                    this.BaseRepository("dm_data").ExecuteBySql(excuteStatistic);
+                }
             }
             catch (Exception ex)
             {

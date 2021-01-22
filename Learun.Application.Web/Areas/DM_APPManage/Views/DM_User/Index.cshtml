@@ -27,9 +27,16 @@
                     </div>
                     <div class=" btn-group btn-group-sm" learun-authorize="no">
                         <!--<a id="lr_add"   class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;新增</a>
-                        <a id="lr_edit"  class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
-                        <a id="lr_delete" class="btn btn-default"><i class="fa fa-trash-o"></i>&nbsp;删除</a>-->
-                        <a id="lr_setlevel" class="btn btn-success"><i class="fa fa-pencil-square-o"></i>&nbsp;设置等级</a>
+    <a id="lr_edit"  class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+    <a id="lr_delete" class="btn btn-default"><i class="fa fa-trash-o"></i>&nbsp;删除</a>-->
+                        <a id="lr_more" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-reorder"></i>&nbsp;更多<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li id="lr_setlevel"><a><i></i>&nbsp;设置等级</a></li>
+                            <li id="lr_invitecode"><a><i></i>&nbsp;设置上级</a></li>
+                            <li id="lr_resetuserStatic"><a><i></i>&nbsp;重置统计数据</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>

@@ -31,6 +31,7 @@ var bootstrap = function ($, learun) {
         },
         initData: function () {
             if (!!selectedRow) {
+                $('#form').lrSetFormData(selectedRow);
                 $.lrSetForm(top.$.rootUrl + '/DM_APPManage/DM_User/GetFormData?keyValue=' + selectedRow.id, function (data) {//
                     $('#form').lrSetFormData(data);
 

@@ -93,6 +93,41 @@ var bootstrap = function ($, learun) {
                     learun.alert.error('请选择需要修改等级的用户！');
                 }
             });
+
+            //设置上级
+            $("#lr_invitecode").on('click', function () {
+                selectedRow = $('#girdtable').jfGridGet('rowdata');
+                if (typeof (selectedRow) != "undefined") {
+                    if (typeof (selectedRow) == "object") {
+                        learun.layerForm({
+                            id: 'form',
+                            title: '设置上级',
+                            url: top.$.rootUrl + '/DM_APPManage/DM_User/SelectUser',
+                            width: 1100,
+                            height: 600,
+                            callBack: function (id) {
+                                return top[id].acceptClick(refreshGirdData);
+                            }
+                        });
+                    } else {
+                        learun.alert.error('不支持同时选择多个用户设置上级！');
+                    }
+                }
+                else {
+                    learun.alert.error('请选择需要修改等级的用户！');
+                }
+            });
+
+            $("#lr_resetuserStatic").on('click', function () {
+                var keyValue = $('#girdtable').jfGridValue('id');
+                learun.layerConfirm('重置后APP端会存在几分钟的延迟,请稍后重试！', function (res) {
+                    if (res) {
+                        learun.postForm(top.$.rootUrl + '/DM_APPManage/DM_UserRelation/ResetUserStatistic', { UserID: keyValue }, function () {
+                            refreshGirdData();
+                        });
+                    }
+                });
+            });
         },
         initGird: function () {
             $('#girdtable').lrAuthorizeJfGrid({
@@ -162,6 +197,9 @@ var bootstrap = function ($, learun) {
                             }
                         }
                     },
+                    { label: '直属粉丝', name: 'mychildcount', width: 100, align: "left" },
+                    { label: '下下级', name: 'mysonchildcount', width: 100, align: "left" },
+                    { label: '我的团队', name: 'mypartnerscount', width: 100, align: "left" },
                     {
                         label: '聊天室', name: 'isvoice', width: 60, align: "center", formatter: function (cellvalue, rows, option) {
                             if (cellvalue == 1) {

@@ -57,6 +57,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public dm_user_relationEntity GetEntityByUserID(int? id)
+        {
+            try
+            {
+                return dM_UserRelationService.GetEntityByUserID(id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+
         public void DeleteEntity(int? keyValue)
         {
             try
@@ -192,11 +208,47 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-               return dM_UserRelationService.GetIncomeReport(User_ID);
+                return dM_UserRelationService.GetIncomeReport(User_ID);
             }
             catch (Exception ex)
             {
-                if(ex is ExceptionEx)
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
+        #region 更改会员上级并重置统计信息
+        public void UpdateUserParent(int UserID, int ParentID)
+        {
+            try
+            {
+                dM_UserRelationService.UpdateUserParent(UserID, ParentID);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
+        #region 重置用户统计信息
+        public void ResetUserStatistic(int UserID)
+        {
+            try
+            {
+                dM_UserRelationService.ResetUserStatistic(UserID);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
                 {
                     throw;
                 }

@@ -91,7 +91,6 @@ var bootstrap = function ($, learun) {
 
         var f = document.getElementById('uploadFile').files[0];
 
-        debugger;
         if (!!f) {
             postData["content"] = encodeURIComponent(ue.getContent(null, null, true));
 

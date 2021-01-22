@@ -340,6 +340,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\LookUserDetail.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\LookUserDetail.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_User\SelectUser.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\SetInviteCode.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\SetLevel.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\UpdateAccountPrice.js" />
@@ -1931,6 +1932,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_User\SetInviteCode.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\PreviewCircle.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_User\SelectUser.cshtml" />
     <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\clipboard.min.js" />

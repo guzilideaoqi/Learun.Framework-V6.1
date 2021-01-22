@@ -41,6 +41,11 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         }
 
         [HttpGet]
+        public ActionResult SelectUser() {
+            return View();
+        }
+
+        [HttpGet]
         public ActionResult SetInviteCode()
         {
             return View();

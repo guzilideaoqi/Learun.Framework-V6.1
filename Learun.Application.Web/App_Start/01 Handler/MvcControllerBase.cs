@@ -1,6 +1,7 @@
 ﻿using Learun.Loger;
 using Learun.Util;
 using Learun.Util.Operat;
+using System;
 using System.Web.Mvc;
 
 namespace Learun.Application.Web
@@ -104,6 +105,16 @@ namespace Learun.Application.Web
         protected virtual ActionResult Fail(string info)
         {
             return Content(new ResParameter { code = ResponseCode.fail, info = info }.ToJson());
+        }
+
+        protected virtual ActionResult FailException(Exception ex)
+        {
+            string msg = ex.Message;
+            if (!ex.InnerException.IsEmpty() && !ex.InnerException.Message.IsEmpty())
+            {
+                msg = "哆来米异常提示：" + ex.InnerException.Message;
+            }
+            return Content(new ResParameter { code = ResponseCode.fail, info = msg }.ToJson());
         }
         /// <summary>
         /// 返回失败消息

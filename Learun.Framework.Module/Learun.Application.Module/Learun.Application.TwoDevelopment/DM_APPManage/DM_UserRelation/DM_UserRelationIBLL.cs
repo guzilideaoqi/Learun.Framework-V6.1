@@ -12,7 +12,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
 		dm_user_relationEntity GetEntity(int? keyValue);
 
-		void DeleteEntity(int? keyValue);
+        dm_user_relationEntity GetEntityByUserID(int? id);
+
+        void DeleteEntity(int? keyValue);
 
 		void SaveEntity(int? keyValue, dm_user_relationEntity entity);
 
@@ -45,6 +47,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #region 获取效果收益报表
         dm_user_relationEntity GetIncomeReport(int User_ID);
+        #endregion
+
+        #region 更改会员上级并重置统计信息
+        void UpdateUserParent(int UserID, int ParentID);
+        #endregion
+
+        #region 重置用户统计信息
+        void ResetUserStatistic(int UserID);
         #endregion
     }
 }
