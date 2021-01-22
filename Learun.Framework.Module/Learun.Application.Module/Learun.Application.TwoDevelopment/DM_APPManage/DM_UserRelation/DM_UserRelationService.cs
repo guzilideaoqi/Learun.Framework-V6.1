@@ -381,7 +381,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_userEntity userEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(UserID);
                 if (!userEntity.IsEmpty())
                 {
-                    string excuteStatistic = string.Format("CALL ResetStatistic({0},{1},{2});", UserID, userEntity.partnersstatus, userEntity.partners);
+                    string excuteStatistic = string.Format("CALL ResetStatistic({0},{1},{2});", UserID, userEntity.partnersstatus, userEntity.partners ?? 0);
                     this.BaseRepository("dm_data").ExecuteBySql(excuteStatistic);
                 }
             }
