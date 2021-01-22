@@ -175,7 +175,7 @@ var bootstrap = function ($, learun) {
                                     return "申请中";
                                     break;
                                 case 2:
-                                    return "合伙人";
+                                    return ("合伙人(" + (cellvalue == 2 ? rows.partners : "") + ")");
                                     break;
                             }
                         }
