@@ -3,77 +3,9 @@
     Layout = "~/Views/Shared/_Form.cshtml";
 }
 <div class="lr-form-wrap" id="form">
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">id<font face="宋体">*</font></div>
-        <input id="id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">任务编号<font face="宋体">*</font></div>
-        <input id="task_no" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">task_title<font face="宋体">*</font></div>
-        <input id="task_title" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">任务类型<font face="宋体">*</font></div>
-        <input id="task_type" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">任务状态 0未进行  1进行中  2已完成  3已取消<font face="宋体">*</font></div>
-        <input id="task_status" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">任务描述<font face="宋体">*</font></div>
-        <input id="task_description" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">任务操作<font face="宋体">*</font></div>
-        <input id="task_operate" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">0pc  1移动<font face="宋体">*</font></div>
-        <input id="plaform" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">排序值<font face="宋体">*</font></div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">权重值<font face="宋体">*</font></div>
         <input id="sort" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">创建时间<font face="宋体">*</font></div>
-        <input id="createtime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">总佣金(发布任务所需要的总金额)<font face="宋体">*</font></div>
-        <input id="totalcommission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">服务费(每一单的服务费)<font face="宋体">*</font></div>
-        <input id="servicefee" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">初级佣金(每一单的佣金)<font face="宋体">*</font></div>
-        <input id="juniorcommission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">高级佣金(每一单的佣金)<font face="宋体">*</font></div>
-        <input id="seniorcommission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">需求人数<font face="宋体">*</font></div>
-        <input id="needcount" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">完成人数<font face="宋体">*</font></div>
-        <input id="finishcount" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">用户ID<font face="宋体">*</font></div>
-        <input id="user_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
-    </div>
-    <div class="col-xs-6 lr-form-item">
-        <div class="lr-form-item-title">平台ID<font face="宋体">*</font></div>
-        <input id="appid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
     </div>
 </div>
 @Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_Task/Form.js")

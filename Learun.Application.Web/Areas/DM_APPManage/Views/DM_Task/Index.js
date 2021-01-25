@@ -49,10 +49,10 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerForm({
                         id: 'form',
-                        title: '编辑',
+                        title: '修改权重',
                         url: top.$.rootUrl + '/DM_APPManage/DM_Task/Form?keyValue=' + keyValue,
-                        width: 700,
-                        height: 400,
+                        width: 400,
+                        height: 200,
                         callBack: function (id) {
                             return top[id].acceptClick(refreshGirdData);
                         }
@@ -87,7 +87,8 @@ var bootstrap = function ($, learun) {
                         label: '任务标题', name: 'task_title', width: 200, align: "left", formatter: function (cellvalue, rowData, options) {
                             var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'");
                             return "<a onclick=\"LookTaskDetail(" + tempJsonStr + ");\" href=\"#\">" + cellvalue + "</a>";
-                        } },
+                        }
+                    },
                     //{ label: '任务类型', name: 'task_type', width: 200, align: "left" },
                     {
                         label: '任务状态', name: 'task_status', width: 80, align: "center", formatter: function (cellvalue, rowData, options) {
@@ -137,7 +138,7 @@ var bootstrap = function ($, learun) {
                             return status;
                         }
                     },
-                    { label: '排序值', name: 'sort', width: 80, align: "left" },
+                    { label: '权重', name: 'sort', width: 80, align: "left" },
                     { label: '总佣金', name: 'totalcommission', width: 80, align: "left" },
                     { label: '服务费', name: 'servicefee', width: 80, align: "left" },
                     { label: '初级佣金', name: 'juniorcommission', width: 80, align: "left" },

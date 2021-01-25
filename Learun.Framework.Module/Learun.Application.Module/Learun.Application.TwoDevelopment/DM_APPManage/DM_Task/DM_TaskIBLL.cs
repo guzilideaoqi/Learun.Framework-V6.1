@@ -92,6 +92,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="task_id"></param>
         void CancelByReleasePerson(int task_id);
+        /// <summary>
+        /// 修改任务权重值
+        /// </summary>
+        /// <param name="task_id">任务ID</param>
+        /// <param name="sort_value">权重值</param>
+        void UpdateSortValue(int task_id, int sort_value);
         #endregion
     }
 }

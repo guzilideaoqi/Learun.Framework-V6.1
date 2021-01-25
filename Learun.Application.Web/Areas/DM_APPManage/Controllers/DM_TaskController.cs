@@ -201,6 +201,13 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             dM_TaskIBLL.DownTask(keyValue);
             return Success("任务下架成功！");
         }
+
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult UpdateSortValue(int task_id,int sort_value) {
+            dM_TaskIBLL.UpdateSortValue(task_id, sort_value);
+            return Success("修改成功!");
+        }
         #endregion
 
     }

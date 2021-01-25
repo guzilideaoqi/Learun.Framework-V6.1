@@ -270,7 +270,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (dataTable == null)
                 {
                     dataTable = dm_Task_ReviceIBLL.GetMyReviceTask(User_ID, TaskStatus, new Pagination { page = PageNo, rows = PageSize, sidx = "revice_time", sord = "desc" });
-                    /* 接受任务需要试试显示  此处先把缓存去掉 2020-08-04
+                    /* 接受任务需要实时显示  此处先把缓存去掉 2020-08-04
                      * int datarow = dataTable.Rows.Count;
                     if (datarow > 0)
                     {

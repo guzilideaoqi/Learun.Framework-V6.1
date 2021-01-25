@@ -206,6 +206,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == phone && t.appid == appid);
+                if (dm_UserEntity.isenable != 1)
+                    throw new Exception("该账号已停用，如有疑问，请联系官方客服!");
                 return dm_UserEntity;
             }
             catch (Exception ex)
@@ -261,6 +263,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.token == token);//从数据库获取
                     if (!dm_UserEntity.IsEmpty())
                     {
+                        if (dm_UserEntity.isenable != 1)
+                            throw new Exception("该账号已停用，如有疑问，请联系官方客服!");
                         #region 判断用户是否有邀请码  没有时再重新创建
                         if (dm_UserEntity.invitecode.IsEmpty())
                         {
@@ -431,6 +435,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 if (!dm_UserEntity.IsEmpty())
                 {
+                    if (dm_UserEntity.isenable != 1)
+                        throw new Exception("该账号已停用，如有疑问，请联系官方客服!");
                     string old_user_token = dm_UserEntity.token;
                     dm_UserEntity.last_logintime = DateTime.Now;
                     dm_UserEntity.token = GeneralToken();
@@ -462,6 +468,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == phone && t.appid == appid);
                 if (!dm_UserEntity.IsEmpty())
                 {
+                    if (dm_UserEntity.isenable != 1)
+                        throw new Exception("该账号已停用，如有疑问，请联系官方客服!");
                     string old_user_token = dm_UserEntity.token;
                     dm_UserEntity.last_logintime = DateTime.Now;
                     dm_UserEntity.token = GeneralToken();

@@ -291,6 +291,29 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
         }
+
+        /// <summary>
+        /// 修改权重值图片
+        /// </summary>
+        /// <param name="task_id">任务ID</param>
+        /// <param name="sort_value">权重值</param>
+        public void UpdateSortValue(int task_id, int sort_value) {
+            try
+            {
+                dM_TaskService.UpdateSortValue(task_id, sort_value);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
     }
 }

@@ -216,7 +216,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("select t.*,r.status ReviceStatus,r.id Revice_ID,r.revice_time from dm_task_revice r left join dm_task t on r.task_id=t.id where r.user_id=" + user_id);
+                stringBuilder.Append("select t.*,r.status ReviceStatus,r.id Revice_ID,r.revice_time,u.nickname,u.rongcloud_token from dm_task_revice r left join dm_task t on r.task_id=t.id LEFT JOIN dm_user u on t.user_id=u.id where r.user_id=" + user_id);
 
                 if (TaskStatus != -1)
                     stringBuilder.Append(" and r.status=" + TaskStatus);

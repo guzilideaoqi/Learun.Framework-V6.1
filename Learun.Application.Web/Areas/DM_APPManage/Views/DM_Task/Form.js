@@ -11,12 +11,14 @@ var bootstrap = function ($, learun) {
     var selectedRow = learun.frameTab.currentIframe().selectedRow;
     var page = {
         init: function () {
+            page.initData();
         },
         bind: function () {
         },
         initData: function () {
             if (!!selectedRow) {
-                $('#form').lrSetFormData(selectedRow);
+                $("#sort").val(selectedRow.sort);
+                //$('#form').lrSetFormData(selectedRow);
             }
         }
     };
@@ -26,7 +28,7 @@ var bootstrap = function ($, learun) {
             return false;
         }
         var postData = $('#form').lrGetFormData();
-        $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Task/SaveForm?keyValue=' + keyValue, postData, function (res) {
+        $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Task/UpdateSortValue?task_id=' + keyValue, { sort_value: $("#sort").val()}, function (res) {
             // 保存成功后才回调
             if (!!callBack) {
                 callBack();

@@ -467,7 +467,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     currentvalue = dm_UserEntity.accountprice,
                     title = "发布任务",
                     type = 12,
-                    profitLoss=CommonHelper.GetProfitLoss(12),
+                    profitLoss = CommonHelper.GetProfitLoss(12),
                     user_id = entity.user_id
                 };
 
@@ -551,7 +551,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     currentvalue = dm_UserEntity.accountprice,
                     title = "取消发布任务",
                     type = 13,
-                    profitLoss=CommonHelper.GetProfitLoss(13),
+                    profitLoss = CommonHelper.GetProfitLoss(13),
                     user_id = dm_TaskEntity.user_id
                 };
 
@@ -568,6 +568,33 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 if (db != null)
                     db.Rollback();
 
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 修改任务权重值
+        public void UpdateSortValue(int task_id, int sort_value)
+        {
+            try
+            {
+                dm_taskEntity dm_TaskEntity= this.BaseRepository("dm_data").FindEntity<dm_taskEntity>(task_id);
+                if (dm_TaskEntity.IsEmpty())
+                    throw new Exception("异常任务!");
+                dm_TaskEntity.sort = sort_value;
+                dm_TaskEntity.Modify(task_id);
+
+                this.BaseRepository("dm_data").Update(dm_TaskEntity);
+            }
+            catch (Exception ex)
+            {
                 if (ex is ExceptionEx)
                 {
                     throw;
