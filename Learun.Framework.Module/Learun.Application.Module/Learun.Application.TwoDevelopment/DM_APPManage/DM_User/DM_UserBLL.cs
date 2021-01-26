@@ -105,7 +105,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity GetPersonInfo(string token) {
+        public dm_userEntity GetPersonInfo(string token)
+        {
             try
             {
                 return dM_UserService.GetPersonInfo(token);
@@ -162,7 +163,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                return dM_UserService.ImportUserInfo(AppID, Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id,Integral);
+                return dM_UserService.ImportUserInfo(AppID, Phone, RealName, NickName, identitycard, userlevel, province, city, down, address, wechat, parent_id, parent_nickname, partners_id, Integral);
             }
             catch (Exception ex)
             {
@@ -221,7 +222,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity LoginByPhone(string phone, string appid) {
+        public dm_userEntity LoginByPhone(string phone, string appid)
+        {
             try
             {
                 return dM_UserService.LoginByPhone(phone, appid);
@@ -269,7 +271,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="ParentInviteCode"></param>
         /// <param name="appid"></param>
         /// <returns></returns>
-        public dm_userEntity QuickLogin(dm_userEntity dm_UserEntity, string ParentInviteCode, string appid) {
+        public dm_userEntity QuickLogin(dm_userEntity dm_UserEntity, string ParentInviteCode, string appid)
+        {
             try
             {
                 return dM_UserService.QuickLogin(dm_UserEntity, ParentInviteCode, appid);
@@ -398,6 +401,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 return dM_UserService.GetShareImage(user_id, appid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
+        #region 清空所有邀请码
+        public int ClearShareImage()
+        {
+            try
+            {
+               return dM_UserService.ClearShareImage();
             }
             catch (Exception ex)
             {
@@ -541,11 +562,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 判断渠道ID是否存在
-        public bool NoExistRelationID(string relationid,int user_id)
+        public bool NoExistRelationID(string relationid, int user_id)
         {
             try
             {
-                return dM_UserService.NoExistRelationID(relationid,user_id);
+                return dM_UserService.NoExistRelationID(relationid, user_id);
             }
             catch (Exception ex)
             {
@@ -559,7 +580,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 补全没有邀请码的用户信息
-        public void BatchGeneralInviteCode() {
+        public void BatchGeneralInviteCode()
+        {
             try
             {
                 dM_UserService.BatchGeneralInviteCode();
@@ -576,7 +598,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 清除淘宝授权信息
-        public void Clear_TB_Relation_Auth(int User_ID) {
+        public void Clear_TB_Relation_Auth(int User_ID)
+        {
             try
             {
                 dM_UserService.Clear_TB_Relation_Auth(User_ID);
@@ -609,10 +632,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
-        public dm_userEntity LoginTokenVerify(string loginToken, string appid, ref string phone) {
+        public dm_userEntity LoginTokenVerify(string loginToken, string appid, ref string phone)
+        {
             try
             {
-                return dM_UserService.LoginTokenVerify(loginToken, appid,ref phone);
+                return dM_UserService.LoginTokenVerify(loginToken, appid, ref phone);
             }
             catch (Exception ex)
             {

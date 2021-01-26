@@ -97,10 +97,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     strSql.Append(" and t.user_id = '" + queryParam["txt_user_id"].ToString() + "'");
                 }
-                if (!queryParam["txt_realname"].IsEmpty()) {
+                if (!queryParam["txt_realname"].IsEmpty())
+                {
                     strSql.Append(" and t.realname like '%" + queryParam["txt_realname"].ToString() + "%'");
                 }
-                if (!queryParam["txt_cardno"].IsEmpty()) {
+                if (!queryParam["txt_cardno"].IsEmpty())
+                {
                     strSql.Append(" and t.cardno like '%" + queryParam["txt_cardno"].ToString() + "%'");
                 }
                 return this.BaseRepository("dm_data").FindList<dm_certifica_recordEntity>(strSql.ToString(), pagination);
@@ -252,7 +254,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             {
                 if (entity.realstatus == 1)
                 {
-                    dm_certifica_recordEntity dm_Certifica_RecordEntity=GetEntity(entity.id);
+                    dm_certifica_recordEntity dm_Certifica_RecordEntity = GetEntity(entity.id);
 
                     dm_userEntity dm_UserEntity = new dm_userEntity();
                     dm_UserEntity.isreal = 1;
@@ -260,6 +262,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_UserEntity.realname = dm_Certifica_RecordEntity.realname;
                     dm_UserEntity.frontcard = dm_Certifica_RecordEntity.frontcard;
                     dm_UserEntity.facecard = dm_Certifica_RecordEntity.facecard;
+                    dm_UserEntity.identitycard = dm_Certifica_RecordEntity.cardno;
 
                     db = this.BaseRepository("dm_data").BeginTrans();
                     db.Update(dm_UserEntity);

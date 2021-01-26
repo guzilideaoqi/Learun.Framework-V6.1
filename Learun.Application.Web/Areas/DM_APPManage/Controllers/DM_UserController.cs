@@ -41,7 +41,8 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         }
 
         [HttpGet]
-        public ActionResult SelectUser() {
+        public ActionResult SelectUser()
+        {
             return View();
         }
 
@@ -225,6 +226,25 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
                 dM_UserIBLL.Clear_TB_Relation_Auth(User_ID);
 
                 return Success("授权清除成功!");
+            }
+            catch (System.Exception ex)
+            {
+                return Fail(ex.InnerException.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult ClearShareImage()
+        {
+            try
+            {
+                int fileCount = dM_UserIBLL.ClearShareImage();
+
+                return Success("操作成功,当前共清空" + fileCount + "条数据!");
             }
             catch (System.Exception ex)
             {

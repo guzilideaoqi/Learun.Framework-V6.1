@@ -28,6 +28,15 @@ var bootstrap = function ($, learun) {
                 });
             });
 
+            $('#lr_clear').on('click', function () {
+                learun.layerConfirm('清空后所有用户的邀请海报都需要重新生成，是否继续？', function (res) {
+                    if (res) {
+                        learun.deleteForm(top.$.rootUrl + '/DM_APPManage/DM_User/ClearShareImage', function () {
+                        });
+                    }
+                });
+            });
+
             $("#OpenTBAuthor").click(function () {
                 learun.layerForm({
                     id: 'form',
@@ -71,6 +80,20 @@ var bootstrap = function ($, learun) {
             $("#showcommission").lrselect();//显示佣金类型
 
             $("#miquan_allowclickpraise").lrselect();//米圈普通用户点赞开关
+
+            $("#InvitePosterType").lrselect().on("change", function () {
+                var type = $("#InvitePosterType").lrselectGet();
+                if (type == 0) {
+                    $("#appurl").css("display", "none");
+                    $("#customurl").css("display", "none");
+                } else if (type == 1) {
+                    $("#appurl").css("display", "block");
+                    $("#customurl").css("display", "none");
+                } else if (type == 2) {
+                    $("#appurl").css("display", "none");
+                    $("#customurl").css("display", "block");
+                }
+            });//邀请海报类型
 
             //商品类型
             $("#goodtype").lrselect({

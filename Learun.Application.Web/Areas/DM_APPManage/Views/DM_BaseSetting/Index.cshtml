@@ -31,6 +31,7 @@
                     <li data-value="14">米圈配置</li>
                     <li data-value="15">提现配置</li>
                     <li data-value="16">明细提示配置</li>
+                    <li data-value="17">邀请海报配置</li>
                     <li data-value="6">其他配置</li>
                 </ul>
             </div>
@@ -395,9 +396,9 @@
                         <input id="rongcloud_appsecret" type="text" class="form-control" />
                     </div>
                     @*<div class="lr-form-item">
-                    <div class="lr-form-item-title">Token</div>
-                    <input id="rongcloud_token" type="text" class="form-control" />
-                </div>*@
+                            <div class="lr-form-item-title">Token</div>
+                            <input id="rongcloud_token" type="text" class="form-control" />
+                        </div>*@
                 </div>
             </div>
             <div class="lr-layout-wrap-item" id="lr_layout_item12">
@@ -639,6 +640,26 @@
                         <div class="lr-form-item-title">其他提示</div>
                         <input id="other_tip" type="text" class="form-control" />
                     </div>
+                </div>
+            </div>
+            <div class="lr-layout-wrap-item active" id="lr_layout_item17">
+                <div class="lr-form-item">
+                    <div class="lr-form-item-title"></div>
+                    <div style="color:#535252;line-height:20px">
+                        修改海报类型时请先<a id="lr_clear" class="btn btn-success btn-xs">&nbsp;清空缓存邀请海报</a>否则已经生成邀请海报的用户将不会重新生成新设定类型的邀请海报
+                    </div>
+                </div>
+                <div class="lr-form-item">
+                    <div class="lr-form-item-title">海报类型</div>
+                    <div id="InvitePosterType"><ul><li data-value="0">邀请码</li><li data-value="1">应用宝地址</li><li data-value="2">自定义地址</li></ul></div>
+                </div>
+                <div class="lr-form-item" id="appurl">
+                    <div class="lr-form-item-title">应用宝二合一</div>
+                    <input id="InvitePoster_AppUrl" type="text" class="form-control" />
+                </div>
+                <div class="lr-form-item" id="customurl">
+                    <div class="lr-form-item-title">自定义地址</div>
+                    <input id="InvitePoster_CustomUrl" type="text" class="form-control" />
                 </div>
             </div>
             <div class="lr-layout-wrap-item" id="lr_layout_item6">

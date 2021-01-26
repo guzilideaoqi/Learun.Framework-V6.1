@@ -72,12 +72,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         #region 用户注册
 
-        public ActionResult DM_Register(dm_userEntity dm_UserEntity, string VerifiCode, string SmsMessageID, string ParentInviteCode = "EX3LFY")
+        public ActionResult DM_Register(dm_userEntity dm_UserEntity, string VerifiCode, string SmsMessageID, string ParentInviteCode = "100001")
         {
             try
             {
                 if (ParentInviteCode.IsEmpty())
-                    ParentInviteCode = ParentInviteCode = "EX3LFY";
+                    ParentInviteCode = ParentInviteCode = "100001";
                 string appid = CheckAPPID();
                 /*if (dm_UserEntity.nickname.IsEmpty())
                 {
@@ -493,14 +493,14 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_Certifica_RecordEntity = new dm_certifica_recordEntity();
 
                 #region 身份证正面上传
-                if (facecard.IsEmpty())
+                if (facecard.IsEmpty() || facecard == "System.Web.HttpPostedFileWrapper")
                 {
                     HttpPostedFile facecard_file = System.Web.HttpContext.Current.Request.Files["facecard"];
                     if (facecard_file.ContentLength == 0 || string.IsNullOrEmpty(facecard_file.FileName))
                     {
                         return Fail("请上传身份证正面照片!");
                     }
-                    dm_Certifica_RecordEntity.facecard = OSSHelper.PutObject(dm_BasesettingEntity, "", facecard_file); ;
+                    dm_Certifica_RecordEntity.facecard = OSSHelper.PutObject(dm_BasesettingEntity, "", facecard_file);
 
                 }
                 else
@@ -511,7 +511,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
 
                 #region 身份证反面上传
-                if (frontcard.IsEmpty())
+                if (frontcard.IsEmpty() || frontcard == "System.Web.HttpPostedFileWrapper")
                 {
                     HttpPostedFile frontcard_file = System.Web.HttpContext.Current.Request.Files["frontcard"];
                     if (frontcard_file.ContentLength == 0 || string.IsNullOrEmpty(frontcard_file.FileName))

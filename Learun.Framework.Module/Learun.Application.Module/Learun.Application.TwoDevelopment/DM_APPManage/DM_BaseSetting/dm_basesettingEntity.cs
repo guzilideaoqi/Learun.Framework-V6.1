@@ -607,6 +607,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("CASHRECORD_MIN_PRICE")]
         public decimal? cashrecord_min_price { get; set; }
 
+        /// <summary>
+        /// 邀请海报类型  0=邀请码  1=应用宝地址  2=自定义地址
+        /// </summary>
+        [Column("INVITEPOSTERTYPE")]
+        public int InvitePosterType { get; set; }
+
+        /// <summary>
+        /// 邀请海报(应用宝地址)
+        /// </summary>
+        [Column("INVITEPOSTER_APPURL")]
+        public string InvitePoster_AppUrl { get; set; }
+
+        /// <summary>
+        /// 邀请海报(自定义地址)
+        /// </summary>
+        [Column("INVITEPOSTER_CUSTOMURL")]
+        public string InvitePoster_CustomUrl { get; set; }
+
         public void Create()
         {
             UserInfo userInfo = LoginUserInfo.Get();

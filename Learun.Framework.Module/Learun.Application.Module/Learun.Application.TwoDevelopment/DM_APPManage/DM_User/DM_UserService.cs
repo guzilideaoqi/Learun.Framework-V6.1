@@ -206,7 +206,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             try
             {
                 dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == phone && t.appid == appid);
-                if (dm_UserEntity.isenable != 1)
+                if (!dm_UserEntity.IsEmpty() && dm_UserEntity.isenable != 1)
                     throw new Exception("该账号已停用，如有疑问，请联系官方客服!");
                 return dm_UserEntity;
             }
@@ -263,7 +263,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.token == token);//从数据库获取
                     if (!dm_UserEntity.IsEmpty())
                     {
-                        if (dm_UserEntity.isenable != 1)
+                        if (!dm_UserEntity.IsEmpty() && dm_UserEntity.isenable != 1)
                             throw new Exception("该账号已停用，如有疑问，请联系官方客服!");
                         #region 判断用户是否有邀请码  没有时再重新创建
                         if (dm_UserEntity.invitecode.IsEmpty())
@@ -435,7 +435,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 if (!dm_UserEntity.IsEmpty())
                 {
-                    if (dm_UserEntity.isenable != 1)
+                    if (!dm_UserEntity.IsEmpty() && dm_UserEntity.isenable != 1)
                         throw new Exception("该账号已停用，如有疑问，请联系官方客服!");
                     string old_user_token = dm_UserEntity.token;
                     dm_UserEntity.last_logintime = DateTime.Now;
@@ -468,7 +468,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity((dm_userEntity t) => t.phone == phone && t.appid == appid);
                 if (!dm_UserEntity.IsEmpty())
                 {
-                    if (dm_UserEntity.isenable != 1)
+                    if (!dm_UserEntity.IsEmpty() && dm_UserEntity.isenable != 1)
                         throw new Exception("该账号已停用，如有疑问，请联系官方客服!");
                     string old_user_token = dm_UserEntity.token;
                     dm_UserEntity.last_logintime = DateTime.Now;
@@ -1080,7 +1080,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 else
                 {
                     //Bitmap qrCode = QRCodeHelper.Generate3(dm_UserEntity.invitecode, 380, 380, basePath + dm_UserEntity.headpic);
-                    Bitmap qrCode = QRCodeHelper.GenerateQRCode(dm_UserEntity.invitecode, 280, 280);
+                    string text = dm_UserEntity.invitecode;
+
+                    #region 根据用户设置的类型生成不同的邀请链接
+                    if (dm_BasesettingEntity.InvitePosterType == 1)
+                        text = dm_BasesettingEntity.InvitePoster_AppUrl;
+                    else if (dm_BasesettingEntity.InvitePosterType == 2)
+                        text = dm_BasesettingEntity.InvitePoster_CustomUrl;
+                    #endregion
+
+                    Bitmap qrCode = QRCodeHelper.GenerateQRCode(text, 280, 280);
 
                     //背景图片，海报背景
                     string path1 = basePath + @"/Resource/ShareImage/1.jpg";
@@ -1142,6 +1151,33 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             imgSrc.Save(newPath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
             return newPath;
+        }
+        #endregion
+
+        #region 清空所有推广码
+        public int ClearShareImage()
+        {
+            int fileCount = 0;
+            try
+            {
+                string basePath = System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd("\\".ToCharArray()) + "/Resource/ShareImage/";
+                string[] files = Directory.GetFiles(basePath, "*Share*");
+                for (int i = 0; i < files.Length; i++)
+                {
+                    File.Delete(files[i]);
+                }
+                fileCount = files.Length;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+
+            return fileCount;
         }
         #endregion
 

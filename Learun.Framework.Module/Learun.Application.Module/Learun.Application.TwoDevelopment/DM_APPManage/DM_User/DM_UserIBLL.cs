@@ -100,6 +100,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         List<string> GetShareImage(int user_id, string appid);
         #endregion
 
+        #region 清空所有邀请码
+        int ClearShareImage();
+        #endregion
+
         #region 获取用户数据
         IEnumerable<dm_userEntity> GetParentUser(int user_id);
         IEnumerable<dm_userEntity> GetChildUser(int user_id);
