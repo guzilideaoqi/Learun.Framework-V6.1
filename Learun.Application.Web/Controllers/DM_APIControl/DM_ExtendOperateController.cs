@@ -523,6 +523,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                throw new Exception("ceshi");
                 string appid = CheckAPPID();
 
                 return SuccessList("获取成功", jsonData);

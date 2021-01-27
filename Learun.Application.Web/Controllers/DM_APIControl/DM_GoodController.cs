@@ -28,6 +28,9 @@ using Hyg.Common.DTKTools.DTKRequest;
 using Hyg.Common.DTKTools.DTKModel;
 using Hyg.Common.DTKTools;
 using Hyg.Common.Model;
+using Hyg.Common.PDDTools;
+using Hyg.Common.PDDTools.PDDRequest;
+using Hyg.Common.PDDTools.PDDResponse;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -78,7 +81,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 获取商品二级分类
-        public ActionResult GetSubGoodType(int cid)
+        public ActionResult GetSubGoodType(int cid = 6)
         {
             try
             {
@@ -474,8 +477,26 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                     else if (PlaformType == 4)
                     {
-                        PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
-                        superGoodItems = ConvertCommonGoodEntityByPDD(pDDApi.SearchGood(KeyWords, PageNo, PageSize, int.Parse(GetSort(PlaformType, sort)), false, -1), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                        PDD_ApiManage pDD_ApiManage = new PDD_ApiManage(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
+                        Good_SearchRequest good_SearchRequest = new Good_SearchRequest();
+                        good_SearchRequest.keyword = KeyWords;
+                        good_SearchRequest.page = PageNo;
+                        good_SearchRequest.page_size = PageSize;
+                        good_SearchRequest.sort_type = int.Parse(GetSort(PlaformType, sort));
+                        good_SearchRequest.with_coupon = false;
+                        good_SearchRequest.cat_id = -1;
+                        good_SearchRequest.IsReturnCommonInfo = true;
+                        good_SearchRequest.pid = "1912666_177495987";
+                        good_SearchRequest.custom_parameters = "guzilideaoqi";
+                        Good_Search_ListResponse good_Search_ListResponse = pDD_ApiManage.Good_Search_List(good_SearchRequest);
+                        if (good_Search_ListResponse.IsError)
+                            throw new Exception(good_Search_ListResponse.error_response.sub_msg);
+                        else
+                        {
+                            superGoodItems = good_Search_ListResponse.CommonGoodInfoList;
+                        }
+                        //PDDApi pDDApi = new PDDApi(dm_BasesettingEntity.pdd_clientid, dm_BasesettingEntity.pdd_clientsecret, "");
+                        //superGoodItems = ConvertCommonGoodEntityByPDD(pDDApi.SearchGood(KeyWords, PageNo, PageSize, int.Parse(GetSort(PlaformType, sort)), false, -1), dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
                     if (superGoodItems.Count > 0)
                         redisCache.Write(cacheKey, superGoodItems, DateTime.Now.AddHours(2.0), 7L);
@@ -668,31 +689,41 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                string cacheKey = Md5Helper.Hash("GetRecommendGoodByTB" + ChannelType + PageNo + PageSize);
-                List<CommonGoodInfoEntity> superGoodItems = redisCache.Read<List<CommonGoodInfoEntity>>(cacheKey, 7L);
-
                 string appid = CheckAPPID();
+
+                string keyWords = "";
+                #region 获取关键词
+                List<CategoryItem> categoryItems = redisCache.Read<List<CategoryItem>>("SuperCategory", 7L);
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+
+                #endregion
+
+                if (ChannelType == "99zhuanqu")
+                {
+                    CategoryItem categoryItem = categoryItems.Where(t => t.cid == dm_BasesettingEntity.goodtype).FirstOrDefault();
+                    keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname.Substring(0, 2));
+                }
+                else if (ChannelType == "chaojiquan")
+                {
+                    CategoryItem categoryItem = categoryItems.Where(t => t.cid == dm_BasesettingEntity.super_coupon_goodtype).FirstOrDefault();
+                    keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname);
+                }
+
+                string cacheKey = Md5Helper.Hash("GetRecommendGoodByTB" + keyWords + ChannelType + PageNo + PageSize);
+                List<CommonGoodInfoEntity> superGoodItems = redisCache.Read<List<CommonGoodInfoEntity>>(cacheKey, 7L);
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(User_ID);
 
                 if (superGoodItems == null)
                 {
-                    #region 获取关键词
-                    List<CategoryItem> categoryItems = redisCache.Read<List<CategoryItem>>("SuperCategory", 7L);
-                    #endregion
-
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
 
                     if (ChannelType == "99zhuanqu")//使用联盟搜索
                     {
-                        CategoryItem categoryItem = categoryItems.Where(t => t.cid == dm_BasesettingEntity.goodtype).FirstOrDefault();
-
                         int? min_price = dm_BasesettingEntity.min_price, max_price = dm_BasesettingEntity.max_price, min_tk_rate = dm_BasesettingEntity.min_tk_rate, max_tk_rate = dm_BasesettingEntity.max_tk_rate;
-
                         DTK_TB_Service_GoodRequest dTK_TB_Service_GoodRequest = new DTK_TB_Service_GoodRequest();
                         dTK_TB_Service_GoodRequest.pageNo = PageNo;
                         dTK_TB_Service_GoodRequest.pageSize = PageSize;
-                        dTK_TB_Service_GoodRequest.keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname.Substring(0, 1));
+                        dTK_TB_Service_GoodRequest.keyWords = keyWords;
                         if (min_price > 0)
                             dTK_TB_Service_GoodRequest.startPrice = min_price;
                         if (max_price > 0)
@@ -712,11 +743,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                     else if (ChannelType == "chaojiquan")//使用大淘客搜索
                     {
-                        CategoryItem categoryItem = categoryItems.Where(t => t.cid == dm_BasesettingEntity.super_coupon_goodtype).FirstOrDefault();
                         DTK_Get_dtk_Search_GoodRequest dtk_Get_dtk_Search_GoodRequest = new DTK_Get_dtk_Search_GoodRequest();
                         dtk_Get_dtk_Search_GoodRequest.pageId = PageNo.ToString();
                         dtk_Get_dtk_Search_GoodRequest.pageSize = PageSize;
-                        dtk_Get_dtk_Search_GoodRequest.keyWords = GetNumid(categoryItem.IsEmpty() ? "潮" : categoryItem.cname);
+                        dtk_Get_dtk_Search_GoodRequest.keyWords = keyWords;
                         if (dm_BasesettingEntity.super_coupon_min_price > 0)
                             dtk_Get_dtk_Search_GoodRequest.priceLowerLimit = dm_BasesettingEntity.super_coupon_min_price;
                         if (dm_BasesettingEntity.super_coupon_max_price > 0)
@@ -1601,7 +1631,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 List<CommonGoodInfoEntity> CommonGoodInfoEntityList = redisCache.Read<List<CommonGoodInfoEntity>>(CacheKey, 7);
                 if (CommonGoodInfoEntityList == null)
-                    return Fail("商品加载出现异常,请返回上一页刷新重试!");
+                    throw new Exception("商品加载出现异常,请返回上一页刷新重试!");
                 else
                 {
                     string appid = CheckAPPID();
@@ -1621,7 +1651,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
 
                     if (CommonGoodInfoEntity.IsEmpty())
-                        return Fail("商品信息加载异常,请重试!");
+                        throw new Exception("商品信息加载异常,请重试!");
                     else
                         return Success("获取成功", CommonGoodInfoEntity);
                 }

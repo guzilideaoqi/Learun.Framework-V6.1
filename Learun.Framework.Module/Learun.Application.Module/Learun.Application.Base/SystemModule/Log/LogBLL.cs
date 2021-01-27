@@ -57,5 +57,20 @@ namespace Learun.Application.Base.SystemModule.Log
                 throw ExceptionEx.ThrowBusinessException(ex, "");
             }
         }
+
+        public static LogEntity LookLogDetail(string F_LogId) {
+            try
+            {
+               return service.GetEntity(F_LogId);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex, "");
+            }
+        }
     }
 }

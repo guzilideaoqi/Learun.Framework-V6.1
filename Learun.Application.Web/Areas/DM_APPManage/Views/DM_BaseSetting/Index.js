@@ -19,6 +19,7 @@ var bootstrap = function ($, learun) {
                 if (!$('#lr_layout').lrValidform()) {
                     return false;
                 }
+
                 var postData = $('#lr_layout').lrGetFormData();
                 $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_BaseSetting/SaveForm?keyValue=' + keyValue, postData, function (res) {
                     // 保存成功后才回调
@@ -98,15 +99,15 @@ var bootstrap = function ($, learun) {
             //商品类型
             $("#goodtype").lrselect({
                 url: top.$.rootUrl + "/DM_Good/GetGoodTypeByCache",
-                value: "cid",
-                text: "cname"
+                text: "cname",
+                value: "cid"
             });
 
             //超级券商品类型
             $("#super_coupon_goodtype").lrselect({
                 url: top.$.rootUrl + "/DM_Good/GetGoodTypeByCache",
-                value: "cid",
-                text: "cname"
+                text: "cname",
+                value: "cid"
             });
         },
     };

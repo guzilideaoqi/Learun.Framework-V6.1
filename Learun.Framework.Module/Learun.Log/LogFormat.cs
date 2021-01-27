@@ -87,6 +87,8 @@ namespace Learun.Loger
             strInfo.Append("3. 类名: " + logMessage.Class + " \r\n");
             strInfo.Append("4. 主机: " + logMessage.Host + "   Ip  : " + logMessage.Ip + "   浏览器: " + logMessage.Browser + "    \r\n");
             strInfo.Append("5. 异常: " + logMessage.ExceptionInfo + "\r\n");
+            if (!string.IsNullOrWhiteSpace(logMessage.RequestParam))
+                strInfo.Append("6.请求参数：" + logMessage.RequestParam + "\r\n");
             //strInfo.Append("6. 来源: " + logMessage.ExceptionSource + "\r\n");
             //strInfo.Append("7. 实例: " + logMessage.ExceptionRemark + "\r\n");
             strInfo.Append("-----------------------------------------------------------------------------------------------------------------------------\r\n");

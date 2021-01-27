@@ -33,19 +33,19 @@ namespace Learun.Application.TwoDevelopment.Common
         /// <param name="dm_UserEntity">里面的token是最新的</param>
         public static void SaveUserInfo(string oldToken, dm_userEntity dm_UserEntity)
         {
-            #region 移除用户信息
-            if (!oldToken.IsEmpty())
-            {
-                string old_cacheKey = SingleLogin + oldToken;
-                redisCache.Remove(old_cacheKey, 7);
-            }
-            #endregion
-
             #region 重新构造用户缓存信息
             if (!dm_UserEntity.IsEmpty())
             {
                 string cacheKey = SingleLogin + dm_UserEntity.token;
                 redisCache.Write<dm_userEntity>(cacheKey, dm_UserEntity, 7);
+
+                #region 移除用户信息
+                if (!oldToken.IsEmpty())
+                {
+                    string old_cacheKey = SingleLogin + oldToken;
+                    redisCache.Remove(old_cacheKey, 7);
+                }
+                #endregion
             }
             #endregion
         }

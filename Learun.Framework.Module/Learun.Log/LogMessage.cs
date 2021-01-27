@@ -54,5 +54,9 @@ namespace Learun.Loger
         /// 异常信息备注
         /// </summary>
         public string ExceptionRemark { get; set; }
+        /// <summary>
+        /// 请求参数
+        /// </summary>
+        public string RequestParam { get; set; }
     }
 }

@@ -5,6 +5,7 @@
  * 日 期：2017.03.22
  * 描 述：日志管理	
  */
+var lookDetail;
 var bootstrap = function ($, learun) {
     "use strict";
     var categoryId = '1';
@@ -102,13 +103,13 @@ var bootstrap = function ($, learun) {
             $('#gridtable').jfGrid({
                 url: top.$.rootUrl + '/LR_SystemModule/Log/GetPageList',
                 headData: [
-                     {
-                        label: "操作时间", name: "F_OperateTime",width: 150, align: "left",
+                    {
+                        label: "操作时间", name: "F_OperateTime", width: 150, align: "left",
                         formatter: function (cellvalue) {
                             return learun.formatDate(cellvalue, 'yyyy-MM-dd hh:mm:ss');
                         }
-                     },
-                    { label: "操作用户", name: "F_OperateAccount",width: 150, align: "left" },
+                    },
+                    { label: "操作用户", name: "F_OperateAccount", width: 150, align: "left" },
                     { label: "IP地址", name: "F_IPAddress", width: 150, align: "left" },
                     { label: "系统功能", name: "F_Module", width: 150, align: "left" },
                     { label: "操作类型", name: "F_OperateType", width: 70, align: "center" },
@@ -122,7 +123,10 @@ var bootstrap = function ($, learun) {
                             }
                         }
                     },
-                    { label: "执行结果描述", name: "F_ExecuteResultJson", width: 300, align: "left" }
+                    {
+                        label: "执行结果描述", name: "F_ExecuteResultJson", width: 400, align: "left", formatter: function (cellvalue, rowdata, options) {                            return "<span onclick=\"lookDetail('" + rowdata.F_LogId + "');\">" + cellvalue + "</span>"
+                        }
+                    }
                 ],
 
                 mainId: 'F_ItemDetailId',
@@ -140,7 +144,19 @@ var bootstrap = function ($, learun) {
         }
     };
 
-
+    lookDetail = function (l_id) {
+        learun.layerForm({
+            id: "LogDetail",
+            title: '日志详情',
+            url: top.$.rootUrl + '/LR_SystemModule/Log/DetailForm?F_LogId=' + l_id,
+            width: 900,
+            height: 500,
+            callBack: function (id) {
+                return top[id].acceptClick();
+            },
+            btn: ['', '关闭']
+        });
+    }
 
     page.init();
 }

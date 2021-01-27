@@ -1,7 +1,36 @@
-﻿@{
+﻿@using Learun.Application.Base.SystemModule.Log;
+@{
     ViewBag.Title = "DetailForm";
     Layout = "~/Views/Shared/_Form.cshtml";
+
+    LogEntity logEntity = ViewBag.LogDetail;
 }
 
-<h2>DetailForm</h2>
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">操作时间<font face="宋体">*</font></div>
+        <input id="F_OperateTime" type="text" disabled="disabled" class="form-control" isvalid="yes" checkexpession="NotNull" value="@logEntity.F_OperateTime" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">IP地址<font face="宋体">*</font></div>
+        <input id="F_IPAddress" type="text" disabled="disabled" class="form-control" isvalid="yes" checkexpession="NotNull" value="@logEntity.F_IPAddress" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">日志模块<font face="宋体">*</font></div>
+        <input id="F_Module" type="text" disabled="disabled" class="form-control" isvalid="yes" checkexpession="NotNull" value="@logEntity.F_Module" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">日志详情<font face="宋体">*</font></div>
+        <textarea style="width:100%" disabled="disabled" rows="12">@logEntity.F_ExecuteResultJson</textarea>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        setTimeout(function () {
+            $(".layui-layer-btn0").html("123")
+            $(".layui-layer-btn0").css("display", "none")
+        }, 3000);
 
+    })
+   
+</script>

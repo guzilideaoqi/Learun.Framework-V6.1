@@ -39,8 +39,9 @@ namespace Learun.Application.Web.Areas.LR_SystemModule.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult DetailForm()
+        public ActionResult DetailForm(string F_LogId)
         {
+            ViewBag.LogDetail= LogBLL.LookLogDetail(F_LogId);
             return View();
         }
         #endregion

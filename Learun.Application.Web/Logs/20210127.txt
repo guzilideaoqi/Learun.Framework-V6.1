@@ -1,0 +1,120 @@
+【时间】=>2021-01-27 10:30:56 688
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=testapi&token=1&platform=android
+【异常位置】=>
+
+【时间】=>2021-01-27 10:31:00 823
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=testapi&token=111&platform=android
+【异常位置】=>
+
+【时间】=>2021-01-27 10:31:15 766
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=testapi&token=111&platform=android
+【异常位置】=>
+
+【时间】=>2021-01-27 10:39:08 303
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=testapi&token=1&platform=android
+【异常位置】=>
+
+【时间】=>2021-01-27 10:39:09 587
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=testapi&token=1&platform=android
+【异常位置】=>
+
+【时间】=>2021-01-27 13:37:29 079
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=getpersonprocess&token=45df5c74-b92f-418a-9741-5ac7d50bc957&platform=android
+【异常位置】=>
+
+【时间】=>2021-01-27 13:57:22 452
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=testapi&token=1&platform=android
+【异常位置】=>
+
+【时间】=>2021-01-27 14:25:29 246
+【错误类型】=>Exception
+【方法名称】=>Good_Search_List
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.PDDTools.PDD_ApiManage.Good_Search_List(Good_SearchRequest good_SearchRequest)
+
+【时间】=>2021-01-27 14:25:37 563
+【错误类型】=>Exception
+【方法名称】=>Good_Search_List
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.PDDTools.PDD_ApiManage.Good_Search_List(Good_SearchRequest good_SearchRequest)
+
+【时间】=>2021-01-27 14:26:51 448
+【错误类型】=>Exception
+【方法名称】=>Good_Search_List
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.PDDTools.PDD_ApiManage.Good_Search_List(Good_SearchRequest good_SearchRequest)
+
+【时间】=>2021-01-27 14:33:43 210
+【错误类型】=>Exception
+【方法名称】=>Good_Search_List
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未传入已经授权备案过的相关参数(pid/custom_parameters), 授权备案说明链接：https://jinbao.pinduoduo.com/qa-system?questionId=204
+【异常位置】=>   在 Hyg.Common.PDDTools.PDD_ApiManage.Good_Search_List(Good_SearchRequest good_SearchRequest)
+
+【时间】=>2021-01-27 14:43:26 292
+【错误类型】=>Exception
+【方法名称】=>Good_Search_List
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.PDDTools.PDD_ApiManage.Good_Search_List(Good_SearchRequest good_SearchRequest)
+
+【时间】=>2021-01-27 14:47:21 216
+【错误类型】=>Exception
+【方法名称】=>Good_Search_List
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.PDDTools.PDD_ApiManage.Good_Search_List(Good_SearchRequest good_SearchRequest)
+
+【时间】=>2021-01-27 14:48:30 895
+【错误类型】=>Exception
+【方法名称】=>Good_Search_List
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.PDDTools.PDD_ApiManage.Good_Search_List(Good_SearchRequest good_SearchRequest)
+
+【时间】=>2021-01-27 14:51:52 529
+【错误类型】=>Exception
+【方法名称】=>Good_Search_List
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.PDDTools.PDD_ApiManage.Good_Search_List(Good_SearchRequest good_SearchRequest)
+

@@ -1,9 +1,14 @@
-﻿using Learun.Loger;
+﻿using Learun.Application.Base.SystemModule.Log;
+using Learun.Application.TwoDevelopment.Common;
+using Learun.Loger;
 using Learun.Util;
 using Learun.Util.Operat;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -168,6 +173,46 @@ namespace Learun.Application.Web.App_Start._01_Handler
 
         protected virtual ActionResult FailException(Exception ex)
         {
+            #region 写入日志
+            StackTrace trace = new StackTrace();
+            StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
+            MethodBase method = frame.GetMethod();
+            String className = method.ReflectedType.Name;
+
+            Exception Error = ex;
+            LogMessage logMessage = new LogMessage();
+            logMessage.OperationTime = DateTime.Now;
+            logMessage.Url = className + "/" + method.Name;
+            logMessage.Class = className;
+            logMessage.Ip = Net.Ip;
+            logMessage.Host = Net.Host;
+            logMessage.Browser = Net.Browser;
+            logMessage.RequestParam = GetParamInfo(base.Request.Params);
+
+            if (Error.InnerException == null)
+            {
+                logMessage.ExceptionInfo = Error.Message;
+            }
+            else
+            {
+                logMessage.ExceptionInfo = Error.InnerException.Message;
+            }
+            logMessage.ExceptionSource = Error.Source;
+            logMessage.ExceptionRemark = Error.StackTrace;
+            logMessage.UserName = GetOperateUserName(base.Request.Headers);
+            string strMessage = new LogFormat().ExceptionFormat(logMessage);
+
+            LogEntity logEntity = new LogEntity();
+            logEntity.F_CategoryId = 5;
+            logEntity.F_OperateTypeId = ((int)OperationType.Exception).ToString();
+            logEntity.F_OperateType = EnumAttribute.GetDescription(OperationType.Exception);
+            logEntity.F_OperateAccount = "调用接口";
+            logEntity.F_OperateUserId = "api";
+            logEntity.F_ExecuteResult = -1;
+            logEntity.F_ExecuteResultJson = strMessage;
+            logEntity.WriteLog();
+            #endregion
+
             if (ex.InnerException.IsEmpty())
             {
                 if (ex.Message.Contains("账户余额不足"))
@@ -199,6 +244,37 @@ namespace Learun.Application.Web.App_Start._01_Handler
                     return Fail(ex.InnerException.Message);
             }
         }
+
+        string GetParamInfo(NameValueCollection nameValueCollection)
+        {
+            string param = "";
+            foreach (string item in nameValueCollection.Keys)
+            {
+                if (!CommonConfig.NoRecordRequestKeyWord.Contains(item))
+                {
+                    if (!param.IsEmpty())
+                        param += "&";
+                    param += (item + "=" + nameValueCollection[item]);
+                }
+            }
+            return param;
+        }
+
+        string GetOperateUserName(NameValueCollection header)
+        {
+            string username = "";
+            if (!header["platform"].IsEmpty())
+            {
+                username += header["platform"].ToString();
+            }
+
+            if (!header["version"].IsEmpty())
+            {
+                username += ("(" + header["version"].ToString() + ")");
+            }
+            return username;
+        }
+
         /// <summary>
         /// 返回失败消息
         /// </summary>
