@@ -1239,6 +1239,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
+                #region 清空当前用户的邀请码
+                string basePath = System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd("\\".ToCharArray()) + "/Resource/ShareImage/";
+                for (int i = 1; i < 4; i++)
+                {
+                    string fileName = basePath + "Share" + User_ID.ToString() + i + ".jpg";
+                    if (File.Exists(fileName))
+                    {
+                        File.Delete(fileName);
+                    }
+                }
+                #endregion
+
                 if (InviteCode.IsEmpty())
                     throw new Exception("邀请码不能为空!");
                 if (InviteCode.Length < 6)
