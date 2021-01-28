@@ -58,7 +58,13 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <param name="TaskID"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult LookTaskDetail(string TaskID) {
+        public ActionResult LookTaskDetail(string TaskID)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult RebutTask() {
             return View();
         }
         #endregion
@@ -204,9 +210,18 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
 
         [HttpPost]
         [AjaxOnly(false)]
-        public ActionResult UpdateSortValue(int task_id,int sort_value) {
+        public ActionResult UpdateSortValue(int task_id, int sort_value)
+        {
             dM_TaskIBLL.UpdateSortValue(task_id, sort_value);
             return Success("修改成功!");
+        }
+
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult RebutTaskByWeb(int id, string remark)
+        {
+            dM_TaskIBLL.RebutTaskByWeb(id, remark);
+            return Success("驳回成功!");
         }
         #endregion
 

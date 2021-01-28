@@ -53,8 +53,7 @@ var bootstrap = function ($, learun) {
             });
             // 查询
             $('#btn_Search').on('click', function () {
-                var keyword = $('#txt_Keyword').val();
-                page.search({ keyword: keyword });
+                page.search();
             });
             // 刷新
             $('#lr_refresh').on('click', function () {
@@ -123,22 +122,27 @@ var bootstrap = function ($, learun) {
                             }
                         }
                     },
+                    { label: "异常信息", name: "F_Description", width: 240, align: "left" },
                     {
-                        label: "执行结果描述", name: "F_ExecuteResultJson", width: 400, align: "left", formatter: function (cellvalue, rowdata, options) {                            return "<span onclick=\"lookDetail('" + rowdata.F_LogId + "');\">" + cellvalue + "</span>"
+                        label: "执行结果描述", name: "F_ExecuteResultJson", width: 550, align: "left", formatter: function (cellvalue, rowdata, options) {                            return "<span onclick=\"lookDetail('" + rowdata.F_LogId + "');\">" + cellvalue + "</span>"
                         }
-                    }
-                ],
+                    }                ],
 
                 mainId: 'F_ItemDetailId',
                 isPage: true,
-                sidx: 'F_OperateTime'
+                sidx: 'F_OperateTime',
+                sord:"desc"
             });
         },
         search: function (param) {
+            var keyword = $('#txt_Keyword').val();
+
             param = param || {};
             param.CategoryId = categoryId;
             param.StartTime = logbegin;
             param.EndTime = logend;
+            param.keyword = keyword;
+            param.ExecuteResultJson = $('#txt_ExecuteResultJson').val();
 
             $('#gridtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }

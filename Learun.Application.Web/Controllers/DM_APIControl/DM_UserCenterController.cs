@@ -483,7 +483,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
                 if (name.IsEmpty())
                 {
-                    return Fail("真实姓名不能为空!");
+                    throw new Exception("真实姓名不能为空!");
                 }
                 //dm_certifica_recordEntity dm_Certifica_RecordEntity = new dm_certifica_recordEntity();
                 dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
@@ -496,9 +496,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (facecard.IsEmpty() || facecard == "System.Web.HttpPostedFileWrapper")
                 {
                     HttpPostedFile facecard_file = System.Web.HttpContext.Current.Request.Files["facecard"];
-                    if (facecard_file.ContentLength == 0 || string.IsNullOrEmpty(facecard_file.FileName))
+                    if (facecard_file.IsEmpty() || facecard_file.ContentLength == 0 || string.IsNullOrEmpty(facecard_file.FileName))
                     {
-                        return Fail("请上传身份证正面照片!");
+                        throw new Exception("请上传身份证正面照片!");
                     }
                     dm_Certifica_RecordEntity.facecard = OSSHelper.PutObject(dm_BasesettingEntity, "", facecard_file);
 
@@ -514,9 +514,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (frontcard.IsEmpty() || frontcard == "System.Web.HttpPostedFileWrapper")
                 {
                     HttpPostedFile frontcard_file = System.Web.HttpContext.Current.Request.Files["frontcard"];
-                    if (frontcard_file.ContentLength == 0 || string.IsNullOrEmpty(frontcard_file.FileName))
+                    if (frontcard_file.IsEmpty() || frontcard_file.ContentLength == 0 || string.IsNullOrEmpty(frontcard_file.FileName))
                     {
-                        return Fail("请上传身份证反面照片!");
+                        throw new Exception("请上传身份证反面照片!");
                     }
 
                     dm_Certifica_RecordEntity.frontcard = OSSHelper.PutObject(dm_BasesettingEntity, "", frontcard_file);

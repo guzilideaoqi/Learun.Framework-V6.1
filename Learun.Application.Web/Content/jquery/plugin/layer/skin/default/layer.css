@@ -479,9 +479,18 @@ html #layuicss-skinlayercss {
     .layui-layer-btn .layui-layer-btn0 {
         border-color: #4898d5;
         background-color: #2e8ded;
-        color: #fff
+        color: #fff;
     }
 
+    .layui-layer-btn a:last-child {
+        background-color: #f1f1f1 !important;
+        color: #000 !important;
+        border: 1px solid #dedede !important;
+    }
+    .layui-layer-btn a:not(:first-of-type):not(:last-of-type) {
+        background-color: red;
+        color: #fff;
+    }
 .layui-layer-btn-l {
     text-align: left
 }

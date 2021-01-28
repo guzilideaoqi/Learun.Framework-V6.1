@@ -205,11 +205,34 @@ var bootstrap = function ($, learun) {
     };
     CheckTask = function (rowData) {
         selectedRow = rowData;
-        learun.layerConfirm('审核通过之后任务将会在APP端展示,如果任务需要取消,请联系发布者在APP端任务详情中操作,是否继续？', function (res) {
-            if (res) {
-                learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Task/CheckTaskByWeb', { keyValue: selectedRow.id }, function () {
-                    refreshGirdData();
+        learun.layerMutipleBtnConfirm({
+            btn: ["审核通过", "审核驳回", "关闭"],
+            content: "请选择对任务的操作?",
+            yes: function (index, layero) {
+                learun.layerConfirm('审核通过之后任务将会在APP端展示,如果任务需要取消,请联系发布者在APP端任务详情中操作,是否继续？', function (res) {
+                    if (res) {
+                        learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Task/CheckTaskByWeb', { keyValue: selectedRow.id }, function () {
+                            refreshGirdData();
+                        });
+                    }
+                })
+            }, btn2: function (index, layero) {
+                //按钮【按钮二】的回调
+                learun.layerForm({
+                    id: 'form',
+                    title: '驳回原因',
+                    url: top.$.rootUrl + '/DM_APPManage/DM_Task/RebutTask?keyValue=' + selectedRow.id,
+                    width: 600,
+                    height: 400,
+                    callBack: function (id) {
+                        return top[id].acceptClick(refreshGirdData);
+                    }
                 });
+                //return false; //开启该代码可禁止点击该按钮关闭
+            }
+            , btn3: function (index, layero) {
+                //按钮【按钮三】的回调
+                //return false 开启该代码可禁止点击该按钮关闭
             }
         })
     };

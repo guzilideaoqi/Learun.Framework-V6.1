@@ -210,6 +210,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
             logEntity.F_OperateUserId = "api";
             logEntity.F_ExecuteResult = -1;
             logEntity.F_ExecuteResultJson = strMessage;
+            logEntity.F_Description = logMessage.ExceptionInfo.Length > 50 ? logMessage.ExceptionInfo.Substring(0, 50) : logMessage.ExceptionInfo;
             logEntity.WriteLog();
             #endregion
 

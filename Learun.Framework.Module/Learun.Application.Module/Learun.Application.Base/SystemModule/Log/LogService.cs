@@ -52,6 +52,10 @@ namespace Learun.Application.Base.SystemModule.Log
                     string keyword = jObject["keyword"].ToString();
                     expression = LinqExtensions.And<LogEntity>(expression, (LogEntity t) => t.F_Module.Contains(keyword) || t.F_OperateType.Contains(keyword) || t.F_IPAddress.Contains(keyword));
                 }
+                if (!jObject["ExecuteResultJson"].IsEmpty()) {
+                    string ExecuteResultJson = jObject["ExecuteResultJson"].ToString();
+                    expression = LinqExtensions.And<LogEntity>(expression, (LogEntity t) => t.F_ExecuteResultJson.Contains(ExecuteResultJson));
+                }
                 if (!string.IsNullOrEmpty(userId))
                 {
                     expression = LinqExtensions.And<LogEntity>(expression, (LogEntity t) => t.F_OperateUserId == userId);

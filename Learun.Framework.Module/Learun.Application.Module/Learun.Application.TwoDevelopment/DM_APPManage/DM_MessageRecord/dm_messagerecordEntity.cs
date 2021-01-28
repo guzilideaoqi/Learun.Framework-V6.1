@@ -35,7 +35,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 		}
 
         /// <summary>
-        /// 消息类型 1开通代理 2接单人取消任务 3任务审核通过
+        /// 消息类型 1开通代理 2接单人取消任务 3任务审核通过  4任务驳回通知
         /// </summary>
 		[Column("MESSAGETYPE")]
 		public int? messagetype

@@ -336,6 +336,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\PubTask.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\RebutTask.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Setting\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\LookUserDetail.css" />
@@ -1933,6 +1934,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\PreviewCircle.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\SelectUser.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\RebutTask.cshtml" />
     <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\clipboard.min.js" />

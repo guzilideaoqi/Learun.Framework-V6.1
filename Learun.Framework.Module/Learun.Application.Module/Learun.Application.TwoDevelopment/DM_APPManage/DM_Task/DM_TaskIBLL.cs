@@ -98,6 +98,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="task_id">任务ID</param>
         /// <param name="sort_value">权重值</param>
         void UpdateSortValue(int task_id, int sort_value);
+        /// <summary>
+        /// 任务驳回
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="remark"></param>
+        void RebutTaskByWeb(int id, string remark);
         #endregion
     }
 }

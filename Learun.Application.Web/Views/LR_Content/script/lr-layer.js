@@ -14,7 +14,7 @@
                 btn: ['确认', '取消'],
                 title: "哆来米提示",
                 icon: 0,
-                skin:'lr-layer',
+                skin: 'lr-layer',
             }, function (index) {
                 callback(true, index);
             }, function (index) {
@@ -33,7 +33,7 @@
                 btn: ['确认', '关闭'],
                 callBack: false,
                 maxmin: false,
-                end:false,
+                end: false,
             };
             $.extend(dfop, op || {});
 
@@ -65,7 +65,7 @@
                         flag = dfop.callBack('layer_' + dfop.id);
                     }
                     if (!!flag) {
-                        learun.layerClose('',index);
+                        learun.layerClose('', index);
                     }
                 },
                 end: function () {
@@ -96,7 +96,35 @@
             } else {
                 top[layero[0].learun_layerid].location.reload();
             }
-           
+
+        },
+        layerMutipleBtnConfirm: function (op) {
+            top.layer.open({
+                content: op.content,
+                btn: op.btn || ['确认', '取消'],
+                title: "哆来米提示",
+                icon: 0,
+                skin: 'lr-layer',
+                yes: function (index, layero) {
+                    //按钮【按钮一】的回调
+                    op.yes(index, layero);
+                }
+                , btn2: function (index, layero) {
+                    //按钮【按钮二】的回调
+                    op.btn2(index, layero);
+                    //return false; //开启该代码可禁止点击该按钮关闭
+                }
+                , btn3: function (index, layero) {
+                    //按钮【按钮三】的回调
+                    op.btn3(index, layero);
+                    //return false;// 开启该代码可禁止点击该按钮关闭
+                }
+                , cancel: function () {
+                    //右上角关闭回调
+
+                    //return false; //开启该代码可禁止点击该按钮关闭
+                }
+            });
         }
     });
 

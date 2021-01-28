@@ -350,6 +350,73 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        #region 任务驳回
+        public void RebutTaskByWeb(int id, string remark)
+        {
+            IRepository db = null;
+            try
+            {
+                /*
+                 * 1、修改任务状态为取消
+                 * 2、修改账户余额
+                 * 3、增加消息通知
+                 */
+                dm_taskEntity dm_TaskEntity = GetEntity(id);
+                if (dm_TaskEntity.task_status != -2)
+                    throw new Exception("当前任务状态无法驳回!");
+                dm_TaskEntity.task_status = 2;
+
+                dm_userEntity dm_UserEntity = dm_UserService.GetEntity(dm_TaskEntity.user_id);
+                if (dm_UserEntity.IsEmpty())
+                    throw new Exception("用户信息异常!");
+
+                dm_UserEntity.accountprice += dm_TaskEntity.totalcommission;
+
+                dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity
+                {
+                    createtime = DateTime.Now,
+                    remark = remark + "(" + dm_TaskEntity.task_no + ")",
+                    stepvalue = dm_TaskEntity.totalcommission,
+                    currentvalue = dm_UserEntity.accountprice,
+                    title = "任务驳回",
+                    type = 23,
+                    profitLoss = CommonHelper.GetProfitLoss(23),
+                    user_id = dm_TaskEntity.user_id
+                };
+
+                dm_messagerecordEntity dm_MessagerecordEntity = new dm_messagerecordEntity
+                {
+                    createtime = DateTime.Now,
+                    user_id = dm_TaskEntity.user_id,
+                    isread = 0,
+                    messagetitle = "任务驳回通知",
+                    messagetype = 4,
+                    messagecontent = remark
+                };
+
+                db = this.BaseRepository("dm_data").BeginTrans();
+                db.Update(dm_TaskEntity);
+                db.Update(dm_UserEntity);
+                db.Insert(dm_AccountdetailEntity);
+                db.Insert(dm_MessagerecordEntity);
+                db.Commit();
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
         /// <summary>
         /// 任务下架
         /// </summary>
@@ -585,7 +652,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                dm_taskEntity dm_TaskEntity= this.BaseRepository("dm_data").FindEntity<dm_taskEntity>(task_id);
+                dm_taskEntity dm_TaskEntity = this.BaseRepository("dm_data").FindEntity<dm_taskEntity>(task_id);
                 if (dm_TaskEntity.IsEmpty())
                     throw new Exception("异常任务!");
                 dm_TaskEntity.sort = sort_value;

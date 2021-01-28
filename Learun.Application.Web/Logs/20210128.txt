@@ -1,0 +1,77 @@
+【时间】=>2021-01-28 09:41:32 986
+【错误类型】=>Exception
+【方法名称】=>Super_GetGoodQueryResultByKeyWord
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.JDTools.JD_ApiManage.ConvertJFGoods(JFGoodsResp[] jFGoodsResps)
+   在 Hyg.Common.JDTools.JD_ApiManage.Super_GetGoodQueryResultByKeyWord(Super_GoodQueryRequest super_GoodQueryRequest)
+
+【时间】=>2021-01-28 09:41:48 524
+【错误类型】=>Exception
+【方法名称】=>Super_GetGoodQueryResultByKeyWord
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.JDTools.JD_ApiManage.ConvertJFGoods(JFGoodsResp[] jFGoodsResps)
+   在 Hyg.Common.JDTools.JD_ApiManage.Super_GetGoodQueryResultByKeyWord(Super_GoodQueryRequest super_GoodQueryRequest)
+
+【时间】=>2021-01-28 10:03:22 321
+【错误类型】=>Exception
+【方法名称】=>Super_GetGoodQueryResultByKeyWord
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.JDTools.JD_ApiManage.ConvertJFGoods(JFGoodsResp[] jFGoodsResps)
+   在 Hyg.Common.JDTools.JD_ApiManage.Super_GetGoodQueryResultByKeyWord(Super_GoodQueryRequest super_GoodQueryRequest)
+
+【时间】=>2021-01-28 10:03:32 156
+【错误类型】=>Exception
+【方法名称】=>Super_GetGoodQueryResultByKeyWord
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.JDTools.JD_ApiManage.ConvertJFGoods(JFGoodsResp[] jFGoodsResps)
+   在 Hyg.Common.JDTools.JD_ApiManage.Super_GetGoodQueryResultByKeyWord(Super_GoodQueryRequest super_GoodQueryRequest)
+
+【时间】=>2021-01-28 10:04:00 862
+【错误类型】=>Exception
+【方法名称】=>Super_GetGoodQueryResultByKeyWord
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>未将对象引用设置到对象的实例。
+【异常位置】=>   在 Hyg.Common.JDTools.JD_ApiManage.ConvertJFGoods(JFGoodsResp[] jFGoodsResps)
+   在 Hyg.Common.JDTools.JD_ApiManage.Super_GetGoodQueryResultByKeyWord(Super_GoodQueryRequest super_GoodQueryRequest)
+
+【时间】=>2021-01-28 10:22:21 602
+【错误类型】=>Debug
+【方法名称】=>测试token
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>ActionName=convertlinkbyjd&token=1&platform=android
+【异常位置】=>
+
+【时间】=>2021-01-28 10:22:56 990
+【错误类型】=>Debug
+【方法名称】=>GetConvertLinkByTool
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>{"jd_union_open_promotion_byunionid_get_response":{"result":"{\"code\":2001904,\"message\":\"优惠券接口异常，请稍后重试\",\"requestId\":\"o_0b1a8ad0_kkg8g5ry_6057641\"}","code":"0"}}
+【异常位置】=>
+
+【时间】=>2021-01-28 10:23:32 981
+【错误类型】=>Debug
+【方法名称】=>GetConvertLinkByTool
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>{"jd_union_open_promotion_byunionid_get_response":{"result":"{\"code\":2001904,\"message\":\"优惠券接口异常，请稍后重试\",\"requestId\":\"o_0b18cf44_kkg8gbv5_5975652\"}","code":"0"}}
+【异常位置】=>
+
+【时间】=>2021-01-28 10:23:54 706
+【错误类型】=>Debug
+【方法名称】=>GetConvertLinkByTool
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>{"jd_union_open_promotion_byunionid_get_response":{"result":"{\"code\":2001904,\"message\":\"优惠券接口异常，请稍后重试\",\"requestId\":\"o_0b1a6ce2_kkg8hecg_6065005\"}","code":"0"}}
+【异常位置】=>
+

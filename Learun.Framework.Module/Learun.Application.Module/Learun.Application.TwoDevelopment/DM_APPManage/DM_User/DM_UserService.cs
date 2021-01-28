@@ -633,7 +633,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     int? num2 = id;
                     obj[1] = num2.ToString();
                     obj[2] = ",上级用户";
-                    num2 = parent_UserEntity.id;
+                    num2 = parent_UserEntity.IsEmpty() ? -1 : parent_UserEntity.id;
                     obj[3] = num2.ToString();
                     obj[4] = ex.Message;
                     obj[5] = ex.StackTrace;

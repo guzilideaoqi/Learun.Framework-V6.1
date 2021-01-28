@@ -9,7 +9,6 @@ using System.Web.Mvc;
 using System.Linq;
 using HYG.CommonHelper.ShoppingAPI;
 using JDModel;
-using HYG.CommonHelper.JDModel;
 using HYG.CommonHelper.PDDModel;
 using System.Web;
 using Top.Api.Request;
@@ -31,6 +30,10 @@ using Hyg.Common.Model;
 using Hyg.Common.PDDTools;
 using Hyg.Common.PDDTools.PDDRequest;
 using Hyg.Common.PDDTools.PDDResponse;
+using Hyg.Common.JDTools;
+using Hyg.Common.JDTools.JDRequest;
+using Hyg.Common.JDTools.JDResponse;
+using HYG.CommonHelper.JDModel;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -472,8 +475,26 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                     else if (PlaformType == 3)
                     {
-                        JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
-                        superGoodItems = ConvertCommonGoodEntityByJF(jDApi.GetJTT_SearchGoodItemList(KeyWords, PageNo, PageSize, 0, 0, GetSort(PlaformType, sort)), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                        JD_ApiManage jD_ApiManage = new JD_ApiManage(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
+                        Super_GoodQueryRequest super_GoodQueryRequest = new Super_GoodQueryRequest();
+                        Super_GoodQueryDetailReq super_GoodQueryDetailReq = new Super_GoodQueryDetailReq();
+                        super_GoodQueryDetailReq.keyword = KeyWords;
+                        super_GoodQueryDetailReq.pageIndex = PageNo;
+                        super_GoodQueryDetailReq.pageSize = PageSize;
+                        super_GoodQueryRequest.goodsReqDTO = super_GoodQueryDetailReq;
+
+                        Super_Jd_GoodInfo_Reponse super_Jd_GoodInfo_Reponse = jD_ApiManage.Super_GetGoodQueryResultByKeyWord(super_GoodQueryRequest);
+                        if (super_Jd_GoodInfo_Reponse.IsError)
+                        {
+                            throw new Exception(super_Jd_GoodInfo_Reponse.message);
+                        }
+                        else
+                        {
+                            superGoodItems = ConvertCommonGoodEntityByJF(super_Jd_GoodInfo_Reponse.jFGoodsRespRows, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                        }
+
+                        //JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
+                        //superGoodItems = ConvertCommonGoodEntityByJF(jDApi.GetJTT_SearchGoodItemList(KeyWords, PageNo, PageSize, 0, 0, GetSort(PlaformType, sort)), dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     }
                     else if (PlaformType == 4)
                     {
@@ -1312,8 +1333,29 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
                 if (jFGoodsRespRows == null)
                 {
-                    JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
-                    jFGoodsRespRows = ConvertCommonGoodEntityByJF(jDApi.GetGoodList(eliteId, pageIndex, pageSize, sortname, sort), dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    GoodQueryRequest goodQueryRequest = new GoodQueryRequest();
+                    GoodQueryDetailReq goodQueryDetailReq = new GoodQueryDetailReq();
+                    goodQueryDetailReq.eliteId = eliteId;
+                    goodQueryDetailReq.pageIndex = pageIndex;
+                    goodQueryDetailReq.pageSize = pageSize;
+                    goodQueryDetailReq.sortName = sortname;
+                    goodQueryDetailReq.sort = sort;
+                    goodQueryRequest.goodsReq = goodQueryDetailReq;
+                    JD_ApiManage jD_ApiManage = new JD_ApiManage(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
+
+                    Hyg.Common.JDTools.JDResponse.Jd_GoodInfo_Reponse jd_GoodInfo_Reponse = jD_ApiManage.GetGoodQueryResultByKeyWord(goodQueryRequest);
+
+                    if (jd_GoodInfo_Reponse.IsError)
+                    {
+                        throw new Exception(jd_GoodInfo_Reponse.message);
+                    }
+                    else
+                    {
+                        jFGoodsRespRows = ConvertCommonGoodEntityByJF(jd_GoodInfo_Reponse.jFGoodsRespRows, dm_UserEntity, dm_BasesettingEntity, cacheKey);
+                    }
+
+                    //JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
+                    //jFGoodsRespRows = ConvertCommonGoodEntityByJF(jDApi.GetGoodList(eliteId, pageIndex, pageSize, sortname, sort), dm_UserEntity, dm_BasesettingEntity, cacheKey);
                     //jFGoodsRespRows= ConvertCommonGoodEntityByJTT(jDApi.GetJTT_GoodItemInfoList("女装", 1, 20, 0, 0, -1, ""), dm_UserEntity, dm_BasesettingEntity, cacheKey);
 
                     if (jFGoodsRespRows.Count > 0)
@@ -1348,10 +1390,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                 if (jDLinkInfo == null)
                 {
-                    JDApi jDApi = new JDApi(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
+                    JD_ApiManage jD_ApiManage = new JD_ApiManage(dm_BasesettingEntity.jd_appkey, dm_BasesettingEntity.jd_appsecret, dm_BasesettingEntity.jd_sessionkey);
 
                     dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
-
                     if (dm_UserEntity.jd_pid.IsEmpty())
                     {
                         #region 自动分配京东pid
@@ -1359,13 +1400,22 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         #endregion
                     }
 
-                    couponlink = HttpUtility.UrlEncode(couponlink);
-                    jDLinkInfo = jDApi.ConvertUrl(skuid, dm_UserEntity.jd_site.ToString(), dm_UserEntity.jd_pid, couponlink);
-
+                    Super_PromotionByToolRequest super_PromotionByToolRequest = new Super_PromotionByToolRequest();
+                    super_PromotionByToolRequest.promotionCodeReq = new Super_PromotionByTool
+                    {
+                        chainType = 2,
+                        couponUrl = HttpUtility.UrlEncode(couponlink),
+                        materialId = "http://item.jd.com/" + skuid + ".html",
+                        positionId = dm_UserEntity.jd_pid,
+                        unionId = dm_BasesettingEntity.jd_accountid.ToString()
+                    };
+                    Hyg.Common.JDTools.JDModel.ConvertLinkResultEntity convertLinkResultEntity = jD_ApiManage.GetConvertLinkByTool(super_PromotionByToolRequest);
+                    jDLinkInfo = new JDLinkInfo();
+                    jDLinkInfo.clickURL = convertLinkResultEntity.shortURL;
                     if (jDLinkInfo != null)
                     {
                         jDLinkInfo.tpwd = "下单链接:" + jDLinkInfo.clickURL;
-                        redisCache.Write(cacheKey, jDLinkInfo, DateTime.Now.AddHours(2.0), 7L);
+                        redisCache.Write(cacheKey, jDLinkInfo, DateTime.Now.AddMinutes(5.0), 7L);
                     }
                 }
 
@@ -1847,10 +1897,10 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         /// 京东商品转公用商品类
         /// </summary>
         /// <param name="jFGoodsRespRows"></param>
-        List<CommonGoodInfoEntity> ConvertCommonGoodEntityByJF(IEnumerable<JFGoodsRespRow> jFGoodsRespRows, dm_userEntity dm_UserEntity, dm_basesettingEntity dm_BasesettingEntity, string cacheKey)
+        List<CommonGoodInfoEntity> ConvertCommonGoodEntityByJF(IEnumerable<Hyg.Common.JDTools.JDResponse.JFGoodsRespRow> jFGoodsRespRows, dm_userEntity dm_UserEntity, dm_basesettingEntity dm_BasesettingEntity, string cacheKey)
         {
             List<CommonGoodInfoEntity> CommonGoodInfoEntityList = new List<CommonGoodInfoEntity>();
-            foreach (JFGoodsRespRow item in jFGoodsRespRows)
+            foreach (Hyg.Common.JDTools.JDResponse.JFGoodsRespRow item in jFGoodsRespRows)
             {
                 string[] images = item.images;
                 CommonGoodInfoEntityList.Add(new CommonGoodInfoEntity

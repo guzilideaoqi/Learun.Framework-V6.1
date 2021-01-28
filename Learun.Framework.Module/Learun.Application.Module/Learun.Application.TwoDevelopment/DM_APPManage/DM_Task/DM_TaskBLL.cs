@@ -314,6 +314,29 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
         }
+
+        /// <summary>
+        /// 任务驳回
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="remark"></param>
+        public void RebutTaskByWeb(int id, string remark) {
+            try
+            {
+                dM_TaskService.RebutTaskByWeb(id, remark);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
     }
 }

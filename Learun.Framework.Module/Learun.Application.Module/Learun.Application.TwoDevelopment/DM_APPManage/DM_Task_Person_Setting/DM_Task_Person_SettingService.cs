@@ -263,7 +263,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             item.finishstatus = 0;
                             item.btntext = "签到";
                         }
-                        else {
+                        else
+                        {
                             item.finishcount = dm_IntergraldetailEntity.createtime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") ? 1 : 0;
                             item.finishstatus = item.finishcount == 1 ? 2 : 0;
                             item.btntext = item.finishstatus == 0 ? "签到" : "已完成";
@@ -372,7 +373,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         if (dm_User_RelationEntity.ordercount < dm_Task_Person_SettingEntity.needcount)
                             throw new Exception("请完成购物任务后再来领取!");
                     }
-                    else if (dm_Task_Person_SettingEntity.s_type == 2) {
+                    else if (dm_Task_Person_SettingEntity.s_type == 2)
+                    {
                         if (dm_UserEntity.mychildcount < dm_Task_Person_SettingEntity.needcount)
                             throw new Exception("请完成邀请任务后再来领取!");
                     }
@@ -434,6 +436,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         db.Insert(dm_Task_Person_RecordEntity);
 
                         db.Commit();
+                    }
+                    else
+                    {
+                        throw new Exception("该任务已领取!");
                     }
                 }
             }

@@ -132,7 +132,7 @@ namespace Learun.Util
         public static int GetProfitLoss(int? type)
         {
             int profitLoss = 0;
-            if (new List<int?> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 21,22 }.Contains(type))
+            if (new List<int?> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23 }.Contains(type))
             {
                 profitLoss = 1;
             }
