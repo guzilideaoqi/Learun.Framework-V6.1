@@ -1935,6 +1935,9 @@
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\PreviewCircle.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_User\SelectUser.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\RebutTask.cshtml" />
+    <Content Include="Cert\alipayCertPublicKey_RSA2.crt" />
+    <Content Include="Cert\alipayRootCert.crt" />
+    <Content Include="Cert\appCertPublicKey_2021001146627152.crt" />
     <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\clipboard.min.js" />

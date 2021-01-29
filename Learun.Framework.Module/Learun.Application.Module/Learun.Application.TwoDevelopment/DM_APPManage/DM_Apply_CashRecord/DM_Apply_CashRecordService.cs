@@ -322,12 +322,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="id">提现记录id</param>
         public void CheckApplyCashRecord(int id, int paytype)
         {
-            IRepository db = null;
             try
             {
                 dm_apply_cashrecordEntity dm_Apply_CashrecordEntity = GetEntity(id);
                 if (dm_Apply_CashrecordEntity.IsEmpty())
                     throw new Exception("提现记录不存在!");
+
+                if (dm_Apply_CashrecordEntity.status != 0)
+                    throw new Exception("当前提现记录不可操作!");
 
                 dm_Apply_CashrecordEntity.paytype = paytype;
                 dm_Apply_CashrecordEntity.status = 1;
@@ -344,15 +346,29 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_AccountdetailEntity.user_id = dm_Apply_CashrecordEntity.user_id;
                 dm_AccountdetailEntity.createtime = DateTime.Now;*/
 
-                db = BaseRepository("dm_data").BeginTrans();
-                db.Update(dm_Apply_CashrecordEntity);
-                //db.Insert(dm_AccountdetailEntity);
-                db.Commit();
+                BaseRepository("dm_data").Update(dm_Apply_CashrecordEntity);
             }
             catch (Exception ex)
             {
-                if (db != null)
-                    db.Rollback();
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        public void CheckApplyCashRecordByAli(dm_apply_cashrecordEntity dm_Apply_CashrecordEntity)
+        {
+            try
+            {
+                BaseRepository("dm_data").Update(dm_Apply_CashrecordEntity);
+            }
+            catch (Exception ex)
+            {
                 if (ex is ExceptionEx)
                 {
                     throw;

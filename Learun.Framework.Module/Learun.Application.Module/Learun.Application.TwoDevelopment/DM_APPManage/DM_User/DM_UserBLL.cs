@@ -105,6 +105,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public dm_userEntity GetUserInfoByToken(string token)
+        {
+            try
+            {
+                return dM_UserService.GetUserInfoByToken(token);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+
         public dm_userEntity GetPersonInfo(string token)
         {
             try
@@ -418,7 +434,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-               return dM_UserService.ClearShareImage();
+                return dM_UserService.ClearShareImage();
             }
             catch (Exception ex)
             {

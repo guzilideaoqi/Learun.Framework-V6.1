@@ -260,7 +260,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_userEntity dm_UserEntity = new dm_userEntity();
                 if (tempTimeKey.IsEmpty())
                 {
-                    dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.token == token);//从数据库获取
+                    dm_UserEntity = GetUserInfoByToken(token); //this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.token == token);//从数据库获取
                     if (!dm_UserEntity.IsEmpty())
                     {
                         if (!dm_UserEntity.IsEmpty() && dm_UserEntity.isenable != 1)
@@ -307,6 +307,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 //Hyg.Common.OtherTools.LogHelper.WriteDebugLog("刷新用户信息", dm_UserEntity.ToJson());
                 return dm_UserEntity;
 
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+
+        public dm_userEntity GetUserInfoByToken(string token)
+        {
+            try
+            {
+                dm_userEntity dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.token == token);//从数据库获取
+                return dm_UserEntity;
             }
             catch (Exception ex)
             {

@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using Learun.Util;
 using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Loger;
+using Learun.Application.TwoDevelopment.Common;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -65,7 +66,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     return Fail("基础配置获取失败!");
 
                 string out_trade_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + user_id.ToString().PadLeft(6, '0');
-                IAopClient client = new DefaultAopClient("https://openapi.alipay.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
+                IAopClient client = new DefaultAopClient("https://openapi.alipay.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", "utf-8", false, AliPayHelper.GetCertParams(dm_BasesettingEntity.alipay_appid, base.Server));
+                //IAopClient client = new DefaultAopClient("https://openapi.alipay.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
                 AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
                 request.SetNotifyUrl(dm_BasesettingEntity.alipay_notifyurl);
                 request.SetReturnUrl(dm_BasesettingEntity.alipay_notifyurl);
@@ -195,7 +197,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 //FinishPrice = 0.01M;//测试支付金额为0.01
 
                 string out_trade_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + User_ID.ToString().PadLeft(6, '0');
-                IAopClient client = new DefaultAopClient("https://openapi.alipay.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
+                IAopClient client = new DefaultAopClient("https://openapi.alipay.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", "utf-8", false, AliPayHelper.GetCertParams(dm_BasesettingEntity.alipay_appid, base.Server));
+                //IAopClient client = new DefaultAopClient("https://openapi.alipay.com/gateway.do", dm_BasesettingEntity.alipay_appid, dm_BasesettingEntity.merchant_private_key, "json", "1.0", "RSA2", dm_BasesettingEntity.alipay_public_key, "GBK", false);
                 AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
                 request.SetNotifyUrl(dm_BasesettingEntity.alipay_notifyurl);
                 request.SetReturnUrl(dm_BasesettingEntity.alipay_notifyurl);
@@ -302,7 +305,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
-        public ActionResult TestPayCallBack() {
+        public ActionResult TestPayCallBack()
+        {
             dM_Alipay_RecordIBLL.OpenAgent(dM_Alipay_RecordIBLL.GetEntity(198));
             return Success("ok");
         }

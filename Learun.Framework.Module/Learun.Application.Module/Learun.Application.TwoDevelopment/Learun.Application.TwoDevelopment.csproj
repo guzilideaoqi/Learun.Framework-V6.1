@@ -74,6 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\AliPayHelper.cs" />
     <Compile Include="Common\CacheHelper.cs" />
     <Compile Include="Common\CommonConfig.cs" />
     <Compile Include="Common\CommonSMSHelper.cs" />

@@ -37,13 +37,13 @@ namespace Learun.Application.TwoDevelopment.Common
             if (!dm_UserEntity.IsEmpty())
             {
                 string cacheKey = SingleLogin + dm_UserEntity.token;
-                redisCache.Write<dm_userEntity>(cacheKey, dm_UserEntity, 7);
+                redisCache.Write<dm_userEntity>(cacheKey, dm_UserEntity, 8);
 
                 #region 移除用户信息
                 if (!oldToken.IsEmpty())
                 {
                     string old_cacheKey = SingleLogin + oldToken;
-                    redisCache.Remove(old_cacheKey, 7);
+                    redisCache.Remove(old_cacheKey, 8);
                 }
                 #endregion
             }
@@ -74,7 +74,7 @@ namespace Learun.Application.TwoDevelopment.Common
         public static dm_userEntity ReadUserInfoByToken(string token)
         {
             string cacheKey = SingleLogin + token;
-            dm_userEntity dm_UserEntity = redisCache.Read<dm_userEntity>(cacheKey, 7);
+            dm_userEntity dm_UserEntity = redisCache.Read<dm_userEntity>(cacheKey, 8);
 
             return dm_UserEntity;
         }
@@ -86,7 +86,7 @@ namespace Learun.Application.TwoDevelopment.Common
         public static void UpdateUserInfo(dm_userEntity dm_UserEntity)
         {
             string cacheKey = SingleLogin + dm_UserEntity.token;
-            redisCache.Write<dm_userEntity>(cacheKey, dm_UserEntity, 7);
+            redisCache.Write<dm_userEntity>(cacheKey, dm_UserEntity, 8);
         }
     }
 }

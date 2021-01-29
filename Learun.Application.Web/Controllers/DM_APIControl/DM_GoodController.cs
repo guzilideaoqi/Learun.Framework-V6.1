@@ -409,7 +409,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         RankingList = ConvertCommonGoodEntityByRank(dTK_Ranking_ListResponse.data, dm_UserEntity, dm_BasesettingEntity, cacheKey);*/
                     }
 
-                    redisCache.Write(cacheKey, RankingList, DateTime.Parse(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss")), 7L);
+                    redisCache.Write(cacheKey, RankingList, DateTime.Parse(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd 10:00:00")), 7L);
                 }
                 return SuccessList("获取成功!", CheckPreviewOutGood(cacheKey, dm_BasesettingEntity, dm_UserEntity, RankingList));
             }

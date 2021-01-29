@@ -208,6 +208,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
         }
+
+        public void CheckApplyCashRecordByAli(dm_apply_cashrecordEntity dm_Apply_CashrecordEntity) {
+            try
+            {
+                dM_Apply_CashRecordService.CheckApplyCashRecordByAli(dm_Apply_CashrecordEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
 
         #region 获取我的提现记录

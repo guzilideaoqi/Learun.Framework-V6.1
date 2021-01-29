@@ -76,20 +76,21 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (SmsMessageID.IsEmpty())
+                    throw new Exception("验证码已失效,请重新获取!");
                 if (ParentInviteCode.IsEmpty())
                     ParentInviteCode = ParentInviteCode = "100001";
-                string appid = CheckAPPID();
                 /*if (dm_UserEntity.nickname.IsEmpty())
                 {
                     return Fail("用户名不能为空!");
                 }*/
                 if (dm_UserEntity.phone.IsEmpty() || dm_UserEntity.phone.Length != 11)
                 {
-                    return Fail("手机号不能为空或格式错误!");
+                    throw new Exception("手机号不能为空或格式错误!");
                 }
                 if (ParentInviteCode.IsEmpty())
                 {
-                    return Fail("邀请码不能为空!");
+                    throw new Exception("邀请码不能为空!");
                 }
                 /*if (dm_UserEntity.pwd.IsEmpty())
                 {
@@ -100,6 +101,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     return Fail("验证码不能为空!");
                 }
 
+                string appid = CheckAPPID();
                 dm_UserEntity.appid = appid;
                 dm_UserEntity.nickname = "dlm_" + Time.GetTimeStamp();
                 dm_UserEntity.pwd = Guid.NewGuid().ToString();
@@ -126,7 +128,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                string appid = CheckAPPID();
+                if (SmsMessageID.IsEmpty())
+                    throw new Exception("验证码已失效,请重新获取!");
 
                 if (dm_UserEntity.phone.IsEmpty() || dm_UserEntity.phone.Length != 11)
                 {
@@ -136,6 +139,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     return Fail("验证码不能为空!");
                 }
+
+                string appid = CheckAPPID();
 
                 if (!CommonSMSHelper.IsPassVerification(SmsMessageID, VerifiCode, appid))
                 {
@@ -187,19 +192,19 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     case 1:
                         if (dm_UserEntity != null)
                         {
-                            return Fail("该手机号已注册!");
+                            throw new Exception("该手机号已注册!");
                         }
                         break;
                     case 2:
                         if (dm_UserEntity == null)
                         {
-                            return Fail("该手机号未注册!");
+                            throw new Exception("该手机号未注册!");
                         }
                         break;
                     case 3:
                         break;
                     default:
-                        return Fail("获取验证码类型不合法!");
+                        throw new Exception("获取验证码类型不合法!");
                 }
                 //Random random = new Random();
                 //int ranCode = random.Next(1111, 9999);
@@ -279,30 +284,32 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                if (SmsMessageID.IsEmpty())
+                    throw new Exception("验证码已失效,请重新获取!");
                 if (Phone.IsEmpty() || Phone.Length != 11)
                 {
-                    return Fail("手机号不能为空或格式错误!");
+                    throw new Exception("手机号不能为空或格式错误!");
                 }
                 if (Pwd.IsEmpty())
                 {
-                    return Fail("密码不能为空!");
+                    throw new Exception("密码不能为空!");
                 }
                 if (VerifiCode.IsEmpty())
                 {
-                    return Fail("验证码不能为空!");
+                    throw new Exception("验证码不能为空!");
                 }
                 string appid = CheckAPPID();
 
                 if (!CommonSMSHelper.IsPassVerification(SmsMessageID, VerifiCode, appid))
                 {
-                    return Fail("验证码错误!");
+                    throw new Exception("验证码错误!");
                 }
 
                 dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByPhone(Phone, appid);
 
                 if (dm_UserEntity == null)
                 {
-                    return Fail("该手机号未注册!");
+                    throw new Exception("该手机号未注册!");
                 }
 
                 dm_UserEntity.pwd = Md5Helper.Encrypt(Pwd, 16);

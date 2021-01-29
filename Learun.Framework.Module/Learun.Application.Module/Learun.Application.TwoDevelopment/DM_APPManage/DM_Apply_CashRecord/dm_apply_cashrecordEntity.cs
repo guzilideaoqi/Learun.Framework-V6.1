@@ -75,6 +75,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("FAILREASON")]
         public string failreason { get; set; }
+
+        /// <summary>
+        /// 支付宝转账订单号
+        /// </summary>
+        [Column("ORDERID")]
+        public string OrderId { get; set; }
+
+        /// <summary>
+        /// 支付宝支付资金流水号
+        /// </summary>
+        [Column("PAYFUNDORDERID")]
+        public string PayFundOrderId { get; set; }
+
+        /// <summary>
+        /// 打款时间
+        /// </summary>
+        [Column("TRANSDATE")]
+        public DateTime? TransDate { get; set; }
         #endregion
 
         #region 扩展操作

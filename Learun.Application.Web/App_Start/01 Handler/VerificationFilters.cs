@@ -15,6 +15,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
 {
     public class VerificationAPIAttribute : AuthorizeAttribute
     {
+        DM_UserIBLL dM_UserIBLL = new DM_UserBLL();
         string[] actionNameList = new string[] {
             "dm_login",
             "getarticledetail",
@@ -71,6 +72,10 @@ namespace Learun.Application.Web.App_Start._01_Handler
         /// <param name="filterContext"></param>
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
+            /*签名生成格式*/
+            /*md5(md5(appidplatform=androidtimestamp=1611907265version=1.1.7appid)+"174PYR5Wwtce")  最后转为大写  参数放在header里面  参数名sign*/
+
+
             //登录拦截是否忽略
             if (_customMode == FilterMode.Ignore)
             {
@@ -130,13 +135,23 @@ namespace Learun.Application.Web.App_Start._01_Handler
                 dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfo(filterContext.HttpContext.Request.Headers);
                 if (dm_UserEntity.IsEmpty())
                 {
-                    string header = string.Format("ActionName={0}&token={1}&platform={2}", ActionName, token, platform);
-                    Hyg.Common.OtherTools.LogHelper.WriteDebugLog("测试token", header);
 
-                    modelResult.code = ResponseCode.LoginExpire;
-                    modelResult.info = "您的账号在另一台设备登录。如非本人操作，请注意账户安全!";
-                    filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
-                    return;
+                    dm_UserEntity = dM_UserIBLL.GetUserInfoByToken(token);
+                    if (!dm_UserEntity.IsEmpty())
+                    {
+                        CacheHelper.UpdateUserInfo(dm_UserEntity);
+                    }
+                    else
+                    {
+                        string header = string.Format("ActionName={0}&token={1}&platform={2}", ActionName, token, platform);
+                        Hyg.Common.OtherTools.LogHelper.WriteDebugLog("测试token", header);
+
+                        modelResult.code = ResponseCode.LoginExpire;
+                        modelResult.info = "您的账号在另一台设备登录。如非本人操作，请注意账户安全!";
+                        //modelResult.info = "亲，离开太久了,重新登录一下吧!";
+                        filterContext.Result = new ContentResult { Content = modelResult.ToJson() };
+                        return;
+                    }
                 }
             }
             #endregion

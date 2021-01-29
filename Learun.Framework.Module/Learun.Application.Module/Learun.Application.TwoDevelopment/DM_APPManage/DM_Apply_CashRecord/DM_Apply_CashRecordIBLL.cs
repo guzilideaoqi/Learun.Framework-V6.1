@@ -58,6 +58,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #region 审核提现记录
         void CheckApplyCashRecord(int id, int paytype);
+
+        void CheckApplyCashRecordByAli(dm_apply_cashrecordEntity dm_Apply_CashrecordEntity);
         #endregion
 
         #region 获取我的提现记录

@@ -7,6 +7,7 @@
 var selectedRow;
 var refreshGirdData;
 var CheckCashRecord;
+var CheckCashRecordByAli;
 var bootstrap = function ($, learun) {
     "use strict";
     var page = {
@@ -98,7 +99,10 @@ var bootstrap = function ($, learun) {
                         label: '提现状态', name: 'status', width: 200, align: "left", formatter: function (cellValue, rowData, options) {
                             if (cellValue == 0) {
                                 var tempJsonStr = JSON.stringify(rowData).replace(/\"/g, "'")
-                                return "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"CheckCashRecord(" + tempJsonStr + ");\"><i class=\"fa fa-plus\"></i>&nbsp;人工转账</a>";
+                                var btn = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"CheckCashRecord(" + tempJsonStr + ");\"><i class=\"fa fa-plus\"></i>&nbsp;手动转账</a>";
+                                btn += "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"CheckCashRecordByAli(" + tempJsonStr + ");\"><i class=\"fa fa-plus\"></i>&nbsp;自动转账</a>";
+                                return btn;
+
                             } else if (cellValue == 1)
                                 return "审核成功";
                             else if (cellValue == 2)
@@ -127,6 +131,16 @@ var bootstrap = function ($, learun) {
         learun.layerConfirm(tip, function (res) {
             if (res) {
                 learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Apply_CashRecord/CheckApplyCashRecord', { id: rowData.id }, function () {
+                    location.reload();
+                });
+            }
+        });
+    };
+    CheckCashRecordByAli= function(rowData) {
+        var tip = "确认打款后将直接转账到用户支付宝，是否继续？"
+        learun.layerConfirm(tip, function (res) {
+            if (res) {
+                learun.excuteOperate(top.$.rootUrl + '/DM_APPManage/DM_Apply_CashRecord/CheckApplyCashRecordByAli', { id: rowData.id }, function () {
                     location.reload();
                 });
             }
