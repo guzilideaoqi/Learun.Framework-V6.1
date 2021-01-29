@@ -924,12 +924,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         public dm_userEntity DecodeInviteCode(string InviteCode)
         {
-            #region 改为直接数据库查询
-            dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.invitecode == InviteCode || t.by_invitecode == InviteCode);
-            if (dm_UserEntity.IsEmpty())
-                throw new Exception("该邀请码无效!");
-            return dm_UserEntity;
-            #endregion
+            try
+            {
+                #region 改为直接数据库查询
+                dm_userEntity dm_UserEntity = BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.invitecode == InviteCode || t.by_invitecode == InviteCode);
+                if (dm_UserEntity.IsEmpty())
+                    throw new Exception("该邀请码无效!");
+                return dm_UserEntity;
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+
 
             /*char[] chs = InviteCode.ToCharArray();
             int res = 0;
