@@ -267,7 +267,9 @@ var bootstrap = function ($, learun) {
                 mainId: 'id',
                 reloadSelected: true,
                 isPage: true,
-                isMultiselect: false
+                isMultiselect: false,
+                sidx: "createtime",
+                sord:"desc"
             });
             page.search();
         },
