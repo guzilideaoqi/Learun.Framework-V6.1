@@ -16,6 +16,7 @@ using Learun.Application.TwoDevelopment.Common;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
+    [VerificationAPI(FilterMode.Ignore)]
     public class A_PayController : MvcAPIControllerBase
     {
         private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();

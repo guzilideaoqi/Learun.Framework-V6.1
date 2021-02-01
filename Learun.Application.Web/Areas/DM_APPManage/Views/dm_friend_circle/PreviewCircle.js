@@ -8,9 +8,10 @@
             var ImageList = JSON.parse(selectedRow.t_images.replace(/'/g, "\""));
             for (var i = 0; i < ImageList.length; i++) {
                 var img = ImageList[i];
-                $("#uploaderFiles").append("<li class=\"weui-uploader__file\" style=\"background-image:url(" + img.ThumbnailImage + ")\"></li>");
+                //style =\"background-image:url(" + img.ThumbnailImage + ");background-repeat: round;\"
+                $("#uploaderFiles").append("<li class=\"weui-uploader__file\"><img src=\"" + img.ThumbnailImage+"\" alt=\"\"></li>");
             }
-            
+            var viewer = new Viewer(document.getElementById('uploaderFiles'));
         }
     }
     page.init();

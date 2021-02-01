@@ -57,6 +57,7 @@ namespace Learun.Application.Web.App_Start._01_Handler
             "resetpwd",
             "getplaformsetting",
             "excutesubcommission","gettasktype","gettasklist","logintokenverify","getcommonsetting","quickregister","dm_loginbyphone","getversionrecord" };
+        string[] nosign = new string[] { "getplaformsetting", "excutesubcommission" };
         private ICache redisCache = CacheFactory.CaChe();
         private FilterMode _customMode;
         /// <summary>默认构造</summary>
@@ -74,13 +75,12 @@ namespace Learun.Application.Web.App_Start._01_Handler
         {
             /*签名生成格式*/
             /*md5(md5(appidplatform=androidtimestamp=1611907265000version=1.2.0appid)+"174PYR5Wwtce")  最后转为小写  参数放在header里面  参数名sign*/
-
+            string ActionName = filterContext.RouteData.Values["action"].ToString().ToLower();
             //登录拦截是否忽略
-            if (_customMode == FilterMode.Ignore)
+            if (_customMode == FilterMode.Ignore || nosign.Contains(ActionName))
             {
                 return;
             }
-            string ActionName = filterContext.RouteData.Values["action"].ToString().ToLower();
             string token = filterContext.HttpContext.Request.Headers["token"];//用户登录token
             string platform = filterContext.HttpContext.Request.Headers["platform"];//平台类型
             string appid = filterContext.HttpContext.Request.Headers["appid"];//appid

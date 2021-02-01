@@ -21,6 +21,7 @@ using Top.Api.Util;
 
 namespace Learun.Application.Web.Controllers
 {
+    [VerificationAPI(FilterMode.Ignore)]
     /// <summary>
     /// 版 本 Learun-ADMS V6.1.6.0 力软敏捷开发框架
     /// Copyright (c) 2013-2017 上海力软信息技术有限公司

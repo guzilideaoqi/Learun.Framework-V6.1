@@ -201,8 +201,8 @@ var bootstrap = function ($, learun) {
             id: 'form',
             title: '文案预览',
             url: top.$.rootUrl + '/DM_APPManage/dm_friend_circle/PreviewCircle',
-            width: 700,
-            height: 600
+            width: 900,
+            height: 700
         });
     }
     page.init();

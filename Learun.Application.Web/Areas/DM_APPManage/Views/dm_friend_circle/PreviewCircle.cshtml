@@ -2,6 +2,7 @@
     ViewBag.Title = "官推文案";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
+<link href="~/Content/dlm/viewer.min.css" rel="stylesheet" />
 @Html.AppendCssFile("/Areas/DM_APPManage/Views/dm_friend_circle/zepto.css")
 <style>
     .image_div {
@@ -14,6 +15,10 @@
             height: 100px;
             margin: 5px;
         }
+    #uploaderFiles li img {
+    width:100%;
+    height:100%;
+    }
 </style>
 <div>
     <div class="lr-form-wrap" id="form">
@@ -21,8 +26,7 @@
         <div class="col-xs-12 lr-form-item">
             <div class="lr-form-item-title">图片<font face="宋体">*</font></div>
             <div class="weui-uploader__bd">
-                <ul class="weui-uploader__files weui-uploader__file_status" id="uploaderFiles">
-                </ul>
+                <ul class="weui-uploader__files weui-uploader__file_status" id="uploaderFiles"></ul>
             </div>
         </div>
         <div class="col-xs-12 lr-form-item">
@@ -31,5 +35,5 @@
         </div>
     </div>
 </div>
-
+<script src="~/Content/dlm/viewer.min.js"></script>
 @Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_friend_circle/PreviewCircle.js")

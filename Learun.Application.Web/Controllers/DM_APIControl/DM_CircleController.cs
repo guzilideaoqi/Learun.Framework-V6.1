@@ -70,7 +70,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 {
                     page = PageNo,
                     rows = PageSize,
-                    sidx = "createtime,iscream",
+                    sidx = "createtime",
                     sord = "desc"
                 };
                 string appid = CheckAPPID();
@@ -78,7 +78,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 List<FriendCircleEntity> friendCircleEntities = redisCache.Read<List<FriendCircleEntity>>(cacheKey, 7);
                 if (friendCircleEntities == null)
                 {
-                    IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities = dm_Friend_CircleIBLL.GetCircleByGeneral(pagination, appid);
+                    IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities = dm_Friend_CircleIBLL.GetCircleByGeneral(pagination, appid).OrderByDescending(t => t.iscream);
                     friendCircleEntities = GeneralPraise(dm_Friend_CircleEntities, cacheKey);
                     if (friendCircleEntities.Count > 0)
                     {
@@ -290,7 +290,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             DateTime pubTime = (DateTime)PubTime;
             DateTime currentTime = DateTime.Now;
             int days = (currentTime - pubTime).Days;
-            if (days == 0)
+            if (days == 0 && pubTime.Day == currentTime.Day)
             {
                 return pubTime.ToString("HH:mm");
             }

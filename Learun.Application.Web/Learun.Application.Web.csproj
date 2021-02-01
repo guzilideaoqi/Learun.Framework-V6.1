@@ -605,6 +605,7 @@
     <Content Include="Content\dlm\responsive.css" />
     <Content Include="Content\dlm\style1.css" />
     <Content Include="Content\dlm\swiper.min.js" />
+    <Content Include="Content\dlm\viewer.min.js" />
     <Content Include="Content\echarts\charts_comm.js" />
     <Content Include="Content\echarts\echarts.js" />
     <Content Include="Content\echarts\echarts.min.js" />
@@ -1938,6 +1939,7 @@
     <Content Include="Cert\alipayCertPublicKey_RSA2.crt" />
     <Content Include="Cert\alipayRootCert.crt" />
     <Content Include="Cert\appCertPublicKey_2021001146627152.crt" />
+    <Content Include="Content\dlm\viewer.min.css" />
     <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\clipboard.min.js" />
