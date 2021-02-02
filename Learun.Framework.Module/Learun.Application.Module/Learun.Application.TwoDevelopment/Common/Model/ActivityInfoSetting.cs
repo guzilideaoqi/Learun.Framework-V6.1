@@ -38,5 +38,15 @@ namespace Learun.Application.TwoDevelopment.Common.Model
         /// APP端活动地址
         /// </summary>
         public string APP_To_ActivityUrl { get; set; }
+
+        /// <summary>
+        /// 活动开始时间
+        /// </summary>
+        public DateTime ActivityStartTime { get; set; }
+
+        /// <summary>
+        /// 活动结束时间
+        /// </summary>
+        public DateTime ActivityEndTime { get; set; }
     }
 }

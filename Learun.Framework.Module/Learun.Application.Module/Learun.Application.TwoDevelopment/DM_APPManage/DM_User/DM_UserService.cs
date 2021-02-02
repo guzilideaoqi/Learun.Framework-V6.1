@@ -1455,6 +1455,32 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        #region 参与活动
+        public dm_userEntity JoinActivity(int user_id)
+        {
+            dm_userEntity dm_UserEntity = null;
+            try
+            {
+                dm_UserEntity = GetEntity(user_id);
+                if (dm_UserEntity.IsEmpty())
+                    throw new Exception("用户信息异常!");
+                if (dm_UserEntity.activityprice.IsEmpty() || dm_UserEntity.activityprice <= 0)
+                    dm_UserEntity.activityprice = Math.Round(new Random().Next(2650, 2882) / 100.0M, 2);
+                this.BaseRepository("dm_data").Update(dm_UserEntity);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+
+            return dm_UserEntity;
+        }
+        #endregion
+
         public void Clear_TB_Relation_Auth(int User_ID)
         {
             dm_userEntity dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(User_ID);

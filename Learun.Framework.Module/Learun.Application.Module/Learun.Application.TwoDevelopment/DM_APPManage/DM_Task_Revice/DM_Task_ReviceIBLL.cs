@@ -58,6 +58,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void SaveEntity(int keyValue, dm_task_reviceEntity entity);
         #endregion
 
+        #region 领取活动任务
+        /// <summary>
+        /// 领取活动任务
+        /// </summary>
+        /// <param name="task_ids"></param>
+        /// <param name="user_id"></param>
+        void ReviceActivityTask(string[] task_ids, int user_id);
+        #endregion
+
         #region Method Extend
         /// <summary>
         /// 获取任务接受列表

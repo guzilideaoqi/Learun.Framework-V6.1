@@ -38,7 +38,9 @@ namespace Learun.Application.TwoDevelopment.Common
             APP_RedPaper_Image = "",
             APP_RedPaper_Text = "瓜分2000万红包",
             APP_Rock_RedPaper_Image = "",
-            APP_To_ActivityUrl = "http://www.baidu.com"
+            APP_To_ActivityUrl = "http://www.baidu.com",
+            ActivityStartTime = DateTime.Parse("2021-02-01 00:00:00"),
+            ActivityEndTime = DateTime.Parse("2021-02-15 00:00:00")
         };
     }
 

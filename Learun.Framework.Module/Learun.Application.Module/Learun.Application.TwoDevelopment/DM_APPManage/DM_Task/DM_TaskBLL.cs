@@ -130,6 +130,28 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
         }
+
+        /// <summary>
+        /// 获取随机活动任务
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dm_taskEntity> GetRandActivityTaskList(int user_id) {
+            try
+            {
+                return dM_TaskService.GetRandActivityTaskList(user_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
 
         #region 提交数据

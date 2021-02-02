@@ -46,6 +46,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         Dictionary<string, object> GetTaskDetail(int? id);
+
+        /// <summary>
+        /// 获取随机活动任务
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<dm_taskEntity> GetRandActivityTaskList(int user_id);
         #endregion
 
         #region 提交数据

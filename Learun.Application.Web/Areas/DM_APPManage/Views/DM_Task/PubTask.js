@@ -38,6 +38,8 @@ var bootstrap = function ($, learun) {
                     //learun.alert.success('发布成功');
                 });
             });
+
+            $("#isactivity").lrselect();
         },
         initData: function () {
             if (!!selectedRow) {

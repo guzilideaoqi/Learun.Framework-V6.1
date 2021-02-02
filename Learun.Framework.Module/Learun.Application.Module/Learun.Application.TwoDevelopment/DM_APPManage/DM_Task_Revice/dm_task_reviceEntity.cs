@@ -94,6 +94,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("COMISSIONAMOUNT")]
         public decimal? comissionamount { get; set; }
+
+        /// <summary>
+        /// 记录索引用于校验步骤
+        /// </summary>
+        [Column("RECORDINDEX")]
+        public int? recordindex { get; set; }
         #endregion
 
         #region 扩展操作

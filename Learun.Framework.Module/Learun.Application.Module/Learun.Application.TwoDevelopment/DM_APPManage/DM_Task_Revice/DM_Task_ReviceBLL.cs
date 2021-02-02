@@ -162,6 +162,31 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 领取活动任务
+        /// <summary>
+        /// 领取活动任务
+        /// </summary>
+        /// <param name="task_ids"></param>
+        /// <param name="user_id"></param>
+        public void ReviceActivityTask(string[] task_ids, int user_id) {
+            try
+            {
+                dM_Task_ReviceService.ReviceActivityTask(task_ids, user_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
+
         #region Method Extend
         /// <summary>
         /// 获取任务接受列表

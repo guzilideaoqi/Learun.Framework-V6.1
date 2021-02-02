@@ -365,6 +365,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("LAST_LOGINTIME")]
         public DateTime? last_logintime { get; set; }
+
+        /// <summary>
+        /// »î¶¯½ð¶î
+        /// </summary>
+        [Column("ACTIVITYPRICE")]
+        public decimal? activityprice { get; set; }
         public void Create()
         {
             userlevel = 0;
@@ -382,6 +388,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             isrelation_beian = 0;
             partners = 0;
             partnersstatus = 0;
+            activityprice = 0;
         }
 
         public void Modify(int? keyValue)

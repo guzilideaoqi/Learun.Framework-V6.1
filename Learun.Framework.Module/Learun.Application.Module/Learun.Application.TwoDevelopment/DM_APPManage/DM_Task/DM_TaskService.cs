@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 using Learun.Cache.Base;
 using Learun.Cache.Factory;
+using io.rong.methods.chatroom.whitelist;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -173,7 +174,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     strSql.Append(" and t.ischeckmode = '" + queryParam["ischeckmode"].ToString() + "'");
                 }
-                if (!queryParam["isactivity"].IsEmpty()) {
+                if (!queryParam["isactivity"].IsEmpty())
+                {
                     strSql.Append(" and t.isactivity = '" + queryParam["isactivity"].ToString() + "'");
                 }
 
@@ -254,6 +256,35 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     return null;
                 }
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取随机活动任务
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dm_taskEntity> GetRandActivityTaskList(int user_id)
+        {
+            try
+            {
+                dm_userEntity dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.id == user_id && t.activityprice > 0);
+                string querySql = "";
+                if (dm_UserEntity.IsEmpty())
+                    querySql = "select * from dm_task where isactivity=1 and task_status=0 order by  RAND() limit 3";
+                else
+                    querySql = "select t.* from dm_task t left join dm_task_revice r on t.id=r.task_id where t.isactivity=1 and t.task_status=0 and r.user_id=" + user_id;
+                return this.BaseRepository("dm_data").FindList<dm_taskEntity>(querySql);
             }
             catch (Exception ex)
             {

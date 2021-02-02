@@ -613,6 +613,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        #region 参与活动
+        public dm_userEntity JoinActivity(int user_id) {
+            try
+            {
+                return dM_UserService.JoinActivity(user_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
         #region 清除淘宝授权信息
         public void Clear_TB_Relation_Auth(int User_ID)
         {
