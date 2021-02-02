@@ -163,6 +163,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("ISCHECKMODE")]
         public int ischeckmode { get; set; }
+
+        /// <summary>
+        /// 是否为活动任务  1=是  0=否
+        /// </summary>
+        [Column("ISACTIVITY")]
+        public int isactivity { get; set; }
         #endregion
 
         #region 扩展操作

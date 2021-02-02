@@ -80,17 +80,17 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     string queryDiction = "";
                     if (status == 2)
                     {//获取审核模式下的任务
-                        queryDiction = "{\"appid\":\"" + appid + "\",\"ischeckmode\":\"1\"}";
+                        queryDiction = "{\"appid\":\"" + appid + "\",\"ischeckmode\":\"1\",\"isactivity\":\"0\"}";
                     }
                     else
                     {
                         if (TaskType == "-1")
                         {
-                            queryDiction = "{\"appid\":\"" + appid + "\",\"ischeckmode\":\"0\"}";
+                            queryDiction = "{\"appid\":\"" + appid + "\",\"ischeckmode\":\"0\",\"isactivity\":\"0\"}";
                         }
                         else
                         {
-                            queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\",\"ischeckmode\":\"0\"}";
+                            queryDiction = "{\"appid\":\"" + appid + "\",\"task_type\":\"" + TaskType + "\",\"ischeckmode\":\"0\",\"isactivity\":\"0\"}";
                         }
                     }
 
@@ -440,7 +440,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     rows = PageSize
                 }, appid);
 
-                if (status == 2) {
+                if (status == 2)
+                {
                     dm_ReadtaskList = dm_ReadtaskList.Where(t => t.ischeckmode == 1);
                 }
 

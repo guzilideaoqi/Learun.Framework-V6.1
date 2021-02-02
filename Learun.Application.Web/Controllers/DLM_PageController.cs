@@ -14,12 +14,23 @@ namespace Learun.Application.Web.Controllers
             return View();
         }
 
-        public ActionResult CloseAccount() {
+        public ActionResult CloseAccount()
+        {
             return View();
         }
 
-        public ActionResult CopyInviteCode(string InviteCode) {
+        public ActionResult CopyInviteCode(string InviteCode)
+        {
             ViewBag.InviteCode = InviteCode;
+            return View();
+        }
+
+        public ActionResult ActivityPage(string token, string appid, string platfotm, string version)
+        {
+            ViewBag.Token = token;
+            ViewBag.AppID = appid;
+            ViewBag.Platform = platfotm;
+            ViewBag.Version = version;
             return View();
         }
     }

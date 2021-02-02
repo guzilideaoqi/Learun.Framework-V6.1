@@ -2443,6 +2443,7 @@
     <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Form.js" />
     <Content Include="Views\DLM_Page\CopyInviteCode.cshtml" />
+    <Content Include="Views\DLM_Page\ActivityPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

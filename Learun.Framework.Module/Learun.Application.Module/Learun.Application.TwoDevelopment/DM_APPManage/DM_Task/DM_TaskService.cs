@@ -173,6 +173,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     strSql.Append(" and t.ischeckmode = '" + queryParam["ischeckmode"].ToString() + "'");
                 }
+                if (!queryParam["isactivity"].IsEmpty()) {
+                    strSql.Append(" and t.isactivity = '" + queryParam["isactivity"].ToString() + "'");
+                }
 
                 if (IsApi)
                 {
