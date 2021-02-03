@@ -583,6 +583,7 @@
     <Content Include="Content\datepicker\开发包\skin\whyGreen\bg.jpg" />
     <Content Include="Content\datepicker\开发包\skin\whyGreen\datepicker.css" />
     <Content Include="Content\datepicker\开发包\skin\whyGreen\img.gif" />
+    <Content Include="Content\dlm\activity_bg.png" />
     <Content Include="Content\dlm\bj.png" />
     <Content Include="Content\dlm\download.png" />
     <Content Include="Content\dlm\bootstrap.min.css" />
@@ -1947,6 +1948,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="UpdateRecord.txt" />
+    <Content Include="Views\DLM_Page\ActivityPage.css" />
     <Content Include="Views\Home\AdminAccordion\Index.css" />
     <Content Include="Views\Home\AdminAccordion\Index.js" />
     <Content Include="Views\Home\AdminDesktopTemp\Index.js" />

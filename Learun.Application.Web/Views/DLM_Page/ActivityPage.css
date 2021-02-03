@@ -1,0 +1,130 @@
+﻿/*html {
+    background-color: #FD6F08;
+}*/
+body {
+    background-image: url('../../Content/dlm/activity_bg.png');
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-position: center 0;
+    background-repeat: no-repeat;
+    font-size: 12px;
+    z-index:999;
+}
+
+.page_title {
+    color: white;
+    text-align: center;
+    line-height: 50px;
+}
+
+.page_price {
+    text-align: center;
+    position: relative;
+    top: 80px;
+}
+
+    .page_price .lot {
+        color: #fd4242;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .page_price .price {
+        color: #fd4242;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .page_price .remark {
+        color: #ff9c03;
+        margin-top: 10px;
+    }
+
+    .page_price .tixian {
+        position: absolute;
+        top: 0;
+        right: 40px;
+        border-radius: 100px 0px 0px 100px;
+        background-color: #FFB8B4;
+        color: #FE6E6C;
+        padding: 5px 10px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+.task_list {
+    margin: 0 10px;
+    background-color: #FD793C;
+    position: relative;
+    top: 180px;
+    border-radius: 5px;
+    padding-bottom: 10px;
+}
+
+    .task_list .remark, .task_description .remark {
+        color: #fadc85;
+        margin-left: 10px;
+        padding-top: 10px;
+    }
+
+    .task_list .task_item {
+        border-radius: 5px;
+        background-color: #FD9058;
+        margin: 5px 10px;
+        display: flex;
+        flex-direction: row;
+        height: 50px;
+        line-height: 50px;
+    }
+
+        .task_list .task_item .task_content {
+            width: 75%;
+            padding-left: 5px;
+            font-size: 12px;
+            color: white;
+        }
+
+        .task_list .task_item .btn {
+            width: 25%;
+            text-align: center;
+            border-radius: 20px;
+            background-image: linear-gradient(#FEE884, #FFAE58);
+            color: #d40909;
+            margin: 12px 5px;
+            line-height: 26px;
+            font-size: 12px;
+        }
+
+.btn_list {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    top: 180px;
+}
+
+    .btn_list div {
+        width: 50%;
+        text-align: center;
+        margin: 15px 8%;
+        background-color: #FD4242;
+        color: white;
+        border-radius: 20px;
+        padding: 5px;
+    }
+
+.task_description {
+    margin: 0 10px;
+    background: rgba(253,147,69,.6);
+    position: relative;
+    top: 180px;
+    border-radius: 5px;
+    padding-bottom: 10px;
+}
+
+    .task_description p {
+        color: white;
+        font-size: 12px;
+        line-height: 18px;
+        padding-left:10px;
+    }
