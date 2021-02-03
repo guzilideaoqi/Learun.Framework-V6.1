@@ -1281,6 +1281,10 @@
     <Content Include="Content\signet\jquery.zsign.js" />
     <Content Include="Content\signet\signet.gif" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\toast\css\animate.css" />
+    <Content Include="Content\toast\css\showMessage.css" />
+    <Content Include="Content\toast\css\toast.css" />
+    <Content Include="Content\toast\toast.js" />
     <Content Include="Content\ueditor\dialogs\anchor\anchor.html" />
     <Content Include="Content\ueditor\dialogs\attachment\attachment.css" />
     <Content Include="Content\ueditor\dialogs\attachment\attachment.html" />
@@ -1949,6 +1953,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="UpdateRecord.txt" />
     <Content Include="Views\DLM_Page\ActivityPage.css" />
+    <Content Include="Views\DLM_Page\ActivityPage.js" />
     <Content Include="Views\Home\AdminAccordion\Index.css" />
     <Content Include="Views\Home\AdminAccordion\Index.js" />
     <Content Include="Views\Home\AdminDesktopTemp\Index.js" />

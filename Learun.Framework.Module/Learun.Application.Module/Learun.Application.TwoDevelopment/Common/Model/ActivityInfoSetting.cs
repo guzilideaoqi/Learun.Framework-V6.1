@@ -48,5 +48,15 @@ namespace Learun.Application.TwoDevelopment.Common.Model
         /// 活动结束时间
         /// </summary>
         public DateTime ActivityEndTime { get; set; }
+
+        /// <summary>
+        /// 活动编号
+        /// </summary>
+        public string ActivityCode { get; set; }
+
+        /// <summary>
+        /// 活动说明
+        /// </summary>
+        public string ActivityRemark { get; set; }
     }
 }

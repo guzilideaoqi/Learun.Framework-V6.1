@@ -9,6 +9,7 @@ using System.Linq;
 using Learun.Cache.Base;
 using Learun.Cache.Factory;
 using io.rong.methods.chatroom.whitelist;
+using Learun.Application.TwoDevelopment.Common;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
 {
@@ -274,17 +275,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取随机活动任务
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<dm_taskEntity> GetRandActivityTaskList(int user_id)
+        public DataTable GetRandActivityTaskList(int user_id)
         {
             try
             {
-                dm_userEntity dm_UserEntity = this.BaseRepository("dm_data").FindEntity<dm_userEntity>(t => t.id == user_id && t.activityprice > 0);
+                IEnumerable<dm_task_reviceEntity> dm_task_reviceList = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == user_id && t.activitycode == CommonConfig.activityInfoSetting.ActivityCode);
+
                 string querySql = "";
-                if (dm_UserEntity.IsEmpty())
-                    querySql = "select * from dm_task where isactivity=1 and task_status=0 order by  RAND() limit 3";
+                if (dm_task_reviceList.Count() <= 0)
+                    querySql = "select *,0 revicestatus from dm_task where isactivity=1 and task_status=0 order by  RAND() limit 3";
                 else
-                    querySql = "select t.* from dm_task t left join dm_task_revice r on t.id=r.task_id where t.isactivity=1 and t.task_status=0 and r.user_id=" + user_id;
-                return this.BaseRepository("dm_data").FindList<dm_taskEntity>(querySql);
+                    querySql = "select t.*,r.status revicestatus from dm_task t left join dm_task_revice r on t.id=r.task_id where t.isactivity=1 and t.task_status=0 and r.user_id=" + user_id;
+                return this.BaseRepository("dm_data").FindTable(querySql);
             }
             catch (Exception ex)
             {
@@ -503,6 +505,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 entity.appid = userInfo.companyId;
                 entity.Create();
                 entity.plaform = 0;
+                entity.task_status = 0;
 
                 this.BaseRepository("dm_data").Insert(entity);
             }

@@ -135,7 +135,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取随机活动任务
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<dm_taskEntity> GetRandActivityTaskList(int user_id) {
+        public DataTable GetRandActivityTaskList(int user_id) {
             try
             {
                 return dM_TaskService.GetRandActivityTaskList(user_id);

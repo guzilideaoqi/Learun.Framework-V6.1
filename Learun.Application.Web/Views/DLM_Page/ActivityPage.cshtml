@@ -4,52 +4,44 @@
     <meta charset="UTF-8">
     <title>瓜分千万红包</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/Content/toast/css/toast.css" rel="stylesheet" />
+    <link href="~/Content/toast/css/animate.css" rel="stylesheet" />
+    <script src="~/Content/jquery/jquery-1.10.2.min.js"></script>
 </head>
 <body>
     @Html.AppendCssFile("/Views/DLM_Page/ActivityPage.css")
-
+    <input id="token" type="hidden"  value="@ViewBag.Token"/>
     <div class="page_title">瓜分2021万</div>
 
     <div class="page_price">
         <span class="lot">￥</span>
-        <span class="price">26.78</span>
+        <span class="price">@ViewBag.ActivityPrice</span>
         <div class="remark">满30元可提现</div>
         <div class="tixian">提现></div>
     </div>
 
-    <div class="task_list">
-        <div class="remark">提现攻略</div>
-        <div class="task_item">
-            <div class="task_content">第一步 XXXXXXXXXXX  1.6元</div>
-            <div class="btn">领取任务</div>
-        </div>
-        <div class="task_item">
-            <div class="task_content">第二步 XXXXXXXXXXX  0.8元</div>
-            <div class="btn">待领取</div>
-        </div>
-        <div class="task_item">
-            <div class="task_content">第二步 XXXXXXXXXXX  0.8元</div>
-            <div class="btn">待领取</div>
-        </div>
+    <div id="task_list" class="task_list">
+
     </div>
 
     <div class="btn_list">
-        <div>解锁更多任务</div>
-        <div>换一批</div>
+        <div id="loadmore">解锁更多任务</div>
+        <div id="changetask">换一批</div>
     </div>
 
     <div class="task_description">
         <div class="remark">活动说明</div>
-        <p>1、来来阿里</p>
-        <p>2、加油干</p>
+        @Html.Raw(ViewBag.ActivityRemark)
     </div>
 
     @*<div>活动奖励:@ViewBag.ActivityPrice</div>
-    <div>Token:@ViewBag.Token</div>
-    <div>AppID:@ViewBag.AppID</div>
-    <div>Version:@ViewBag.Version</div>
-    <div>Platform:@ViewBag.Platform</div>
+        <div>Token:@ViewBag.Token</div>
+        <div>AppID:@ViewBag.AppID</div>
+        <div>Version:@ViewBag.Version</div>
+        <div>Platform:@ViewBag.Platform</div>
 
-    <a href="#">打开任务详情</a>*@
+        <a href="#">打开任务详情</a>*@
 </body>
 </html>
+<script src="~/Content/toast/toast.js"></script>
+@Html.AppendJsFile("/Views/DLM_Page/ActivityPage.js")

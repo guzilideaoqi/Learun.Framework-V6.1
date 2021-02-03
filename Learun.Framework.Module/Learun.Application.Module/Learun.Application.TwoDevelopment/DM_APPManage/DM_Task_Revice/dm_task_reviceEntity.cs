@@ -100,6 +100,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("RECORDINDEX")]
         public int? recordindex { get; set; }
+
+        /// <summary>
+        /// 活动编号
+        /// </summary>
+        [Column("ACTIVITYCODE")]
+        public string activitycode { get; set; }
         #endregion
 
         #region 扩展操作

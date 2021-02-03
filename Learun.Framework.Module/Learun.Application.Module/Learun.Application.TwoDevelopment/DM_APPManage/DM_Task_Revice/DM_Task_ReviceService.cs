@@ -780,7 +780,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         recordindex = i + 1,
                         status = 1,
                         task_id = int.Parse(task_ids[i]),
-                        user_id = user_id
+                        user_id = user_id,
+                        activitycode=CommonConfig.activityInfoSetting.ActivityCode
                     };
                     dm_Task_ReviceEntity.Create();
                     dm_task_reviceList.Add(dm_Task_ReviceEntity);

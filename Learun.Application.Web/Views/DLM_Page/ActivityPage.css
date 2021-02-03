@@ -16,12 +16,13 @@ body {
     color: white;
     text-align: center;
     line-height: 50px;
+    font-size:18px;
 }
 
 .page_price {
     text-align: center;
     position: relative;
-    top: 80px;
+    top: 90px;
 }
 
     .page_price .lot {
@@ -38,13 +39,13 @@ body {
 
     .page_price .remark {
         color: #ff9c03;
-        margin-top: 10px;
+        margin-top: 20px;
     }
 
     .page_price .tixian {
         position: absolute;
         top: 0;
-        right: 40px;
+        right: 53px;
         border-radius: 100px 0px 0px 100px;
         background-color: #FFB8B4;
         color: #FE6E6C;
@@ -57,7 +58,7 @@ body {
     margin: 0 10px;
     background-color: #FD793C;
     position: relative;
-    top: 180px;
+    top: 220px;
     border-radius: 5px;
     padding-bottom: 10px;
 }
@@ -89,18 +90,32 @@ body {
             width: 25%;
             text-align: center;
             border-radius: 20px;
-            background-image: linear-gradient(#FEE884, #FFAE58);
-            color: #d40909;
+
             margin: 12px 5px;
             line-height: 26px;
             font-size: 12px;
+        }
+
+        .task_list .task_item .red {
+            background-image: linear-gradient(#FEE884, #FFAE58);
+            color: #d40909;
+        }
+
+        .task_list .task_item .gray {
+            background-image: linear-gradient(#f1efe5,#908b85);
+            color:white;
+        }
+
+        .task_list .task_item .finish {
+            background-image: linear-gradient(#fe7b07,#ad5504);
+            color: #ffffff;
         }
 
 .btn_list {
     display: flex;
     flex-direction: row;
     position: relative;
-    top: 180px;
+    top: 220px;
 }
 
     .btn_list div {
@@ -110,14 +125,14 @@ body {
         background-color: #FD4242;
         color: white;
         border-radius: 20px;
-        padding: 5px;
+        padding:10px 5px;
     }
 
 .task_description {
     margin: 0 10px;
     background: rgba(253,147,69,.6);
     position: relative;
-    top: 180px;
+    top: 220px;
     border-radius: 5px;
     padding-bottom: 10px;
 }
@@ -125,6 +140,6 @@ body {
     .task_description p {
         color: white;
         font-size: 12px;
-        line-height: 18px;
+        line-height: 25px;
         padding-left:10px;
     }

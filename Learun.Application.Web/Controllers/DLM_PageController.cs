@@ -3,6 +3,7 @@ using Learun.Application.TwoDevelopment.Common;
 using Learun.Application.TwoDevelopment.DM_APPManage;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -50,28 +51,28 @@ namespace Learun.Application.Web.Controllers
             ViewBag.AppID = appid;
             ViewBag.Platform = platfotm;
             ViewBag.Version = version;
+            ViewBag.ActivityRemark = CommonConfig.activityInfoSetting.ActivityRemark;
             return View();
         }
 
         [HttpGet]
         [AjaxOnly(false)]
-        public ActionResult GetRandActivityTaskList(string queryJson)
+        public ActionResult GetRandActivityTaskList(string token)
         {
-            dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(ViewBag.Token);
-            List<dm_taskEntity> dm_TaskEntities = new List<dm_taskEntity>();
+            dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
+            DataTable dm_TaskEntities=new DataTable();
             if (!dm_UserEntity.IsEmpty())
             {
-                dm_TaskEntities = dM_TaskIBLL.GetRandActivityTaskList((int)dm_UserEntity.id).ToList();
+                dm_TaskEntities = dM_TaskIBLL.GetRandActivityTaskList((int)dm_UserEntity.id);
             }
             return Success(dm_TaskEntities);
         }
 
         [HttpPost]
         [AjaxOnly(false)]
-        [ValidateInput(false)]
-        public ActionResult ReviceActivityTask(string taskids, dm_articleEntity entity)
+        public ActionResult ReviceActivityTask(string token,string taskids)
         {
-            dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(ViewBag.Token);
+            dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
             if (!dm_UserEntity.IsEmpty())
             {
                 dM_Task_ReviceIBLL.ReviceActivityTask(taskids.Split(','), (int)dm_UserEntity.id);
