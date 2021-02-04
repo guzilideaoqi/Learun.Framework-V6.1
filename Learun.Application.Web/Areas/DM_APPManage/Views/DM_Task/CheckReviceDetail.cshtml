@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "CheckReviceDetail";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    #dataList .dataitem .remark {
+        margin:6px 0px;
+    }
+
+    #dataList .dataitem .imagelist img {
+        margin: 5px;
+        max-width: 120px;
+    }
+</style>
+<div style="padding-left:20px;" id="dataList">
+    
+</div>
+
+
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_Task/CheckReviceDetail.js")

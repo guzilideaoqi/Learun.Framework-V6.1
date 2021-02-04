@@ -556,140 +556,181 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 dm_TaskEntity.Modify(dm_TaskEntity.id);
                 #endregion
 
-                #region 任务审核消息
-                dm_messagerecordEntity dm_MessagerecordEntity = new dm_messagerecordEntity
+                if (dm_TaskEntity.isactivity == 0)
                 {
-                    isread = 0,
-                    user_id = dm_Task_ReviceEntity.user_id,
-                    messagetitle = "任务审核通过",
-                    messagecontent = "您接受的任务编号:" + dm_TaskEntity.task_no + "已审核通过,请及时查看!",
-                    messagetype = 3,
-                    createtime = DateTime.Now
-                };
-                #endregion
-
-                #region 执行返佣
-                /*做任务人根据等级返佣金*/
-                /*上级从服务费中计算佣金*/
-                //获取上下级关系
-                IEnumerable<dm_user_relationEntity> userRelationList = dM_UserRelationService.GetParentRelation(dm_Task_ReviceEntity.user_id);
-
-                ///获取上下级关系的用户信息
-                IEnumerable<dm_userEntity> userList = dM_UserService.GetParentUser(dm_Task_ReviceEntity.user_id);
-
-                #region 做任务人返佣
-                currentUser = userList.Where(t => t.id == dm_Task_ReviceEntity.user_id).FirstOrDefault();
-                currentNickName = currentUser.nickname;//记录下接单人的昵称  防止丢失
-                if (currentUser.IsEmpty())
-                    throw new Exception("用户信息异常!");
-                if (currentUser.userlevel == 0)
-                    throw new Exception("用户等级异常,返佣失败!");
-                else if (currentUser.userlevel == 1)
-                    do_task_commission = dm_TaskEntity.juniorcommission;
-                else if (currentUser.userlevel == 2)
-                    do_task_commission = dm_TaskEntity.seniorcommission;
-                else
-                    throw new Exception("用户无等级,返佣失败!");
-
-                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(dm_TaskEntity.appid);
-
-                dm_basesetting_tipEntity dm_Basesetting_TipEntity = dm_Basesetting_TipService.GetEntityByAppID(dm_TaskEntity.appid);
-
-                if (do_task_commission > 0)
-                {
-                    dm_Task_ReviceEntity.comissionamount = do_task_commission;
-                    currentUser = CalculateComission(currentUser.id, do_task_commission, currentUser.accountprice);
-                    dm_AccountdetailEntities.Add(GeneralAccountDetail(currentUser.id, 14, dm_Basesetting_TipEntity.task_do_tip, "您接受的任务编号" + dm_TaskEntity.task_no + "已返佣到账,请及时查收!", do_task_commission, currentUser.accountprice));
-                }
-                #endregion
-                dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity.id);//由于需要修改任务所得佣金  故修改放到此处
-
-                #region 更改一级账户余额及明细
-                dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Task_ReviceEntity.user_id).FirstOrDefault();
-                if (!dm_User_RelationEntity_one.IsEmpty())
-                {
-                    one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
-                    if (!one_User.IsEmpty())
+                    #region 任务审核消息
+                    dm_messagerecordEntity dm_MessagerecordEntity = new dm_messagerecordEntity
                     {
-                        if (one_User.userlevel == 1 || one_User.userlevel == 2 || one_User.partnersstatus == 2)
-                        {//做任务人为代理身份才会返佣
-                            one_agent_commission = ConvertComission(dm_BasesettingEntity.task_one * dm_TaskEntity.servicefee);
-                            if (one_agent_commission > 0)
-                            {
-                                one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 15, dm_Basesetting_TipEntity.task_one_tip, "您的" + dm_Basesetting_TipEntity.task_one_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_agent_commission, one_User.accountprice));
-                            }
+                        isread = 0,
+                        user_id = dm_Task_ReviceEntity.user_id,
+                        messagetitle = "任务审核通过",
+                        messagecontent = "您接受的任务编号:" + dm_TaskEntity.task_no + "已审核通过,请及时查看!",
+                        messagetype = 3,
+                        createtime = DateTime.Now
+                    };
+                    #endregion
 
-                            #region 更改二级账户余额及明细
-                            dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
-                            if (!dm_User_RelationEntity_two.IsEmpty())
-                            {
-                                two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
-                                if (!two_User.IsEmpty())
+                    #region 执行返佣
+                    /*做任务人根据等级返佣金*/
+                    /*上级从服务费中计算佣金*/
+                    //获取上下级关系
+                    IEnumerable<dm_user_relationEntity> userRelationList = dM_UserRelationService.GetParentRelation(dm_Task_ReviceEntity.user_id);
+
+                    ///获取上下级关系的用户信息
+                    IEnumerable<dm_userEntity> userList = dM_UserService.GetParentUser(dm_Task_ReviceEntity.user_id);
+
+                    #region 做任务人返佣
+                    currentUser = userList.Where(t => t.id == dm_Task_ReviceEntity.user_id).FirstOrDefault();
+                    currentNickName = currentUser.nickname;//记录下接单人的昵称  防止丢失
+                    if (currentUser.IsEmpty())
+                        throw new Exception("用户信息异常!");
+                    if (currentUser.userlevel == 0)
+                        throw new Exception("用户等级异常,返佣失败!");
+                    else if (currentUser.userlevel == 1)
+                        do_task_commission = dm_TaskEntity.juniorcommission;
+                    else if (currentUser.userlevel == 2)
+                        do_task_commission = dm_TaskEntity.seniorcommission;
+                    else
+                        throw new Exception("用户无等级,返佣失败!");
+
+                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(dm_TaskEntity.appid);
+
+                    dm_basesetting_tipEntity dm_Basesetting_TipEntity = dm_Basesetting_TipService.GetEntityByAppID(dm_TaskEntity.appid);
+
+                    if (do_task_commission > 0)
+                    {
+                        dm_Task_ReviceEntity.comissionamount = do_task_commission;
+                        currentUser = CalculateComission(currentUser.id, do_task_commission, currentUser.accountprice);
+                        dm_AccountdetailEntities.Add(GeneralAccountDetail(currentUser.id, 14, dm_Basesetting_TipEntity.task_do_tip, "您接受的任务编号" + dm_TaskEntity.task_no + "已返佣到账,请及时查收!", do_task_commission, currentUser.accountprice));
+                    }
+                    #endregion
+                    dm_Task_ReviceEntity.Modify(dm_Task_ReviceEntity.id);//由于需要修改任务所得佣金  故修改放到此处
+
+                    #region 更改一级账户余额及明细
+                    dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Task_ReviceEntity.user_id).FirstOrDefault();
+                    if (!dm_User_RelationEntity_one.IsEmpty())
+                    {
+                        one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
+                        if (!one_User.IsEmpty())
+                        {
+                            if (one_User.userlevel == 1 || one_User.userlevel == 2 || one_User.partnersstatus == 2)
+                            {//做任务人为代理身份才会返佣
+                                one_agent_commission = ConvertComission(dm_BasesettingEntity.task_one * dm_TaskEntity.servicefee);
+                                if (one_agent_commission > 0)
                                 {
-                                    if (two_User.userlevel == 1 || two_User.userlevel == 2 || two_User.partnersstatus == 2)
+                                    one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 15, dm_Basesetting_TipEntity.task_one_tip, "您的" + dm_Basesetting_TipEntity.task_one_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_agent_commission, one_User.accountprice));
+                                }
+
+                                #region 更改二级账户余额及明细
+                                dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
+                                if (!dm_User_RelationEntity_two.IsEmpty())
+                                {
+                                    two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
+                                    if (!two_User.IsEmpty())
                                     {
-                                        two_agent_commission = ConvertComission(dm_BasesettingEntity.task_two * dm_TaskEntity.servicefee);
-                                        if (two_agent_commission > 0)
+                                        if (two_User.userlevel == 1 || two_User.userlevel == 2 || two_User.partnersstatus == 2)
                                         {
-                                            two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
-                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 16, dm_Basesetting_TipEntity.task_two_tip, "您的" + dm_Basesetting_TipEntity.task_two_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                            two_agent_commission = ConvertComission(dm_BasesettingEntity.task_two * dm_TaskEntity.servicefee);
+                                            if (two_agent_commission > 0)
+                                            {
+                                                two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
+                                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 16, dm_Basesetting_TipEntity.task_two_tip, "您的" + dm_Basesetting_TipEntity.task_two_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            #endregion
-                        }
-                    }
-                }
-                #endregion
-
-                #region 获取当前用户所属合伙人(一级合伙人)
-                one_partners = dM_UserService.GetUserByPartnersID(dm_User_RelationEntity_one.partners_id);
-                if (!one_partners.IsEmpty())
-                {
-                    one_partners_commission = ConvertComission(dm_BasesettingEntity.task_one_partners * dm_TaskEntity.servicefee);
-                    if (one_partners_commission > 0)
-                    {
-                        one_partners = CalculateComission(one_partners.id, one_partners_commission, one_partners.accountprice);
-                        dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 17, dm_Basesetting_TipEntity.task_parners_one_tip, "您的" + dm_Basesetting_TipEntity.task_parners_one_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_partners_commission, one_partners.accountprice));
-                    }
-
-                    #region 二级合伙人
-                    dm_user_relationEntity dm_User_RelationEntity_one_partners = dM_UserRelationService.GetEntityByUserID(one_partners.id);
-                    two_partners = dM_UserService.GetEntityByCache(dm_User_RelationEntity_one_partners.parent_id);
-                    //two_partners = dM_UserService.GetUserByPartnersID(dm_User_RelationEntity_one_partners.partners_id);
-                    if (!two_partners.IsEmpty())
-                    {
-                        if (two_partners.partnersstatus == 2)
-                        {//二级用户为合伙人时才进行返利
-                            two_partners_commission = ConvertComission(dm_BasesettingEntity.task_two_partners * dm_TaskEntity.servicefee);
-                            if (two_partners_commission > 0)
-                            {
-                                two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
-                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 18, dm_Basesetting_TipEntity.task_parners_two_tip, "您的" + dm_Basesetting_TipEntity.task_parners_two_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_partners_commission, two_partners.accountprice));
+                                #endregion
                             }
                         }
                     }
                     #endregion
-                }
-                #endregion
-                #endregion
 
-                if (calculateComissionEntities.Count > 0)
-                {
-                    //必须加上这个变量,用于清除当前返利账户的余额
-                    foreach (var item in calculateComissionEntities)
+                    #region 获取当前用户所属合伙人(一级合伙人)
+                    one_partners = dM_UserService.GetUserByPartnersID(dm_User_RelationEntity_one.partners_id);
+                    if (!one_partners.IsEmpty())
                     {
-                        item.Modify(item.id);
+                        one_partners_commission = ConvertComission(dm_BasesettingEntity.task_one_partners * dm_TaskEntity.servicefee);
+                        if (one_partners_commission > 0)
+                        {
+                            one_partners = CalculateComission(one_partners.id, one_partners_commission, one_partners.accountprice);
+                            dm_AccountdetailEntities.Add(GeneralAccountDetail(one_partners.id, 17, dm_Basesetting_TipEntity.task_parners_one_tip, "您的" + dm_Basesetting_TipEntity.task_parners_one_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", one_partners_commission, one_partners.accountprice));
+                        }
+
+                        #region 二级合伙人
+                        dm_user_relationEntity dm_User_RelationEntity_one_partners = dM_UserRelationService.GetEntityByUserID(one_partners.id);
+                        two_partners = dM_UserService.GetEntityByCache(dm_User_RelationEntity_one_partners.parent_id);
+                        //two_partners = dM_UserService.GetUserByPartnersID(dm_User_RelationEntity_one_partners.partners_id);
+                        if (!two_partners.IsEmpty())
+                        {
+                            if (two_partners.partnersstatus == 2)
+                            {//二级用户为合伙人时才进行返利
+                                two_partners_commission = ConvertComission(dm_BasesettingEntity.task_two_partners * dm_TaskEntity.servicefee);
+                                if (two_partners_commission > 0)
+                                {
+                                    two_partners = CalculateComission(two_partners.id, two_partners_commission, two_partners.accountprice);
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(two_partners.id, 18, dm_Basesetting_TipEntity.task_parners_two_tip, "您的" + dm_Basesetting_TipEntity.task_parners_two_tip + "《" + currentNickName + "》任务已完成,奖励已发放到您的账户,继续努力哟!", two_partners_commission, two_partners.accountprice));
+                                }
+                            }
+                        }
+                        #endregion
                     }
+                    #endregion
+                    #endregion
+
+                    if (calculateComissionEntities.Count > 0)
+                    {
+                        //必须加上这个变量,用于清除当前返利账户的余额
+                        foreach (var item in calculateComissionEntities)
+                        {
+                            item.Modify(item.id);
+                        }
+                        db = BaseRepository("dm_data").BeginTrans();
+                        db.Update(dm_Task_ReviceEntity);//更改接单表信息
+                        db.Update(dm_TaskEntity);//更改任务主表信息
+                        db.Insert(dm_MessagerecordEntity);//增加任务审核消息(发给接受任务的人)
+                        db.Insert(dm_MessagerecordEntity);//增加消息记录
+                        db.Insert(dm_AccountdetailEntities);//增加账户余额明细
+                        db.Update(calculateComissionEntities);//批量修改用户信息
+                        db.Commit();
+                    }
+                }
+                else
+                {
+                    currentUser = dM_UserService.GetEntity(dm_Task_ReviceEntity.user_id);
+                    if (currentUser.IsEmpty())
+                        throw new Exception("用户信息异常!");
+                    #region 活动账户增加金额
+                    currentUser.activityprice += dm_TaskEntity.singlecommission;
+                    #endregion
+
+                    dm_accountdetailEntity dm_AccountdetailEntity = null;
+
+                    /*判断当前所有任务是否都已完成*/
+                    IEnumerable<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == dm_Task_ReviceEntity.user_id && t.status != 3 && t.status != 4 && t.activitycode == CommonConfig.activityInfoSetting.ActivityCode);
+                    if (dm_Task_ReviceEntities.Count() <= 0)
+                    {//活动任务已全部完成
+                        currentUser.accountprice += currentUser.activityprice;
+
+                        dm_AccountdetailEntity = new dm_accountdetailEntity
+                        {
+                            createtime = DateTime.Now,
+                            remark = "活动奖励" + CommonConfig.activityInfoSetting.ActivityCode,
+                            stepvalue = currentUser.activityprice,
+                            currentvalue = currentUser.accountprice,
+                            title = "活动奖励",
+                            type = 24,
+                            user_id = dm_Task_ReviceEntity.user_id,
+                            profitLoss = 1
+                        };
+                    }
+
                     db = BaseRepository("dm_data").BeginTrans();
-                    db.Update(dm_Task_ReviceEntity);//更改接单表信息
-                    db.Update(dm_TaskEntity);//更改任务主表信息
-                    db.Insert(dm_MessagerecordEntity);//增加任务审核消息(发给接受任务的人)
-                    db.Insert(dm_MessagerecordEntity);//增加消息记录
-                    db.Insert(dm_AccountdetailEntities);//增加账户余额明细
-                    db.Update(calculateComissionEntities);//批量修改用户信息
+                    db.Update(currentUser);
+                    db.Update(dm_TaskEntity);
+                    db.Update(dm_Task_ReviceEntity);
+                    if (!dm_AccountdetailEntity.IsEmpty())
+                        db.Insert(dm_AccountdetailEntity);
                     db.Commit();
                 }
 
@@ -762,14 +803,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #endregion
 
         #region 领取活动任务
-        public void ReviceActivityTask(string[] task_ids,int user_id)
+        public void ReviceActivityTask(string[] task_ids, int user_id)
         {
             try
             {
                 DateTime currentTime = DateTime.Now;
-                if (currentTime < CommonConfig.activityInfoSetting.ActivityStartTime || currentTime > CommonConfig.activityInfoSetting.ActivityEndTime) {
+                if (currentTime < CommonConfig.activityInfoSetting.ActivityStartTime || currentTime > CommonConfig.activityInfoSetting.ActivityEndTime)
+                {
                     throw new Exception("不在活动时间内，无法接受任务!");
                 }
+
+                IEnumerable<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == user_id && t.activitycode == CommonConfig.activityInfoSetting.ActivityCode);
+                if (dm_Task_ReviceEntities.Count() > 0)
+                    throw new Exception("每个活动每人只能接一次!");
 
                 List<dm_task_reviceEntity> dm_task_reviceList = new List<dm_task_reviceEntity>();
                 for (int i = 0; i < task_ids.Length; i++)
@@ -781,7 +827,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         status = 1,
                         task_id = int.Parse(task_ids[i]),
                         user_id = user_id,
-                        activitycode=CommonConfig.activityInfoSetting.ActivityCode
+                        activitycode = CommonConfig.activityInfoSetting.ActivityCode
                     };
                     dm_Task_ReviceEntity.Create();
                     dm_task_reviceList.Add(dm_Task_ReviceEntity);

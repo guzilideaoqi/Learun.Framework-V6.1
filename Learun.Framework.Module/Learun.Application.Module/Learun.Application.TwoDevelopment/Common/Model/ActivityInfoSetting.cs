@@ -40,6 +40,11 @@ namespace Learun.Application.TwoDevelopment.Common.Model
         public string APP_To_ActivityUrl { get; set; }
 
         /// <summary>
+        /// 活动标题
+        /// </summary>
+        public string ActivityTitle { get; set; }
+
+        /// <summary>
         /// 活动开始时间
         /// </summary>
         public DateTime ActivityStartTime { get; set; }
@@ -58,5 +63,10 @@ namespace Learun.Application.TwoDevelopment.Common.Model
         /// 活动说明
         /// </summary>
         public string ActivityRemark { get; set; }
+
+        /// <summary>
+        /// 活动状态
+        /// </summary>
+        public int ActivityStatus { get; set; }
     }
 }

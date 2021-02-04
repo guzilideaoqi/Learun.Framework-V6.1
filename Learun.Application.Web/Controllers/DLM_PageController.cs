@@ -33,7 +33,7 @@ namespace Learun.Application.Web.Controllers
             return View();
         }
 
-        public ActionResult ActivityPage(string token, string appid, string platfotm, string version)
+        public ActionResult ActivityPage(string token, string appid, string platform, string version)
         {
             /*
              * 1、随机生成金额分配给对应用户，金额区间26.5~28.2
@@ -49,7 +49,7 @@ namespace Learun.Application.Web.Controllers
 
             ViewBag.Token = token;
             ViewBag.AppID = appid;
-            ViewBag.Platform = platfotm;
+            ViewBag.Platform = platform;
             ViewBag.Version = version;
             ViewBag.ActivityRemark = CommonConfig.activityInfoSetting.ActivityRemark;
             return View();
@@ -60,17 +60,21 @@ namespace Learun.Application.Web.Controllers
         public ActionResult GetRandActivityTaskList(string token)
         {
             dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
-            DataTable dm_TaskEntities=new DataTable();
+            DataTable dm_TaskEntities = new DataTable();
             if (!dm_UserEntity.IsEmpty())
             {
                 dm_TaskEntities = dM_TaskIBLL.GetRandActivityTaskList((int)dm_UserEntity.id);
+            }
+            else
+            {
+                return Fail("用户信息异常!");
             }
             return Success(dm_TaskEntities);
         }
 
         [HttpPost]
         [AjaxOnly(false)]
-        public ActionResult ReviceActivityTask(string token,string taskids)
+        public ActionResult ReviceActivityTask(string token, string taskids)
         {
             dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
             if (!dm_UserEntity.IsEmpty())

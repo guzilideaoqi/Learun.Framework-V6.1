@@ -38,29 +38,31 @@ namespace Learun.Application.TwoDevelopment.Common
             APP_RedPaper_Image = "",
             APP_RedPaper_Text = "瓜分2000万红包",
             APP_Rock_RedPaper_Image = "",
-            APP_To_ActivityUrl = "http://www.baidu.com",
+            APP_To_ActivityUrl = "http://dev.dlaimi.cn/DLM_Page/ActivityPage",
+            ActivityTitle="瓜分2021万",
             ActivityStartTime = DateTime.Parse("2021-02-01 00:00:00"),
             ActivityEndTime = DateTime.Parse("2021-02-15 00:00:00"),
             ActivityCode = "DLM10001",
+            ActivityStatus = 1,//1进行中的活动  0活动已暂停
             ActivityRemark = string.Format(@"<p>1、活动任务每人限制接受一次</p>
 <p>2、任务一旦接受不能取消</p>
 <p>3、任务结束未完成将不发放金额</p>")
-    };
-}
+        };
+    }
 
-public class IP_Limit
-{
-    /// <summary>
-    /// 记录开始请求时间点
-    /// </summary>
-    public DateTime RequestTime { get; set; }
-    /// <summary>
-    /// 记录请求数量
-    /// </summary>
-    public int RequestCount { get; set; }
-    /// <summary>
-    /// IP地址
-    /// </summary>
-    public string IP { get; set; }
-}
+    public class IP_Limit
+    {
+        /// <summary>
+        /// 记录开始请求时间点
+        /// </summary>
+        public DateTime RequestTime { get; set; }
+        /// <summary>
+        /// 记录请求数量
+        /// </summary>
+        public int RequestCount { get; set; }
+        /// <summary>
+        /// IP地址
+        /// </summary>
+        public string IP { get; set; }
+    }
 }

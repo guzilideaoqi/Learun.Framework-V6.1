@@ -332,6 +332,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Order\SyncOrder.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Order\SyncOrder.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_ReadTask\Form.css" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\CheckReviceDetail.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookReviceDetail.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\PubTask.js" />
@@ -1945,6 +1946,7 @@
     <Content Include="Cert\alipayRootCert.crt" />
     <Content Include="Cert\appCertPublicKey_2021001146627152.crt" />
     <Content Include="Content\dlm\viewer.min.css" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\CheckReviceDetail.cshtml" />
     <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\clipboard.min.js" />

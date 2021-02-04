@@ -132,7 +132,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     nodatatip = CommonConfig.NoDataTip,
                     sign_rule = dm_BasesettingEntity.sign_rule,
                     cashrecord_fee = dm_BasesettingEntity.cashrecord_fee,
-                    cashrecord_remark = dm_BasesettingEntity.cashrecord_remark
+                    cashrecord_remark = dm_BasesettingEntity.cashrecord_remark,
+                    activitysetting = CommonConfig.activityInfoSetting
                 });
             }
             catch (Exception ex)

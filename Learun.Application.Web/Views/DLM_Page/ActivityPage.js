@@ -25,7 +25,11 @@ var meuns = {
         })
 
         $("#loadmore").on("click", function () {
-            meuns.Toast("暂未对接APP");
+            meuns.NativeToApp(1, 0);
+        })
+
+        $("#tixian").on("click", function () {
+            meuns.NativeToApp(2, 0);
         })
     },
     LoadTask: function () {
@@ -90,11 +94,9 @@ var meuns = {
             }
 
 
-
-
             html += "            <div class=\"task_item\">" +
                 "<div class=\"task_content\">" + stepName + " " + taskItem.task_title + "  " + taskItem.singlecommission + "元</div>" +
-                "<div class=\"btn " + btnclass + "\" onclick=\"ReviceActivityTask('" + btnText + "')\">" + btnText + "</div>" +
+                "<div class=\"btn " + btnclass + "\" onclick=\"ReviceActivityTask('" + btnText + "'," + taskItem.reviceid + ")\">" + btnText + "</div>" +
                 "</div>";
 
         }
@@ -102,11 +104,19 @@ var meuns = {
     },
     Toast: function (text) {
         showMessage(text, 3000, true);
+    }, NativeToApp: function (type, id) {
+        var platform = $("#platform").val();
+        if (platform == "android") {
+            window.app.onNativeToAPP(type, id);
+        } else if (platform == "ios") {
+            meuns.Toast("无法从活动页面跳转到APP，请直接在我的接收中完成任务!");
+        } else {
+            meuns.Toast("未检测到合法平台!");
+        }
     }
 }
 
-ReviceActivityTask = function (btntext) {
-    console.log(btntext);
+ReviceActivityTask = function (btntext, reviceid) {
     if (btntext == "领取任务") {
         $.ajax({
             url: "/DLM_Page/ReviceActivityTask",
@@ -124,13 +134,8 @@ ReviceActivityTask = function (btntext) {
             }
         });
     } else if (btntext == "去完成") {
-        meuns.Toast("暂未对接APP");
+        meuns.NativeToApp(3, reviceid);
     }
-
-}
-
-gofinish = function () {
-
 }
 
 meuns.init();

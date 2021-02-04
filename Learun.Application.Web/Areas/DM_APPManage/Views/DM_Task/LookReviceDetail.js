@@ -7,6 +7,7 @@
 var acceptClick;
 var selectedRow;
 var refreshGirdData;
+var checkReviceDetail;
 var bootstrap = function ($, learun) {
     "use strict";
     var selectedRow = learun.frameTab.currentIframe().selectedRow;
@@ -37,7 +38,8 @@ var bootstrap = function ($, learun) {
                                     status = "进行中";
                                     break;
                                 case 2:
-                                    status = "待审核";
+                                    //status = "待审核";
+                                    status = "<a id=\"lr_add\"  class=\"btn btn-success\" style=\"padding:1px 6px;font-size:12px;\" onclick=\"checkReviceDetail(" + rowData.id + ");\">审核</a>";
                                     break;
                                 case 3:
                                     status = "已完成";
@@ -74,5 +76,18 @@ var bootstrap = function ($, learun) {
     acceptClick = function (callBack) {
         learun.layerClose("LookReviceDetail", "");
     };
+    checkReviceDetail = function (id) {
+        learun.layerForm({
+            id: 'form',
+            title: '提交资料审核',
+            url: top.$.rootUrl + '/DM_APPManage/DM_Task/CheckReviceDetail?keyValue=' + id,
+            width: 700,
+            height: 400,
+            btn: ["审核", "关闭"],
+            callBack: function (id) {
+                return top[id].acceptClick(refreshGirdData);
+            }
+        });
+    }
     page.init();
 }

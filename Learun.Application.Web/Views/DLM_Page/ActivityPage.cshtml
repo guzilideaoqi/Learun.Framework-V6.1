@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>瓜分千万红包</title>
+    <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="~/Content/toast/css/toast.css" rel="stylesheet" />
     <link href="~/Content/toast/css/animate.css" rel="stylesheet" />
@@ -10,14 +10,15 @@
 </head>
 <body>
     @Html.AppendCssFile("/Views/DLM_Page/ActivityPage.css")
-    <input id="token" type="hidden"  value="@ViewBag.Token"/>
+    <input id="token" type="hidden" value="@ViewBag.Token" />
+    <input id="platform" type="hidden" value="@ViewBag.Platform" />
     <div class="page_title">瓜分2021万</div>
 
     <div class="page_price">
         <span class="lot">￥</span>
         <span class="price">@ViewBag.ActivityPrice</span>
         <div class="remark">满30元可提现</div>
-        <div class="tixian">提现></div>
+        <div id="tixian" class="tixian">提现></div>
     </div>
 
     <div id="task_list" class="task_list">
@@ -44,4 +45,5 @@
 </body>
 </html>
 <script src="~/Content/toast/toast.js"></script>
-@Html.AppendJsFile("/Views/DLM_Page/ActivityPage.js")
+@*@Html.AppendJsFile("/Views/DLM_Page/ActivityPage.js")*@
+<script src="~/Views/DLM_Page/ActivityPage.js" type="text/javascript"></script>

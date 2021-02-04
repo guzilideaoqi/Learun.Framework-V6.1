@@ -24,7 +24,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
         /// <summary>
         /// 表单页
@@ -33,7 +33,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-             return View();
+            return View();
         }
         #endregion
 
@@ -45,7 +45,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList( string queryJson )
+        public ActionResult GetList(string queryJson)
         {
             var data = dM_Task_ReviceIBLL.GetList(queryJson);
             return Success(data);
@@ -122,12 +122,21 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(int keyValue,dm_task_reviceEntity entity)
+        public ActionResult SaveForm(int keyValue, dm_task_reviceEntity entity)
         {
             dM_Task_ReviceIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
         }
         #endregion
 
+        #region 任务审核
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult AuditTask(int keyValue)
+        {
+            dM_Task_ReviceIBLL.AuditTask(keyValue);
+            return Success("审核成功！");
+        }
+        #endregion
     }
 }
