@@ -248,6 +248,14 @@
     <Compile Include="DM_APPManage\dm_basesetting_tip\dm_basesetting_tipService.cs" />
     <Compile Include="DM_APPManage\dm_basesetting_tip\dm_basesetting_tipIBLL.cs" />
     <Compile Include="DM_APPManage\dm_basesetting_tip\dm_basesetting_tipBLL.cs" />
+    <Compile Include="DM_APPManage\dm_activity_record\dm_activity_recordEntity.cs" />
+    <Compile Include="DM_APPManage\dm_activity_record\dm_activity_recordService.cs" />
+    <Compile Include="DM_APPManage\dm_activity_record\dm_activity_recordIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_activity_record\dm_activity_recordBLL.cs" />
+    <Compile Include="DM_APPManage\dm_activity_manage\dm_activity_manageEntity.cs" />
+    <Compile Include="DM_APPManage\dm_activity_manage\dm_activity_manageService.cs" />
+    <Compile Include="DM_APPManage\dm_activity_manage\dm_activity_manageIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_activity_manage\dm_activity_manageBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

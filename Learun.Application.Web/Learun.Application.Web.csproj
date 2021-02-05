@@ -311,6 +311,8 @@
     <Compile Include="Areas\DM_APPManage\Controllers\dm_level_remarkController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_versionController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_basesetting_tipController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_activity_recordController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_activity_manageController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -337,6 +339,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\PubTask.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.js" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\RebutReviceTask.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\RebutTask.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Person_Setting\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task_Type\Form.css" />
@@ -1947,6 +1950,7 @@
     <Content Include="Cert\appCertPublicKey_2021001146627152.crt" />
     <Content Include="Content\dlm\viewer.min.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\CheckReviceDetail.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\RebutReviceTask.cshtml" />
     <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\clipboard.min.js" />
@@ -2453,6 +2457,14 @@
     <Content Include="Areas\DM_APPManage\Views\dm_basesetting_tip\Form.js" />
     <Content Include="Views\DLM_Page\CopyInviteCode.cshtml" />
     <Content Include="Views\DLM_Page\ActivityPage.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_activity_record\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_activity_record\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_activity_record\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_activity_record\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_activity_manage\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_activity_manage\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_activity_manage\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_activity_manage\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

@@ -47,6 +47,9 @@ var bootstrap = function ($, learun) {
                                 case 4:
                                     status = "取消接受";
                                     break;
+                                case 5:
+                                    status = "已驳回(" + rowData.failreason + ")";
+                                    break;
                             }
                             return status;
                         }
@@ -77,17 +80,58 @@ var bootstrap = function ($, learun) {
         learun.layerClose("LookReviceDetail", "");
     };
     checkReviceDetail = function (id) {
-        learun.layerForm({
-            id: 'form',
-            title: '提交资料审核',
+        learun.layerMutipleBtnForm({
+            id:"CheckReviceDetail",
+            btn: ["审核通过", "审核驳回", "关闭"],
             url: top.$.rootUrl + '/DM_APPManage/DM_Task/CheckReviceDetail?keyValue=' + id,
-            width: 700,
-            height: 400,
-            btn: ["审核", "关闭"],
-            callBack: function (id) {
-                return top[id].acceptClick(refreshGirdData);
+            title: '提交资料审核',
+            width: 800,
+            height: 600,
+            yes: function (index, layero) {
+                learun.layerConfirm('审核通过无法取消,是否继续？', function (res,f_index) {
+                    if (res) {
+                        top.layer.close(f_index);
+                        $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Task_Revice/AuditTask?keyValue=' + id, function (res) {
+                            // 保存成功后才回调
+                            if (!!callBack) {
+                                callBack();
+                            }
+                        });
+                        learun.layerClose('CheckReviceDetail', index);
+                    } else {
+                        return false;
+                    }
+                })
+            }, btn2: function (index, layero) {
+                learun.layerForm({
+                    id: 'form',
+                    title: '请输入驳回原因',
+                    url: top.$.rootUrl + '/DM_APPManage/DM_Task/RebutReviceTask?keyValue=' + id,
+                    width: 700,
+                    height: 400,
+                    btn: ["提交", "关闭"],
+                    callBack: function (id) {
+                        return top[id].acceptClick(refreshGirdData);
+                    }
+                });
+                //return false; //开启该代码可禁止点击该按钮关闭
             }
-        });
+            , btn3: function (index, layero) {
+                //按钮【按钮三】的回调
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        })
+        //learun.layerForm({
+        //    id: 'form',
+        //    title: '提交资料审核',
+        //    url: top.$.rootUrl + '/DM_APPManage/DM_Task/CheckReviceDetail?keyValue=' + id,
+        //    width: 700,
+        //    height: 400,
+        //    btn: ["审核", "关闭"],
+        //    callBack: function (id) {
+        //        return top[id].acceptClick(refreshGirdData);
+        //    }
+        //});
     }
     page.init();
 }

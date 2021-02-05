@@ -30,16 +30,19 @@ namespace Learun.Application.TwoDevelopment.Common
 
         public static List<IP_Limit> iP_Limits = new List<IP_Limit>();//IP地址限制
 
+        public static string NoActivityTip = "未找到正在进行中的任务";
+
         /// <summary>
         /// 活动信息配置
         /// </summary>
-        public static ActivityInfoSetting activityInfoSetting = new ActivityInfoSetting
+        public static ActivityInfoSetting activityInfoSetting1 = new ActivityInfoSetting
         {
             APP_RedPaper_Image = "",
             APP_RedPaper_Text = "瓜分2000万红包",
             APP_Rock_RedPaper_Image = "",
             APP_To_ActivityUrl = "http://dev.dlaimi.cn/DLM_Page/ActivityPage",
-            ActivityTitle="瓜分2021万",
+            ActivityTitle = "瓜分2021万",
+            ActivityType = 1,
             ActivityStartTime = DateTime.Parse("2021-02-01 00:00:00"),
             ActivityEndTime = DateTime.Parse("2021-02-15 00:00:00"),
             ActivityCode = "DLM10001",

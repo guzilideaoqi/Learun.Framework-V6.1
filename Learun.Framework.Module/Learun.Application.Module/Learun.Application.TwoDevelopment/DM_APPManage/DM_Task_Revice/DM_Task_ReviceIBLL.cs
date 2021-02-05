@@ -114,6 +114,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="task_id"></param>
         /// <returns></returns>
         dm_task_reviceEntity GetReviceEntity(int user_id, int task_id, int revice_id);
+
+        /// <summary>
+        /// 驳回接受任务
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="failreason"></param>
+        void RebutReciveTaskByWeb(int id, string failreason);
         #endregion
     }
 }

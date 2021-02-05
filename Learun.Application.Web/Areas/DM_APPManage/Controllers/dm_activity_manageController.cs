@@ -8,12 +8,12 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
     /// 版 本 Learun-ADMS V6.1.6.0 力软敏捷开发框架
     /// Copyright (c) 2013-2017 上海力软信息技术有限公司
     /// 创 建：超级管理员
-    /// 日 期：2020-04-16 16:03
-    /// 描 述：任务接受记录
+    /// 日 期：2021-02-05 15:33
+    /// 描 述：活动管理
     /// </summary>
-    public class DM_Task_ReviceController : MvcControllerBase
+    public class dm_activity_manageController : MvcControllerBase
     {
-        private DM_Task_ReviceIBLL dM_Task_ReviceIBLL = new DM_Task_ReviceBLL();
+        private dm_activity_manageIBLL dm_activity_manageIBLL = new dm_activity_manageBLL();
 
         #region 视图功能
 
@@ -24,7 +24,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            return View();
+             return View();
         }
         /// <summary>
         /// 表单页
@@ -33,7 +33,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-            return View();
+             return View();
         }
         #endregion
 
@@ -45,9 +45,9 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList(string queryJson)
+        public ActionResult GetList( string queryJson )
         {
-            var data = dM_Task_ReviceIBLL.GetList(queryJson);
+            var data = dm_activity_manageIBLL.GetList(queryJson);
             return Success(data);
         }
         /// <summary>
@@ -60,23 +60,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         public ActionResult GetPageList(string pagination, string queryJson)
         {
             Pagination paginationobj = pagination.ToObject<Pagination>();
-            var data = dM_Task_ReviceIBLL.GetPageList(paginationobj, queryJson);
-            var jsonData = new
-            {
-                rows = data,
-                total = paginationobj.total,
-                page = paginationobj.page,
-                records = paginationobj.records
-            };
-            return Success(jsonData);
-        }
-
-        [HttpGet]
-        [AjaxOnly]
-        public ActionResult GetPageListByDataTable(string pagination, string queryJson)
-        {
-            Pagination paginationobj = pagination.ToObject<Pagination>();
-            var data = dM_Task_ReviceIBLL.GetPageListByDataTable(paginationobj, queryJson);
+            var data = dm_activity_manageIBLL.GetPageList(paginationobj, queryJson);
             var jsonData = new
             {
                 rows = data,
@@ -93,9 +77,9 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetFormData(int keyValue)
+        public ActionResult GetFormData(string keyValue)
         {
-            var data = dM_Task_ReviceIBLL.GetEntity(keyValue);
+            var data = dm_activity_manageIBLL.GetEntity(keyValue);
             return Success(data);
         }
         #endregion
@@ -109,9 +93,9 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpPost]
         [AjaxOnly]
-        public ActionResult DeleteForm(int keyValue)
+        public ActionResult DeleteForm(string keyValue)
         {
-            dM_Task_ReviceIBLL.DeleteEntity(keyValue);
+            dm_activity_manageIBLL.DeleteEntity(keyValue);
             return Success("删除成功！");
         }
         /// <summary>
@@ -122,29 +106,12 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(int keyValue, dm_task_reviceEntity entity)
+        public ActionResult SaveForm(string keyValue,dm_activity_manageEntity entity)
         {
-            dM_Task_ReviceIBLL.SaveEntity(keyValue, entity);
+            dm_activity_manageIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
         }
         #endregion
 
-        #region 任务审核
-        [HttpPost]
-        [AjaxOnly]
-        public ActionResult AuditTask(int keyValue)
-        {
-            dM_Task_ReviceIBLL.AuditTask(keyValue);
-            return Success("审核成功！");
-        }
-        #endregion
-
-        #region 驳回接受任务
-        public ActionResult RebutReciveTaskByWeb(int id, string failreason)
-        {
-            dM_Task_ReviceIBLL.RebutReciveTaskByWeb(id, failreason);
-            return Success("驳回成功!");
-        }
-        #endregion
     }
 }

@@ -279,13 +279,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                IEnumerable<dm_task_reviceEntity> dm_task_reviceList = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == user_id && t.activitycode == CommonConfig.activityInfoSetting.ActivityCode);
+                dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageService().GetActivityInfo();
+                if (dm_Activity_ManageEntity.IsEmpty())
+                    throw new Exception(CommonConfig.NoActivityTip);
+
+                IEnumerable<dm_task_reviceEntity> dm_task_reviceList = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == user_id && t.activitycode == dm_Activity_ManageEntity.f_id);
 
                 string querySql = "";
                 if (dm_task_reviceList.Count() <= 0)
-                    querySql = "select *,0 revicestatus,0 reviceid from dm_task where isactivity=1 and task_status=0 order by  RAND() limit 3";
+                    querySql = "select *,0 revicestatus,0 reviceid,'' failreason from dm_task where isactivity=1 and task_status=0 order by  RAND() limit 3";
                 else
-                    querySql = "select t.*,r.status revicestatus,r.id reviceid from dm_task t left join dm_task_revice r on t.id=r.task_id where t.isactivity=1 and t.task_status=0 and r.user_id=" + user_id;
+                    querySql = "select t.*,r.status revicestatus,r.id reviceid,r.failreason from dm_task t left join dm_task_revice r on t.id=r.task_id where t.isactivity=1 and t.task_status=0 and r.user_id=" + user_id;
                 return this.BaseRepository("dm_data").FindTable(querySql);
             }
             catch (Exception ex)

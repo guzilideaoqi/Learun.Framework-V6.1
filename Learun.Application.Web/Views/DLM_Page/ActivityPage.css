@@ -111,6 +111,11 @@ body {
             color: #ffffff;
         }
 
+        .task_list .task_item .nopass {
+            background-image: linear-gradient(#f6e7a0,#c2b041);
+            color: white;
+        }
+
 .btn_list {
     display: flex;
     flex-direction: row;

@@ -125,6 +125,43 @@
                     //return false; //开启该代码可禁止点击该按钮关闭
                 }
             });
+        },
+        layerMutipleBtnForm: function (op) {
+            /*适应窗口大小*/
+            var width = op.width > $(window).width() ? $(window).width() - 10 : op.width;
+            var height = op.height > $(window).height() ? $(window).height() - 10 : op.height;
+            var dfop = {
+                id: null,
+                type: 2,
+                title: op.title || '哆来米提示',
+                area: [width + 'px', height + 'px'],
+                content: op.url,
+                btn: op.btn || ['确认', '关闭'],
+                callBack: false,
+                maxmin: false,
+                end: false,
+                yes: function (index, layero) {
+                    //按钮【按钮一】的回调
+                    op.yes(index, layero);
+                }
+                , btn2: function (index, layero) {
+                    //按钮【按钮二】的回调
+                    op.btn2(index, layero);
+                    //return false; //开启该代码可禁止点击该按钮关闭
+                }
+                , btn3: function (index, layero) {
+                    //按钮【按钮三】的回调
+                    op.btn3(index, layero);
+                    //return false;// 开启该代码可禁止点击该按钮关闭
+                }
+                , cancel: function () {
+                    //右上角关闭回调
+
+                    //return false; //开启该代码可禁止点击该按钮关闭
+                }
+            };
+
+            var r = top.layer.open(dfop);
         }
     });
 

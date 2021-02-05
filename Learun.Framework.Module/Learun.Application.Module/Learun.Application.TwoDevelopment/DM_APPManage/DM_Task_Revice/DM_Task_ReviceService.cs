@@ -700,38 +700,117 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     currentUser = dM_UserService.GetEntity(dm_Task_ReviceEntity.user_id);
                     if (currentUser.IsEmpty())
                         throw new Exception("用户信息异常!");
-                    #region 活动账户增加金额
-                    currentUser.activityprice += dm_TaskEntity.singlecommission;
-                    #endregion
 
-                    dm_accountdetailEntity dm_AccountdetailEntity = null;
+                    dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageService().GetActivityInfo();
+                    if (dm_Activity_ManageEntity.IsEmpty())
+                        throw new Exception(CommonConfig.NoActivityTip);
 
-                    /*判断当前所有任务是否都已完成*/
-                    IEnumerable<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == dm_Task_ReviceEntity.user_id && t.status != 3 && t.status != 4 && t.activitycode == CommonConfig.activityInfoSetting.ActivityCode);
-                    if (dm_Task_ReviceEntities.Count() <= 0)
-                    {//活动任务已全部完成
-                        currentUser.accountprice += currentUser.activityprice;
+                    dm_activity_recordEntity dm_Activity_RecordEntity = new dm_activity_recordService().GetEntityByUserID((int)dm_Task_ReviceEntity.user_id, dm_Activity_ManageEntity.f_id);
+                    if (dm_Activity_RecordEntity.IsEmpty())
+                        throw new Exception("未找到对应的加入活动任务信息!");
 
-                        dm_AccountdetailEntity = new dm_accountdetailEntity
+                    if (dm_Activity_ManageEntity.ActivityType == 0)
+                    {
+                        #region 初始用红包类型的任务
+                        #region 活动账户增加金额
+                        currentUser.activityprice += dm_TaskEntity.singlecommission;
+                        #endregion
+
+                        /*判断当前所有任务是否都已完成*/
+                        List<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == dm_Task_ReviceEntity.user_id && t.status != 3 && t.status != 4 && t.activitycode == dm_Activity_ManageEntity.f_id).ToList();
+                        if (dm_Task_ReviceEntities.Count() <= 0 || (dm_Task_ReviceEntities.Count() == 1 && dm_Task_ReviceEntities[0].id == dm_Task_ReviceEntity.id))
+                        {//活动任务已全部完成
+                            currentUser.accountprice += currentUser.activityprice;
+                            dm_AccountdetailEntities.Add(new dm_accountdetailEntity
+                            {
+                                createtime = DateTime.Now,
+                                remark = "活动奖励" + dm_Activity_ManageEntity.ActivityCode,
+                                stepvalue = currentUser.activityprice,
+                                currentvalue = currentUser.accountprice,
+                                title = "活动奖励",
+                                type = 24,
+                                user_id = dm_Task_ReviceEntity.user_id,
+                                profitLoss = 1
+                            });
+
+                            #region 上级用户返利
+                            dm_user_relationEntity parnetUserRelation = dM_UserRelationService.GetEntityByUserID(dm_Task_ReviceEntity.user_id);
+                            if (!parnetUserRelation.IsEmpty())
+                            {
+                                one_User = dM_UserService.GetEntity(parnetUserRelation.parent_id);
+                                if (!one_User.IsEmpty())
+                                {
+                                    decimal next_user_activity_commission = Math.Round((decimal)currentUser.activityprice * 0.2M, 2);
+                                    one_User.accountprice += next_user_activity_commission;
+
+                                    dm_AccountdetailEntities.Add(new dm_accountdetailEntity
+                                    {
+                                        createtime = DateTime.Now,
+                                        remark = "活动奖励" + dm_Activity_ManageEntity.ActivityCode,
+                                        stepvalue = next_user_activity_commission,
+                                        currentvalue = one_User.accountprice,
+                                        title = "下级完成活动任务奖励",
+                                        type = 25,
+                                        user_id = one_User.id,
+                                        profitLoss = 1
+                                    });
+                                }
+                            }
+                            #endregion
+
+                            dm_Activity_RecordEntity.finishtime = DateTime.Now;//设置活动任务完成时间
+                        }
+
+
+                        db = BaseRepository("dm_data").BeginTrans();
+                        db.Update(currentUser);
+                        db.Update(dm_TaskEntity);
+                        db.Update(dm_Task_ReviceEntity);
+                        if (dm_AccountdetailEntities.Count > 0)
                         {
-                            createtime = DateTime.Now,
-                            remark = "活动奖励" + CommonConfig.activityInfoSetting.ActivityCode,
-                            stepvalue = currentUser.activityprice,
-                            currentvalue = currentUser.accountprice,
-                            title = "活动奖励",
-                            type = 24,
-                            user_id = dm_Task_ReviceEntity.user_id,
-                            profitLoss = 1
-                        };
+                            db.Insert(dm_AccountdetailEntities);
+                        }
+                        if (!one_User.IsEmpty())
+                            db.Update(one_User);
+                        db.Update(dm_Activity_RecordEntity);
+                        db.Commit();
+                        #endregion
                     }
+                    else
+                    {
+                        List<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == dm_Task_ReviceEntity.user_id && t.status != 3 && t.status != 4 && t.activitycode == dm_Activity_ManageEntity.f_id).ToList();
+                        if (dm_Task_ReviceEntities.Count() <= 0 || (dm_Task_ReviceEntities.Count() == 1 && dm_Task_ReviceEntities[0].id == dm_Task_ReviceEntity.id))
+                        {//活动任务已全部完成
+                            decimal? activityprice = dm_Activity_ManageEntity.RewardPrice;
+                            currentUser.accountprice += activityprice;
+                            currentUser.activityprice += activityprice;
 
-                    db = BaseRepository("dm_data").BeginTrans();
-                    db.Update(currentUser);
-                    db.Update(dm_TaskEntity);
-                    db.Update(dm_Task_ReviceEntity);
-                    if (!dm_AccountdetailEntity.IsEmpty())
-                        db.Insert(dm_AccountdetailEntity);
-                    db.Commit();
+                            dm_AccountdetailEntities.Add(new dm_accountdetailEntity
+                            {
+                                createtime = DateTime.Now,
+                                remark = "活动奖励" + dm_Activity_ManageEntity.ActivityCode,
+                                stepvalue = activityprice,
+                                currentvalue = currentUser.accountprice,
+                                title = "活动奖励",
+                                type = 24,
+                                user_id = dm_Task_ReviceEntity.user_id,
+                                profitLoss = 1
+                            });
+
+                            dm_Activity_RecordEntity.finishtime = DateTime.Now;//设置活动任务完成时间
+
+                            db = BaseRepository("dm_data").BeginTrans();
+                            db.Update(currentUser);
+                            db.Update(dm_TaskEntity);
+                            db.Update(dm_Task_ReviceEntity);
+                            if (dm_AccountdetailEntities.Count > 0)
+                            {
+                                db.Insert(dm_AccountdetailEntities);
+                            }
+                            db.Update(dm_Activity_RecordEntity);
+                            db.Commit();
+                        }
+                    }
                 }
 
                 return dm_Task_ReviceEntity;
@@ -807,13 +886,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
+                dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageService().GetActivityInfo();
+                if (dm_Activity_ManageEntity.IsEmpty())
+                    throw new Exception(CommonConfig.NoActivityTip);
+
                 DateTime currentTime = DateTime.Now;
-                if (currentTime < CommonConfig.activityInfoSetting.ActivityStartTime || currentTime > CommonConfig.activityInfoSetting.ActivityEndTime)
+                if (currentTime < dm_Activity_ManageEntity.ActivityStartTime || currentTime > dm_Activity_ManageEntity.ActivityEndTime)
                 {
                     throw new Exception("不在活动时间内，无法接受任务!");
                 }
 
-                IEnumerable<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == user_id && t.activitycode == CommonConfig.activityInfoSetting.ActivityCode);
+                IEnumerable<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == user_id && t.activitycode == dm_Activity_ManageEntity.f_id);
                 if (dm_Task_ReviceEntities.Count() > 0)
                     throw new Exception("每个活动每人只能接一次!");
 
@@ -827,7 +910,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         status = 1,
                         task_id = int.Parse(task_ids[i]),
                         user_id = user_id,
-                        activitycode = CommonConfig.activityInfoSetting.ActivityCode
+                        activitycode = dm_Activity_ManageEntity.f_id
                     };
                     dm_Task_ReviceEntity.Create();
                     dm_task_reviceList.Add(dm_Task_ReviceEntity);
@@ -835,6 +918,30 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 if (dm_task_reviceList.Count > 0)
                     this.BaseRepository("dm_data").Insert(dm_task_reviceList);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region  驳回接受任务
+        public void RebutReciveTaskByWeb(int id, string failreason)
+        {
+            try
+            {
+                dm_task_reviceEntity dm_Task_ReviceEntity = this.BaseRepository("dm_data").FindEntity<dm_task_reviceEntity>(id);
+                dm_Task_ReviceEntity.status = 5;
+                dm_Task_ReviceEntity.failreason = failreason;
+                this.BaseRepository("dm_data").Update(dm_Task_ReviceEntity);
             }
             catch (Exception ex)
             {

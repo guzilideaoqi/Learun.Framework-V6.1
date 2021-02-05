@@ -629,7 +629,48 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_userEntity dm_UserEntity_New = GetEntity(id.ToInt());
                     CacheHelper.SaveUserInfo("", dm_UserEntity_New);
 
-                    Hyg.Common.OtherTools.LogHelper.WriteDebugLog("测试注册", dm_UserEntity_New.ToJson());
+                    IRepository db_activity = null;
+                    try
+                    {
+                        #region 用户注册成功之后需要判断上级是否正在参与活动
+                        dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageService().GetActivityInfo();
+                        //当前有活动正在进行中
+                        if (!dm_Activity_ManageEntity.IsEmpty() && dm_Activity_ManageEntity.ActivityType == 1)
+                        {
+                            db = this.BaseRepository("dm_data").BeginTrans();
+                            dm_activity_recordEntity dm_Activity_RecordEntity = new dm_activity_recordService().GetEntityByUserID((int)parent_UserEntity.id, dm_Activity_ManageEntity.f_id);
+                            if (!dm_Activity_RecordEntity.IsEmpty() && dm_Activity_RecordEntity.finishtime < DateTime.Now)
+                                dm_Activity_RecordEntity.invitenum += 1;
+                            db.Update(dm_Activity_RecordEntity);
+
+                            if (dm_Activity_RecordEntity.invitenum >= 3)
+                            {
+                                #region 给用户账户返钱
+                                parent_UserEntity.accountprice += dm_Activity_ManageEntity.RewardPrice;
+                                parent_UserEntity.activityprice += dm_Activity_ManageEntity.RewardPrice;
+                                #endregion
+                                db.Update(parent_UserEntity);
+
+                                dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity
+                                {
+                                    createtime = DateTime.Now,
+                                    remark = "活动奖励_邀请用户" + dm_Activity_ManageEntity.ActivityCode,
+                                    stepvalue = dm_Activity_ManageEntity.RewardPrice,
+                                    currentvalue = parent_UserEntity.accountprice,
+                                    title = "活动奖励_邀请用户",
+                                    type = 24,
+                                    user_id = parent_UserEntity.id,
+                                    profitLoss = 1
+                                };
+                                db.Insert(dm_AccountdetailEntity);
+                            }
+                        }
+                        #endregion
+                    }
+                    catch (Exception ex)
+                    {
+                        Hyg.Common.OtherTools.LogHelper.WriteDebugLog("活动增加任务异常!", ex.Message);
+                    }
 
                     return dm_UserEntity_New;
                 }
@@ -1458,18 +1499,56 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 参与活动
         public dm_userEntity JoinActivity(int user_id)
         {
+            IRepository db = null;
             dm_userEntity dm_UserEntity = null;
             try
             {
+
                 dm_UserEntity = GetEntity(user_id);
                 if (dm_UserEntity.IsEmpty())
                     throw new Exception("用户信息异常!");
-                if (dm_UserEntity.activityprice.IsEmpty() || dm_UserEntity.activityprice <= 0)
-                    dm_UserEntity.activityprice = Math.Round(new Random().Next(2650, 2882) / 100.0M, 2);
-                this.BaseRepository("dm_data").Update(dm_UserEntity);
+
+                #region 判断当前用户是否有接受任务记录
+                dm_activity_recordService dm_Activity_RecordService = new dm_activity_recordService();
+                dm_activity_recordEntity dm_Activity_RecordEntity = dm_Activity_RecordService.GetEntityByUserID(user_id);
+                if (dm_Activity_RecordEntity.IsEmpty())
+                {
+                    dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageService().GetActivityInfo();
+                    if (dm_Activity_ManageEntity.IsEmpty())
+                        throw new Exception(CommonConfig.NoActivityTip);
+                    if (dm_Activity_ManageEntity.ActivityType == 1)
+                    {
+                        if (dm_UserEntity.activityprice.IsEmpty() || dm_UserEntity.activityprice <= 0)
+                            dm_UserEntity.activityprice = Math.Round(new Random().Next((int)dm_Activity_ManageEntity.InitRedPaper_MinPrice * 100, (int)dm_Activity_ManageEntity.InitRedPaper_MaxPrice * 100) / 100.0M, 2);
+                    }
+                    else
+                    {
+                        dm_UserEntity.activityprice = 0;
+                    }
+
+                    dm_Activity_RecordEntity = new dm_activity_recordEntity
+                    {
+                        initactivityprice = dm_UserEntity.activityprice,
+                        activity_code = dm_Activity_ManageEntity.f_id,
+                        activity_type = dm_Activity_ManageEntity.ActivityType,
+                        createtime = DateTime.Now,
+                        invitenum = 0,
+                        user_id = user_id
+                    };
+
+                    dm_Activity_RecordEntity.Create();
+
+                    db = this.BaseRepository("dm_data").BeginTrans();
+                    db.Update(dm_UserEntity);
+                    db.Insert(dm_Activity_RecordEntity);
+                    db.Commit();
+                }
+                #endregion
             }
             catch (Exception ex)
             {
+                if (db != null)
+                    db.Rollback();
                 if (ex is ExceptionEx)
                 {
                     throw;

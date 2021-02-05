@@ -36,6 +36,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private dm_versionIBLL dm_VersionIBLL = new dm_versionBLL();
 
+        private dm_activity_manageIBLL dm_Activity_ManageIBLL = new dm_activity_manageBLL();
+
         #region 获取平台设置
         public ActionResult GetPlaformSetting()
         {
@@ -118,6 +120,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if ((platform == "ios" && version == dm_BasesettingEntity.previewversion) || (platform == "android" && version == dm_BasesettingEntity.previewversionandroid))
                         Status = 1;
                 }
+
+                dm_activity_manageEntity dm_Activity_ManageEntity = dm_Activity_ManageIBLL.GetActivityInfo();
+                if (dm_Activity_ManageEntity.IsEmpty())
+                    dm_Activity_ManageEntity = new dm_activity_manageEntity { ActivityStatus = 0 };
+
                 return Success("获取成功", new
                 {
                     //isAppStorePreview = ((base.Request.Headers["version"].ToString() == dm_BasesettingEntity.previewversion) ? 1 : 0)
@@ -133,7 +140,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     sign_rule = dm_BasesettingEntity.sign_rule,
                     cashrecord_fee = dm_BasesettingEntity.cashrecord_fee,
                     cashrecord_remark = dm_BasesettingEntity.cashrecord_remark,
-                    activitysetting = CommonConfig.activityInfoSetting
+                    activitysetting = dm_Activity_ManageEntity
                 });
             }
             catch (Exception ex)

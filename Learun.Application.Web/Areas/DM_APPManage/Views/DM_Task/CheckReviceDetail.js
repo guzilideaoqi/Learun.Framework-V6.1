@@ -45,9 +45,6 @@ var bootstrap = function ($, learun) {
     };
     // 保存数据
     acceptClick = function (callBack) {
-        if (!$('#form').lrValidform()) {
-            return false;
-        }
         var postData = $('#form').lrGetFormData();
         $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Task_Revice/AuditTask?keyValue=' + keyValue, function (res) {
             // 保存成功后才回调

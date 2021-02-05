@@ -40,6 +40,11 @@ namespace Learun.Application.TwoDevelopment.Common.Model
         public string APP_To_ActivityUrl { get; set; }
 
         /// <summary>
+        /// 活动类型  0=初始有红包加做任务   1=初始无红包加做任务加邀请人
+        /// </summary>
+        public int ActivityType { get; set; }
+
+        /// <summary>
         /// 活动标题
         /// </summary>
         public string ActivityTitle { get; set; }

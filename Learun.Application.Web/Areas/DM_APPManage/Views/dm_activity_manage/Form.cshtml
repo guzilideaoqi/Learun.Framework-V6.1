@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "活动管理";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">红包背景图片<font face="宋体">*</font></div>
+        <input id="APP_RedPaper_Image" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">红包上的文本信息<font face="宋体">*</font></div>
+        <input id="APP_RedPaper_Text" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">摇晃红包图片地址<font face="宋体">*</font></div>
+        <input id="APP_Rock_RedPaper_Image" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">开红包跳转地址<font face="宋体">*</font></div>
+        <input id="APP_To_ActivityUrl" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">前端刘海栏显示文本<font face="宋体">*</font></div>
+        <input id="ActivityTitle" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">活动类型<font face="宋体">*</font></div>
+        <div id="ActivityType"><ul><li data-value="0">初始有红包加做任务</li><li data-value="1">初始无红包加做任务加邀请人</li></ul></div>
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">活动开始时间<font face="宋体">*</font></div>
+        <input id="ActivityStartTime" type="text" class="form-control" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss',startDate:'%y-%M-%d 00:00:00' })" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">活动结束时间<font face="宋体">*</font></div>
+        <input id="ActivityEndTime" type="text" class="form-control" onload="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss',startDate:'%y-%M-%d 00:00:00' })" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss',startDate:'%y-%M-%d 00:00:00' })" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">活动编号<font face="宋体">*</font></div>
+        <input id="ActivityCode" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">活动状态<font face="宋体">*</font></div>
+        <div id="ActivityStatus"><ul><li data-value="1">开启</li><li data-value="0">关闭</li></ul></div>
+    </div>
+    <div class="col-xs-6 lr-form-item hasredpaper">
+        <div class="lr-form-item-title">初始红包最小金额<font face="宋体">*</font></div>
+        <input id="InitRedPaper_MinPrice" type="text" class="form-control" />
+    </div>
+    <div class="col-xs-6 lr-form-item hasredpaper">
+        <div class="lr-form-item-title">初始红包最大金额<font face="宋体">*</font></div>
+        <input id="InitRedPaper_MaxPrice" type="text" class="form-control" />
+    </div>
+    <div class="col-xs-6 lr-form-item noredpaper" style="display:none">
+        <div class="lr-form-item-title">奖励金额<font face="宋体">*</font></div>
+        <input id="RewardPrice" type="text" class="form-control" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">活动描述<font face="宋体">*</font></div>
+        <textarea id="ActivityRemark" style="width:100%" rows="5"></textarea>
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_activity_manage/Form.js")

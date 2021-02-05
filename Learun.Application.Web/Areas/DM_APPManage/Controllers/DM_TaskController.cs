@@ -72,6 +72,12 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         public ActionResult CheckReviceDetail() {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult RebutReviceTask()
+        {
+            return View();
+        }
         #endregion
 
         #region 获取数据

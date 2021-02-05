@@ -41,7 +41,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("REVICE_TIME")]
         public DateTime? revice_time { get; set; }
         /// <summary>
-        /// 接收状态 1进行中  2待审核  3已完成  4取消任务
+        /// 接收状态 1进行中  2待审核  3已完成  4取消任务 5驳回
         /// </summary>
         /// <returns></returns>
         [Column("STATUS")]
@@ -106,6 +106,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("ACTIVITYCODE")]
         public string activitycode { get; set; }
+
+        /// <summary>
+        /// 审核失败原因
+        /// </summary>
+        [Column("FAILREASON")]
+        public string failreason { get; set; }
         #endregion
 
         #region 扩展操作

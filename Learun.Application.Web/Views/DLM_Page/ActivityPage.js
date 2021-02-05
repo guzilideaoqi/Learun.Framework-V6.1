@@ -15,7 +15,6 @@ var meuns = {
                 if (taskItem.revicestatus != 0) {
                     isallow = false; break;
                 }
-
             }
             if (isallow)
                 meuns.LoadTask();
@@ -90,13 +89,17 @@ var meuns = {
                 } else if (taskItem.revicestatus == 3) {
                     btnText = "已完成";
                     btnclass = "finish";
+                } else if (taskItem.revicestatus == 5) {
+                    isrunning = true;
+                    btnText = "未通过";
+                    btnclass = "nopass";
                 }
             }
 
 
             html += "            <div class=\"task_item\">" +
                 "<div class=\"task_content\">" + stepName + " " + taskItem.task_title + "  " + taskItem.singlecommission + "元</div>" +
-                "<div class=\"btn " + btnclass + "\" onclick=\"ReviceActivityTask('" + btnText + "'," + taskItem.reviceid + ")\">" + btnText + "</div>" +
+                "<div class=\"btn " + btnclass + "\" onclick=\"ReviceActivityTask('" + btnText + "'," + taskItem.reviceid + ",'" + taskItem.failreason + "')\">" + btnText + "</div>" +
                 "</div>";
 
         }
@@ -116,7 +119,7 @@ var meuns = {
     }
 }
 
-ReviceActivityTask = function (btntext, reviceid) {
+ReviceActivityTask = function (btntext, reviceid, failreason) {
     if (btntext == "领取任务") {
         $.ajax({
             url: "/DLM_Page/ReviceActivityTask",
@@ -135,6 +138,8 @@ ReviceActivityTask = function (btntext, reviceid) {
         });
     } else if (btntext == "去完成") {
         meuns.NativeToApp(3, reviceid);
+    } else if (btntext == "未通过") {
+        meuns.Toast(failreason)
     }
 }
 

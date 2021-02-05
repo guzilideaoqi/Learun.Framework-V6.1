@@ -354,6 +354,29 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 }
             }
         }
+
+        /// <summary>
+        /// 驳回接受任务
+        /// </summary>
+        /// <param name="id">任务接受记录id</param>
+        /// <param name="failreason">失败原因</param>
+        public void RebutReciveTaskByWeb(int id, string failreason) {
+            try
+            {
+                dM_Task_ReviceService.RebutReciveTaskByWeb(id, failreason);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
     }
 }
