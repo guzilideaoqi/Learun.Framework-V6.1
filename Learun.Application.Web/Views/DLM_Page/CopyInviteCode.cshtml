@@ -4,61 +4,85 @@
     <meta charset="UTF-8">
     <title>哆来米</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .invitecode {
+            width: 50%;
+            height: 35px;
+            border: 0;
+            background: none;
+            float: left;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+            padding-left: 10px;
+            color: red;
+            font-weight: bolder;
+            text-align: center;
+        }
+
+        .copy_btn {
+            width: 90px;
+            height: 35px;
+            border: 0;
+            background: none;
+            float: right;
+            border-top-right-radius: 25px;
+            border-bottom-right-radius: 25px;
+            text-align: center;
+            background-image: linear-gradient(#ff5500, #e56688);
+            color: white;
+            padding: 10px 0px;
+        }
+
+        .divleft {
+            width: 70%;
+            height: 35px;
+            border: 1px solid #ff5500;
+            border-radius: 25px;
+            margin: 1% 15%;
+            background-color: #ffebf4;
+        }
+
+        .downloadurl {
+            width: 70%;
+            margin: 2% 15%;
+            height: 35px;
+            border: 1px solid #ff5500;
+            border-radius: 25px;
+            background-color: #ff5500;
+            line-height: 35px;
+            text-align: center;
+            color: white;
+            display: none;
+        }
+
+        .invite_tip {
+            margin: 10px 20% 0 20%;
+            text-align: center;
+            color: #cdcdcd;
+            font-size: 14px;
+        }
+
+        .todownloadapp {
+            margin: 30px 20% 0 20%;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            background-color: #cac7c7;
+            font-size: 12px;
+            padding: 10px;
+        }
+    </style>
 </head>
-<style>
-    .invitecode {
-        width: 50%;
-        height: 35px;
-        border: 0;
-        background: none;
-        float: left;
-        border-top-left-radius: 25px;
-        border-bottom-left-radius: 25px;
-        padding-left: 10px;
-    }
 
-    .copy_btn {
-        width: 90px;
-        height: 35px;
-        border: 0;
-        background: none;
-        float: right;
-        border-top-right-radius: 25px;
-        border-bottom-right-radius: 25px;
-        text-align: center;
-        background-image: linear-gradient(#ff5500, #e56688);
-        color: white;
-        padding: 10px 0px;
-    }
-
-    .divleft {
-        width: 70%;
-        height: 35px;
-        float: left;
-        border: 1px solid #ff5500;
-        border-radius: 25px;
-        margin: 1% 15%;
-        display:none;
-    }
-    .downloadurl {
-        width: 70%;
-        margin: 2% 15%;
-        height: 35px;
-        border: 1px solid #ff5500;
-        border-radius: 25px;
-        background-color: #ff5500;
-        line-height:35px;
-        text-align:center;
-        color:white;
-    }
-</style>
 <body>
     <!-- 1. Define some markup -->
     <image src="~/Content/dlm/bj.png" style="width: 80%;margin: 5% 10%;height:400px"></image>
     <div class="divleft">
-        <input id="foo" type="text" value="@ViewBag.InviteCode" class="invitecode" disabled="disabled">
+        <input id="foo" type="text" value="邀请码：@ViewBag.InviteCode" class="invitecode" disabled="disabled">
         <button class="btn copy_btn" data-clipboard-action="copy" data-clipboard-text="@ViewBag.InviteCode">复制邀请码</button>
     </div>
+    <div class="invite_tip">邀请码用于激活APP的使用!</div>
+    <div id="todownloadapp" class="todownloadapp">前往下载app(请先复制邀请码)</div>
 
     <div class="downloadurl" style="background-color: #e56688;" onclick="download_android()">
         安卓下载
@@ -76,8 +100,11 @@
 
         clipboard.on('success', function (e) {
             console.log(e);
-            document.getElementById('foo').style.color = "#e56688";
-            ismobile();
+            document.getElementById('todownloadapp').style.backgroundColor = "red";
+            //ismobile();
+            document.getElementById('todownloadapp').onclick = function () {
+                window.location = "https://a.app.qq.com/o/simple.jsp?pkgname=com.app.duolaimi";
+            }
         });
 
         clipboard.on('error', function (e) {

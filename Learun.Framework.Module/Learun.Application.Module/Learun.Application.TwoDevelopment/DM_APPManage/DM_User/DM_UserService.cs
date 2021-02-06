@@ -1516,7 +1516,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageService().GetActivityInfo();
                     if (dm_Activity_ManageEntity.IsEmpty())
                         throw new Exception(CommonConfig.NoActivityTip);
-                    if (dm_Activity_ManageEntity.ActivityType == 1)
+                    if (dm_Activity_ManageEntity.ActivityType == 0)
                     {
                         if (dm_UserEntity.activityprice.IsEmpty() || dm_UserEntity.activityprice <= 0)
                             dm_UserEntity.activityprice = Math.Round(new Random().Next((int)dm_Activity_ManageEntity.InitRedPaper_MinPrice * 100, (int)dm_Activity_ManageEntity.InitRedPaper_MaxPrice * 100) / 100.0M, 2);

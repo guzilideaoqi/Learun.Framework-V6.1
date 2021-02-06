@@ -88,6 +88,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        public dm_activity_recordEntity GetEntityByUserID(int user_id, string activity_f_id = "") {
+            try
+            {
+                return dm_activity_recordService.GetEntityByUserID(user_id, activity_f_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         #endregion
 
         #region 提交数据

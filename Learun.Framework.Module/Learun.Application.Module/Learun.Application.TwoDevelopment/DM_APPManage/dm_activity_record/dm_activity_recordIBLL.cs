@@ -31,6 +31,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <summary>
         /// <returns></returns>
         dm_activity_recordEntity GetEntity(string keyValue);
+
+        dm_activity_recordEntity GetEntityByUserID(int user_id, string activity_f_id = "");
         #endregion
 
         #region 提交数据

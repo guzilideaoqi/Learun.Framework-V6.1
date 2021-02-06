@@ -17,6 +17,7 @@ namespace Learun.Application.Web.Controllers
         DM_Task_ReviceIBLL dM_Task_ReviceIBLL = new DM_Task_ReviceBLL();
         DM_TaskIBLL dM_TaskIBLL = new DM_TaskBLL();
         dm_activity_manageIBLL dm_Activity_ManageIBLL = new dm_activity_manageBLL();
+        dm_activity_recordIBLL dm_Activity_RecordIBLL = new dm_activity_recordBLL();
         // GET: DLM_Page
         public ActionResult Index()
         {
@@ -46,16 +47,21 @@ namespace Learun.Application.Web.Controllers
                 dm_UserEntity = dM_UserIBLL.JoinActivity((int)dm_UserEntity.id);
 
                 ViewBag.ActivityPrice = dm_UserEntity.activityprice;
+
+                dm_activity_manageEntity dm_Activity_ManageEntity = dm_Activity_ManageIBLL.GetActivityInfo();
+
+                if (!dm_Activity_ManageEntity.IsEmpty())
+                    ViewBag.ActivityRemark = dm_Activity_ManageEntity.ActivityRemark;
+
+                ViewBag.MyActivityInfo = dm_Activity_RecordIBLL.GetEntityByUserID((int)dm_UserEntity.id, dm_Activity_ManageEntity.f_id);
             }
 
-            dm_activity_manageEntity dm_Activity_ManageEntity = dm_Activity_ManageIBLL.GetActivityInfo();
 
             ViewBag.Token = token;
             ViewBag.AppID = appid;
             ViewBag.Platform = platform;
             ViewBag.Version = version;
-            if (!dm_Activity_ManageEntity.IsEmpty())
-                ViewBag.ActivityRemark = dm_Activity_ManageEntity.ActivityRemark;
+
             return View();
         }
 

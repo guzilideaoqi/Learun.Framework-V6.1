@@ -2,65 +2,105 @@
     background-color: #FD6F08;
 }*/
 body {
-    background-image: url('../../Content/dlm/activity_bg.png');
+    background: linear-gradient(0deg, #FF9604 0%, #FD5F0A 100%);
     background-size: cover;
-    -webkit-background-size: cover;
-    -o-background-size: cover;
-    background-position: center 0;
-    background-repeat: no-repeat;
     font-size: 12px;
-    z-index:999;
 }
 
-.page_title {
-    color: white;
-    text-align: center;
-    line-height: 50px;
-    font-size:18px;
+.page_head {
+    background-image: url(../../Content/dlm/activity_image/head_bj.png);
+    background-size: 160% 169%;
+    height: 400px;
+    background-position: 50% 77%;
+    background-repeat: no-repeat;
 }
 
-.page_price {
-    text-align: center;
-    position: relative;
-    top: 90px;
-}
-
-    .page_price .lot {
-        color: #fd4242;
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    .page_price .price {
-        color: #fd4242;
-        font-size: 30px;
-        font-weight: bold;
-    }
-
-    .page_price .remark {
-        color: #ff9c03;
-        margin-top: 20px;
-    }
-
-    .page_price .tixian {
+    .page_head .pao {
+        width: 112px;
+        height: 135px;
         position: absolute;
-        top: 0;
-        right: 53px;
-        border-radius: 100px 0px 0px 100px;
-        background-color: #FFB8B4;
-        color: #FE6E6C;
-        padding: 5px 10px;
-        font-size: 12px;
+        right: 0;
+    }
+
+    .page_head .page_price {
+        text-align: center;
+        width: 77%;
+        position: absolute;
+        margin: 35% 10%;
+    }
+
+.page_price .lot {
+    color: #fd4242;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.page_price .price {
+    color: #fd4242;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.page_price .remark {
+    color: #ff9c03;
+    margin-top: 20px;
+}
+
+.page_price .tixian {
+    border-radius: 100px 0px 0px 100px;
+    background-color: #FFB8B4;
+    color: #FE6E6C;
+    padding: 5px 10px;
+    font-size: 12px;
+    text-align: center;
+    width: 50px;
+    float: right;
+    margin-top: -74px;
+}
+
+.page_center {
+    height: 400px;
+    margin-top: -120px;
+}
+
+    .page_center .head_center_image {
+        width: 90%;
+        margin: 0 5%;
+        margin-top: 40px;
+        position: absolute;
+    }
+
+    .page_center .head_center_tip, .page_bottom .head_bottom_tip {
+        width: 50%;
+        margin: 0 25%;
+        position: absolute;
+        margin-top: 21px;
+        z-index: 999;
+        background-image: url(../../Content/dlm/activity_image/head_center_tip.png);
+        background-size: 100%;
+        background-repeat: no-repeat;
+        height: 60px;
+        line-height: 40px;
+        font-size: 16px;
+        font-family: Source Han Sans CN;
+        font-weight: 500;
+        color: #FDE6B5;
         text-align: center;
     }
 
+
 .task_list {
-    margin: 0 10px;
     background-color: #FD793C;
-    position: relative;
-    top: 220px;
+    position: absolute;
     border-radius: 5px;
-    padding-bottom: 10px;
+    z-index: 990;
+    width: 80%;
+    margin: 0 5%;
+    background-image: url(../../Content/dlm/activity_image/head_center_image.png);
+    padding: 5%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    margin-top: 41px;
 }
 
     .task_list .remark, .task_description .remark {
@@ -70,27 +110,57 @@ body {
     }
 
     .task_list .task_item {
-        border-radius: 5px;
-        background-color: #FD9058;
-        margin: 5px 10px;
         display: flex;
         flex-direction: row;
-        height: 50px;
-        line-height: 50px;
+        padding: 10px 5px;
     }
 
+        .task_list .task_item:last-child .task_content, .task_list .task_item:last-child .btn_info {
+            border-bottom: 0px;
+        }
+
+        .task_list .task_item .headicon {
+            width: 20%;
+        }
+
+            .task_list .task_item .headicon img {
+                width: 45px;
+                height: 45px;
+            }
+
         .task_list .task_item .task_content {
-            width: 75%;
-            padding-left: 5px;
+            width: 50%;
             font-size: 12px;
             color: white;
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #ef7b58;
+        }
+
+            .task_list .task_item .task_content .task_title {
+                font-size: 16px;
+                font-family: Source Han Sans CN;
+                font-weight: 500;
+                color: #FDE8BA;
+            }
+
+            .task_list .task_item .task_content .task_remark {
+                font-size: 12px;
+                font-family: Source Han Sans CN;
+                font-weight: 400;
+                color: #FDE8BA;
+                opacity: 0.64;
+                line-height: 36px;
+            }
+
+        .task_list .task_item .btn_info {
+            width: 30%;
+            border-bottom: 1px solid #ef7b58;
         }
 
         .task_list .task_item .btn {
-            width: 25%;
             text-align: center;
             border-radius: 20px;
-
             margin: 12px 5px;
             line-height: 26px;
             font-size: 12px;
@@ -103,7 +173,7 @@ body {
 
         .task_list .task_item .gray {
             background-image: linear-gradient(#f1efe5,#908b85);
-            color:white;
+            color: white;
         }
 
         .task_list .task_item .finish {
@@ -116,35 +186,108 @@ body {
             color: white;
         }
 
-.btn_list {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    top: 220px;
+.head_center_bottom {
+    height: 200px;
+    margin-top: 20px;
 }
 
-    .btn_list div {
-        width: 50%;
+    .head_center_bottom .head_center_bottom_image {
+        background-image: url('../../Content/dlm/activity_image/head_center_bottom.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 90%;
+        margin: 0 5%;
+        height: 60px;
+        line-height: 60px;
         text-align: center;
-        margin: 15px 8%;
-        background-color: #FD4242;
-        color: white;
-        border-radius: 20px;
-        padding:10px 5px;
+        font-size: 20px;
+        color: #C2181A;
+        margin-top: -90px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
     }
 
-.task_description {
-    margin: 0 10px;
-    background: rgba(253,147,69,.6);
-    position: relative;
-    top: 220px;
-    border-radius: 5px;
-    padding-bottom: 10px;
+    .head_center_bottom .invite_process {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        margin: 0 10%;
+        margin-top: 20px;
+    }
+
+        .head_center_bottom .invite_process .invitefinish {
+            width: 33%;
+        }
+
+.invite_process .niu {
+    position: absolute;
+    width: 45px;
+    z-index: 999;
 }
 
-    .task_description p {
-        color: white;
+.invite_process .invitefinish .invitefinish_image {
+    background-image: url(../../Content/dlm/activity_image/invitefinish.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    margin-top: 37px;
+    z-index: 999;
+}
+
+.invite_process .invitefinish .invitenofinish_image {
+    background-image: url(../../Content/dlm/activity_image/invitenofinish.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    margin-top: 37px;
+    z-index: 999;
+}
+
+.head_center_bottom .invite_split {
+    width: 70%;
+    height: 2px;
+    background: #FFF2D4;
+    margin: 0 15%;
+    position: absolute;
+    margin-top: 59px;
+}
+
+.page_bottom {
+    margin-top: -30px;
+    height: 450px;
+}
+
+    .page_bottom .task_description {
+        background-color: #FD793C;
+        position: absolute;
+        border-radius: 5px;
+        z-index: 990;
+        width: 80%;
+        margin: 0 5%;
+        background-image: url(../../Content/dlm/activity_image/head_bottom.png);
+        padding: 5%;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        margin-top: 41px;
         font-size: 12px;
-        line-height: 25px;
-        padding-left:10px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+        color: #FDE8BA;
+        opacity: 0.89;
+        line-height: 22px;
+        height: 360px;
     }
+
+        .page_bottom .task_description textarea {
+            margin: 0px;
+            width: 100%;
+            height: 100%;
+            line-height: 24px;
+            background-color: transparent;
+            border: 0;
+            color: #FDE8BA;
+        }

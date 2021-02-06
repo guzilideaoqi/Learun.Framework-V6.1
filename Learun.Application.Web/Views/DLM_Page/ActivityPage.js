@@ -30,6 +30,14 @@ var meuns = {
         $("#tixian").on("click", function () {
             meuns.NativeToApp(2, 0);
         })
+
+        $("#inviteuser").on("click", function () {
+            if ($(".finish").length >= 3) {
+                meuns.NativeToApp(5, 0);
+            } else {
+                meuns.Toast("请先完成以上小任务!");
+            }
+        })
     },
     LoadTask: function () {
         $.ajax({
@@ -59,7 +67,7 @@ var meuns = {
     },
     LoadTaskHtmlData: function () {
         $("#task_list").html("");
-        var html = " <div class=\"remark\">提现攻略</div>";
+        var html = "";
         var stepName = "第一步";
         var isrunning = false;
         var btnclass = "red";
@@ -96,11 +104,23 @@ var meuns = {
                 }
             }
 
+            html += "<div class=\"task_item\">" +
+                "<div class=\"headicon\">" +
+                "<img src=\"../Content/dlm/activity_image/headicon" + (i + 1) + ".png\" />" +
+                "</div > " +
+                "    <div class=\"task_content\">" +
+                "   <div class=\"task_title\">" + taskItem.task_title + "</div>" +
+                "  <div class=\"task_remark\">" + taskItem.task_description + "</div>" +
+                "             </div > " +
+                "<div class=\"btn_info\">" +
+                "<div class=\"btn " + btnclass + "\" onclick=\"ReviceActivityTask('" + btnText + "'," + taskItem.reviceid + ",'" + taskItem.failreason + "')\">" + btnText + "</div>" +
+                "           </div>" +
+                "      </div>";
 
-            html += "            <div class=\"task_item\">" +
+            /*html += "            <div class=\"task_item\">" +
                 "<div class=\"task_content\">" + stepName + " " + taskItem.task_title + "  " + taskItem.singlecommission + "元</div>" +
                 "<div class=\"btn " + btnclass + "\" onclick=\"ReviceActivityTask('" + btnText + "'," + taskItem.reviceid + ",'" + taskItem.failreason + "')\">" + btnText + "</div>" +
-                "</div>";
+                "</div>";*/
 
         }
         $("#task_list").html(html);

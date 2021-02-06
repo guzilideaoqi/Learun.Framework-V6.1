@@ -498,6 +498,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 dm_certifica_recordEntity dm_Certifica_RecordEntity = dm_CertificaRecordIBLL.GetCertificationRecord(User_ID);
                 if (dm_Certifica_RecordEntity.IsEmpty())
                     dm_Certifica_RecordEntity = new dm_certifica_recordEntity();
+                else
+                {
+                    if (dm_Certifica_RecordEntity.realstatus == 0)
+                        throw new Exception("实名认证信息正在审核中,请勿重复提交!");
+                    else if (dm_Certifica_RecordEntity.realstatus == 1)
+                        throw new Exception("实名认证信息已审核通过!");
+                }
 
                 #region 身份证正面上传
                 if (facecard.IsEmpty() || facecard == "System.Web.HttpPostedFileWrapper")

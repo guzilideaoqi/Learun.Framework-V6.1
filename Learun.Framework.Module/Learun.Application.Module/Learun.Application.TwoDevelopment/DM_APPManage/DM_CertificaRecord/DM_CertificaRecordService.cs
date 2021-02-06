@@ -211,13 +211,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
-
         #region 获取实名认证记录
         public dm_certifica_recordEntity GetCertificationRecord(int user_id)
         {
             try
             {
-                string cacheKey = "CertificationRecord" + user_id;
+                dm_certifica_recordEntity dm_Certifica_RecordEntity = this.BaseRepository("dm_data").FindEntity<dm_certifica_recordEntity>(t => t.user_id == user_id);
+
+                /*string cacheKey = "CertificationRecord" + user_id;
                 dm_certifica_recordEntity dm_Certifica_RecordEntity = redisCache.Read<dm_certifica_recordEntity>(cacheKey);
 
                 if (dm_Certifica_RecordEntity == null)
@@ -228,7 +229,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     {
                         redisCache.Write<dm_certifica_recordEntity>(cacheKey, dm_Certifica_RecordEntity, DateTime.Now.AddHours(2), 7);
                     }
-                }
+                }*/
 
                 return dm_Certifica_RecordEntity;
             }
