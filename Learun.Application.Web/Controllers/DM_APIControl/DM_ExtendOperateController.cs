@@ -38,6 +38,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private dm_activity_manageIBLL dm_Activity_ManageIBLL = new dm_activity_manageBLL();
 
+        private dm_activity_recordIBLL dm_Activity_RecordIBLL = new dm_activity_recordBLL();
+
         #region 获取平台设置
         public ActionResult GetPlaformSetting()
         {
@@ -121,9 +123,27 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         Status = 1;
                 }
 
+                #region 活动配置校验
+                bool JoinActivity = false;
                 dm_activity_manageEntity dm_Activity_ManageEntity = dm_Activity_ManageIBLL.GetActivityInfo();
                 if (dm_Activity_ManageEntity.IsEmpty())
                     dm_Activity_ManageEntity = new dm_activity_manageEntity { ActivityStatus = 0 };
+                else
+                {
+                    string token = base.Request.Headers["token"].ToString();
+                    if (!token.IsEmpty())
+                    {
+                        dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
+                        if (!dm_UserEntity.IsEmpty())
+                        {
+                            dm_activity_recordEntity dm_Activity_RecordEntity = dm_Activity_RecordIBLL.GetEntityByUserID((int)dm_UserEntity.id, dm_Activity_ManageEntity.f_id);
+                            if (!dm_Activity_RecordEntity.IsEmpty())
+                                JoinActivity = true;
+                        }
+                    }
+                }
+                #endregion
+
 
                 return Success("获取成功", new
                 {
@@ -140,7 +160,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     sign_rule = dm_BasesettingEntity.sign_rule,
                     cashrecord_fee = dm_BasesettingEntity.cashrecord_fee,
                     cashrecord_remark = dm_BasesettingEntity.cashrecord_remark,
-                    activitysetting = dm_Activity_ManageEntity
+                    activitysetting = dm_Activity_ManageEntity,
+                    JoinActivity = JoinActivity ? 1 : 0
                 });
             }
             catch (Exception ex)
