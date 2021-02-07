@@ -21,6 +21,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         private dm_friend_thumb_recordIBLL dm_Friend_Thumb_RecordIBLL = new dm_friend_thumb_recordBLL();
 
+        private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();//基础配置信息
+
         private DM_UserIBLL dM_UserIBLL = new DM_UserBLL();
 
         const string _cache_key_list = "CircleCacheKeyList";
@@ -66,6 +68,11 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                string appid = CheckAPPID();
+                int status = 1;//2代表审核模式
+                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                GetPreviewVersion(dm_BasesettingEntity, ref status);
+
                 Pagination pagination = new Pagination
                 {
                     page = PageNo,
@@ -73,12 +80,12 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     sidx = "createtime",
                     sord = "desc"
                 };
-                string appid = CheckAPPID();
-                string cacheKey = Md5Helper.Hash("GetCircleByGeneral" + pagination.ToJson() + appid);
+                string cacheKey = Md5Helper.Hash("GetCircleByGeneral" + pagination.ToJson() + appid + status);
                 List<FriendCircleEntity> friendCircleEntities = redisCache.Read<List<FriendCircleEntity>>(cacheKey, 7);
                 if (friendCircleEntities == null)
                 {
-                    IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities = dm_Friend_CircleIBLL.GetCircleByGeneral(pagination, appid).OrderByDescending(t => t.iscream);
+                    int ischeck = status == 2 ? 1 : 0;
+                    IEnumerable<dm_friend_circleEntity> dm_Friend_CircleEntities = dm_Friend_CircleIBLL.GetCircleByGeneral(pagination, appid, ischeck).OrderByDescending(t => t.iscream);
                     friendCircleEntities = GeneralPraise(dm_Friend_CircleEntities, cacheKey);
                     if (friendCircleEntities.Count > 0)
                     {
@@ -87,6 +94,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         ManageRedisCache(cacheKey);
                     }
                 }
+
+
 
                 return SuccessList("获取成功!", friendCircleEntities);
             }
@@ -394,6 +403,25 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             }
         }
         #endregion
+
+        public string CheckPlaform()
+        {
+            if (base.Request.Headers["platform"].IsEmpty())
+            {
+                throw new Exception("缺少参数platform");
+            }
+            return base.Request.Headers["platform"].ToString();
+        }
+
+        public string CheckVersion()
+        {
+            if (base.Request.Headers["version"].IsEmpty())
+            {
+                throw new Exception("缺少参数version");
+            }
+            return base.Request.Headers["version"].ToString();
+        }
+
         public string CheckAPPID()
         {
             if (base.Request.Headers["appid"].IsEmpty())
@@ -401,6 +429,17 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 throw new Exception("缺少参数appid");
             }
             return base.Request.Headers["appid"].ToString();
+        }
+
+        public void GetPreviewVersion(dm_basesettingEntity dm_BasesettingEntity, ref int Status)
+        {
+            if (dm_BasesettingEntity.openchecked == "1")
+            { //开启审核模式
+                string version = CheckVersion();
+                string platform = CheckPlaform();
+                if ((platform == "ios" && version == dm_BasesettingEntity.previewversion) || (platform == "android" && version == dm_BasesettingEntity.previewversionandroid))
+                    Status = 2;
+            }
         }
     }
 

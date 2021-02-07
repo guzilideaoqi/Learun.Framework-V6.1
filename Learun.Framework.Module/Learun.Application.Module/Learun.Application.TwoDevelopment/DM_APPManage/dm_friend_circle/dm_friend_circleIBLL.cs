@@ -63,7 +63,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <param name="appid"></param>
         /// <returns></returns>
-        IEnumerable<dm_friend_circleEntity> GetCircleByGeneral(Pagination pagination, string appid);
+        IEnumerable<dm_friend_circleEntity> GetCircleByGeneral(Pagination pagination, string appid, int ischeck);
 
         /// <summary>
         /// 获取单条哆米圈任务

@@ -16,10 +16,11 @@ body {
 }
 
     .page_head .pao {
-        width: 112px;
-        height: 135px;
+        width: 100px;
+        height: 111px;
         position: absolute;
         right: 0;
+        z-index: 999;
     }
 
     .page_head .page_price {
@@ -55,7 +56,7 @@ body {
     text-align: center;
     width: 50px;
     float: right;
-    margin-top: -74px;
+    margin-top: -75px;
 }
 
 .page_center {

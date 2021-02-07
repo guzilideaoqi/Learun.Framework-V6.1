@@ -22,7 +22,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_friend_circleEntity> GetList( string queryJson )
+        public IEnumerable<dm_friend_circleEntity> GetList(string queryJson)
         {
             try
             {
@@ -148,7 +148,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取官推任务
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<dm_friend_circleEntity> GetCircleByGovernment(Pagination pagination, string appid) {
+        public IEnumerable<dm_friend_circleEntity> GetCircleByGovernment(Pagination pagination, string appid)
+        {
             try
             {
                 return dm_friend_circleService.GetCircleByGovernment(pagination, appid);
@@ -172,10 +173,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <param name="appid"></param>
         /// <returns></returns>
-        public IEnumerable<dm_friend_circleEntity> GetCircleByGeneral(Pagination pagination, string appid) {
+        public IEnumerable<dm_friend_circleEntity> GetCircleByGeneral(Pagination pagination, string appid, int ischeck)
+        {
             try
             {
-                return dm_friend_circleService.GetCircleByGeneral(pagination, appid);
+                return dm_friend_circleService.GetCircleByGeneral(pagination, appid, ischeck);
             }
             catch (Exception ex)
             {
@@ -195,7 +197,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public dm_friend_circleEntity GetSingleCircle(int id) {
+        public dm_friend_circleEntity GetSingleCircle(int id)
+        {
             try
             {
                 return dm_friend_circleService.GetSingleCircle(id);
@@ -219,10 +222,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <param name="User_ID"></param>
         /// <returns></returns>
-        public IEnumerable<dm_friend_circleEntity> GetMyCircle(Pagination pagination, string User_ID) {
+        public IEnumerable<dm_friend_circleEntity> GetMyCircle(Pagination pagination, string User_ID)
+        {
             try
             {
-               return dm_friend_circleService.GetMyCircle(pagination, User_ID);
+                return dm_friend_circleService.GetMyCircle(pagination, User_ID);
             }
             catch (Exception ex)
             {
@@ -244,7 +248,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="Content">文章内容</param>
         /// <param name="Images">图片信息</param>
         /// <param name="User_ID">用户信息</param>
-        public void PubCircle(string AppID, string Content, string Images, string User_ID) {
+        public void PubCircle(string AppID, string Content, string Images, string User_ID)
+        {
             try
             {
                 dm_friend_circleService.PubCircle(AppID, Content, Images, User_ID);

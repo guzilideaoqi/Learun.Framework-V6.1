@@ -81,6 +81,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("ISCREAM")]
         public int? iscream { get; set; }
+
+        /// <summary>
+        /// 是否为审核模式
+        /// </summary>
+        [Column("ISCHECKMODE")]
+        public int? ischeckmode { get; set; }
         #endregion
 
         #region 扩展操作

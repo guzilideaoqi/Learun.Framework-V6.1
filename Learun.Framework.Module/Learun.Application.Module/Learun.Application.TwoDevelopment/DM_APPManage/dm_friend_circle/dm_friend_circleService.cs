@@ -233,11 +233,14 @@ t.iscream,
         /// <param name="pagination"></param>
         /// <param name="appid"></param>
         /// <returns></returns>
-        public IEnumerable<dm_friend_circleEntity> GetCircleByGeneral(Pagination pagination, string appid)
+        public IEnumerable<dm_friend_circleEntity> GetCircleByGeneral(Pagination pagination, string appid, int ischeck)
         {
             try
             {
-                return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.appid == appid && t.t_type == 0 && t.t_status == 1, pagination);
+                if (ischeck == 1)
+                    return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.appid == appid && t.t_type == 0 && t.t_status == 1 && t.ischeckmode == ischeck, pagination);
+                else
+                    return this.BaseRepository("dm_data").FindList<dm_friend_circleEntity>(t => t.appid == appid && t.t_type == 0 && t.t_status == 1, pagination);
 
                 //DataTable dataTable = this.BaseRepository("dm_data").FindTable("select  f.*,u.nickname,u.headpic from dm_friend_circle f left join dm_user u on f.createcode=u.id where f.t_type=0 and f.t_status=1 and f.appid='" + appid + "'", pagination);
                 //return dataTable;
