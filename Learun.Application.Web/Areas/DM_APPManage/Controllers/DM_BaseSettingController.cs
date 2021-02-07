@@ -6,6 +6,10 @@ using System.Web.Mvc;
 using cn.jpush.api;
 using cn.jpush.api.push.notification;
 using System.Collections;
+using Hyg.Common.DTKTools.DTKModel;
+using Learun.Cache.Base;
+using Learun.Cache.Factory;
+using System;
 
 namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
 {
@@ -13,6 +17,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
     {
         private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
         private dm_basesetting_tipIBLL dM_BaseSetting_tipIBLL = new dm_basesetting_tipBLL();
+        private ICache redisCache = CacheFactory.CaChe();
 
         [HttpGet]
         public ActionResult Index()
@@ -69,6 +74,22 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
             }
 
             return Success(new { BaseSetting = data, BaseSetting_Tip = dm_Basesetting_TipEntity });
+        }
+
+        [HttpGet]
+        [AjaxOnly(false)]
+        public ActionResult GetGoodTypeByCache()
+        {
+            try
+            {
+                string cacheKey = "SuperCategory";
+                List<CategoryItem> categoryItems = redisCache.Read<List<CategoryItem>>(cacheKey, 7L);
+                return Success("获取成功", categoryItems);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
 
         [HttpPost]

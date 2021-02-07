@@ -376,8 +376,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 if (RankingList == null)
                 {
                     Hyg.Common.DTKTools.DTK_ApiManage dTK_ApiManage = new Hyg.Common.DTKTools.DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
-
-                    if (true)
+                    if (false)
                     {
                         //更改为每日爆款
                         DTK_Explosive_Goods_ListRequest dTK_Explosive_Goods_ListRequest = new DTK_Explosive_Goods_ListRequest();
@@ -399,6 +398,18 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     }
                     else
                     {
+                        DTK_History_Low_Price_ListRequest dTK_History_Low_Price_ListRequest = new DTK_History_Low_Price_ListRequest();
+                        dTK_History_Low_Price_ListRequest.pageId = "1";
+                        dTK_History_Low_Price_ListRequest.pageSize = 50;
+                        dTK_History_Low_Price_ListRequest.IsReturnCommonInfo = true;
+                        DTK_History_Low_Price_ListResponse dTK_History_Low_Price_ListResponse = dTK_ApiManage.GetHistoryLowPriceListResponse(dTK_History_Low_Price_ListRequest);
+                        if (dTK_History_Low_Price_ListResponse.code != 0)
+                        {
+                            return Fail(CommonConfig.NoDataTip);
+                        }
+
+                        RankingList = dTK_History_Low_Price_ListResponse.CommonGoodInfoList;
+
                         /*DTK_Ranking_ListRequest dTK_Ranking_ListRequest = new DTK_Ranking_ListRequest();
                         dTK_Ranking_ListRequest.rankType = 7;
                         DTK_Ranking_ListResponse dTK_Ranking_ListResponse = dTK_ApiManage.GetRankingList(dTK_Ranking_ListRequest);

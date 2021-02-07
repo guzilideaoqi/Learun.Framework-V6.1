@@ -24,16 +24,16 @@ var meuns = {
         })
 
         $("#loadmore").on("click", function () {
-            meuns.NativeToApp(1, 0);
+            meuns.NativeToApp(1, 0, 0);
         })
 
         $("#tixian").on("click", function () {
-            meuns.NativeToApp(2, 0);
+            meuns.NativeToApp(2, 0, 0);
         })
 
         $("#inviteuser").on("click", function () {
             if ($(".finish").length >= 3) {
-                meuns.NativeToApp(5, 0);
+                meuns.NativeToApp(5, 0, 0);
             } else {
                 meuns.Toast("请先完成以上小任务!");
             }
@@ -90,10 +90,12 @@ var meuns = {
                     isrunning = true;
                 else if (taskItem.revicestatus == 1) {
                     btnText = "去完成";
+                    btnclass = "red"
                     isrunning = true;
                 } else if (taskItem.revicestatus == 2) {
                     btnText = "审核中";
                     isrunning = true;
+                    btnclass = "red"
                 } else if (taskItem.revicestatus == 3) {
                     btnText = "已完成";
                     btnclass = "finish";
@@ -113,7 +115,7 @@ var meuns = {
                 "  <div class=\"task_remark\">" + taskItem.task_description + "</div>" +
                 "             </div > " +
                 "<div class=\"btn_info\">" +
-                "<div class=\"btn " + btnclass + "\" onclick=\"ReviceActivityTask('" + btnText + "'," + taskItem.reviceid + ",'" + taskItem.failreason + "')\">" + btnText + "</div>" +
+                "<div class=\"btn " + btnclass + "\" onclick=\"ReviceActivityTask('" + btnText + "'," + taskItem.id + "," + taskItem.reviceid + ",'" + taskItem.failreason + "')\">" + btnText + "</div>" +
                 "           </div>" +
                 "      </div>";
 
@@ -127,19 +129,19 @@ var meuns = {
     },
     Toast: function (text) {
         showMessage(text, 3000, true);
-    }, NativeToApp: function (type, id) {
+    }, NativeToApp: function (type, taskId, receiveId) {
         var platform = $("#platform").val();
         if (platform == "android") {
-            window.app.onNativeToAPP(type, id);
+            window.app.onNativeToAPP(type, taskId, receiveId);
         } else if (platform == "ios") {
-            meuns.Toast("无法从活动页面跳转到APP，请直接在我的接收中完成任务!");
+            window.webkit.messageHandlers.onNativeToAPP.postMessage({ type: type, taskId: taskId, receiveId: receiveId });
         } else {
             meuns.Toast("未检测到合法平台!");
         }
     }
 }
 
-ReviceActivityTask = function (btntext, reviceid, failreason) {
+ReviceActivityTask = function (btntext, taskid, reviceid, failreason) {
     if (btntext == "领取任务") {
         $.ajax({
             url: "/DLM_Page/ReviceActivityTask",
@@ -157,7 +159,9 @@ ReviceActivityTask = function (btntext, reviceid, failreason) {
             }
         });
     } else if (btntext == "去完成") {
-        meuns.NativeToApp(3, reviceid);
+        var tip = "任务ID：" + taskid + "接受ID：" + reviceid;
+        meuns.Toast(tip);
+        meuns.NativeToApp(4, taskid, reviceid);
     } else if (btntext == "未通过") {
         meuns.Toast(failreason)
     }

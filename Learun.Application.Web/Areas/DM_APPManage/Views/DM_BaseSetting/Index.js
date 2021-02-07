@@ -98,14 +98,14 @@ var bootstrap = function ($, learun) {
 
             //商品类型
             $("#goodtype").lrselect({
-                url: top.$.rootUrl + "/DM_Good/GetGoodTypeByCache",
+                url: top.$.rootUrl + "/DM_BaseSetting/GetGoodTypeByCache",
                 text: "cname",
                 value: "cid"
             });
 
             //超级券商品类型
             $("#super_coupon_goodtype").lrselect({
-                url: top.$.rootUrl + "/DM_Good/GetGoodTypeByCache",
+                url: top.$.rootUrl + "/DM_BaseSetting/GetGoodTypeByCache",
                 text: "cname",
                 value: "cid"
             });

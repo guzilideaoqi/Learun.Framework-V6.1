@@ -779,6 +779,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     else
                     {
                         List<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == dm_Task_ReviceEntity.user_id && t.status != 3 && t.status != 4 && t.activitycode == dm_Activity_ManageEntity.f_id).ToList();
+
+                        db = BaseRepository("dm_data").BeginTrans();
+                        db.Update(dm_TaskEntity);
+                        db.Update(dm_Task_ReviceEntity);
+
                         if (dm_Task_ReviceEntities.Count() <= 0 || (dm_Task_ReviceEntities.Count() == 1 && dm_Task_ReviceEntities[0].id == dm_Task_ReviceEntity.id))
                         {//活动任务已全部完成
                             decimal? activityprice = dm_Activity_ManageEntity.RewardPrice;
@@ -799,17 +804,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                             dm_Activity_RecordEntity.finishtime = DateTime.Now;//设置活动任务完成时间
 
-                            db = BaseRepository("dm_data").BeginTrans();
                             db.Update(currentUser);
-                            db.Update(dm_TaskEntity);
-                            db.Update(dm_Task_ReviceEntity);
                             if (dm_AccountdetailEntities.Count > 0)
                             {
                                 db.Insert(dm_AccountdetailEntities);
                             }
                             db.Update(dm_Activity_RecordEntity);
-                            db.Commit();
                         }
+                        db.Commit();
                     }
                 }
 
