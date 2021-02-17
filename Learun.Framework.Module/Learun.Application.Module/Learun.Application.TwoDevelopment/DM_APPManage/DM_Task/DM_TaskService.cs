@@ -287,9 +287,9 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
                 string querySql = "";
                 if (dm_task_reviceList.Count() <= 0)
-                    querySql = "select *,0 revicestatus,0 reviceid,'' failreason from dm_task where isactivity=1 and task_status=0 order by  RAND() limit 3";
+                    querySql = "select *,0 revicestatus,0 reviceid,'' failreason from dm_task where isactivity=1 and task_status=0 order by  createtime asc limit 3";
                 else
-                    querySql = "select t.*,r.status revicestatus,r.id reviceid,r.failreason from dm_task t left join dm_task_revice r on t.id=r.task_id where t.isactivity=1 and t.task_status=0 and r.user_id=" + user_id;
+                    querySql = "select t.*,r.status revicestatus,r.id reviceid,r.failreason from dm_task t left join dm_task_revice r on t.id=r.task_id where t.isactivity=1 and t.task_status=0 and r.activitycode='" + dm_Activity_ManageEntity.f_id + "' and r.user_id='" + user_id + "'";
                 return this.BaseRepository("dm_data").FindTable(querySql);
             }
             catch (Exception ex)

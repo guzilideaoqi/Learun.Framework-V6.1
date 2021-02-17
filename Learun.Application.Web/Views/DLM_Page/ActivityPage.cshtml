@@ -1,4 +1,5 @@
 ﻿@using Learun.Application.TwoDevelopment.DM_APPManage;
+@using Learun.Util;
 @{
 
     dm_activity_recordEntity dm_Activity_RecordEntity = ViewBag.MyActivityInfo as dm_activity_recordEntity;
@@ -23,7 +24,7 @@
         <div class="page_price">
             <span class="lot">￥</span>
             <span class="price">@ViewBag.ActivityPrice</span>
-            <div class="remark">完成3步小任务,最少可得8.88</div>
+            <div class="remark">完成以下三个小任务可提现8.88</div>
             <div id="tixian" class="tixian">提现></div>
         </div>
     </div>
@@ -31,42 +32,7 @@
     <div class="page_center">
         <div class="head_center_tip">做任务领现金</div>
         <div id="task_list" class="task_list">
-            <div class="task_item">
-                <div class="headicon">
-                    <img src="~/Content/dlm/activity_image/headicon1.png" />
-                </div>
-                <div class="task_content">
-                    <div class="task_title">邀请好友</div>
-                    <div class="task_remark">邀请好友可得1.6元</div>
-                </div>
-                <div class="btn_info">
-                    <div class="btn red" onclick="ReviceActivityTask('领取任务',0,'')">领取任务</div>
-                </div>
-            </div>
-            <div class="task_item">
-                <div class="headicon">
-                    <img src="~/Content/dlm/activity_image/headicon1.png" />
-                </div>
-                <div class="task_content">
-                    <div class="task_title">邀请好友</div>
-                    <div class="task_remark">邀请好友可得1.6元</div>
-                </div>
-                <div class="btn_info">
-                    <div class="btn finish" onclick="ReviceActivityTask('领取任务',0,'')">已完成</div>
-                </div>
-            </div>
-            <div class="task_item">
-                <div class="headicon">
-                    <img src="~/Content/dlm/activity_image/headicon1.png" />
-                </div>
-                <div class="task_content">
-                    <div class="task_title">邀请好友</div>
-                    <div class="task_remark">邀请好友可得1.6元</div>
-                </div>
-                <div class="btn_info">
-                    <div class="btn gray" onclick="ReviceActivityTask('领取任务',0,'')">领取任务</div>
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -77,7 +43,7 @@
         <div class="invite_process">
             <div class="invitefinish">
                 <img class="niu" src="~/Content/dlm/activity_image/niu1.png" />
-                @if (dm_Activity_RecordEntity.invitenum >= 1)
+                @if (!dm_Activity_RecordEntity.IsEmpty()&& dm_Activity_RecordEntity.invitenum >= 1)
                 {
                     <div class="invitefinish_image"></div>
                 }
@@ -88,7 +54,7 @@
             </div>
             <div class="invitefinish">
                 <img class="niu" src="~/Content/dlm/activity_image/niu2.png" />
-                @if (dm_Activity_RecordEntity.invitenum >= 2)
+                @if (!dm_Activity_RecordEntity.IsEmpty() && dm_Activity_RecordEntity.invitenum >= 2)
                 {
                     <div class="invitefinish_image"></div>
                 }
@@ -99,7 +65,7 @@
             </div>
             <div class="invitefinish">
                 <img class="niu" src="~/Content/dlm/activity_image/niu3.png" />
-                @if (dm_Activity_RecordEntity.invitenum >= 3)
+                @if (!dm_Activity_RecordEntity.IsEmpty() && dm_Activity_RecordEntity.invitenum >= 3)
                 {
                     <div class="invitefinish_image"></div>
                 }

@@ -44,16 +44,33 @@ namespace Learun.Application.Web.Controllers
             dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
             if (!dm_UserEntity.IsEmpty())
             {
-                dm_UserEntity = dM_UserIBLL.JoinActivity((int)dm_UserEntity.id);
-
-                ViewBag.ActivityPrice = dm_UserEntity.activityprice;
-
                 dm_activity_manageEntity dm_Activity_ManageEntity = dm_Activity_ManageIBLL.GetActivityInfo();
 
                 if (!dm_Activity_ManageEntity.IsEmpty())
+                {
                     ViewBag.ActivityRemark = dm_Activity_ManageEntity.ActivityRemark;
 
-                ViewBag.MyActivityInfo = dm_Activity_RecordIBLL.GetEntityByUserID((int)dm_UserEntity.id, dm_Activity_ManageEntity.f_id);
+                    dm_activity_recordEntity dm_Activity_RecordEntity = dm_Activity_RecordIBLL.GetEntityByUserID((int)dm_UserEntity.id, dm_Activity_ManageEntity.f_id);
+
+                    if (!dm_Activity_RecordEntity.IsEmpty())
+                    {
+                        dm_UserEntity = dM_UserIBLL.GetEntity(dm_UserEntity.id);
+                    }
+                    else
+                    {
+                        dm_UserEntity = dM_UserIBLL.JoinActivity((int)dm_UserEntity.id);
+                        dm_Activity_RecordEntity = new dm_activity_recordEntity();
+                    }
+
+                    ViewBag.ActivityPrice = dm_UserEntity.activityprice;
+
+                    ViewBag.MyActivityInfo = dm_Activity_RecordEntity;
+                }
+
+            }
+            else
+            {
+                ViewBag.MyActivityInfo = new dm_activity_recordEntity();
             }
 
 

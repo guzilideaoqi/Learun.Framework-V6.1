@@ -27,7 +27,7 @@ body {
         text-align: center;
         width: 77%;
         position: absolute;
-        margin: 35% 10%;
+        margin: 33% 10%;
     }
 
 .page_price .lot {
@@ -143,6 +143,11 @@ body {
                 font-family: Source Han Sans CN;
                 font-weight: 500;
                 color: #FDE8BA;
+                display: inline-block;
+                white-space: nowrap;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .task_list .task_item .task_content .task_remark {
@@ -151,6 +156,11 @@ body {
                 font-weight: 400;
                 color: #FDE8BA;
                 opacity: 0.64;
+                display: inline-block;
+                white-space: nowrap;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 line-height: 36px;
             }
 
@@ -205,7 +215,7 @@ body {
         color: #C2181A;
         margin-top: -90px;
         font-family: Source Han Sans CN;
-        font-weight: 400;
+        font-weight: bolder;
     }
 
     .head_center_bottom .invite_process {
@@ -290,5 +300,5 @@ body {
             line-height: 24px;
             background-color: transparent;
             border: 0;
-            color: #FDE8BA;
+            color: white;
         }

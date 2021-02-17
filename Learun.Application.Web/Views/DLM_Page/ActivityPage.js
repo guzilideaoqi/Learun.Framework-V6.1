@@ -160,7 +160,6 @@ ReviceActivityTask = function (btntext, taskid, reviceid, failreason) {
         });
     } else if (btntext == "去完成") {
         var tip = "任务ID：" + taskid + "接受ID：" + reviceid;
-        meuns.Toast(tip);
         meuns.NativeToApp(4, taskid, reviceid);
     } else if (btntext == "未通过") {
         meuns.Toast(failreason)
