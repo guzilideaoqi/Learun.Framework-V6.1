@@ -2415,7 +2415,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 pwdContent = getValue("(?<=(id=))[0-9]{5,}", keyWord);//识别出来的商品ID
                 if (string.IsNullOrWhiteSpace(pwdContent))
                 {
-                    string pwdReg = @"[^a-zA-Z=/\d@<\u4E00-\u9FA5]([a-zA-Z0-9]{11})[^a-zA-Z=.\d@>\u4E00-\u9FA5]";
+                    //string pwdReg = @"[^a-zA-Z=/\d@<\u4E00-\u9FA5]([a-zA-Z0-9]{11})[^a-zA-Z=.\d@>\u4E00-\u9FA5]";
+                    string pwdReg = @"((^s*)|[^a-zA-Z])([a-zA-Z0-9]{11})($|[^a-zA-Z])";
                     pwdContent = getValue(pwdReg, keyWord);
                     if (pwdContent != "")
                     {
