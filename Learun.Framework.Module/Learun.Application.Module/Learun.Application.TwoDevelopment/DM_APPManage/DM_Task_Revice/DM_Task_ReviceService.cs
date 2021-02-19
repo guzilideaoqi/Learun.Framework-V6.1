@@ -788,7 +788,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         {//活动任务已全部完成
                             decimal? activityprice = dm_Activity_ManageEntity.RewardPrice;
                             currentUser.accountprice += activityprice;
-                            currentUser.activityprice += activityprice;
+                            //currentUser.activityprice += activityprice;
 
                             dm_AccountdetailEntities.Add(new dm_accountdetailEntity
                             {

@@ -371,6 +371,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         [Column("ACTIVITYPRICE")]
         public decimal? activityprice { get; set; }
+
+        /// <summary>
+        /// À˘ ÙÕ≈∂”ID
+        /// </summary>
+        [Column("BELONG_PARTNERS_ID")]
+        public int? belong_partners_id { get; set; }
         public void Create()
         {
             userlevel = 0;

@@ -28,7 +28,11 @@ var meuns = {
         })
 
         $("#tixian").on("click", function () {
-            meuns.NativeToApp(2, 0, 0);
+            if ($(".finish").length >= 3) {
+                meuns.NativeToApp(2, 0, 0);
+            } else {
+                meuns.Toast("完成以下三个小任务才能提现!");
+            }
         })
 
         $("#inviteuser").on("click", function () {

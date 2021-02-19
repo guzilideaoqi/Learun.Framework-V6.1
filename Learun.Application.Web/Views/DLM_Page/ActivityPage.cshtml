@@ -23,8 +23,25 @@
         <img class="pao" src="~/Content/dlm/activity_image/pao.png" />
         <div class="page_price">
             <span class="lot">￥</span>
-            <span class="price">@ViewBag.ActivityPrice</span>
-            <div class="remark">完成以下三个小任务可提现8.88</div>
+            <span class="price" id="reward_price">0</span>
+            <script>
+                var finish_price=@ViewBag.ActivityPrice;
+                var set_price = setInterval(function () {
+                    var current_price = parseFloat(parseFloat($("#reward_price").text()).toFixed(2));
+                    if (current_price >= finish_price) {
+                        clearInterval(set_price);
+                    } else {
+                        current_price += 0.43;
+                        if (current_price > finish_price) {
+                            current_price = finish_price;
+                        }
+                    }
+                    console.log(current_price);
+
+                    $("#reward_price").html(current_price.toFixed(2));
+                }, 50);
+            </script>
+            <div class="remark">完成以下三个小任务可提现</div>
             <div id="tixian" class="tixian">提现></div>
         </div>
     </div>
@@ -43,7 +60,7 @@
         <div class="invite_process">
             <div class="invitefinish">
                 <img class="niu" src="~/Content/dlm/activity_image/niu1.png" />
-                @if (!dm_Activity_RecordEntity.IsEmpty()&& dm_Activity_RecordEntity.invitenum >= 1)
+                @if (!dm_Activity_RecordEntity.IsEmpty() && dm_Activity_RecordEntity.invitenum >= 1)
                 {
                     <div class="invitefinish_image"></div>
                 }

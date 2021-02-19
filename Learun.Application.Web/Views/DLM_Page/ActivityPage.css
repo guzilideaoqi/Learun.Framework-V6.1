@@ -11,7 +11,7 @@ body {
     background-image: url(../../Content/dlm/activity_image/head_bj.png);
     background-size: 160% 169%;
     height: 400px;
-    background-position: 50% 77%;
+    background-position: 50% 66%;
     background-repeat: no-repeat;
 }
 
@@ -27,7 +27,7 @@ body {
         text-align: center;
         width: 77%;
         position: absolute;
-        margin: 33% 10%;
+        margin: 43% 10%;
     }
 
 .page_price .lot {
@@ -61,7 +61,7 @@ body {
 
 .page_center {
     height: 400px;
-    margin-top: -120px;
+    margin-top: -80px;
 }
 
     .page_center .head_center_image {
@@ -301,4 +301,5 @@ body {
             background-color: transparent;
             border: 0;
             color: white;
+            opacity: 1;
         }

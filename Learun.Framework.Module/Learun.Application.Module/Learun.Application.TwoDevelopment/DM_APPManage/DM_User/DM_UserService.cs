@@ -557,13 +557,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         throw new Exception("邀请人信息异常!");
                     }
 
+                    int? partners_id = parent_UserEntity.partnersstatus == 2 ? parent_UserEntity.partners : dm_Parent_User_RelationEntity.partners_id;
+
                     dm_userEntity dm_UserEntity_exist = GetEntityByPhone(dm_UserEntity.phone, appid);
                     if (!dm_UserEntity_exist.IsEmpty())
                     {
                         throw new Exception("该手机号已注册!");
                     }
-
-
 
                     dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
                     if (dm_UserEntity.pwd.IsEmpty())
@@ -586,6 +586,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         updateEntity.invitecode = EncodeInviteCode(updateEntity.id);
                         updateEntity.integral = dm_BasesettingEntity.new_people;
                         updateEntity.rongcloud_token = rongyun_token(id, updateEntity.nickname, updateEntity.headpic, appid);
+                        updateEntity.belong_partners_id = partners_id;
                         updateEntity.Modify(id);
                         db.Update(updateEntity);
                         db.Insert(new dm_intergraldetailEntity
@@ -615,7 +616,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             user_id = id,
                             parent_id = (int)parent_UserEntity.id,
                             parent_nickname = parent_UserEntity.nickname,
-                            partners_id = parent_UserEntity.partnersstatus == 2 ? parent_UserEntity.partners : dm_Parent_User_RelationEntity.partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
+                            partners_id = partners_id,//如果上级用户为合伙人，此时邀请下级需要绑定自己的合伙人编号，如果非合伙人则继承自己的所属团队
                         };
                         dm_User_RelationEntity.Create();
                         db.Insert(dm_User_RelationEntity);
@@ -637,11 +638,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         //当前有活动正在进行中
                         if (!dm_Activity_ManageEntity.IsEmpty() && dm_Activity_ManageEntity.ActivityType == 1)
                         {
-                            db = this.BaseRepository("dm_data").BeginTrans();
+                            db_activity = this.BaseRepository("dm_data").BeginTrans();
                             dm_activity_recordEntity dm_Activity_RecordEntity = new dm_activity_recordService().GetEntityByUserID((int)parent_UserEntity.id, dm_Activity_ManageEntity.f_id);
                             if (!dm_Activity_RecordEntity.IsEmpty() && dm_Activity_RecordEntity.finishtime < DateTime.Now)
                                 dm_Activity_RecordEntity.invitenum += 1;
-                            db.Update(dm_Activity_RecordEntity);
+                            db_activity.Update(dm_Activity_RecordEntity);
 
                             if (dm_Activity_RecordEntity.invitenum >= 3)
                             {
@@ -649,7 +650,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 parent_UserEntity.accountprice += dm_Activity_ManageEntity.RewardPrice;
                                 parent_UserEntity.activityprice += dm_Activity_ManageEntity.RewardPrice;
                                 #endregion
-                                db.Update(parent_UserEntity);
+                                db_activity.Update(parent_UserEntity);
 
                                 dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity
                                 {
@@ -662,13 +663,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                     user_id = parent_UserEntity.id,
                                     profitLoss = 1
                                 };
-                                db.Insert(dm_AccountdetailEntity);
+                                db_activity.Insert(dm_AccountdetailEntity);
                             }
+                            db_activity.Commit();
                         }
                         #endregion
                     }
                     catch (Exception ex)
                     {
+                        if (db_activity != null)
+                            db_activity.Rollback();
                         Hyg.Common.OtherTools.LogHelper.WriteDebugLog("活动增加任务异常!", ex.Message);
                     }
 
@@ -1523,7 +1527,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     }
                     else
                     {
-                        dm_UserEntity.activityprice = 0;
+                        dm_UserEntity.activityprice = dm_Activity_ManageEntity.RewardPrice;
                     }
 
                     dm_Activity_RecordEntity = new dm_activity_recordEntity

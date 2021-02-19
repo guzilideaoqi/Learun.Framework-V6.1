@@ -532,7 +532,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
-        #region 获取APP
+        #region 获取APP版本信息
         public ActionResult GetVersionRecord()
         {
             try
@@ -544,6 +544,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             {
                 return FailException(ex);
             }
+        }
+        #endregion
+
+        #region 接收多麦平台推送的订单
+        public ActionResult RevicePushOrderByDuoMai()
+        {
+            return Content("1");
         }
         #endregion
 
