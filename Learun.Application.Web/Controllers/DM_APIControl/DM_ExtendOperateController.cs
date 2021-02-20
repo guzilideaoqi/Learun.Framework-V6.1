@@ -548,6 +548,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 接收多麦平台推送的订单
+        [NoNeedLogin]
         public ActionResult RevicePushOrderByDuoMai()
         {
             return Content("1");
@@ -563,6 +564,52 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 string appid = CheckAPPID();
 
                 return SuccessList("获取成功", jsonData);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 极光推送相关功能测试
+        /// <summary>
+        /// 为单一用户推送消息
+        /// </summary>
+        /// <param name="User_ID"></param>
+        /// <param name="Title"></param>
+        /// <param name="Content"></param>
+        /// <returns></returns>
+        [NoNeedLogin]
+        public ActionResult SendPushByUserID(string User_ID, string Title, string Content)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                JPushClientHelper.SendPush(appid, User_ID, Title, Content, PushTarget.User);
+                return Success("推送成功!");
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 推送团队消息
+        /// </summary>
+        /// <param name="PartnersID"></param>
+        /// <param name="Title"></param>
+        /// <param name="Content"></param>
+        /// <returns></returns>
+        [NoNeedLogin]
+        public ActionResult SendPushByPartnersID(string PartnersID, string Title, string Content)
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                JPushClientHelper.SendPush(appid, PartnersID, Title, Content, PushTarget.Partners);
+                return Success("推送成功!");
             }
             catch (Exception ex)
             {

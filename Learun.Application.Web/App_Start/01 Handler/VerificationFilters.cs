@@ -30,8 +30,6 @@ namespace Learun.Application.Web.App_Start._01_Handler
             "getgoodtypebycache",
             "gettop100",
             "getrankinglist",
-            "gettodaygood",
-            "commonsearchgood",
             "getsuperserachgood",
             "getdtksearchgood",
             "getrecommendgoodbytb",
@@ -81,6 +79,14 @@ namespace Learun.Application.Web.App_Start._01_Handler
             {
                 return;
             }
+
+            var attrNeeds = filterContext.ActionDescriptor.GetCustomAttributes(typeof(NoNeedLoginAttribute), false);
+            if (!attrNeeds.IsEmpty() && attrNeeds.Count() > 0)
+            {
+                //NoNeedLoginAttribute needPass = attrNeeds[0] as NoNeedLoginAttribute;
+                return;
+            }
+
             string token = filterContext.HttpContext.Request.Headers["token"];//用户登录token
             string platform = filterContext.HttpContext.Request.Headers["platform"];//平台类型
             string appid = filterContext.HttpContext.Request.Headers["appid"];//appid

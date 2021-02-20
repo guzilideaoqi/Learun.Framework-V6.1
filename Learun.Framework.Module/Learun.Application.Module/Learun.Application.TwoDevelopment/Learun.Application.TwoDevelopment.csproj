@@ -39,6 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Learun.Application.Web\bin\AopSdk.dll</HintPath>
     </Reference>
+    <Reference Include="cn.jpush.api">
+      <HintPath>..\..\..\Learun.Application.Web\bin\cn.jpush.api.dll</HintPath>
+    </Reference>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
@@ -78,6 +81,7 @@
     <Compile Include="Common\CacheHelper.cs" />
     <Compile Include="Common\CommonConfig.cs" />
     <Compile Include="Common\CommonSMSHelper.cs" />
+    <Compile Include="Common\JPushClientHelper.cs" />
     <Compile Include="Common\JSMSClient.cs" />
     <Compile Include="Common\MeetingAPI.cs" />
     <Compile Include="Common\Model\ActivityInfoSetting.cs" />

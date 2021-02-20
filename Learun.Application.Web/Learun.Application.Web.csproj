@@ -175,6 +175,7 @@
     <Compile Include="App_Start\01 Handler\HandlerValidateAntiForgeryTokenAttribute.cs" />
     <Compile Include="App_Start\01 Handler\MvcAPIControllerBase.cs" />
     <Compile Include="App_Start\01 Handler\MvcControllerBase.cs" />
+    <Compile Include="App_Start\01 Handler\NoNeedLoginAttribute.cs" />
     <Compile Include="App_Start\01 Handler\ResultFillters.cs" />
     <Compile Include="App_Start\01 Handler\VerificationFilters.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />

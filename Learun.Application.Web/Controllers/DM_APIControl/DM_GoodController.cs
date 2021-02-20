@@ -363,6 +363,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 今日推荐(2个小时更新一次)
+        [NoNeedLogin]
         public ActionResult GetTodayGood(int User_ID = 0)
         {
             try
@@ -432,6 +433,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         #endregion
 
         #region 三合一超级搜索接口
+        [NoNeedLogin]
         public ActionResult CommonSearchGood(int user_id = 0, int PlaformType = 1, int PageNo = 1, int PageSize = 10, string KeyWords = "20", int sort = 0)
         {
             try

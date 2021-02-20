@@ -44,7 +44,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private dm_business_cooperationIBLL dm_Business_CooperationIBLL = new dm_business_cooperationBLL();
 
         #region 用户名密码登陆
-
         public ActionResult DM_Login(dm_userEntity dm_UserEntity)
         {
             try
