@@ -1395,6 +1395,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
+                couponlink = couponlink == "0" ? "" : couponlink;
                 string appid = CheckAPPID();
                 if (user_id <= 0)
                     return FailNoLogin();
@@ -1423,6 +1424,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         unionId = dm_BasesettingEntity.jd_accountid.ToString()
                     };
                     Hyg.Common.JDTools.JDModel.ConvertLinkResultEntity convertLinkResultEntity = jD_ApiManage.GetConvertLinkByTool(super_PromotionByToolRequest);
+                    if (convertLinkResultEntity.IsEmpty())
+                        throw new Exception("京东转链失败!");
                     jDLinkInfo = new JDLinkInfo();
                     jDLinkInfo.clickURL = convertLinkResultEntity.shortURL;
                     if (jDLinkInfo != null)
