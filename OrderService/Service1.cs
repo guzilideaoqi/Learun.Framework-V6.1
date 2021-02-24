@@ -70,6 +70,30 @@ namespace OrderService
                 LogHelper.WriteLog(resultContent);
                 #endregion
             }
+            else if (rateTimerStr == "23 02:00:00" || rateTimerStr == "24 02:00:00")
+            {
+                #region 开始同步上个月的结算订单
+                new System.Threading.Thread(() =>
+                {
+                    int start_time = 0;
+                    currentTime = DateTime.Parse(currentTime.AddMonths(-1).ToString("yyyy-MM-01 00:00:00"));
+                    int total_day = DateTime.DaysInMonth(currentTime.Year, currentTime.Month);
+                    int total_num = total_day * 8;
+                    for (int i = 0; i < total_num; i++)
+                    {
+                        start_time = 3 * i;
+                        string starttime = currentTime.AddHours(start_time).ToString("yyyy-MM-dd HH:mm:ss");
+                        string endtime = currentTime.AddHours((start_time + 3)).ToString("yyyy-MM-dd HH:mm:ss");
+
+                        #region 开始上个月的结算订单
+                        //同步所有订单
+                        synd_tb_order(3, 1, 50, "14", "", starttime, endtime);
+                        System.Threading.Thread.Sleep(3000);
+                        #endregion
+                    }
+                }).Start();
+                #endregion
+            }
             else if (currentTime.Hour == 1 && currentTime.Second == 0 && currentTime.Minute == 0)
             {
                 new System.Threading.Thread(() =>
