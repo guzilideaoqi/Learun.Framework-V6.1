@@ -1160,7 +1160,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     if (dm_BasesettingEntity.InvitePosterType == 1)
                         text = dm_BasesettingEntity.InvitePoster_AppUrl;
                     else if (dm_BasesettingEntity.InvitePosterType == 2)
-                        text = dm_BasesettingEntity.InvitePoster_CustomUrl;
+                        text = dm_BasesettingEntity.InvitePoster_CustomUrl + dm_UserEntity.invitecode;
                     #endregion
 
                     Bitmap qrCode = QRCodeHelper.GenerateQRCode(text, 280, 280);
