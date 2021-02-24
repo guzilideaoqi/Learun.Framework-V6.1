@@ -429,7 +429,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 获取我的订单总数量
         public int GetMyOrderCount(int user_id)
         {
-            string querySql = string.Format("select count(id) from dm_order where userid='{0}' or userid in (select userid from dm_user_relation ur where ur.parent_id='{0}')", user_id);
+            string querySql = string.Format("select count(id) from dm_order where (userid='{0}' or userid in (select ur.user_id from dm_user_relation ur where ur.parent_id='{0}')) and order_type_new<>3", user_id);
             return int.Parse(BaseRepository("dm_data").FindObject(querySql).ToString());
         }
         #endregion
