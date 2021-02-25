@@ -17,6 +17,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// </summary>
     public class DM_Apply_CashRecordService : RepositoryFactory
     {
+        private static object sign = new object();
         private DM_UserIBLL dm_UserIBLL = new DM_UserBLL();
         private DM_BaseSettingService dm_BaseSettingService = new DM_BaseSettingService();
         #region 构造函数和属性
@@ -241,62 +242,65 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             IRepository db = null;
             try
             {
-                dm_userEntity dm_UserEntity = dm_UserIBLL.GetEntity(user_id);//不从缓存取，此处需要验证账户余额
-                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
-                if (dm_UserEntity.IsEmpty())
-                    throw new Exception("用户信息异常!");
-                //if (dm_UserEntity.isreal == 0)  未实名认证也可以提现(2021-01-11)
-                //    throw new Exception("您的账号未实名，禁止提现!");
-                if (dm_UserEntity.zfb.IsEmpty())
-                    throw new Exception("支付宝账号未绑定,禁止提现!");
-                if (price < dm_BasesettingEntity.cashrecord_min_price)
-                    throw new Exception(string.Format("最低提现金额不得小于{0}元!", dm_BasesettingEntity.cashrecord_min_price));
-
-                if (price > dm_UserEntity.accountprice)
+                lock (sign)
                 {
-                    throw new Exception("账户余额不足!");
-                }
-                else
-                {
-                    decimal predict_price = price;
-                    if (dm_BasesettingEntity.cashrecord_fee > 0)
-                        price = price * (1 - dm_BasesettingEntity.cashrecord_fee / 100);
-                    if (price <= 0)
-                        throw new Exception("提现数据异常,请联系官方客服!");
+                    dm_userEntity dm_UserEntity = dm_UserIBLL.GetEntity(user_id);//不从缓存取，此处需要验证账户余额
+                    dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingService.GetEntityByCache(appid);
+                    if (dm_UserEntity.IsEmpty())
+                        throw new Exception("用户信息异常!");
+                    //if (dm_UserEntity.isreal == 0)  未实名认证也可以提现(2021-01-11)
+                    //    throw new Exception("您的账号未实名，禁止提现!");
+                    if (dm_UserEntity.zfb.IsEmpty())
+                        throw new Exception("支付宝账号未绑定,禁止提现!");
+                    if (price < dm_BasesettingEntity.cashrecord_min_price)
+                        throw new Exception(string.Format("最低提现金额不得小于{0}元!", dm_BasesettingEntity.cashrecord_min_price));
 
-                    dm_UserEntity.accountprice -= predict_price;
-                    dm_UserEntity.Modify(user_id);
+                    if (price > dm_UserEntity.accountprice)
+                    {
+                        throw new Exception("账户余额不足!");
+                    }
+                    else
+                    {
+                        decimal predict_price = price;
+                        if (dm_BasesettingEntity.cashrecord_fee > 0)
+                            price = price * (1 - dm_BasesettingEntity.cashrecord_fee / 100);
+                        if (price <= 0)
+                            throw new Exception("提现数据异常,请联系官方客服!");
 
-                    #region 增加提现记录
-                    dm_apply_cashrecordEntity dm_Apply_CashrecordEntity = new dm_apply_cashrecordEntity();
-                    dm_Apply_CashrecordEntity.user_id = user_id;
-                    dm_Apply_CashrecordEntity.createtime = DateTime.Now;
-                    dm_Apply_CashrecordEntity.paytype = 0;
-                    dm_Apply_CashrecordEntity.price = price;
-                    dm_Apply_CashrecordEntity.predict_price = predict_price;
-                    dm_Apply_CashrecordEntity.currentprice = dm_UserEntity.accountprice;
-                    dm_Apply_CashrecordEntity.remark = remark;
-                    dm_Apply_CashrecordEntity.status = 0;
-                    #endregion
+                        dm_UserEntity.accountprice -= predict_price;
+                        dm_UserEntity.Modify(user_id);
 
-                    #region 增加余额变更明细(2020-08-20)
-                    dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity();
-                    dm_AccountdetailEntity.currentvalue = dm_Apply_CashrecordEntity.currentprice;
-                    dm_AccountdetailEntity.stepvalue = dm_Apply_CashrecordEntity.price;
-                    dm_AccountdetailEntity.type = 11;
-                    dm_AccountdetailEntity.profitLoss = CommonHelper.GetProfitLoss(11);
-                    dm_AccountdetailEntity.title = "提现";
-                    dm_AccountdetailEntity.remark = "账户余额提现";
-                    dm_AccountdetailEntity.user_id = dm_Apply_CashrecordEntity.user_id;
-                    dm_AccountdetailEntity.createtime = DateTime.Now;
-                    #endregion
+                        #region 增加提现记录
+                        dm_apply_cashrecordEntity dm_Apply_CashrecordEntity = new dm_apply_cashrecordEntity();
+                        dm_Apply_CashrecordEntity.user_id = user_id;
+                        dm_Apply_CashrecordEntity.createtime = DateTime.Now;
+                        dm_Apply_CashrecordEntity.paytype = 0;
+                        dm_Apply_CashrecordEntity.price = price;
+                        dm_Apply_CashrecordEntity.predict_price = predict_price;
+                        dm_Apply_CashrecordEntity.currentprice = dm_UserEntity.accountprice;
+                        dm_Apply_CashrecordEntity.remark = remark;
+                        dm_Apply_CashrecordEntity.status = 0;
+                        #endregion
 
-                    db = BaseRepository("dm_data").BeginTrans();
-                    db.Update(dm_UserEntity);
-                    db.Insert(dm_Apply_CashrecordEntity);
-                    db.Insert(dm_AccountdetailEntity);
+                        #region 增加余额变更明细(2020-08-20)
+                        dm_accountdetailEntity dm_AccountdetailEntity = new dm_accountdetailEntity();
+                        dm_AccountdetailEntity.currentvalue = dm_Apply_CashrecordEntity.currentprice;
+                        dm_AccountdetailEntity.stepvalue = dm_Apply_CashrecordEntity.price;
+                        dm_AccountdetailEntity.type = 11;
+                        dm_AccountdetailEntity.profitLoss = CommonHelper.GetProfitLoss(11);
+                        dm_AccountdetailEntity.title = "提现";
+                        dm_AccountdetailEntity.remark = "账户余额提现";
+                        dm_AccountdetailEntity.user_id = dm_Apply_CashrecordEntity.user_id;
+                        dm_AccountdetailEntity.createtime = DateTime.Now;
+                        #endregion
 
-                    db.Commit();
+                        db = BaseRepository("dm_data").BeginTrans();
+                        db.Update(dm_UserEntity);
+                        db.Insert(dm_Apply_CashrecordEntity);
+                        db.Insert(dm_AccountdetailEntity);
+
+                        db.Commit();
+                    }
                 }
             }
             catch (Exception ex)
