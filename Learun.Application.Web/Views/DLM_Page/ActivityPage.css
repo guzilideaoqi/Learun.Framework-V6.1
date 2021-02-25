@@ -59,9 +59,26 @@ body {
     margin-top: -75px;
 }
 
+.threelogo {
+    display: flex;
+    flex-direction: row;
+    top: -60px;
+    position: relative;
+}
+
+    .threelogo > div {
+        width: 33%;
+        text-align: center;
+    }
+
+        .threelogo > div img {
+            width: 45px;
+            height: 45px;
+        }
+
 .page_center {
     height: 400px;
-    margin-top: -80px;
+    margin-top: -62px;
 }
 
     .page_center .head_center_image {

@@ -604,14 +604,17 @@
     <Content Include="Content\dlm\activity_image\head_bottom.png" />
     <Content Include="Content\dlm\activity_image\pao.png" />
     <Content Include="Content\dlm\bj.png" />
+    <Content Include="Content\dlm\dlm.png" />
     <Content Include="Content\dlm\download.png" />
     <Content Include="Content\dlm\bootstrap.min.css" />
     <Content Include="Content\dlm\combined_shape copy.png" />
+    <Content Include="Content\dlm\feizhu.png" />
     <Content Include="Content\dlm\good.png" />
     <Content Include="Content\dlm\group_4 copy.png" />
     <Content Include="Content\dlm\group_4.png" />
     <Content Include="Content\dlm\jquery.fancybox.pack.js" />
     <Content Include="Content\dlm\king.png" />
+    <Content Include="Content\dlm\kuaishou.png" />
     <Content Include="Content\dlm\main.css" />
     <Content Include="Content\dlm\main.js" />
     <Content Include="Content\dlm\meeting.png" />
