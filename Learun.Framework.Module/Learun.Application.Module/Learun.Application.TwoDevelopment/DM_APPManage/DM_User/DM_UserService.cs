@@ -1574,6 +1574,31 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             this.BaseRepository("dm_data").Update(dm_UserEntity);
         }
 
+        /// <summary>
+        /// 未审核数据统计
+        /// </summary>
+        /// <returns></returns>
+        public DataTable NoCheckDataStatistic()
+        {
+            try
+            {
+                string querySql = string.Format(@"select (SELECT count(1) from dm_apply_cashrecord where status=0) nocheck_cashrecord,
+(select count(1) from dm_certifica_record where realstatus=0) nocheck_certifica,
+(select count(1) from dm_apply_partners_record where status=0) nocheck_apply_partners,
+(select count(1) from dm_friend_circle where t_status=0) nocheck_friend_circle,
+(select count(1) from dm_task where task_status=-2) nocheck_task");
+                return this.BaseRepository("dm_data").FindTable(querySql);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+
         #region 生成融云Token
         /**
          * 此处替换成您的appKey

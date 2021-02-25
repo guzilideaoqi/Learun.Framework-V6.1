@@ -11,7 +11,7 @@
     <meta name="description" content="力软敏捷开发框架，是一个Web可视化开发平台，是一个集PC快速开发、组织架构、工作流、表单设计、自定义报表、APP快速开发等全方位功能于一体的高效、稳定的快速开发平台。" />
     <link rel="icon" href="~/favicon.ico">
 
-    <title>力软信息|快速开发平台|Learun敏捷开发框架|@ViewBag.Title</title>
+    <title>@Learun.Util.Config.GetValue("SoftName")|@ViewBag.Title</title>
     <link href="~/Content/pace/pace-theme-minimal.css" rel="stylesheet" />
     <link href="~/Content/font/css/font-awesome.min.css" rel="stylesheet" />
     <link href="~/Content/bootstrap/bootstrap.min.css" rel="stylesheet" />
@@ -130,25 +130,25 @@
             </div>
             <div class="portal-panel-content" id="OrderData" style="overflow: hidden; padding-top: 20px; padding-left: 30px; padding-right: 50px;">
                 @*<div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[审批]&nbsp;&nbsp;&nbsp;老李的请假条</a>
-                    <label>2016-05-25</label>
-                </div>
-                <div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[审批]&nbsp;&nbsp;&nbsp;陈日天的转岗申请单</a>
-                    <label>2016-04-01</label>
-                </div>
-                <div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[工作]&nbsp;&nbsp;&nbsp;回访千事汇通项目负责人</a>
-                    <label>2015-09-11</label>
-                </div>
-                <div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[工作]&nbsp;&nbsp;&nbsp;联系宋卡公司财务支付二期尾款</a>
-                    <label>2015-02-19</label>
-                </div>
-                <div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[审批]&nbsp;&nbsp;&nbsp;刘昊的借支申请单</a>
-                    <label>2015-02-26</label>
-                </div>*@
+                        <a href="#" style="text-decoration: none;">[审批]&nbsp;&nbsp;&nbsp;老李的请假条</a>
+                        <label>2016-05-25</label>
+                    </div>
+                    <div class="lr-msg-line">
+                        <a href="#" style="text-decoration: none;">[审批]&nbsp;&nbsp;&nbsp;陈日天的转岗申请单</a>
+                        <label>2016-04-01</label>
+                    </div>
+                    <div class="lr-msg-line">
+                        <a href="#" style="text-decoration: none;">[工作]&nbsp;&nbsp;&nbsp;回访千事汇通项目负责人</a>
+                        <label>2015-09-11</label>
+                    </div>
+                    <div class="lr-msg-line">
+                        <a href="#" style="text-decoration: none;">[工作]&nbsp;&nbsp;&nbsp;联系宋卡公司财务支付二期尾款</a>
+                        <label>2015-02-19</label>
+                    </div>
+                    <div class="lr-msg-line">
+                        <a href="#" style="text-decoration: none;">[审批]&nbsp;&nbsp;&nbsp;刘昊的借支申请单</a>
+                        <label>2015-02-26</label>
+                    </div>*@
             </div>
         </div>
         <div class="col-xs-6">
@@ -157,25 +157,25 @@
             </div>
             <div class="portal-panel-content" id="TaskData" style="overflow: hidden; padding-top: 20px; padding-left: 30px; padding-right: 50px;">
                 @*<div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[公告]&nbsp;&nbsp;&nbsp;端午节放假安排</a>
-                    <label>2016-06-01</label>
-                </div>
-                <div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[通知]&nbsp;&nbsp;&nbsp;苏州分公司总经理任命书</a>
-                    <label>2016-05-28</label>
-                </div>
-                <div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[通知]&nbsp;&nbsp;&nbsp;公司开票信息更新通知</a>
-                    <label>2016-05-23</label>
-                </div>
-                <div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[公告]&nbsp;&nbsp;&nbsp;全体员工体检通知</a>
-                    <label>2016-04-06</label>
-                </div>
-                <div class="lr-msg-line">
-                    <a href="#" style="text-decoration: none;">[通知]&nbsp;&nbsp;&nbsp;华东区营销总监任命书</a>
-                    <label>2016-04-18</label>
-                </div>*@
+                        <a href="#" style="text-decoration: none;">[公告]&nbsp;&nbsp;&nbsp;端午节放假安排</a>
+                        <label>2016-06-01</label>
+                    </div>
+                    <div class="lr-msg-line">
+                        <a href="#" style="text-decoration: none;">[通知]&nbsp;&nbsp;&nbsp;苏州分公司总经理任命书</a>
+                        <label>2016-05-28</label>
+                    </div>
+                    <div class="lr-msg-line">
+                        <a href="#" style="text-decoration: none;">[通知]&nbsp;&nbsp;&nbsp;公司开票信息更新通知</a>
+                        <label>2016-05-23</label>
+                    </div>
+                    <div class="lr-msg-line">
+                        <a href="#" style="text-decoration: none;">[公告]&nbsp;&nbsp;&nbsp;全体员工体检通知</a>
+                        <label>2016-04-06</label>
+                    </div>
+                    <div class="lr-msg-line">
+                        <a href="#" style="text-decoration: none;">[通知]&nbsp;&nbsp;&nbsp;华东区营销总监任命书</a>
+                        <label>2016-04-18</label>
+                    </div>*@
             </div>
         </div>
         <div class="col-xs-6" style="display:none;">
@@ -200,7 +200,7 @@
     <script src="~/Content/jquery/jquery-1.10.2.min.js"></script>
     <script src="~/Content/jquery/plugin/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/Content/echarts/echarts.min.js"></script>
-    @Html.AppendJsFile("/Views/LR_Content/script/lr-ajax.js","/Views/Home/AdminDesktopTemp/index.js")
+    @Html.AppendJsFile("/Views/LR_Content/script/lr-ajax.js", "/Views/Home/AdminDesktopTemp/index.js")
 </body>
 </html>
 

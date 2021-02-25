@@ -96,7 +96,9 @@ var bootstrap = function ($, learun) {
                 ],
                 mainId: 'id',
                 reloadSelected: true,
-                isPage: true
+                isPage: true,
+                sidx: "createtime",
+                sord: "desc"
             });
             page.search();
         },
@@ -116,7 +118,7 @@ var bootstrap = function ($, learun) {
             url: top.$.rootUrl + '/DM_APPManage/DM_CertificaRecord/CheckCertificaRecord?keyValue=' + rowData.id,
             width: 550,
             height: 650,
-            btn:["审核通过","关闭"],
+            btn: ["审核通过", "关闭"],
             callBack: function (id) {
                 return top[id].acceptClick(refreshGirdData);
             }

@@ -114,7 +114,9 @@ var bootstrap = function ($, learun) {
                 ],
                 mainId: 'id',
                 reloadSelected: true,
-                isPage: true
+                isPage: true,
+                sidx: "createtime",
+                sord: "desc"
             });
             page.search();
         },

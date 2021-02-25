@@ -140,6 +140,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void Clear_TB_Relation_Auth(int User_ID);
         #endregion
 
+        #region 未审核数据统计
+        DataTable NoCheckDataStatistic();
+        #endregion
+
         #region 生成融云Token
         string GeneralRongTokne(int User_ID, string appid);
 

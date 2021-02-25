@@ -57,7 +57,7 @@ namespace OrderService
 
             DateTime currentTime = DateTime.Now;
 
-            string rateTimerStr = currentTime.ToString("DD HH:mm:ss");
+            string rateTimerStr = currentTime.ToString("dd HH:mm:ss");
             //每个月25号2点开始执行返利
             if (rateTimerStr == "25 02:00:00")
             {

@@ -78,13 +78,15 @@ var bootstrap = function ($, learun) {
                     { label: '实际支付金额', name: 'total_amount', width: 200, align: "left" },
                     { label: '支付宝交易状态', name: 'alipay_status', width: 200, align: "left" },
                     {
-                        label: '1初级代理  2高级代理  3升级代理', name: 'templateid', width: 200, align: "left", formatter: function (cellValue, rowData, options) {
+                        label: '操作类型', name: 'templateid', width: 200, align: "left", formatter: function (cellValue, rowData, options) {
                             if (cellValue == 1)
                                 return "初级代理";
                             else if (cellValue == 2)
                                 return "高级代理";
                             else if (cellValue == 3)
                                 return "升级代理";
+                            else if (cellValue == 99)
+                                return "余额充值";
                             else
                                 return "未知请求";
                         }
@@ -100,7 +102,9 @@ var bootstrap = function ($, learun) {
                 ],
                 mainId: 'id',
                 reloadSelected: true,
-                isPage: true
+                isPage: true,
+                sidx: "createtime",
+                sord: "desc"
             });
             page.search();
         },

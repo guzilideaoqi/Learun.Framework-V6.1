@@ -133,7 +133,7 @@ var bootstrap = function ($, learun) {
             $('#girdtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_User/GetPageListByDataTable',
                 headData: [
-                    { label: '用户id', name: 'id', width: 200, align: "left" },
+                    { label: '用户id', name: 'id', width: 70, align: "left" },
                     { label: '手机号', name: 'phone', width: 100, align: "left" },
                     { label: '用户昵称', name: 'nickname', width: 100, align: "left" },
                     { label: '账户余额', name: 'accountprice', width: 80, align: "left" },
@@ -236,7 +236,9 @@ var bootstrap = function ($, learun) {
                 mainId: 'id',
                 reloadSelected: true,
                 isPage: true,
-                isMultiselect: true
+                isMultiselect: true,
+                sidx: "createtime",
+                sord: "desc"
             });
             page.search();
         },

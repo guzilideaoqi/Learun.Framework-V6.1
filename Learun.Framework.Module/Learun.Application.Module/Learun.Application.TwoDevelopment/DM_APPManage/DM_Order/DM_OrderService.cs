@@ -208,22 +208,22 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         if (pay_user.userlevel == 0)
                         {
                             //pay_comission = ConvertComission(Convert.ToDecimal(item.estimated_effect) * (decimal)dm_BasesettingEntity.shopping_pay_junior);
-                            pay_comission = ConvertComission(Convert.ToDecimal(item.commission_amount));
+                            pay_comission = ConvertComission(Convert.ToDecimal(item.commission_amount), false);
                         }
                         else if (pay_user.userlevel == 1)
                         {
                             //pay_comission = ConvertComission(Convert.ToDecimal(item.estimated_effect) * (decimal)dm_BasesettingEntity.shopping_pay_middle);
-                            pay_comission = ConvertComission(Convert.ToDecimal(item.commission_amount));
+                            pay_comission = ConvertComission(Convert.ToDecimal(item.commission_amount), false);
                         }
                         else if (pay_user.userlevel == 2)
                         {
                             //pay_comission = ConvertComission(Convert.ToDecimal(item.estimated_effect) * (decimal)dm_BasesettingEntity.shopping_pay_senior);
-                            pay_comission = ConvertComission(Convert.ToDecimal(item.commission_amount));
+                            pay_comission = ConvertComission(Convert.ToDecimal(item.commission_amount), false);
                         }
                         if (pay_comission > 0m)
                         {
                             calculateComissionEntity2 = CalculateComission(pay_user.user_id, pay_comission, pay_user.accountprice);
-                            dm_AccountdetailEntities.Add(GeneralAccountDetail(pay_user.user_id, 1, dm_Basesetting_TipEntity.shop_pay_tip, "您的订单" + item.order_status.ToString() + "佣金已到账,请查收!", pay_comission, calculateComissionEntity2.accountprice));
+                            dm_AccountdetailEntities.Add(GeneralAccountDetail(pay_user.user_id, 1, dm_Basesetting_TipEntity.shop_pay_tip, "您的订单" + item.sub_order_sn.ToString() + "佣金已到账,请查收!", pay_comission, calculateComissionEntity2.accountprice));
                         }
                         if (pay_user.parent_id != -1 && pay_comission > 0m)
                         {
@@ -333,9 +333,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             return calculateComissionEntity;
         }
 
-        private decimal ConvertComission(decimal comissionamount)
+        private decimal ConvertComission(decimal comissionamount, bool is_chu = true)
         {
-            return Math.Round(comissionamount / 100m, 2);
+            if (is_chu)
+                return Math.Round(comissionamount / 100m, 2);
+            else
+                return Math.Round(comissionamount, 2);
         }
 
         private dm_accountdetailEntity GeneralAccountDetail(int user_id, int type, string title, string remark, decimal billdetailCommission, decimal? currentaccountprice)

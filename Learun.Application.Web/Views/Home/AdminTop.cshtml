@@ -4,7 +4,7 @@
 }
 @Html.AppendCssFile("/Views/Home/AdminTop/index.css")
 <div class="lr-frame-top">
-    <a class="lr-logo-title"><i class="iconfont icon-logo"></i><span>.</span> 敏捷开发框架</a>
+    <a class="lr-logo-title">@*<i class="iconfont icon-logo"></i><span>.</span>*@ @Learun.Util.Config.GetValue("SoftName")</a>
 </div>
 <div class="lr-frame-menu-btn" id="lr_frame_menu_btn"><i class="fa fa-fw fa-dedent"></i></div>
 <div class="lr-second-menu-wrap" id="lr_second_menu_wrap"></div>

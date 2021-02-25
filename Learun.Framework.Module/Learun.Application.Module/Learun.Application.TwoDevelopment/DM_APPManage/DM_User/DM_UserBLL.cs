@@ -648,6 +648,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         }
         #endregion
 
+        #region 未审核数据统计
+        public DataTable NoCheckDataStatistic() {
+            try
+            {
+                return dM_UserService.NoCheckDataStatistic();
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowBusinessException(ex);
+            }
+        }
+        #endregion
+
         #region 生成融云Token
         public string GeneralRongTokne(int User_ID, string appid)
         {

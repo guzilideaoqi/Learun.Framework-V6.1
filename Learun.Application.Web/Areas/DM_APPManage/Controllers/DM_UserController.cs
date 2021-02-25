@@ -251,5 +251,18 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
                 return Fail(ex.InnerException.Message);
             }
         }
+
+        [HttpPost]
+        [AjaxOnly(false)]
+        public ActionResult NoCheckDataStatistic() {
+            try
+            {
+                return Success(dM_UserIBLL.NoCheckDataStatistic());
+            }
+            catch (System.Exception ex)
+            {
+                return Fail(ex.InnerException.Message);
+            }
+        }
     }
 }
