@@ -5,6 +5,12 @@
     <title>哆来米</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        html,body{
+            margin:0px;
+            padding:0px;
+            height: 100%;
+            width:100%;
+        }
         .invitecode {
             width: 50%;
             height: 35px;
@@ -63,7 +69,7 @@
         }
 
         .todownloadapp {
-            margin: 30px 20% 0 20%;
+            margin: 12.7% 20% 0 20%;
             border-radius: 20px;
             text-align: center;
             color: white;
@@ -76,7 +82,7 @@
 
 <body>
     <!-- 1. Define some markup -->
-    <image src="~/Content/dlm/bj.png" style="width: 80%;margin: 5% 10%;height:300px"></image>
+    <image src="~/Content/dlm/bj_2.png" style="width: 100%;margin:0 0 8.33%;height:54%"></image>
     <div class="divleft">
         <input id="foo" type="text" value="邀请码：@ViewBag.InviteCode" class="invitecode" disabled="disabled">
         <button class="btn copy_btn" data-clipboard-action="copy" data-clipboard-text="@ViewBag.InviteCode">复制邀请码</button>
