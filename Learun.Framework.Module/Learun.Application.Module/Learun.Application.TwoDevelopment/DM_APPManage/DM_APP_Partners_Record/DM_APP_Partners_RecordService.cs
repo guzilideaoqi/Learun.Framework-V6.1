@@ -267,7 +267,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_apply_partners_recordEntity dm_Apply_Partners_RecordEntity = GetEntity(entity.id);
 
                     dm_userEntity dm_UserEntity = new dm_userEntity();
-                    dm_UserEntity.partnersstatus = 1;
+                    dm_UserEntity.partnersstatus = 2;
                     dm_UserEntity.partners = 20000 + dm_Apply_Partners_RecordEntity.user_id;
                     dm_UserEntity.id = dm_Apply_Partners_RecordEntity.user_id;
 
