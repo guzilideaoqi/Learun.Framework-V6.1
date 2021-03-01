@@ -75,7 +75,7 @@ var bootstrap = function ($, learun) {
                     //{ label: '用户id', name: 'user_id', width: 200, align: "left" },
                     { label: '收件人', name: 'username', width: 100, align: "left" },
                     { label: '手机号', name: 'phone', width: 100, align: "left" },
-                    { label: '商品id', name: 'goodid', width: 100, align: "left" },
+                    { label: '商品标题', name: 'goodtitle', width: 200, align: "left" },
                     { label: '快递单号', name: 'expresscode', width: 100, align: "left" },
                     { label: '描述(平台描述)', name: 'remark', width: 200, align: "left" },
                     { label: '省份', name: 'province', width: 100, align: "left" },

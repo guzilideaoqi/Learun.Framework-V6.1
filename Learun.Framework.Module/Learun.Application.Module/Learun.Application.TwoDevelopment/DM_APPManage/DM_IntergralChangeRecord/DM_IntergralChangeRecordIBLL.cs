@@ -25,5 +25,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination"></param>
         /// <returns></returns>
         DataTable GetMyIntegralGoodRecord(int UserID, Pagination pagination);
+
+        /// <summary>
+        /// 积分兑换记录
+        /// </summary>
+        /// <param name="pagination">分页数据</param>
+        /// <param name="queryJson">查询条件</param>
+        /// <returns></returns>
+        DataTable GetIntegralGoodRecord(Pagination pagination, string queryJson);
     }
 }

@@ -187,5 +187,35 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
         #endregion
+
+        #region 积分兑换记录
+        public DataTable GetIntegralGoodRecord(Pagination pagination, string queryJson)
+        {
+            try
+            {
+                var queryParam = queryJson.ToJObject();
+
+                StringBuilder strSql = new StringBuilder();
+                strSql.Append("select r.*,g.goodtitle,g.goodremark,g.goodimage from dm_intergralchangerecord r left join dm_intergralchangegood g on r.goodid=g.id where 1=1");
+
+                if (!queryParam["txt_phone"].IsEmpty())
+                    strSql.Append(" and t.phone like '%" + queryParam["txt_phone"].ToString() + "%'");
+                if (!queryParam["txt_username"].IsEmpty())
+                    strSql.Append(" and t.username like '%" + queryParam["txt_username"].ToString() + "%'");
+                if (!queryParam["txt_expresscode"].IsEmpty())
+                    strSql.Append(" and t.expresscode like '%" + queryParam["txt_expresscode"].ToString() + "%'");
+
+                return BaseRepository("dm_data").FindTable(strSql.ToString(), pagination);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                throw ExceptionEx.ThrowServiceException(ex);
+            }
+        }
+        #endregion
     }
 }
