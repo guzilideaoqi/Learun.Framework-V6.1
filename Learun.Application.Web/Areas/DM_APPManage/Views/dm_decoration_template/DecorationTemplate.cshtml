@@ -5,33 +5,70 @@
 }
 
 <style>
-    .module_item {
-        width: 98%;
-        border: 1px solid #c3c3c3;
-        margin: 1%;
-        border-radius: 10px;
-        min-height: 30px;
-        margin-top: 20px;
+    #container {
+        position: relative;
+        height:550px;
+        overflow-y:scroll;
     }
+        #container img {
+        height:25px;
+        }
+
+        .module_item {
+            width: 98%;
+            border: 1px solid #c3c3c3;
+            margin: 1%;
+            border-radius: 5px;
+            min-height: 30px;
+            margin-top: 20px;
+            position: relative;
+        }
+
         .module_item .module_name {
             background-color: limegreen;
             color: white;
             padding: 2px 5px;
             border-radius: 5px;
-            margin-left: 20px;
+            margin-left: 5px;
             position: relative;
             top: -10px;
         }
+
+        .module_item .add_fun_item {
+            background-color: white;
+            border: 1px solid #c3c3c3;
+            color: #464646;
+            padding: 2px 5px;
+            border-radius: 5px;
+            position: absolute;
+            top: -10px;
+            right: 27px;
+            cursor: pointer;
+        }
+
+        .module_item .removemodule {
+            background-color: red;
+            border: 0px solid #c3c3c3;
+            color: #ffffff;
+            padding: 2px 5px;
+            border-radius: 5px;
+            position: absolute;
+            top: -10px;
+            right: 2px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
 </style>
 
-<div class="lr-layout lr-layout" id="lr_layout">
+
+<div class="lr-layout" id="lr_layout">
     <div class="lr-layout-center">
         <div class="lr-layout-wrap" style="padding-top: 54px;">
             <div class="lr-layout-tool" style="top:0;">
                 <div class="lr-layout-tool-left">
                     <div class="lr-layout-tool-item">
-                        <label>主色调:</label><label style="background-color:red;color:red;">12322222</label>
-                        <label>辅色调:</label><label style="background-color:red;color:red;">12322222</label>
+                        <label>主色调:</label><label id="main_color">12322222</label>
+                        <label>辅色调:</label><label id="secondary_color">12322222</label>
                     </div>
                     @*<div class="lr-layout-tool-item">
                     <a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</a>
@@ -39,22 +76,20 @@
                 </div>
                 <div class="lr-layout-tool-right">
                     <div class=" btn-group btn-group-sm">
-                        <a id="lr_refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>
+                        @*<a id="lr_refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>*@
                     </div>
                     <div class=" btn-group btn-group-sm">
                         <a id="lr_add" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;新增模块</a>
                     </div>
                 </div>
             </div>
+
             <div id="container">
-                <div class="module_item">
-                    <label class="module_name">轮播图</label>
-                    <label style="background-color:white;border:1px solid #c3c3c3;color:#464646; padding:2px 5px;border-radius:5px;position:relative;top:-10px;right:10px;margin-left: 74%;">+</label>
-                    <label style="background-color:white;border:1px solid #c3c3c3;color:#464646; padding:2px 5px;border-radius:5px;position:relative;top:-10px;right:10px;margin-left: 10px;">-</label>
-                </div>
+
             </div>
         </div>
 
     </div>
 </div>
+
 @Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_decoration_template/DecorationTemplate.js")

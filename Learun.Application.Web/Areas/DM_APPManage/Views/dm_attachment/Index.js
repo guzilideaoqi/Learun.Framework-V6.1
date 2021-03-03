@@ -22,24 +22,6 @@ var bootstrap = function ($, learun) {
             $('#lr_refresh').on('click', function () {
                 location.reload();
             });
-            $("#select_attachment").on('click', function () {
-                selectedRow = null;
-                learun.layerForm({
-                    id: 'form',
-                    title: '选择附件',
-                    url: top.$.rootUrl + '/DM_APPManage/dm_attachment/AttachMentManage?keyValue=0',
-                    width: 900,
-                    height: 650,
-                    callBack: function (id) {
-                        var selectedData = top[id].selectFile();
-                        if (!selectedData) {
-                            learun.alert.error("请选择文件!");
-                        } else {
-                            learun.layerClose("form");
-                        }
-                    }
-                });
-            })
             // 新增
             $('#lr_add').on('click', function () {
                 selectedRow = null;

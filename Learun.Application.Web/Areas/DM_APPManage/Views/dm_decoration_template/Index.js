@@ -100,7 +100,8 @@ var bootstrap = function ($, learun) {
                     },
                     {
                         label: '装修', name: 'id', width: 200, align: "left", formatter: function (cellvalue, rowdata, options) {
-                            return "<span class=\"label label-success\" style=\"cursor: pointer;\" onclick=\"decoration('" + cellvalue + "','" + rowdata.template_name + "')\">装修</span>";
+                            var tempJsonStr = JSON.stringify(rowdata).replace(/\"/g, "'")
+                            return "<span class=\"label label-success\" style=\"cursor: pointer;\" onclick=\"decoration(" + tempJsonStr+")\">装修</span>";
                         }
                     },
                     { label: '创建时间', name: 'createtime', width: 200, align: "left" },
@@ -120,12 +121,13 @@ var bootstrap = function ($, learun) {
     refreshGirdData = function () {
         page.search();
     };
-    decoration = function (id, name) {
+    decoration = function (rowdata) {
+        selectedRow = rowdata;
         learun.layerForm({
             id: 'decoration',
-            title: name + '--装修',
+            title: rowdata.template_name + '--装修',
             url: top.$.rootUrl + '/DM_APPManage/dm_decoration_template/DecorationTemplate',
-            width: 600,
+            width: 620,
             height: 700,
             callBack: function (id) {
                 return top[id].acceptClick(refreshGirdData);
