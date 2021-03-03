@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "多麦计划";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">f_id<font face="宋体">*</font></div>
+        <input id="f_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">推广计划ID<font face="宋体">*</font></div>
+        <input id="ads_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">推广计划名称<font face="宋体">*</font></div>
+        <input id="ads_name" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">所属商场名称<font face="宋体">*</font></div>
+        <input id="store_name" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">活动类型：0 web 1 wap 3 ROI 4 小程序<font face="宋体">*</font></div>
+        <input id="channel" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">RD有效期<font face="宋体">*</font></div>
+        <input id="rddays" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">普通佣金说明，具体佣金说明及政策请访问<font face="宋体">*</font></div>
+        <input id="commission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">当category=1 海外商家时，此字段表示计划允许的跟单地区<font face="宋体">*</font></div>
+        <input id="category_area" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">商家类型：0 国内商家 1 海外商家 2 跨境电商<font face="宋体">*</font></div>
+        <input id="category" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">审核方式 1人工审核 2自动通过<font face="宋体">*</font></div>
+        <input id="apply_mode" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">计划开始时间，格式:yyyy-MM-dd HH:mm:ss<font face="宋体">*</font></div>
+        <input id="stime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">计划截止时间，格式:yyyy-MM-dd HH:mm:ss<font face="宋体">*</font></div>
+        <input id="etime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">默认url<font face="宋体">*</font></div>
+        <input id="url" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">计划logo<font face="宋体">*</font></div>
+        <input id="ads_logo" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">计划状态：0 待提交 1 待审核 2 已拒绝 3 运行中 4 修改待审核 7 已终止 8已挂起<font face="宋体">*</font></div>
+        <input id="status" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">申请状态：1审核通过，0未审核通过，-1未申请<font face="宋体">*</font></div>
+        <input id="ads_apply_status" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">创建时间<font face="宋体">*</font></div>
+        <input id="createtime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">修改时间<font face="宋体">*</font></div>
+        <input id="updatetime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_dauomai_plan_manage/Form.js")

@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "AttachMentManage";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="lr-layout lr-layout" id="lr_layout">
+    <div class="lr-layout-center">
+        <div class="lr-layout-wrap" style="padding-top: 54px;">
+            <div class="lr-layout-tool" style="top:0;">
+                <div class="lr-layout-tool-left">
+                    <div class="lr-layout-tool-item">
+                        <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询附件简称" />
+                    </div>
+                    <div class="lr-layout-tool-item">
+                        <a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</a>
+                    </div>
+                </div>
+                <div class="lr-layout-tool-right">
+                    <div class=" btn-group btn-group-sm">
+                        <a id="lr_refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>
+                    </div>
+                    <div class=" btn-group btn-group-sm">
+                        <a id="lr_add" class="btn btn-info"><i class="fa fa-plus"></i>&nbsp;上传附件</a>
+                    </div>
+                </div>
+            </div>
+            <div class="lr-layout-body" id="girdtable"></div>
+        </div>
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_attachment/AttachMentManage.js")
+

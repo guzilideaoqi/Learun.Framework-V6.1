@@ -149,6 +149,13 @@
     <Compile Include="DM_APPManage\dm_basesetting_tipMap.cs" />
     <Compile Include="DM_APPManage\dm_activity_recordMap.cs" />
     <Compile Include="DM_APPManage\dm_activity_manageMap.cs" />
+    <Compile Include="DM_APPManage\dm_attachmentMap.cs" />
+    <Compile Include="DM_APPManage\dm_dauomai_plan_manageMap.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_fun_manageMap.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_moduleMap.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_templateMap.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_moduleMap.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module_itemMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

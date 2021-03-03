@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "装修模板";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">模板名称<font face="宋体">*</font></div>
+        <input id="template_name" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">模板备注<font face="宋体">*</font></div>
+        <input id="template_remark" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">主色<font face="宋体">*</font></div>
+        <input id="main_color" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">辅色<font face="宋体">*</font></div>
+        <input id="secondary_color" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">模板状态<font face="宋体">*</font></div>
+        <div id="template_status"><ul><li data-value="0">停用</li><li data-value="1">启用</li><li data-value="2">上架模板</li></ul></div>
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_decoration_template/Form.js")

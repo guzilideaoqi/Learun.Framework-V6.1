@@ -260,6 +260,34 @@
     <Compile Include="DM_APPManage\dm_activity_manage\dm_activity_manageService.cs" />
     <Compile Include="DM_APPManage\dm_activity_manage\dm_activity_manageIBLL.cs" />
     <Compile Include="DM_APPManage\dm_activity_manage\dm_activity_manageBLL.cs" />
+    <Compile Include="DM_APPManage\dm_attachment\dm_attachmentEntity.cs" />
+    <Compile Include="DM_APPManage\dm_attachment\dm_attachmentService.cs" />
+    <Compile Include="DM_APPManage\dm_attachment\dm_attachmentIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_attachment\dm_attachmentBLL.cs" />
+    <Compile Include="DM_APPManage\dm_dauomai_plan_manage\dm_dauomai_plan_manageEntity.cs" />
+    <Compile Include="DM_APPManage\dm_dauomai_plan_manage\dm_dauomai_plan_manageService.cs" />
+    <Compile Include="DM_APPManage\dm_dauomai_plan_manage\dm_dauomai_plan_manageIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_dauomai_plan_manage\dm_dauomai_plan_manageBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_fun_manage\dm_decoration_fun_manageEntity.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_fun_manage\dm_decoration_fun_manageService.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_fun_manage\dm_decoration_fun_manageIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_fun_manage\dm_decoration_fun_manageBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_module\dm_decoration_moduleEntity.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_module\dm_decoration_moduleService.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_module\dm_decoration_moduleIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_module\dm_decoration_moduleBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template\dm_decoration_templateEntity.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template\dm_decoration_templateService.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template\dm_decoration_templateIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template\dm_decoration_templateBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module\dm_decoration_template_moduleEntity.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module\dm_decoration_template_moduleService.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module\dm_decoration_template_moduleIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module\dm_decoration_template_moduleBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module_item\dm_decoration_template_module_itemEntity.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module_item\dm_decoration_template_module_itemService.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module_item\dm_decoration_template_module_itemIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module_item\dm_decoration_template_module_itemBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

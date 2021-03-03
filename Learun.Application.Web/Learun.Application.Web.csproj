@@ -314,6 +314,13 @@
     <Compile Include="Areas\DM_APPManage\Controllers\dm_basesetting_tipController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_activity_recordController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_activity_manageController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_attachmentController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_dauomai_plan_manageController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_decoration_fun_manageController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_decoration_moduleController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_decoration_templateController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_decoration_template_moduleController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_decoration_template_module_itemController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -321,10 +328,15 @@
     <Content Include="Areas\AppManager\Views\FunctionManager\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Announcement\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Article\Form.css" />
+    <Content Include="Areas\DM_APPManage\Views\dm_attachment\AttachMentManage.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_attachment\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Banner\Form.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\Index.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\JPushManage.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\CheckCertficaRecord.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_fun_manage\SelectFun.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_module\SelectModule.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template\DecorationTemplate.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\lrz.min.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\PreviewCircle.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_friend_circle\zepto.css" />
@@ -1969,6 +1981,10 @@
     <Content Include="Content\dlm\viewer.min.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\CheckReviceDetail.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\RebutReviceTask.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_attachment\AttachMentManage.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_module\SelectModule.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template\DecorationTemplate.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_fun_manage\SelectFun.cshtml" />
     <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\clipboard.min.js" />
@@ -2483,6 +2499,34 @@
     <Content Include="Areas\DM_APPManage\Views\dm_activity_manage\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_activity_manage\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_activity_manage\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_attachment\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_attachment\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_attachment\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_attachment\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_dauomai_plan_manage\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_dauomai_plan_manage\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_dauomai_plan_manage\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_dauomai_plan_manage\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_fun_manage\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_fun_manage\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_fun_manage\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_fun_manage\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_module\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_module\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_module\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_module\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module_item\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module_item\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module_item\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module_item\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "装修模块分类";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">功能名称<font face="宋体">*</font></div>
+        <input id="fun_name" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">导航图类型<font face="宋体">*</font></div>
+        <div id="fun_type"><ul><li data-value="1">原生</li><li data-value="2">多麦</li><li data-value="3">站内H5</li></ul></div>
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">功能参数值<font face="宋体">*</font></div>
+        <input id="fun_param" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">功能描述<font face="宋体">*</font></div>
+        <input id="fun_remark" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_decoration_fun_manage/Form.js")

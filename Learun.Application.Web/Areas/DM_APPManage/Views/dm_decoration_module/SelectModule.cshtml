@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "选择模块";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<div class="col-xs-10 lr-form-item">
+    <div class="lr-form-item-title">选择模块<font face="宋体">*</font></div>
+    <div id="fun_type"></div>
+</div>
+
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_decoration_module/SelectModule.js")
