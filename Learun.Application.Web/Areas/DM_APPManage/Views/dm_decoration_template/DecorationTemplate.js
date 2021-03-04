@@ -84,13 +84,13 @@ var bootstrap = function ($, learun) {
                 headData: [
                     {
                         label: '名称', name: 'module_item_name', width: 145, align: "left", formatter: function (cellvalue, rowdata, options) {
-                            return "<input id=\"txt_Keyword\" type=\"text\" class=\"form-control\" placeholder=\"名称\" value=\"" + cellvalue + "\" />";
+                            return "<input id=\"txt_Keyword\" type=\"text\" row_id=\"" + rowdata.id + "\" class=\"form-control\" placeholder=\"名称\" value=\"" + cellvalue + "\" />";
                         }
                     },
                     {
                         label: '图片', name: 'module_item_image', width: 105, align: "center", formatter: function (cellvalue, rowdata, options) {
                             if (!!cellvalue) {
-                                return "<img src=\"" + cellvalue + "\" style=\"width:25px;height:25px;\" />";
+                                return "<img src=\"" + cellvalue + "\" style=\"width:25px;height:25px;\" /><i class=\"fa fa-pencil-square-o\" onclick=\"selectattachment(this)\"></i>";
                             } else {
                                 return "<i class=\"fa fa-pencil-square-o\" onclick=\"selectattachment(this)\"></i>";
                             }
@@ -99,7 +99,7 @@ var bootstrap = function ($, learun) {
                     {
                         label: '功能', name: 'module_fun_id', width: 155, align: "center", formatter: function (cellvalue, rowdata, options) {
                             if (!!cellvalue) {
-                                return "<i class=\"fa fa-pencil-square-o\" onclick=\"selectfun(this)\"></i>";
+                                return "<span fun_id=\"" + cellvalue + "\">" + rowdata.module_fun_name + "</span><i class=\"fa fa-pencil-square-o\" onclick=\"selectfun(this)\"></i>";
                             } else {
                                 return "<i class=\"fa fa-pencil-square-o\" onclick=\"selectfun(this)\"></i>";
                             }
@@ -107,7 +107,7 @@ var bootstrap = function ($, learun) {
                     },
                     {
                         label: '排序', name: 'module_sort', width: 108, align: "center", formatter: function (cellvalue, rowdata, options) {
-                            return "<input type=\"text\" class=\"form-control\" style=\"text-align:center;\" placeholder=\"排序\" />";
+                            return "<input type=\"text\" class=\"form-control\" style=\"text-align:center;\" placeholder=\"排序\" value=\"" + cellvalue + "\" />";
                         }
                     },
                     {
@@ -122,6 +122,22 @@ var bootstrap = function ($, learun) {
             });
         }, existgridtable(id) {
             return $("#gridtable" + id).length > 0;
+        }, getgridrowdata: function (grid_table_id) {
+            var module_item_list = [];
+            var dbTable = $('#' + grid_table_id).jfGridGet('rowdatas');
+            for (var i = 0; i < dbTable.length; i++) {
+                var rownum = "rownum_" + grid_table_id + "_" + i;
+                var id = $("div[rownum=" + rownum + "][colname=module_item_name]>input").attr("row_id");
+                var module_item_name = $("div[rownum=" + rownum + "][colname=module_item_name]>input").val();
+                var module_item_image = $("div[rownum=" + rownum + "][colname=module_item_image]>img").attr("src");
+                var module_sort = $("div[rownum=" + rownum + "][colname=module_sort]>input").val();
+                var module_fun_id = $("div[rownum=" + rownum + "][colname=module_fun_id]>span").attr("fun_id");
+                var module_fun_name = $("div[rownum=" + rownum + "][colname=module_fun_id]>span").innerText;
+
+                module_item_list.push({ id: id, module_item_name: module_item_name, module_item_image: module_item_image, module_fun_id: module_fun_id, module_sort: module_sort, module_fun_name: module_fun_name });
+            }
+
+            return module_item_list;
         }
     };
     // 保存数据
@@ -132,17 +148,7 @@ var bootstrap = function ($, learun) {
             var grid_table_id = $(this).attr("module_gridtable_id");
             var module_type = $(this).attr("module_type");
             var module_id = $(this).attr("module_id");
-            var dbTable = $('#' + grid_table_id).jfGridGet('rowdatas');
-            var module_item_list = [];
-            for (var i = 0; i < dbTable.length; i++) {
-                var rownum = "rownum_" + grid_table_id + "_" + i;
-                var module_item_name = $("div[rownum=" + rownum + "][colname=module_item_name]>input").val();
-                var module_item_image = $("div[rownum=" + rownum + "][colname=module_item_image]>img").attr("src");
-                var module_sort = $("div[rownum=" + rownum + "][colname=module_sort]>input").val();
-                var module_fun_id = $("div[rownum=" + rownum + "][colname=module_fun_id]>span").attr("fun_id");
-
-                module_item_list.push({ module_item_name: module_item_name, module_item_image: module_item_image, module_fun_id: module_fun_id, module_sort: module_sort });
-            }
+            var module_item_list = page.getgridrowdata(grid_table_id);
             module_list.push({
                 template_id: template_id,
                 module_id: module_id,
@@ -174,18 +180,20 @@ var bootstrap = function ($, learun) {
             learun.alert.error("滚动公告只能添加一项!"); return;
         }
 
-
-        $('#' + gridtable_id).jfGridSet('addRow', { row: { id: learun.newGuid(), module_item_name: "", module_item_image: "", module_fun_id: "", module_sort: 0 } });
+        var module_item_list = page.getgridrowdata(gridtable_id);
+        module_item_list.push({ id: learun.newGuid(), module_item_name: "", module_item_image: "", module_fun_id: "", module_sort: 0, module_fun_name:"" });
+        $('#' + gridtable_id).jfGridSet('refreshdata', { rowdatas: module_item_list });
+        //$('#' + gridtable_id).jfGridSet('addRow', { row: { id: learun.newGuid(), module_item_name: "", module_item_image: "", module_fun_id: "", module_sort: 0 } });
     };
     removerow = function (gridtable_id, id) {
-        var dbTable = $('#' + gridtable_id).jfGridGet('rowdatas');
-        for (var i = 0; i < dbTable.length; i++) {
-            var item = dbTable[i];
+        var module_item_list = page.getgridrowdata(gridtable_id);
+        for (var i = 0; i < module_item_list.length; i++) {
+            var item = module_item_list[i];
             if (item.id == id) {
-                dbTable.splice(item, 1); break;
+                module_item_list.splice($.inArray(item, module_item_list), 1); break;
             }
         }
-        $('#' + gridtable_id).jfGridSet('refreshdata', { rowdatas: dbTable });
+        $('#' + gridtable_id).jfGridSet('refreshdata', { rowdatas: module_item_list });
     };
     selectattachment = function (thi) {
         learun.layerForm({
