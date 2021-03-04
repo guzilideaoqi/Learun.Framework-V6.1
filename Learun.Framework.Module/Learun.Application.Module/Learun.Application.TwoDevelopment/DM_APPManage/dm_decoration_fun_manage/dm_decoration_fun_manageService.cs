@@ -92,6 +92,10 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 {
                     strSql.Append(string.Format(" and t.fun_name like '%{0}%' or t.fun_remark like '%{0}%'", queryParam["keyword"].ToString()));
                 }
+                if (!queryParam["fun_type"].IsEmpty())
+                {
+                    strSql.Append(string.Format(" and t.fun_type='" + queryParam["fun_type"].ToString() + "'"));
+                }
                 return this.BaseRepository("dm_data").FindList<dm_decoration_fun_manageEntity>(strSql.ToString(), pagination);
             }
             catch (Exception ex)

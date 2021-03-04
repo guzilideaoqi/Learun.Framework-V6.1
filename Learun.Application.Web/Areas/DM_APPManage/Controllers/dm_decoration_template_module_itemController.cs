@@ -1,4 +1,5 @@
 ﻿using Learun.Application.TwoDevelopment.DM_APPManage;
+using Learun.Application.TwoDevelopment.DM_APPManage.dm_decoration_template_module_item;
 using Learun.Util;
 using System.Web.Mvc;
 
@@ -24,7 +25,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
         /// <summary>
         /// 表单页
@@ -33,7 +34,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-             return View();
+            return View();
         }
         #endregion
 
@@ -45,7 +46,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList( string queryJson )
+        public ActionResult GetList(string queryJson)
         {
             var data = dm_decoration_template_module_itemIBLL.GetList(queryJson);
             return Success(data);
@@ -106,12 +107,37 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(int? keyValue,dm_decoration_template_module_itemEntity entity)
+        public ActionResult SaveForm(int? keyValue, dm_decoration_template_module_itemEntity entity)
         {
             dm_decoration_template_module_itemIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
         }
-        #endregion
 
+        /// <summary>
+        /// 保存装修模板数据
+        /// </summary>
+        /// <param name="jsondata"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult SaveDecorationTemplateData(int templateid, string jsondata)
+        {
+            dm_decoration_template_module_itemIBLL.SaveDecorationTemplateData(templateid, jsondata);
+            return Success("保存成功!");
+        }
+
+        /// <summary>
+        /// 获取装修模板数据
+        /// </summary>
+        /// <param name="templateid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [AjaxOnly]
+        public ActionResult GetDecorationTemplateData(int templateid)
+        {
+            DecorationTemplateInfo decorationTemplateInfo = dm_decoration_template_module_itemIBLL.GetDecorationTemplateData(templateid);
+            return Success(decorationTemplateInfo);
+        }
+        #endregion
     }
 }

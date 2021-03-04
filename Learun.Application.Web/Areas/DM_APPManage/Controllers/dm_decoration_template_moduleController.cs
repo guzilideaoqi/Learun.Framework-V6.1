@@ -77,7 +77,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetFormData(int? keyValue)
+        public ActionResult GetFormData(string keyValue)
         {
             var data = dm_decoration_template_moduleIBLL.GetEntity(keyValue);
             return Success(data);
@@ -93,7 +93,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpPost]
         [AjaxOnly]
-        public ActionResult DeleteForm(int? keyValue)
+        public ActionResult DeleteForm(string keyValue)
         {
             dm_decoration_template_moduleIBLL.DeleteEntity(keyValue);
             return Success("删除成功！");
@@ -106,7 +106,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(int? keyValue,dm_decoration_template_moduleEntity entity)
+        public ActionResult SaveForm(string keyValue,dm_decoration_template_moduleEntity entity)
         {
             dm_decoration_template_moduleIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");

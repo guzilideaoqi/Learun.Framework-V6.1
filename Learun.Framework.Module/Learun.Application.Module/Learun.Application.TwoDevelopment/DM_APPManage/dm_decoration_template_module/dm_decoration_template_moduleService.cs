@@ -99,7 +99,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public dm_decoration_template_moduleEntity GetEntity(int? keyValue)
+        public dm_decoration_template_moduleEntity GetEntity(string keyValue)
         {
             try
             {
@@ -127,7 +127,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public void DeleteEntity(int? keyValue)
+        public void DeleteEntity(string keyValue)
         {
             try
             {
@@ -151,11 +151,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public void SaveEntity(int? keyValue, dm_decoration_template_moduleEntity entity)
+        public void SaveEntity(string keyValue, dm_decoration_template_moduleEntity entity)
         {
             try
             {
-                if (keyValue>0)
+                if (!string.IsNullOrWhiteSpace(keyValue))
                 {
                     entity.Modify(keyValue);
                     this.BaseRepository("dm_data").Update(entity);

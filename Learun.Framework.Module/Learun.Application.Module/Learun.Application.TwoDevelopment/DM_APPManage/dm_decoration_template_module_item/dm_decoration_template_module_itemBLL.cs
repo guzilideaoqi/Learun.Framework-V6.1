@@ -1,4 +1,5 @@
-﻿using Learun.Util;
+﻿using Learun.Application.TwoDevelopment.DM_APPManage.dm_decoration_template_module_item;
+using Learun.Util;
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +22,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_decoration_template_module_itemEntity> GetList( string queryJson )
+        public IEnumerable<dm_decoration_template_module_itemEntity> GetList(string queryJson)
         {
             try
             {
@@ -142,5 +143,52 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 保存/获取模板数据
+        /// <summary>
+        /// 保存模板数据
+        /// </summary>
+        /// <param name="jsondata"></param>
+        public void SaveDecorationTemplateData(int templateid, string jsondata)
+        {
+            try
+            {
+                dm_decoration_template_module_itemService.SaveDecorationTemplateData(templateid,jsondata);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        /// <summary>
+        /// 获取模板数据
+        /// </summary>
+        /// <param name="templateid"></param>
+        /// <returns></returns>
+        public DecorationTemplateInfo GetDecorationTemplateData(int templateid)
+        {
+            try
+            {
+                return dm_decoration_template_module_itemService.GetDecorationTemplateData(templateid);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

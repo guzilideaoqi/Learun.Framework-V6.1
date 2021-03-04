@@ -1,4 +1,5 @@
-﻿using Learun.Util;
+﻿using Learun.Application.TwoDevelopment.DM_APPManage.dm_decoration_template_module_item;
+using Learun.Util;
 using System.Collections.Generic;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
@@ -49,5 +50,18 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void SaveEntity(int? keyValue, dm_decoration_template_module_itemEntity entity);
         #endregion
 
+        #region 保存/获取模板数据
+        /// <summary>
+        /// 保存模板数据
+        /// </summary>
+        /// <param name="jsondata"></param>
+        void SaveDecorationTemplateData(int templateid,string jsondata);
+        /// <summary>
+        /// 获取模板数据
+        /// </summary>
+        /// <param name="templateid"></param>
+        /// <returns></returns>
+        DecorationTemplateInfo GetDecorationTemplateData(int templateid);
+        #endregion
     }
 }

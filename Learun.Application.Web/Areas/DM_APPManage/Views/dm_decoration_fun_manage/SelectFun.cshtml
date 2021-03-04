@@ -4,5 +4,40 @@
     Layout = "~/Views/Shared/_Index.cshtml";
 }
 
-<h2>SelectFun</h2>
-
+@Html.AppendCssFile("/Areas/DM_APPManage/Views/dm_decoration_fun_manage/SelectFun.css")
+<div class="step-pane" id="step-3">
+    <ul class="nav nav-tabs lr-form-tab" id="nav_tabs">
+        <li class="active"><a data-value="1">原生模块</a></li>
+        <li><a data-value="2">多麦模块</a></li>
+        <li><a data-value="3">站内H5</a></li>
+        <li><a data-value="4">淘宝官方活动</a></li>
+    </ul>
+</div>
+<div class="lr-layout lr-layout" id="lr_layout">
+    <div class="lr-layout-center">
+        <div class="lr-layout-wrap" style="padding-top: 54px;">
+            <div class="lr-layout-tool" style="top:0;">
+                <div class="lr-layout-tool-left">
+                    <div class="lr-layout-tool-item">
+                        <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" />
+                    </div>
+                    <div class="lr-layout-tool-item">
+                        <a id="btn_Search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</a>
+                    </div>
+                </div>
+                @*<div class="lr-layout-tool-right">
+                    <div class=" btn-group btn-group-sm">
+                        <a id="lr_refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>
+                    </div>
+                    <div class=" btn-group btn-group-sm" learun-authorize="yes">
+                        <a id="lr_add" class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;新增</a>
+                        <a id="lr_edit" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+                        <a id="lr_delete" class="btn btn-default"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+                    </div>
+                </div>*@
+            </div>
+            <div class="lr-layout-body" id="girdtable"></div>
+        </div>
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_decoration_fun_manage/SelectFun.js")

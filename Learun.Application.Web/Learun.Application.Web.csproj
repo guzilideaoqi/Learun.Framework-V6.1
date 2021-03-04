@@ -334,6 +334,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\Index.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_BaseSetting\JPushManage.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_CertificaRecord\CheckCertficaRecord.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_decoration_fun_manage\SelectFun.css" />
     <Content Include="Areas\DM_APPManage\Views\dm_decoration_fun_manage\SelectFun.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_decoration_module\SelectModule.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_decoration_template\DecorationTemplate.js" />

@@ -91,6 +91,9 @@
     <Compile Include="Common\Model\VoiceCode.cs" />
     <Compile Include="Common\OSSHelper.cs" />
     <Compile Include="Common\QRCodeHelper.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module_item\DecorationTemplateInfo.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module_item\ModuleInfoEntity.cs" />
+    <Compile Include="DM_APPManage\dm_decoration_template_module_item\ModuleItemInfoEntity.cs" />
     <Compile Include="DM_APPManage\DM_Order\CalculateComissionEntity.cs" />
     <Compile Include="DM_APPManage\DM_Order\DM_OrderBLL.cs" />
     <Compile Include="DM_APPManage\DM_Order\dm_orderEntity.cs" />

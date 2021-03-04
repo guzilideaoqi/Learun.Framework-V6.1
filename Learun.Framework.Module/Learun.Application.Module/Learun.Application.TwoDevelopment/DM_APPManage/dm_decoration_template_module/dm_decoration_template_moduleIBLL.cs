@@ -30,7 +30,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        dm_decoration_template_moduleEntity GetEntity(int? keyValue);
+        dm_decoration_template_moduleEntity GetEntity(string keyValue);
         #endregion
 
         #region 提交数据
@@ -40,13 +40,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        void DeleteEntity(int? keyValue);
+        void DeleteEntity(string keyValue);
         /// <summary>
         /// 保存实体数据（新增、修改）
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        void SaveEntity(int? keyValue, dm_decoration_template_moduleEntity entity);
+        void SaveEntity(string keyValue, dm_decoration_template_moduleEntity entity);
         #endregion
 
     }

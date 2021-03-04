@@ -45,6 +45,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("MODULE_SORT")]
         public int? module_sort { get; set; }
+
+        /// <summary>
+        /// template_module_id
+        /// </summary>
+        [Column("TEMPLATE_MODULE_ID")]
+        public string template_module_id { get; set; }
+
+        /// <summary>
+        /// 模板ID
+        /// </summary>
+        [Column("TEMPLATE_ID")]
+        public int template_id { get; set; }
+
         /// <summary>
         /// createtime
         /// </summary>

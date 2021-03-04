@@ -43,7 +43,9 @@ var bootstrap = function ($, learun) {
         },
         initData: function () {
             if (!!selectedRow) {
-                $('#form').lrSetFormData(selectedRow);
+                $.lrSetForm(top.$.rootUrl + '/DM_APPManage/dm_decoration_template_module_item/GetDecorationTemplateData?templateid=' + selectedRow.id,  function (res) {
+                    console.log(res)
+                })
             }
         }, generalDataGrid: function (item) {
             console.log(item);
@@ -66,7 +68,7 @@ var bootstrap = function ($, learun) {
             }
 
 
-            var html = "<div class=\"module_item\" module_type=\"" + item.module_type + "\">" +
+            var html = "<div class=\"module_item\" module_id=\"" + item.id + "\" module_type=\"" + item.module_type + "\" module_gridtable_id=\"" + gridtable_id + "\">" +
                 "<label class=\"module_name\">" + item.module_name + "</label>" +
                 "<label class=\"add_fun_item\" onclick=\"addrow('" + gridtable_id + "')\">+</label>" +
                 "<label class=\"removemodule\" onclick=\"removemodule(this)\">X</label>" +
@@ -97,7 +99,7 @@ var bootstrap = function ($, learun) {
                     {
                         label: '功能', name: 'module_fun_id', width: 155, align: "center", formatter: function (cellvalue, rowdata, options) {
                             if (!!cellvalue) {
-                                return "<img src=\"" + cellvalue + "\" style=\"width:25px;height:25px;\" />";
+                                return "<i class=\"fa fa-pencil-square-o\" onclick=\"selectfun(this)\"></i>";
                             } else {
                                 return "<i class=\"fa fa-pencil-square-o\" onclick=\"selectfun(this)\"></i>";
                             }
@@ -105,7 +107,7 @@ var bootstrap = function ($, learun) {
                     },
                     {
                         label: '排序', name: 'module_sort', width: 108, align: "center", formatter: function (cellvalue, rowdata, options) {
-                            return "<input id=\"txt_Keyword\" type=\"text\" class=\"form-control\" style=\"text-align:center;\" placeholder=\"排序\" />";
+                            return "<input type=\"text\" class=\"form-control\" style=\"text-align:center;\" placeholder=\"排序\" />";
                         }
                     },
                     {
@@ -124,11 +126,33 @@ var bootstrap = function ($, learun) {
     };
     // 保存数据
     acceptClick = function (callBack) {
-        if (!$('#form').lrValidform()) {
-            return false;
-        }
+        var module_list = [];
+        var template_id = selectedRow.id;
+        $(".module_item").each(function () {
+            var grid_table_id = $(this).attr("module_gridtable_id");
+            var module_type = $(this).attr("module_type");
+            var module_id = $(this).attr("module_id");
+            var dbTable = $('#' + grid_table_id).jfGridGet('rowdatas');
+            var module_item_list = [];
+            for (var i = 0; i < dbTable.length; i++) {
+                var rownum = "rownum_" + grid_table_id + "_" + i;
+                var module_item_name = $("div[rownum=" + rownum + "][colname=module_item_name]>input").val();
+                var module_item_image = $("div[rownum=" + rownum + "][colname=module_item_image]>img").attr("src");
+                var module_sort = $("div[rownum=" + rownum + "][colname=module_sort]>input").val();
+                var module_fun_id = $("div[rownum=" + rownum + "][colname=module_fun_id]>span").attr("fun_id");
+
+                module_item_list.push({ module_item_name: module_item_name, module_item_image: module_item_image, module_fun_id: module_fun_id, module_sort: module_sort });
+            }
+            module_list.push({
+                template_id: template_id,
+                module_id: module_id,
+                module_item_list: module_item_list,
+            })
+        })
         var postData = $('#form').lrGetFormData();
-        $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/dm_decoration_template/SaveForm?keyValue=' + keyValue, postData, function (res) {
+        postData["templateid"] = template_id;
+        postData["jsondata"] = JSON.stringify(module_list);
+        $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/dm_decoration_template_module_item/SaveDecorationTemplateData', postData, function (res) {
             // 保存成功后才回调
             if (!!callBack) {
                 callBack();
@@ -198,7 +222,23 @@ var bootstrap = function ($, learun) {
             width: 600,
             height: 650,
             callBack: function (id) {
-
+                var selectedData = top[id].selectFun();
+                console.log(selectedData);
+                if (!selectedData) {
+                    learun.alert.error("请选择功能模块!");
+                } else {
+                    var parent_con = $(thi).prev();
+                    if (!!parent_con && parent_con.length > 0) {
+                        var nodename = parent_con[0].nodeName;
+                        if (nodename == "SPAN") {
+                            parent_con[0].innerText = selectedData.fun_name;
+                            parent_con[0].attr("fun_id", selectedData.id);
+                        }
+                    } else {
+                        $(thi).before("<span fun_id=\"" + selectedData.id + "\">" + selectedData.fun_name + "</span>");
+                    }
+                    learun.layerClose("form");
+                }
             }
         });
     };

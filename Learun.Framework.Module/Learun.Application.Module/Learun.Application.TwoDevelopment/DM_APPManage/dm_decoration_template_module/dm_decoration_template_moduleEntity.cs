@@ -11,15 +11,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 日 期：2021-03-03 10:57
     /// 描 述：模板对应模块
     /// </summary>
-    public class dm_decoration_template_moduleEntity 
+    public class dm_decoration_template_moduleEntity
     {
         #region 实体成员
         /// <summary>
         /// id
         /// </summary>
         /// <returns></returns>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        [Column("ID")]
-        public int? id { get; set; }
+        [Column("ID")]
+        public string id { get; set; }
         /// <summary>
         /// 模板ID
         /// </summary>
@@ -53,12 +53,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         public void Create()
         {
             this.createtime = DateTime.Now;
+            this.id = Guid.NewGuid().ToString();
         }
         /// <summary>
         /// 编辑调用
         /// </summary>
         /// <param name="keyValue"></param>
-        public void Modify(int? keyValue)
+        public void Modify(string keyValue)
         {
             this.id = keyValue;
             this.updatetime = DateTime.Now;
