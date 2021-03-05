@@ -25,7 +25,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("ADS_ID")]
-        public int? ads_id { get; set; }
+        public string ads_id { get; set; }
         /// <summary>
         /// 推广计划名称
         /// </summary>
@@ -43,7 +43,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("CHANNEL")]
-        public int? channel { get; set; }
+        public string channel { get; set; }
         /// <summary>
         /// RD有效期
         /// </summary>
@@ -79,13 +79,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// </summary>
         /// <returns></returns>
         [Column("STIME")]
-        public DateTime? stime { get; set; }
+        public string stime { get; set; }
         /// <summary>
         /// 计划截止时间，格式:yyyy-MM-dd HH:mm:ss
         /// </summary>
         /// <returns></returns>
         [Column("ETIME")]
-        public DateTime? etime { get; set; }
+        public string etime { get; set; }
         /// <summary>
         /// 默认url
         /// </summary>
@@ -110,6 +110,13 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("ADS_APPLY_STATUS")]
         public string ads_apply_status { get; set; }
+
+        /// <summary>
+        /// 使用状态  0=未激活  1=激活成功
+        /// </summary>
+        [Column("USE_STATUS")]
+        public int? use_status { get; set; }
+
         /// <summary>
         /// 创建时间
         /// </summary>

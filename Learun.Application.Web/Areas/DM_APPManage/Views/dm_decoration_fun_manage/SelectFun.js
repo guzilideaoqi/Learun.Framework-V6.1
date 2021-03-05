@@ -6,7 +6,7 @@
  */
 var acceptClick;
 var keyValue = request('keyValue');
-var fun_type = 1; var fun_name = ""; var selectFun;
+var fun_type = 1;  var selectFun;
 var bootstrap = function ($, learun) {
     "use strict";
     var selectedRow = learun.frameTab.currentIframe().selectedRow;
@@ -22,6 +22,10 @@ var bootstrap = function ($, learun) {
                 fun_type = id;
                 page.search();
             });
+
+            $("#btn_Search").on("click", function () {
+                page.search();
+            })
         },
         initData: function () {
 
@@ -61,7 +65,7 @@ var bootstrap = function ($, learun) {
             page.search();
         },
         search: function (param) {
-            param = param || { fun_type: fun_type, keyword: fun_name };
+            param = param || { fun_type: fun_type, keyword: $("#txt_Keyword").val() };
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
 

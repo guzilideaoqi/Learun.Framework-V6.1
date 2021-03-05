@@ -50,6 +50,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("TEMPLATE_STATUS")]
         public int? template_status { get; set; }
+
+        /// <summary>
+        /// 是否为审核模板
+        /// </summary>
+        [Column("ISCHECKTEMPLATE")]
+        public int? ischecktemplate { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>

@@ -142,5 +142,24 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 获取使用中的模板ID
+        public int GetTemplateID(bool IsCheckMode = false) {
+            try
+            {
+                return dm_decoration_templateService.GetTemplateID(IsCheckMode);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

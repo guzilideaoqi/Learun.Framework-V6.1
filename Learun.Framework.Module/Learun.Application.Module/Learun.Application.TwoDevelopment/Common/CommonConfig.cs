@@ -51,6 +51,12 @@ namespace Learun.Application.TwoDevelopment.Common
 <p>2、任务一旦接受不能取消</p>
 <p>3、任务结束未完成将不发放金额</p>")
         };
+
+        #region 多麦信息配置
+        public static string duomai_appkey = "437579";
+        public static string duomai_appsecret = "227f424324003391b6880f04b5d66d9d";
+        public static string duomai_pid = "437582";
+        #endregion
     }
 
     public class IP_Limit

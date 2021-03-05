@@ -27,7 +27,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("FUN_NAME")]
         public string fun_name { get; set; }
         /// <summary>
-        /// 功能类型  1=原生  2=多麦  3=站内H5
+        /// 功能类型  1=原生  2=多麦  3=站内H5 4=淘宝官方活动
         /// </summary>
         /// <returns></returns>
         [Column("FUN_TYPE")]

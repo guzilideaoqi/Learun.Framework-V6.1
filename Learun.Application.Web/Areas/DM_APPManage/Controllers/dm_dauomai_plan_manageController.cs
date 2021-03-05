@@ -1,5 +1,7 @@
-﻿using Learun.Application.TwoDevelopment.DM_APPManage;
+﻿using Hyg.Common.DuoMaiTools.DuoMaiRequest;
+using Learun.Application.TwoDevelopment.DM_APPManage;
 using Learun.Util;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
@@ -24,7 +26,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
         /// <summary>
         /// 表单页
@@ -33,7 +35,17 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpGet]
         public ActionResult Form()
         {
-             return View();
+            return View();
+        }
+
+        /// <summary>
+        /// 同步推广计划
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult SyncPlan()
+        {
+            return View();
         }
         #endregion
 
@@ -45,7 +57,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         /// <returns></returns>
         [HttpGet]
         [AjaxOnly]
-        public ActionResult GetList( string queryJson )
+        public ActionResult GetList(string queryJson)
         {
             var data = dm_dauomai_plan_manageIBLL.GetList(queryJson);
             return Success(data);
@@ -106,12 +118,40 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
-        public ActionResult SaveForm(int? keyValue,dm_dauomai_plan_manageEntity entity)
+        public ActionResult SaveForm(int? keyValue, dm_dauomai_plan_manageEntity entity)
         {
             dm_dauomai_plan_manageIBLL.SaveEntity(keyValue, entity);
             return Success("保存成功！");
         }
         #endregion
 
+        /// <summary>
+        /// 同步推广计划
+        /// </summary>
+        /// <param name="query_CPS_Stores_PlansRequest"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult SyncPlanList(Query_CPS_Stores_PlansRequest query_CPS_Stores_PlansRequest)
+        {
+            dm_dauomai_plan_manageIBLL.SyncPlanList(query_CPS_Stores_PlansRequest);
+            return Success("同步成功！");
+        }
+
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult StartPlan(int keyValue)
+        {
+            dm_dauomai_plan_manageIBLL.StartPlan(keyValue);
+            return Success("激活成功!");
+        }
+
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult StopPlan(int keyValue)
+        {
+            dm_dauomai_plan_manageIBLL.StopPlan(keyValue);
+            return Success("停用成功,该模块已从装修模板移除,若需要使用此功能，请在激活后重新装修!");
+        }
     }
 }

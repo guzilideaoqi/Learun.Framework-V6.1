@@ -28,6 +28,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage.dm_decoration_template_
         /// </summary>
         public string ModuleType { get; set; }
 
+        /// <summary>
+        /// 模块ID
+        /// </summary>
+        public int? ModuleID { get; set; }
+
         public List<ModuleItemInfoEntity> ModuleItemInfoList { get; set; }
     }
 }

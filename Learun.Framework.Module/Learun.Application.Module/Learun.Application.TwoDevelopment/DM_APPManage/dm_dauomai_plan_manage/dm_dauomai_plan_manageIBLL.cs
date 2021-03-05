@@ -1,4 +1,6 @@
-﻿using Learun.Util;
+﻿using Hyg.Common.DuoMaiTools.DuoMaiRequest;
+using Hyg.Common.DuoMaiTools.DuoMaiResponse;
+using Learun.Util;
 using System.Collections.Generic;
 
 namespace Learun.Application.TwoDevelopment.DM_APPManage
@@ -49,5 +51,20 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void SaveEntity(int? keyValue, dm_dauomai_plan_manageEntity entity);
         #endregion
 
+        #region 同步推广计划
+        void SyncPlanList(Query_CPS_Stores_PlansRequest query_CPS_Stores_PlansRequest);
+        #endregion
+
+        #region 激活功能
+        void StartPlan(int plan_id);
+        #endregion
+
+        #region 停止使用
+        void StopPlan(int plan_id);
+        #endregion
+
+        #region 推广转链
+        CPS_Convert_LinkResponse ConvertLink(int plan_id, int user_id);
+        #endregion
     }
 }

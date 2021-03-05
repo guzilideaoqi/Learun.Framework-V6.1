@@ -1,4 +1,9 @@
 ﻿using Dapper;
+using Hyg.Common.DuoMaiTools;
+using Hyg.Common.DuoMaiTools.DuoMaiModel;
+using Hyg.Common.DuoMaiTools.DuoMaiRequest;
+using Hyg.Common.DuoMaiTools.DuoMaiResponse;
+using Learun.Application.TwoDevelopment.Common;
 using Learun.DataBase.Repository;
 using Learun.Util;
 using System;
@@ -22,8 +27,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         private string fieldSql;
         public dm_dauomai_plan_manageService()
         {
-            fieldSql=@"
-                t.f_id,
+            fieldSql = @"
+                t.id,
                 t.ads_id,
                 t.ads_name,
                 t.store_name,
@@ -39,6 +44,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 t.ads_logo,
                 t.status,
                 t.ads_apply_status,
+                t.use_status,
                 t.createtime,
                 t.updatetime
             ";
@@ -51,7 +57,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_dauomai_plan_manageEntity> GetList( string queryJson )
+        public IEnumerable<dm_dauomai_plan_manageEntity> GetList(string queryJson)
         {
             try
             {
@@ -84,7 +90,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <param name="pagination">分页参数</param>
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_dauomai_plan_manageEntity> GetPageList(Pagination pagination, string queryJson)
+        public IEnumerable<dm_dauomai_plan_manageEntity> GetPageList(Learun.Util.Pagination pagination, string queryJson)
         {
             try
             {
@@ -144,7 +150,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                this.BaseRepository("dm_data").Delete<dm_dauomai_plan_manageEntity>(t=>t.id == keyValue);
+                this.BaseRepository("dm_data").Delete<dm_dauomai_plan_manageEntity>(t => t.id == keyValue);
             }
             catch (Exception ex)
             {
@@ -168,7 +174,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                if (keyValue>0)
+                if (keyValue > 0)
                 {
                     entity.Modify(keyValue);
                     this.BaseRepository("dm_data").Update(entity);
@@ -194,5 +200,185 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 同步推广计划
+        public void SyncPlanList(Query_CPS_Stores_PlansRequest query_CPS_Stores_PlansRequest)
+        {
+            try
+            {
+                DuoMai_ApiManage duoMai_ApiManage = new DuoMai_ApiManage(CommonConfig.duomai_appkey, CommonConfig.duomai_appsecret);
+
+                query_CPS_Stores_PlansRequest.is_apply = 0;
+                query_CPS_Stores_PlansRequest.page_size = 200;
+                List<CPS_Stores_PlansEntity> cPS_Stores_PlansEntities = duoMai_ApiManage.Query_CPS_Stores_Plans(query_CPS_Stores_PlansRequest);
+
+                List<dm_dauomai_plan_manageEntity> dm_dauomai_plan_manageList = new List<dm_dauomai_plan_manageEntity>();
+                foreach (var item in cPS_Stores_PlansEntities)
+                {
+                    dm_dauomai_plan_manageEntity dm_Dauomai_Plan_ManageEntity = new dm_dauomai_plan_manageEntity
+                    {
+                        ads_apply_status = item.ads_apply_status,
+                        ads_id = item.ads_id,
+                        ads_logo = item.ads_logo,
+                        ads_name = item.ads_name,
+                        apply_mode = item.apply_mode,
+                        category = item.category,
+                        category_area = item.category_area,
+                        channel = item.channel,
+                        commission = item.commission,
+                        etime = item.etime,
+                        stime = item.stime,
+                        rddays = item.rddays,
+                        status = item.status,
+                        store_name = item.store_name,
+                        url = item.url
+                    };
+                    dm_Dauomai_Plan_ManageEntity.Create();
+                    dm_dauomai_plan_manageList.Add(dm_Dauomai_Plan_ManageEntity);
+                }
+                if (dm_dauomai_plan_manageList.Count > 0)
+                    this.BaseRepository("dm_data").Insert(dm_dauomai_plan_manageList);
+
+                if (cPS_Stores_PlansEntities.Count >= 200)
+                {
+                    query_CPS_Stores_PlansRequest.page++;
+                    SyncPlanList(query_CPS_Stores_PlansRequest);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 激活功能
+        public void StartPlan(int plan_id)
+        {
+            IRepository db = null;
+            try
+            {
+                dm_dauomai_plan_manageEntity dm_Dauomai_Plan_ManageEntity = GetEntity(plan_id);
+                if (dm_Dauomai_Plan_ManageEntity.IsEmpty())
+                    throw new Exception("推广计划不存在!");
+
+                dm_Dauomai_Plan_ManageEntity.use_status = 1;
+                dm_Dauomai_Plan_ManageEntity.Modify(dm_Dauomai_Plan_ManageEntity.id);
+
+                dm_decoration_fun_manageEntity dm_Decoration_Fun_ManageEntity = this.BaseRepository("dm_data").FindEntity<dm_decoration_fun_manageEntity>(t => t.fun_param == plan_id.ToString());
+
+                db = this.BaseRepository("dm_data").BeginTrans();
+
+                ///功能中不存在该计划
+                if (dm_Decoration_Fun_ManageEntity.IsEmpty())
+                {
+                    dm_Decoration_Fun_ManageEntity = new dm_decoration_fun_manageEntity();
+                    dm_Decoration_Fun_ManageEntity.fun_name = dm_Dauomai_Plan_ManageEntity.ads_name;
+                    dm_Decoration_Fun_ManageEntity.fun_param = dm_Dauomai_Plan_ManageEntity.id.ToString();
+                    dm_Decoration_Fun_ManageEntity.fun_remark = dm_Dauomai_Plan_ManageEntity.commission;
+                    dm_Decoration_Fun_ManageEntity.fun_type = 2;
+                    dm_Decoration_Fun_ManageEntity.Create();
+                    db.Insert(dm_Decoration_Fun_ManageEntity);
+                }
+                else
+                {
+                    dm_Decoration_Fun_ManageEntity.fun_name = dm_Dauomai_Plan_ManageEntity.ads_name;
+                    dm_Decoration_Fun_ManageEntity.fun_param = dm_Dauomai_Plan_ManageEntity.id.ToString();
+                    dm_Decoration_Fun_ManageEntity.fun_remark = dm_Dauomai_Plan_ManageEntity.commission;
+                    dm_Decoration_Fun_ManageEntity.Modify(dm_Decoration_Fun_ManageEntity.id);
+                    db.Update(dm_Decoration_Fun_ManageEntity);
+                }
+                db.Update(dm_Dauomai_Plan_ManageEntity);
+                db.Commit();
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 停止使用
+        public void StopPlan(int plan_id)
+        {
+            IRepository db = null;
+            try
+            {
+                dm_dauomai_plan_manageEntity dm_Dauomai_Plan_ManageEntity = GetEntity(plan_id);
+                if (dm_Dauomai_Plan_ManageEntity.IsEmpty())
+                    throw new Exception("推广计划不存在!");
+
+                dm_Dauomai_Plan_ManageEntity.use_status = 0;
+                dm_Dauomai_Plan_ManageEntity.Modify(dm_Dauomai_Plan_ManageEntity.id);
+
+                db = this.BaseRepository("dm_data").BeginTrans();
+                db.Delete<dm_decoration_fun_manageEntity>(t => t.fun_param == plan_id.ToString());
+                db.Delete<dm_decoration_template_module_itemEntity>(t => t.module_fun_id == plan_id);
+                db.Update(dm_Dauomai_Plan_ManageEntity);
+                db.Commit();
+            }
+            catch (Exception ex)
+            {
+                if (db != null)
+                    db.Rollback();
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 推广转链
+        public CPS_Convert_LinkResponse ConvertLink(int plan_id, int user_id)
+        {
+            try
+            {
+                dm_dauomai_plan_manageEntity dm_Dauomai_Plan_ManageEntity = GetEntity(plan_id);
+                if (dm_Dauomai_Plan_ManageEntity.IsEmpty())
+                    throw new Exception("推广计划不存在!");
+                DuoMai_ApiManage duoMai_ApiManage = new DuoMai_ApiManage(CommonConfig.duomai_appkey, CommonConfig.duomai_appsecret);
+                CPS_Convert_LinkRequest cPS_Convert_LinkRequest = new CPS_Convert_LinkRequest();
+                cPS_Convert_LinkRequest.ads_id = dm_Dauomai_Plan_ManageEntity.ads_id;
+                cPS_Convert_LinkRequest.ext = new CPS_Convert_Link_ext
+                {
+                    euid = user_id.ToString()
+                };
+                cPS_Convert_LinkRequest.site_id = CommonConfig.duomai_pid;
+                cPS_Convert_LinkRequest.url = dm_Dauomai_Plan_ManageEntity.url;
+                return duoMai_ApiManage.Get_CPS_Convert_Link(cPS_Convert_LinkRequest);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

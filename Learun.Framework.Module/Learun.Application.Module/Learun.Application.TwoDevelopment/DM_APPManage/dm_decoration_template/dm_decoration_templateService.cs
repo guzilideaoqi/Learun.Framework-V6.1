@@ -22,13 +22,14 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         private string fieldSql;
         public dm_decoration_templateService()
         {
-            fieldSql=@"
+            fieldSql = @"
                 t.id,
                 t.template_name,
                 t.template_remark,
                 t.main_color,
                 t.secondary_color,
                 t.template_status,
+                t.ischecktemplate,
                 t.createtime,
                 t.updatetime
             ";
@@ -41,7 +42,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_decoration_templateEntity> GetList( string queryJson )
+        public IEnumerable<dm_decoration_templateEntity> GetList(string queryJson)
         {
             try
             {
@@ -134,7 +135,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         {
             try
             {
-                this.BaseRepository("dm_data").Delete<dm_decoration_templateEntity>(t=>t.id == keyValue);
+                this.BaseRepository("dm_data").Delete<dm_decoration_templateEntity>(t => t.id == keyValue);
             }
             catch (Exception ex)
             {
@@ -156,12 +157,23 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         public void SaveEntity(int? keyValue, dm_decoration_templateEntity entity)
         {
+            IRepository db = null;
             try
             {
-                if (keyValue>0)
+                if (keyValue > 0)
                 {
                     entity.Modify(keyValue);
-                    this.BaseRepository("dm_data").Update(entity);
+                    if (entity.template_status == 1)
+                    {
+                        db = this.BaseRepository("dm_data").BeginTrans();
+                        db.ExecuteBySql("update dm_decoration_template set template_status=0");
+                        db.Update(entity);
+                        db.Commit();
+                    }
+                    else
+                    {
+                        this.BaseRepository("dm_data").Update(entity);
+                    }
                 }
                 else
                 {
@@ -182,6 +194,47 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             }
         }
 
+        #endregion
+
+        #region 获取模板ID
+        /// <summary>
+        /// 是否为审核模式
+        /// </summary>
+        /// <param name="IsCheckMode"></param>
+        /// <returns></returns>
+        public int GetTemplateID(bool IsCheckMode = false)
+        {
+            try
+            {
+                dm_decoration_templateEntity dm_Decoration_TemplateEntity = null;
+                if (IsCheckMode)
+                {
+                    dm_Decoration_TemplateEntity = this.BaseRepository("dm_data").FindEntity<dm_decoration_templateEntity>(t => t.ischecktemplate == 1);
+                }
+                else
+                {
+                    dm_Decoration_TemplateEntity = this.BaseRepository("dm_data").FindEntity<dm_decoration_templateEntity>(t => t.template_status == 1);
+                }
+
+                if (dm_Decoration_TemplateEntity.IsEmpty())
+                    throw new Exception("未找到已启用或审核中的模板!");
+                else
+                {
+                    return (int)dm_Decoration_TemplateEntity.id;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
         #endregion
 
     }

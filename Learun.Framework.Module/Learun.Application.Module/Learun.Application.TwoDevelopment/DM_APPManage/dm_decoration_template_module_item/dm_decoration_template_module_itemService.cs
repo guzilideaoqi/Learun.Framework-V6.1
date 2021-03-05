@@ -211,16 +211,19 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         dm_decoration_template_module_itemList.Add(entity);
                     }
                 }
-
-                if (dm_decoration_template_moduleList.Count > 0)
+                if (templateid > 0)
                 {
                     db = this.BaseRepository("dm_data").BeginTrans();
                     db.Delete<dm_decoration_template_moduleEntity>(t => t.template_id == templateid);
                     db.Delete<dm_decoration_template_module_itemEntity>(t => t.template_id == templateid);
-                    db.Insert(dm_decoration_template_moduleList);
-                    db.Insert(dm_decoration_template_module_itemList);
+                    if (dm_decoration_template_moduleList.Count > 0)
+                    {
+                        db.Insert(dm_decoration_template_moduleList);
+                        db.Insert(dm_decoration_template_module_itemList);
+                    }
                     db.Commit();
                 }
+
             }
             catch (Exception ex)
             {
@@ -268,7 +271,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                         ModuleInfoEntity moduleInfoEntity = new ModuleInfoEntity
                         {
                             ModuleName = dm_Decoration_ModuleEntity.module_name,
-                            ModuleType = dm_Decoration_ModuleEntity.module_type
+                            ModuleType = dm_Decoration_ModuleEntity.module_type,
+                            ModuleID = dm_Decoration_ModuleEntity.id
                         };
 
                         List<ModuleItemInfoEntity> moduleItemInfoEntities = new List<ModuleItemInfoEntity>();
@@ -280,6 +284,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                             {
                                 ModuleItemInfoEntity moduleItemInfoEntity = new ModuleItemInfoEntity
                                 {
+                                    id = dm_Decoration_Template_Module_ItemEntity.id,
                                     module_fun_id = dm_Decoration_Template_Module_ItemEntity.module_fun_id,
                                     module_fun_name = dm_Decoration_Fun_ManageEntity.fun_name,
                                     module_item_image = dm_Decoration_Template_Module_ItemEntity.module_item_image,

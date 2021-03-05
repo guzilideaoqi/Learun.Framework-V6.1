@@ -11,6 +11,7 @@ var removerow;
 var selectattachment;
 var selectfun;
 var removemodule;
+var belong_id = 100000;
 var bootstrap = function ($, learun) {
     "use strict";
     var selectedRow = learun.frameTab.currentIframe().selectedRow;
@@ -24,7 +25,6 @@ var bootstrap = function ($, learun) {
         bind: function () {
             // 新增
             $('#lr_add').on('click', function () {
-                selectedRow = null;
                 learun.layerForm({
                     id: 'selectmodule',
                     title: '新增功能',
@@ -43,12 +43,18 @@ var bootstrap = function ($, learun) {
         },
         initData: function () {
             if (!!selectedRow) {
-                $.lrSetForm(top.$.rootUrl + '/DM_APPManage/dm_decoration_template_module_item/GetDecorationTemplateData?templateid=' + selectedRow.id,  function (res) {
-                    console.log(res)
+                $.lrSetForm(top.$.rootUrl + '/DM_APPManage/dm_decoration_template_module_item/GetDecorationTemplateData?templateid=' + selectedRow.id, function (res) {
+                    var ModuleInfoList = res.ModuleInfoList;
+                    for (var i = 0; i < ModuleInfoList.length; i++) {
+                        var item = ModuleInfoList[i];
+                        var general_data_grid_param = { module_type: item.ModuleType, module_name: item.ModuleName, id: item.ModuleID };
+                        var gridtable_id = page.generalDataGrid(general_data_grid_param);
+
+                        $('#' + gridtable_id).jfGridSet('refreshdata', { rowdatas: item.ModuleItemInfoList });
+                    }
                 })
             }
         }, generalDataGrid: function (item) {
-            console.log(item);
             var gridtable_id = "gridtable" + item.module_type;
 
             if (item.module_type == 2 || item.module_type == 3) {
@@ -78,6 +84,7 @@ var bootstrap = function ($, learun) {
 
 
             page.initgrid(gridtable_id);
+            return gridtable_id;
         }, initgrid: function (gridtable_id) {
             $('#' + gridtable_id).jfGrid({
                 rowdatas: [],
@@ -132,7 +139,7 @@ var bootstrap = function ($, learun) {
                 var module_item_image = $("div[rownum=" + rownum + "][colname=module_item_image]>img").attr("src");
                 var module_sort = $("div[rownum=" + rownum + "][colname=module_sort]>input").val();
                 var module_fun_id = $("div[rownum=" + rownum + "][colname=module_fun_id]>span").attr("fun_id");
-                var module_fun_name = $("div[rownum=" + rownum + "][colname=module_fun_id]>span").innerText;
+                var module_fun_name = $("div[rownum=" + rownum + "][colname=module_fun_id]>span").text();
 
                 module_item_list.push({ id: id, module_item_name: module_item_name, module_item_image: module_item_image, module_fun_id: module_fun_id, module_sort: module_sort, module_fun_name: module_fun_name });
             }
@@ -181,7 +188,8 @@ var bootstrap = function ($, learun) {
         }
 
         var module_item_list = page.getgridrowdata(gridtable_id);
-        module_item_list.push({ id: learun.newGuid(), module_item_name: "", module_item_image: "", module_fun_id: "", module_sort: 0, module_fun_name:"" });
+        belong_id++;
+        module_item_list.push({ id: belong_id, module_item_name: "", module_item_image: "", module_fun_id: "", module_sort: 0, module_fun_name: "" });
         $('#' + gridtable_id).jfGridSet('refreshdata', { rowdatas: module_item_list });
         //$('#' + gridtable_id).jfGridSet('addRow', { row: { id: learun.newGuid(), module_item_name: "", module_item_image: "", module_fun_id: "", module_sort: 0 } });
     };
@@ -209,7 +217,6 @@ var bootstrap = function ($, learun) {
                 } else {
                     var parent_con = $(thi).prev();
                     if (!!parent_con && parent_con.length > 0) {
-                        debugger;
                         var nodename = parent_con[0].nodeName;
                         if (nodename == "IMG") {
                             parent_con[0].src = selectedData;
@@ -240,7 +247,7 @@ var bootstrap = function ($, learun) {
                         var nodename = parent_con[0].nodeName;
                         if (nodename == "SPAN") {
                             parent_con[0].innerText = selectedData.fun_name;
-                            parent_con[0].attr("fun_id", selectedData.id);
+                            parent_con[0].setAttribute("fun_id", selectedData.id);
                         }
                     } else {
                         $(thi).before("<span fun_id=\"" + selectedData.id + "\">" + selectedData.fun_name + "</span>");

@@ -1,4 +1,6 @@
-﻿using Learun.Util;
+﻿using Hyg.Common.DuoMaiTools.DuoMaiRequest;
+using Hyg.Common.DuoMaiTools.DuoMaiResponse;
+using Learun.Util;
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +23,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 获取列表数据
         /// <summary>
         /// <returns></returns>
-        public IEnumerable<dm_dauomai_plan_manageEntity> GetList( string queryJson )
+        public IEnumerable<dm_dauomai_plan_manageEntity> GetList(string queryJson)
         {
             try
             {
@@ -142,5 +144,88 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
 
         #endregion
 
+        #region 同步推广计划
+        public void SyncPlanList(Query_CPS_Stores_PlansRequest query_CPS_Stores_PlansRequest)
+        {
+            try
+            {
+                dm_dauomai_plan_manageService.SyncPlanList(query_CPS_Stores_PlansRequest);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 激活功能
+        public void StartPlan(int plan_id)
+        {
+            try
+            {
+                dm_dauomai_plan_manageService.StartPlan(plan_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 停止使用
+        public void StopPlan(int plan_id)
+        {
+            try
+            {
+                dm_dauomai_plan_manageService.StopPlan(plan_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region 推广转链
+        public CPS_Convert_LinkResponse ConvertLink(int plan_id, int user_id)
+        {
+            try
+            {
+                return dm_dauomai_plan_manageService.ConvertLink(plan_id, user_id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
+        #endregion
     }
 }

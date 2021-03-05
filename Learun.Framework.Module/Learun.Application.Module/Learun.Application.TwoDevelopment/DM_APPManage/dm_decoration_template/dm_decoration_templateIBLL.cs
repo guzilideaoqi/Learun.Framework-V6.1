@@ -49,5 +49,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         void SaveEntity(int? keyValue, dm_decoration_templateEntity entity);
         #endregion
 
+        #region 获取使用中的模板ID
+        int GetTemplateID(bool IsCheckMode = false);
+        #endregion
     }
 }

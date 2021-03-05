@@ -60,21 +60,10 @@ body {
 }
 
 .threelogo {
-    display: flex;
-    flex-direction: row;
     top: -60px;
     position: relative;
+    text-align:center;
 }
-
-    .threelogo > div {
-        width: 33%;
-        text-align: center;
-    }
-
-        .threelogo > div img {
-            width: 45px;
-            height: 45px;
-        }
 
 .page_center {
     height: 400px;

@@ -136,7 +136,6 @@
         param['__RequestVerificationToken'] = $.lrToken;
         learun.loading(true, '正在保存数据');
         learun.httpAsyncPost(url, param, function (res) {
-            debugger;
             learun.loading(false);
             if (res.code == learun.httpCode.success) {
                 if (!!callback) {

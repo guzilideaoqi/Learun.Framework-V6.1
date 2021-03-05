@@ -19,6 +19,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage.dm_decoration_template_
     /// </summary>
     public class ModuleItemInfoEntity
     {
+        public int? id { get; set; }
         /// <summary>
         /// 模块项名称
         /// </summary>

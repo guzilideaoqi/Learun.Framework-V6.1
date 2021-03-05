@@ -90,7 +90,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 strSql.Append(" FROM dm_decoration_fun_manage t where 1=1 ");
                 if (!queryParam["keyword"].IsEmpty())
                 {
-                    strSql.Append(string.Format(" and t.fun_name like '%{0}%' or t.fun_remark like '%{0}%'", queryParam["keyword"].ToString()));
+                    strSql.Append(string.Format(" and (t.fun_name like '%{0}%' or t.fun_remark like '%{0}%')", queryParam["keyword"].ToString()));
                 }
                 if (!queryParam["fun_type"].IsEmpty())
                 {

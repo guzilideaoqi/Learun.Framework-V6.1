@@ -87,6 +87,9 @@ var bootstrap = function ($, learun) {
                                 case 3:
                                     typeName = "站内H5";
                                     break;
+                                case 4:
+                                    typeName = "淘宝官方活动";
+                                    break;
                             }
                             return typeName;
                         }

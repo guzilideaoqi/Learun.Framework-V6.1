@@ -13,6 +13,12 @@ using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Linq;
+using Learun.Application.TwoDevelopment.DM_APPManage.dm_decoration_template_module_item;
+using Hyg.Common.DuoMaiTools.DuoMaiResponse;
+using System.Collections.Specialized;
+using Hyg.Common.DTKTools.DTKResponse;
+using Hyg.Common.DTKTools.DTKRequest;
+using Hyg.Common.DTKTools;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -39,6 +45,17 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         private dm_activity_manageIBLL dm_Activity_ManageIBLL = new dm_activity_manageBLL();
 
         private dm_activity_recordIBLL dm_Activity_RecordIBLL = new dm_activity_recordBLL();
+
+        private dm_decoration_template_module_itemIBLL dm_decoration_template_module_itemIBLL = new dm_decoration_template_module_itemBLL();
+
+        private dm_decoration_templateIBLL dm_Decoration_TemplateIBLL = new dm_decoration_templateBLL();
+
+        private dm_decoration_fun_manageIBLL dm_Decoration_Fun_ManageIBLL = new dm_decoration_fun_manageBLL();
+
+        private dm_dauomai_plan_manageIBLL dm_Dauomai_Plan_ManageIBLL = new dm_dauomai_plan_manageBLL();
+
+        private DM_BaseSettingIBLL dM_BaseSettingIBLL = new DM_BaseSettingBLL();
+
 
         #region 获取平台设置
         public ActionResult GetPlaformSetting()
@@ -511,7 +528,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                ; string cacheKey = "AreaInfo" + parentID;
+                string cacheKey = "AreaInfo" + parentID;
                 List<AreaEntity> areaEntities = redisCache.Read<List<AreaEntity>>(cacheKey, 7);
 
                 if (areaEntities == null)
@@ -552,6 +569,133 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         public ActionResult RevicePushOrderByDuoMai()
         {
             return Content("1");
+        }
+        #endregion
+
+        #region 个性化装修模块转链
+        [NoNeedLogin]
+        public ActionResult GetDecorationTemplateData()
+        {
+            try
+            {
+                string appid = CheckAPPID();
+                string cacheKey = "DecorationTemplate" + appid;
+                DecorationTemplateInfo decorationTemplateInfo = redisCache.Read<DecorationTemplateInfo>(cacheKey, 7);
+                if (decorationTemplateInfo.IsEmpty())
+                {
+                    dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+
+                    int Status = 0;
+                    GetPreviewVersion(dm_BasesettingEntity, ref Status);
+                    int template_id = dm_Decoration_TemplateIBLL.GetTemplateID(Status == 2);
+
+                    if (template_id > 0)
+                    {
+                        decorationTemplateInfo = dm_decoration_template_module_itemIBLL.GetDecorationTemplateData(template_id);
+                        if (!decorationTemplateInfo.IsEmpty())
+                        {
+                            redisCache.Write<DecorationTemplateInfo>(cacheKey, decorationTemplateInfo, 7);
+                        }
+                        else
+                        {
+                            throw new Exception("模板未装修!");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("当前没有正在进行中的模板!");
+                    }
+                }
+
+                return Success(decorationTemplateInfo);
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
+        }
+        #endregion
+
+        #region 非原声模块处理
+        public ActionResult ConvertFunLink(int module_fun_id)
+        {
+            try
+            {
+                NameValueCollection nameValueCollection = base.Request.Headers;
+                dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfo(nameValueCollection);
+
+
+                if (!dm_UserEntity.IsEmpty())
+                {
+                    string cacheKey = Md5Helper.Hash(module_fun_id + "module_fun_id" + dm_UserEntity.id);
+                    string to_link = redisCache.Read<string>(cacheKey, 7);
+                    if (to_link.IsEmpty())
+                    {
+                        dm_decoration_fun_manageEntity dm_Decoration_Fun_ManageEntity = dm_Decoration_Fun_ManageIBLL.GetEntity(module_fun_id);
+                        if (dm_Decoration_Fun_ManageEntity.fun_type == 2)
+                        {
+                            #region 多麦模块处理  多麦模块fun_param为int类型
+                            CPS_Convert_LinkResponse cPS_Convert_LinkResponse = dm_Dauomai_Plan_ManageIBLL.ConvertLink(int.Parse(dm_Decoration_Fun_ManageEntity.fun_param), (int)dm_UserEntity.id);
+                            to_link = cPS_Convert_LinkResponse.short_url;
+                            #endregion
+                        }
+                        else if (dm_Decoration_Fun_ManageEntity.fun_type == 3)
+                        {
+                            #region 站内H5页面 fun_param为自定义的h5链接地址
+                            if (dm_Decoration_Fun_ManageEntity.fun_param.EndsWith("?"))
+                                dm_Decoration_Fun_ManageEntity.fun_param = dm_Decoration_Fun_ManageEntity.fun_param.TrimEnd('?');
+                            string param = string.Format("token={0}&version={1}&platform={2}&timestamp={3}", nameValueCollection["token"], nameValueCollection["version"], nameValueCollection["platform"], nameValueCollection["timestamp"]);
+                            if (dm_Decoration_Fun_ManageEntity.fun_param.Contains("?"))
+                            {
+                                param = "&" + param;
+                            }
+                            else
+                            {
+                                param = "?" + param;
+                            }
+
+                            to_link = dm_Decoration_Fun_ManageEntity.fun_param + param;
+                            #endregion
+                        }
+                        else if (dm_Decoration_Fun_ManageEntity.fun_type == 4)
+                        {
+                            string appid = CheckAPPID();
+                            dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
+                            DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
+
+                            #region 淘宝官方活动
+                            DTK_TB_ActivityLinkRequest dTK_TB_ActivityLinkRequest = new DTK_TB_ActivityLinkRequest();
+                            dTK_TB_ActivityLinkRequest.promotionSceneId = dm_Decoration_Fun_ManageEntity.fun_param;
+                            dTK_TB_ActivityLinkRequest.pid = dm_UserEntity.tb_pid;
+                            dTK_TB_ActivityLinkRequest.relationId = dm_UserEntity.tb_relationid;
+                            dTK_TB_ActivityLinkRequest.unionId = "dlm" + dm_UserEntity.id;
+                            DTK_TB_ActivityLinkResponse dTK_TB_ActivityLinkResponse = dTK_ApiManage.GetTB_ActivityConvertLink(dTK_TB_ActivityLinkRequest);
+                            if (dTK_TB_ActivityLinkResponse.code == 200 && !dTK_TB_ActivityLinkResponse.data.IsEmpty())
+                            {
+                                to_link = dTK_TB_ActivityLinkResponse.data.click_url;
+                            }
+                            else {
+                                throw new Exception("淘宝官方活动转链失败!");
+                            }
+                            #endregion
+                        }
+                        else
+                        {
+                            throw new Exception("未找到扩展类型!");
+                        }
+                    }
+
+                    return Success(to_link);
+                }
+                else
+                {
+                    throw new Exception("模块转链：用户信息异常!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return FailException(ex);
+            }
         }
         #endregion
 

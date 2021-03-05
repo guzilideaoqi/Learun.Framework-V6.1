@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "SyncPlan";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item">
+        <div class="lr-form-item-title">同步类型<font face="宋体">*</font></div>
+        <div id="is_apply"><ul><li data-value="1">查询已申请计划</li><li data-value="0">查询全部</li></ul></div>
+    </div>
+</div>
+
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_dauomai_plan_manage/SyncPlan.js")
