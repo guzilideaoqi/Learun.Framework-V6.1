@@ -497,21 +497,31 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw new Exception("任务佣金不能小于0!");
                 if (entity.needcount <= 0)
                     throw new Exception("任务参与数不能小于0!");
-                UserInfo userInfo = LoginUserInfo.Get();
 
-                entity.totalcommission = entity.singlecommission * entity.needcount;//需要从用户账户扣除的金额
-                dm_basesettingEntity dm_BaseSettingEntity = dm_BaseSettingService.GetEntityByCache(userInfo.companyId);
-                entity.seniorcommission = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_do_senior) / 100, 2);//高级代理佣金
-                entity.juniorcommission = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_do_junior) / 100, 2);//初级代理佣金
-                entity.servicefee = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_servicefee) / 100, 2);//任务服务费(奖励在服务费中分发)
-                entity.task_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + entity.user_id.ToString().PadLeft(6, '0');
-                entity.sort = GetSort(null, entity.totalcommission);
-                entity.appid = userInfo.companyId;
-                entity.Create();
-                entity.plaform = 0;
-                entity.task_status = 0;
+                if (entity.id > 0)
+                {
+                    entity.Modify(entity.id);
+                    this.BaseRepository("dm_data").Update(entity);
+                }
+                else {
+                    UserInfo userInfo = LoginUserInfo.Get();
 
-                this.BaseRepository("dm_data").Insert(entity);
+                    entity.totalcommission = entity.singlecommission * entity.needcount;//需要从用户账户扣除的金额
+                    dm_basesettingEntity dm_BaseSettingEntity = dm_BaseSettingService.GetEntityByCache(userInfo.companyId);
+                    entity.seniorcommission = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_do_senior) / 100, 2);//高级代理佣金
+                    entity.juniorcommission = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_do_junior) / 100, 2);//初级代理佣金
+                    entity.servicefee = Math.Round((entity.singlecommission * dm_BaseSettingEntity.task_servicefee) / 100, 2);//任务服务费(奖励在服务费中分发)
+                    entity.task_no = DateTime.Now.ToString("yyyyMMddHHmmssfff") + entity.user_id.ToString().PadLeft(6, '0');
+                    entity.sort = GetSort(null, entity.totalcommission);
+                    entity.appid = userInfo.companyId;
+                    entity.Create();
+                    entity.plaform = 0;
+                    entity.task_status = 0;
+
+                    this.BaseRepository("dm_data").Insert(entity);
+                }
+
+
             }
             catch (Exception ex)
             {

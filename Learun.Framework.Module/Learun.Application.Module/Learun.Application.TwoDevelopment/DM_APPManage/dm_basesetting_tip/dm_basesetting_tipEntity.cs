@@ -87,6 +87,11 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         [Column("SHOP_PARNERS_TWO_TIP")]
         public string shop_parners_two_tip { get; set; }
         /// <summary>
+        /// 开通代理(普通用户)
+        /// </summary>
+        [Column("OPENGENT_GENERAL_TIP")]
+        public string opengent_general_tip { get; set; }
+        /// <summary>
         /// 开通代理(一级)
         /// </summary>
         /// <returns></returns>

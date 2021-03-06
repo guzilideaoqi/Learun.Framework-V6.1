@@ -309,21 +309,42 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     dm_basesetting_tipEntity dm_Basesetting_TipEntity = dm_Basesetting_TipService.GetEntityByAppID(currentUser.appid);
 
                     #region 更改一级账户余额及明细
+                    /*2021-03-06 
+                     * 1、业务逻辑调整  等级分佣时如果有普通用户将不再断层，仍然会执行三级分佣  
+                     * 2、增加普通用户返佣比例设置，增加普通用户返佣比例说明*/
                     dm_user_relationEntity dm_User_RelationEntity_one = userRelationList.Where(t => t.user_id == dm_Alipay_RecordEntity_old.user_id).FirstOrDefault();
                     if (!dm_User_RelationEntity_one.IsEmpty())
                     {
                         one_User = userList.Where(t => t.id == dm_User_RelationEntity_one.parent_id).FirstOrDefault();
                         if (!one_User.IsEmpty())
                         {
-                            if (one_User.userlevel == 1 || one_User.userlevel == 2 || one_User.partnersstatus == 2)
+                            if (one_User.userlevel == 0 || one_User.userlevel == 1 || one_User.userlevel == 2 || one_User.partnersstatus == 2)
                             {//高级代理或合伙人才能享受代理提成  2021-01-03 业务逻辑调整 上级只要是付费用户都可以返佣金
-                                one_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
+                                #region 开通会员一级返佣计算
+                                if (one_User.userlevel != 0)
+                                {//非普通用户
+                                    one_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
+                                }
+                                else
+                                {
+                                    one_agent_commission = ConvertComission(dm_BasesettingEntity.opengent_general_member * dm_Alipay_RecordEntity_old.total_amount);
+                                }
+
                                 if (one_agent_commission > 0)
                                 {
+                                    string general_member_one_tip = "";
+                                    if (one_User.userlevel == 0)
+                                    {
+                                        decimal real_opengent_general_member_one = ConvertComission(dm_BasesettingEntity.openagent_one * dm_Alipay_RecordEntity_old.total_amount);
+                                        if (real_opengent_general_member_one > 0)
+                                            general_member_one_tip = dm_Basesetting_TipEntity.opengent_general_tip.Replace("[升级预估佣金]", real_opengent_general_member_one.ToString());
+                                    }
+
                                     one_tip = GetText(dm_Basesetting_TipEntity, dm_Alipay_RecordEntity_old.templateid, 1);
                                     one_User = CalculateComission(one_User.id, one_agent_commission, one_User.accountprice);
-                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 6, one_tip, "您的" + one_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", one_agent_commission, one_User.accountprice));
+                                    dm_AccountdetailEntities.Add(GeneralAccountDetail(one_User.id, 6, one_tip, "您的" + one_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!" + general_member_one_tip, one_agent_commission, one_User.accountprice));
                                 }
+                                #endregion
 
                                 #region 更改二级账户余额及明细
                                 dm_user_relationEntity dm_User_RelationEntity_two = userRelationList.Where(t => t.user_id == one_User.id).FirstOrDefault();
@@ -332,15 +353,31 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                     two_User = userList.Where(t => t.id == dm_User_RelationEntity_two.parent_id).FirstOrDefault();
                                     if (!two_User.IsEmpty())
                                     {
-                                        if (two_User.userlevel == 1 || two_User.userlevel == 2 || two_User.partnersstatus == 2)
+                                        if (two_User.userlevel == 0 || two_User.userlevel == 1 || two_User.userlevel == 2 || two_User.partnersstatus == 2)
                                         {
-                                            two_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_two * dm_Alipay_RecordEntity_old.total_amount);
+                                            #region 开通会员二级返佣比例
+                                            if (two_User.userlevel != 0)
+                                            {
+                                                two_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_two * dm_Alipay_RecordEntity_old.total_amount);
+                                            }
+                                            else
+                                            {
+                                                two_agent_commission = ConvertComission(dm_BasesettingEntity.opengent_general_member * dm_Alipay_RecordEntity_old.total_amount);
+                                            }
                                             if (two_agent_commission > 0)
                                             {
+                                                string general_member_tow_tip = "";
+                                                if (two_User.userlevel == 0)
+                                                {
+                                                    decimal real_opengent_general_member_two = ConvertComission(dm_BasesettingEntity.openagent_two * dm_Alipay_RecordEntity_old.total_amount);
+                                                    if (real_opengent_general_member_two > 0)
+                                                        general_member_tow_tip = dm_Basesetting_TipEntity.opengent_general_tip.Replace("[升级预估佣金]", real_opengent_general_member_two.ToString());
+                                                }
                                                 two_tip = GetText(dm_Basesetting_TipEntity, dm_Alipay_RecordEntity_old.templateid, 2);
                                                 two_User = CalculateComission(two_User.id, two_agent_commission, two_User.accountprice);
-                                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 7, two_tip, "您的" + two_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", two_agent_commission, two_User.accountprice));
+                                                dm_AccountdetailEntities.Add(GeneralAccountDetail(two_User.id, 7, two_tip, "您的" + two_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!" + general_member_tow_tip, two_agent_commission, two_User.accountprice));
                                             }
+                                            #endregion
 
                                             #region 更改三级账户余额及明细
                                             dm_user_relationEntity dm_User_RelationEntity_three = userRelationList.Where(t => t.user_id == two_User.id).FirstOrDefault();
@@ -349,15 +386,33 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                                 three_User = userList.Where(t => t.id == dm_User_RelationEntity_three.parent_id).FirstOrDefault();
                                                 if (!three_User.IsEmpty())
                                                 {
-                                                    if (three_User.userlevel == 1 || three_User.userlevel == 2 || three_User.partnersstatus == 2)
+                                                    if (three_User.userlevel == 0 || three_User.userlevel == 1 || three_User.userlevel == 2 || three_User.partnersstatus == 2)
                                                     {
-                                                        three_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_three * dm_Alipay_RecordEntity_old.total_amount);
+                                                        #region 开通会员三级返佣比例
+                                                        if (three_User.userlevel != 0)
+                                                        {
+                                                            three_agent_commission = ConvertComission(dm_BasesettingEntity.openagent_three * dm_Alipay_RecordEntity_old.total_amount);
+                                                        }
+                                                        else
+                                                        {
+                                                            three_agent_commission = ConvertComission(dm_BasesettingEntity.opengent_general_member * dm_Alipay_RecordEntity_old.total_amount);
+                                                        }
+
                                                         if (three_agent_commission > 0)
                                                         {
+                                                            string general_member_three_tip = "";
+                                                            if (three_User.userlevel == 0)
+                                                            {
+                                                                decimal real_opengent_general_member_three = ConvertComission(dm_BasesettingEntity.openagent_three * dm_Alipay_RecordEntity_old.total_amount);
+                                                                if (real_opengent_general_member_three > 0)
+                                                                    general_member_three_tip = dm_Basesetting_TipEntity.opengent_general_tip.Replace("[升级预估佣金]", real_opengent_general_member_three.ToString());
+                                                            }
+
                                                             three_tip = GetText(dm_Basesetting_TipEntity, dm_Alipay_RecordEntity_old.templateid, 3);
                                                             three_User = CalculateComission(three_User.id, three_agent_commission, three_User.accountprice);
-                                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(three_User.id, 22, three_tip, "您的" + three_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!", three_agent_commission, three_User.accountprice));
+                                                            dm_AccountdetailEntities.Add(GeneralAccountDetail(three_User.id, 22, three_tip, "您的" + three_tip + "《" + currentUser.nickname + "》开通代理成功,奖励已到账,继续努力哟!" + general_member_three_tip, three_agent_commission, three_User.accountprice));
                                                         }
+                                                        #endregion
                                                     }
                                                 }
                                             }

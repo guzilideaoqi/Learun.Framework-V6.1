@@ -19,6 +19,8 @@ using System.Collections.Specialized;
 using Hyg.Common.DTKTools.DTKResponse;
 using Hyg.Common.DTKTools.DTKRequest;
 using Hyg.Common.DTKTools;
+using Learun.Loger;
+using Learun.Application.TwoDevelopment.Common.Model;
 
 namespace Learun.Application.Web.Controllers.DM_APIControl
 {
@@ -129,57 +131,66 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         {
             try
             {
-                string appid = CheckAPPID();
-                dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
-                int Status = 0;
-                if (dm_BasesettingEntity.openchecked == "1")
-                { //开启审核模式
-                    string version = CheckVersion();
-                    string platform = CheckPlaform();
-                    if ((platform == "ios" && version == dm_BasesettingEntity.previewversion) || (platform == "android" && version == dm_BasesettingEntity.previewversionandroid))
-                        Status = 1;
-                }
+                string appid = CheckAPPID(); string token = base.Request.Headers["token"];
+                string cacheKey = Md5Helper.Hash("CommonSettingInfo" + appid + token);
+                CommonSettingInfo commonSettingInfo = redisCache.Read<CommonSettingInfo>(cacheKey, 7);
 
-                #region 活动配置校验
-                bool JoinActivity = false;
-                dm_activity_manageEntity dm_Activity_ManageEntity = dm_Activity_ManageIBLL.GetActivityInfo();
-                if (dm_Activity_ManageEntity.IsEmpty())
-                    dm_Activity_ManageEntity = new dm_activity_manageEntity { ActivityStatus = 0 };
-                else
+                if (commonSettingInfo.IsEmpty())
                 {
-                    string token = base.Request.Headers["token"].ToString();
+                    dm_basesettingEntity dm_BasesettingEntity = dm_BaseSettingIBLL.GetEntityByCache(appid);
+                    int Status = 0;
+                    if (dm_BasesettingEntity.openchecked == "1")
+                    { //开启审核模式
+                        string version = CheckVersion();
+                        string platform = CheckPlaform();
+                        if ((platform == "ios" && version == dm_BasesettingEntity.previewversion) || (platform == "android" && version == dm_BasesettingEntity.previewversionandroid))
+                            Status = 1;
+                    }
+
+                    #region 活动配置校验
+                    bool JoinActivity = false;
+                    dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageEntity();
                     if (!token.IsEmpty())
                     {
-                        dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
-                        if (!dm_UserEntity.IsEmpty())
+                        dm_Activity_ManageEntity = dm_Activity_ManageIBLL.GetActivityInfo();
+                        if (dm_Activity_ManageEntity.IsEmpty())
+                            dm_Activity_ManageEntity = new dm_activity_manageEntity { ActivityStatus = 0 };
+                        else
                         {
-                            dm_activity_recordEntity dm_Activity_RecordEntity = dm_Activity_RecordIBLL.GetEntityByUserID((int)dm_UserEntity.id, dm_Activity_ManageEntity.f_id);
-                            if (!dm_Activity_RecordEntity.IsEmpty())
-                                JoinActivity = true;
+                            dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
+                            if (!dm_UserEntity.IsEmpty())
+                            {
+                                dm_activity_recordEntity dm_Activity_RecordEntity = dm_Activity_RecordIBLL.GetEntityByUserID((int)dm_UserEntity.id, dm_Activity_ManageEntity.f_id);
+                                if (!dm_Activity_RecordEntity.IsEmpty())
+                                    JoinActivity = true;
+                            }
                         }
                     }
+                    #endregion
+
+                    commonSettingInfo = new CommonSettingInfo
+                    {
+                        //isAppStorePreview = ((base.Request.Headers["version"].ToString() == dm_BasesettingEntity.previewversion) ? 1 : 0)
+                        //previewversion = dm_BasesettingEntity.previewversion,
+                        ischecked = Status,  //dm_BasesettingEntity.openchecked,
+                        welcomenewperson = dm_BasesettingEntity.welcomenewperson,
+                        showcommission = dm_BasesettingEntity.showcommission,
+                        miquan_remark = dm_BasesettingEntity.miquan_remark,
+                        task_remark = "http://dlaimi.cn/dm_appmanage/dm_article/lookarticle?id=16",
+                        task_submit_remark_title = "任务提交小建议",
+                        task_submit_remark = dm_BasesettingEntity.task_submit_remark,
+                        nodatatip = CommonConfig.NoDataTip,
+                        sign_rule = dm_BasesettingEntity.sign_rule,
+                        cashrecord_fee = dm_BasesettingEntity.cashrecord_fee,
+                        cashrecord_remark = dm_BasesettingEntity.cashrecord_remark,
+                        activitysetting = dm_Activity_ManageEntity,
+                        JoinActivity = JoinActivity ? 1 : 0
+                    };
+
+                    redisCache.Write<CommonSettingInfo>(cacheKey, commonSettingInfo, DateTime.Now.AddMinutes(1), 7);
                 }
-                #endregion
 
-
-                return Success("获取成功", new
-                {
-                    //isAppStorePreview = ((base.Request.Headers["version"].ToString() == dm_BasesettingEntity.previewversion) ? 1 : 0)
-                    //previewversion = dm_BasesettingEntity.previewversion,
-                    ischecked = Status,  //dm_BasesettingEntity.openchecked,
-                    welcomenewperson = dm_BasesettingEntity.welcomenewperson,
-                    showcommission = dm_BasesettingEntity.showcommission,
-                    miquan_remark = dm_BasesettingEntity.miquan_remark,
-                    task_remark = "http://dlaimi.cn/dm_appmanage/dm_article/lookarticle?id=16",
-                    task_submit_remark_title = "任务提交小建议",
-                    task_submit_remark = dm_BasesettingEntity.task_submit_remark,
-                    nodatatip = CommonConfig.NoDataTip,
-                    sign_rule = dm_BasesettingEntity.sign_rule,
-                    cashrecord_fee = dm_BasesettingEntity.cashrecord_fee,
-                    cashrecord_remark = dm_BasesettingEntity.cashrecord_remark,
-                    activitysetting = dm_Activity_ManageEntity,
-                    JoinActivity = JoinActivity ? 1 : 0
-                });
+                return Success("获取成功", commonSettingInfo);
             }
             catch (Exception ex)
             {
@@ -568,6 +579,25 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         [NoNeedLogin]
         public ActionResult RevicePushOrderByDuoMai()
         {
+            Log log = LogFactory.GetLogger("workflowapi");
+
+            log.Error("\r\n回调成功");
+
+            int i = 0;
+            IDictionary<string, string> sArray = new Dictionary<string, string>();
+            NameValueCollection coll;
+            //Load Form variables into NameValueCollection variable.
+            coll = Request.Form;
+            // Get names of all forms into a string array.
+            String[] requestItem = coll.AllKeys;
+
+            for (i = 0; i < requestItem.Length; i++)
+            {
+                sArray.Add(requestItem[i], Request.Form[requestItem[i]]);
+            }
+
+            string resultContent = sArray.ToJson();
+            log.Error(resultContent + "\r\n");
             return Content("1");
         }
         #endregion
@@ -674,7 +704,8 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                             {
                                 to_link = dTK_TB_ActivityLinkResponse.data.click_url;
                             }
-                            else {
+                            else
+                            {
                                 throw new Exception("淘宝官方活动转链失败!");
                             }
                             #endregion

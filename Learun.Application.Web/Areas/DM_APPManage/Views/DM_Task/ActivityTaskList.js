@@ -33,35 +33,14 @@ var bootstrap = function ($, learun) {
                 selectedRow = null;
                 learun.layerForm({
                     id: 'form',
-                    title: '发布任务',
-                    url: top.$.rootUrl + '/DM_APPManage/DM_Task/PubTask?isactivity=0',
+                    title: '发布活动任务',
+                    url: top.$.rootUrl + '/DM_APPManage/DM_Task/PubTask?isactivity=1',
                     width: 1100,
                     height: 800,
                     callBack: function (id) {
                         return top[id].acceptClick(refreshGirdData);
                     }
                 });
-            });
-            //修改任务
-            $('#lr_edit_task').on('click', function () {
-                var keyValue = $('#girdtable').jfGridValue('id');
-                selectedRow = $('#girdtable').jfGridGet('rowdata');
-                if (selectedRow.plaform == 0) {
-                    if (learun.checkrow(keyValue)) {
-                        learun.layerForm({
-                            id: 'form',
-                            title: '修改任务',
-                            url: top.$.rootUrl + '/DM_APPManage/DM_Task/PubTask?isactivity=0&keyValue=' + keyValue,
-                            width: 1100,
-                            height: 800,
-                            callBack: function (id) {
-                                return top[id].acceptClick(refreshGirdData);
-                            }
-                        });
-                    }
-                } else {
-                    learun.alert.error("非PC端发布任务无法修改!");
-                }
             });
             // 编辑
             $('#lr_edit').on('click', function () {
@@ -70,10 +49,10 @@ var bootstrap = function ($, learun) {
                 if (learun.checkrow(keyValue)) {
                     learun.layerForm({
                         id: 'form',
-                        title: '修改权重',
-                        url: top.$.rootUrl + '/DM_APPManage/DM_Task/Form?keyValue=' + keyValue,
-                        width: 400,
-                        height: 200,
+                        title: '编辑活动任务',
+                        url: top.$.rootUrl + '/DM_APPManage/DM_Task/PubTask?isactivity=1&keyValue=' + keyValue,
+                        width: 1100,
+                        height: 800,
                         callBack: function (id) {
                             return top[id].acceptClick(refreshGirdData);
                         }
@@ -99,7 +78,7 @@ var bootstrap = function ($, learun) {
             });
         },
         initGird: function () {
-            $('#girdtable').lrAuthorizeJfGrid({
+            $('#girdtable').jfGrid({
                 url: top.$.rootUrl + '/DM_APPManage/DM_Task/GetPageListByDataTable',
                 headData: [
                     //{ label: 'id', name: 'id', width: 200, align: "left" },
@@ -189,7 +168,7 @@ var bootstrap = function ($, learun) {
             page.search();
         },
         search: function (param) {
-            param = param || { txt_title: $("#txt_title").val(), txt_realname: $("#txt_realname").val(), txt_nickname: $("#txt_nickname").val(), txt_phone: $("#txt_phone").val(), txt_status: $('#txt_status').lrselectGet(), isactivity: 0 };
+            param = param || { txt_title: $("#txt_title").val(), txt_realname: $("#txt_realname").val(), txt_nickname: $("#txt_nickname").val(), txt_phone: $("#txt_phone").val(), txt_status: $('#txt_status').lrselectGet(), isactivity: 1 };
             $('#girdtable').jfGridSet('reload', { param: { queryJson: JSON.stringify(param) } });
         }
     };

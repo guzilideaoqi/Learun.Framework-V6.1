@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "dm_duomai_order商品";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">id<font face="宋体">*</font></div>
+        <input id="id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">商品类目，以实际商家平台结果为准<font face="宋体">*</font></div>
+        <input id="goods_cate" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">商品类目名称，有可能是数字标识、文字说明，以实际商家平台结果为准<font face="宋体">*</font></div>
+        <input id="goods_cate_name" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">商品编号<font face="宋体">*</font></div>
+        <input id="goods_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">商品名称<font face="宋体">*</font></div>
+        <input id="goods_name" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">商品单价<font face="宋体">*</font></div>
+        <input id="goods_price" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">商品件数<font face="宋体">*</font></div>
+        <input id="goods_ta" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单金额，例：1.00<font face="宋体">*</font></div>
+        <input id="orders_price" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">商家平台原始订单状态描述，有可能是英文、中文、数值等，以实际结果为准<font face="宋体">*</font></div>
+        <input id="order_status" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">预估站长佣金，非结算站长佣金，例：1.00<font face="宋体">*</font></div>
+        <input id="order_commission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单号<font face="宋体">*</font></div>
+        <input id="order_sn" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">父订单号/子订单号<font face="宋体">*</font></div>
+        <input id="parent_order_sn" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">商品图片地址<font face="宋体">*</font></div>
+        <input id="goods_img" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">创建时间<font face="宋体">*</font></div>
+        <input id="createtime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">修改时间<font face="宋体">*</font></div>
+        <input id="updatetime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_duomai_order_good/Form.js")

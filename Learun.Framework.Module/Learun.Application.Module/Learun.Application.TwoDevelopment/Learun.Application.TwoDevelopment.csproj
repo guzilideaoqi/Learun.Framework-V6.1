@@ -85,6 +85,7 @@
     <Compile Include="Common\JSMSClient.cs" />
     <Compile Include="Common\MeetingAPI.cs" />
     <Compile Include="Common\Model\ActivityInfoSetting.cs" />
+    <Compile Include="Common\Model\CommonSettingInfo.cs" />
     <Compile Include="Common\Model\HttpResponse.cs" />
     <Compile Include="Common\Model\SignModel.cs" />
     <Compile Include="Common\Model\TemplateMessage.cs" />
@@ -291,6 +292,14 @@
     <Compile Include="DM_APPManage\dm_decoration_template_module_item\dm_decoration_template_module_itemService.cs" />
     <Compile Include="DM_APPManage\dm_decoration_template_module_item\dm_decoration_template_module_itemIBLL.cs" />
     <Compile Include="DM_APPManage\dm_decoration_template_module_item\dm_decoration_template_module_itemBLL.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_order\dm_duomai_orderEntity.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_order\dm_duomai_orderService.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_order\dm_duomai_orderIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_order\dm_duomai_orderBLL.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_order_good\dm_duomai_order_goodEntity.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_order_good\dm_duomai_order_goodService.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_order_good\dm_duomai_order_goodIBLL.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_order_good\dm_duomai_order_goodBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

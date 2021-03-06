@@ -459,7 +459,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw new Exception("任务已取消，请勿重复提交!");
 
                 dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
-
+                if (dm_TaskEntity.isactivity == 1)
+                    throw new Exception("活动任务不能取消哟!");
 
                 if (IsPubCancel == 1)
                 {

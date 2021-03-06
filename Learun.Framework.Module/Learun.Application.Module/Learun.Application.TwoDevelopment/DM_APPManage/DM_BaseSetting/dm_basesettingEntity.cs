@@ -110,15 +110,27 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
             set;
         }
 
+        /// <summary>
+        /// 普通会员分佣比例
+        /// </summary>
+        [Column("OPENGENT_GENERAL_MEMBER")]
+        public decimal opengent_general_member { get; set; }
+
+        /// <summary>
+        /// 开通代理一级提成
+        /// </summary>
         [Column("OPENAGENT_ONE")]
-        public int openagent_one
+        public decimal openagent_one
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// 开通代理二级提成
+        /// </summary>
         [Column("OPENAGENT_TWO")]
-        public int openagent_two
+        public decimal openagent_two
         {
             get;
             set;
@@ -128,17 +140,17 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// 开通代理三级提成
         /// </summary>
         [Column("OPENAGENT_THREE")]
-        public int openagent_three { get; set; }
+        public decimal openagent_three { get; set; }
 
         [Column("OPENAGENT_ONE_PARTNERS")]
-        public int openagent_one_partners
+        public decimal openagent_one_partners
         {
             get;
             set;
         }
 
         [Column("OPENAGENT_TWO_PARTNERS")]
-        public int openagent_two_partners
+        public decimal openagent_two_partners
         {
             get;
             set;

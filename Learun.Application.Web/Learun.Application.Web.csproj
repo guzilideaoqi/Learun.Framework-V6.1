@@ -321,6 +321,8 @@
     <Compile Include="Areas\DM_APPManage\Controllers\dm_decoration_templateController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_decoration_template_moduleController.cs" />
     <Compile Include="Areas\DM_APPManage\Controllers\dm_decoration_template_module_itemController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_duomai_orderController.cs" />
+    <Compile Include="Areas\DM_APPManage\Controllers\dm_duomai_order_goodController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AppManager\Views\FunctionManager\Form.css" />
@@ -349,6 +351,7 @@
     <Content Include="Areas\DM_APPManage\Views\DM_Order\SyncOrder.css" />
     <Content Include="Areas\DM_APPManage\Views\DM_Order\SyncOrder.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_ReadTask\Form.css" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\ActivityTaskList.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\CheckReviceDetail.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookReviceDetail.js" />
     <Content Include="Areas\DM_APPManage\Views\DM_Task\LookTaskDetail.css" />
@@ -1989,6 +1992,7 @@
     <Content Include="Areas\DM_APPManage\Views\dm_decoration_template\DecorationTemplate.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_decoration_fun_manage\SelectFun.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_dauomai_plan_manage\SyncPlan.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\DM_Task\ActivityTaskList.cshtml" />
     <None Include="Properties\PublishProfiles\Dev.dlaimi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\clipboard.min.js" />
@@ -2531,6 +2535,14 @@
     <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module_item\Index.js" />
     <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module_item\Form.cshtml" />
     <Content Include="Areas\DM_APPManage\Views\dm_decoration_template_module_item\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_duomai_order\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_duomai_order\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_duomai_order\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_duomai_order\Form.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_duomai_order_good\Index.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_duomai_order_good\Index.js" />
+    <Content Include="Areas\DM_APPManage\Views\dm_duomai_order_good\Form.cshtml" />
+    <Content Include="Areas\DM_APPManage\Views\dm_duomai_order_good\Form.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LR_CodeDemo\Controllers\" />

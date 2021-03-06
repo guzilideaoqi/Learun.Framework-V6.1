@@ -1,5 +1,6 @@
-﻿@{
-    ViewBag.Title = "任务中心";
+﻿
+@{
+    ViewBag.Title = "活动任务列表";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
 <style>
@@ -35,9 +36,8 @@
                         <a id="lr_refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>
                     </div>
                     <div class=" btn-group btn-group-sm" learun-authorize="yes">
-                        <a id="lr_add" class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;发布任务</a>
-                        <a id="lr_edit_task" class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;修改任务</a>
-                        <a id="lr_edit" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;修改权重</a>
+                        <a id="lr_add" class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;发布活动任务</a>
+                        <a id="lr_edit" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑活动任务</a>
                         <a id="lr_delete" class="btn btn-default"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
                     </div>
                 </div>
@@ -46,4 +46,6 @@
         </div>
     </div>
 </div>
-@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_Task/Index.js")
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/DM_Task/ActivityTaskList.js")
+
+

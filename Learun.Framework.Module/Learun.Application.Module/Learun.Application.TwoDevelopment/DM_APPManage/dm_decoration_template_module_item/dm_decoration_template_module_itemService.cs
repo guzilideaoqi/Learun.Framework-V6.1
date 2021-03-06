@@ -287,6 +287,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                     id = dm_Decoration_Template_Module_ItemEntity.id,
                                     module_fun_id = dm_Decoration_Template_Module_ItemEntity.module_fun_id,
                                     module_fun_name = dm_Decoration_Fun_ManageEntity.fun_name,
+                                    module_fun_type = dm_Decoration_Fun_ManageEntity.fun_type,
+                                    module_fun_param = dm_Decoration_Fun_ManageEntity.fun_param,
                                     module_item_image = dm_Decoration_Template_Module_ItemEntity.module_item_image,
                                     module_item_name = dm_Decoration_Template_Module_ItemEntity.module_item_name,
                                     module_item_type = dm_Decoration_ModuleEntity.module_type,

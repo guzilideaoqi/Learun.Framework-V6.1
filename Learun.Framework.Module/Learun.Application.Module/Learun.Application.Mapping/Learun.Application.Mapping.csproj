@@ -156,6 +156,8 @@
     <Compile Include="DM_APPManage\dm_decoration_templateMap.cs" />
     <Compile Include="DM_APPManage\dm_decoration_template_moduleMap.cs" />
     <Compile Include="DM_APPManage\dm_decoration_template_module_itemMap.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_orderMap.cs" />
+    <Compile Include="DM_APPManage\dm_duomai_order_goodMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Learun.Application.Organization\Learun.Application.Organization.csproj">

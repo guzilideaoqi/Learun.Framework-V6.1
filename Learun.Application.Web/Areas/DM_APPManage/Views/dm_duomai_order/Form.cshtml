@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "dm_duomai_order";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">id<font face="宋体">*</font></div>
+        <input id="id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">计划ID<font face="宋体">*</font></div>
+        <input id="ads_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">推广位ID<font face="宋体">*</font></div>
+        <input id="site_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">推广计划链接ID<font face="宋体">*</font></div>
+        <input id="link_id" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">反馈ID<font face="宋体">*</font></div>
+        <input id="euid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单编号<font face="宋体">*</font></div>
+        <input id="order_sn" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">针对部分联盟存在父订单号<font face="宋体">*</font></div>
+        <input id="parent_order_sn" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单下单时间，格式:yyyy-MM-dd HH:mm:ss<font face="宋体">*</font></div>
+        <input id="order_time" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单金额，例：1.00<font face="宋体">*</font></div>
+        <input id="orders_price" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">订单佣金，例：1.00<font face="宋体">*</font></div>
+        <input id="siter_commission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">多麦联盟结算状态：-1=无效 0=未确认 1=确认 2=结算<font face="宋体">*</font></div>
+        <input id="status" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">确认订单金额，1.00<font face="宋体">*</font></div>
+        <input id="confirm_price" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">确认订单佣金，1.00<font face="宋体">*</font></div>
+        <input id="confirm_siter_commission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">结算时间，格式:yyyy-MM-dd HH:mm:ss<font face="宋体">*</font></div>
+        <input id="charge_time" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">创建时间<font face="宋体">*</font></div>
+        <input id="createtime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-6 lr-form-item">
+        <div class="lr-form-item-title">修改时间<font face="宋体">*</font></div>
+        <input id="updatetime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/DM_APPManage/Views/dm_duomai_order/Form.js")

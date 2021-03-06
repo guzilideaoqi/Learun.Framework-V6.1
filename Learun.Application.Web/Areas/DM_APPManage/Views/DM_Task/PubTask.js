@@ -6,13 +6,18 @@
  */
 var acceptClick;
 var keyValue = request('keyValue');
+var isactivity = request('isactivity');
 var bootstrap = function ($, learun) {
     "use strict";
     var selectedRow = learun.frameTab.currentIframe().selectedRow;
     var ue;
     var page = {
         init: function () {
+            if (!isactivity)
+                isactivity = 0;
+
             page.bind();
+            page.initData();
         },
         bind: function () {
             //内容编辑器
@@ -30,6 +35,7 @@ var bootstrap = function ($, learun) {
                 var postData = $('#form').lrGetFormData();
                 postData["task_operate"] = ue.getContent(null, null, true);
                 keyValue = (keyValue == null || keyValue == "") ? 0 : keyValue;
+                postData["isactivity"] = isactivity;
                 $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Task/PubNewTask?keyValue=' + keyValue, postData, function (res) {
                     // 保存成功后才回调
                     //if (!!callBack) {
@@ -38,14 +44,31 @@ var bootstrap = function ($, learun) {
                     //learun.alert.success('发布成功');
                 });
             });
-
-            $("#isactivity").lrselect();
         },
         initData: function () {
             if (!!selectedRow) {
                 $('#form').lrSetFormData(selectedRow);
+                setTimeout(function () {
+                    ue.setContent(selectedRow.task_operate);
+                }, 500);
             }
         }
     };
+    acceptClick = function () {
+        if (!$('#form').lrValidform()) {
+            return false;
+        }
+        var postData = $('#form').lrGetFormData();
+        postData["task_operate"] = ue.getContent(null, null, true);
+        keyValue = (keyValue == null || keyValue == "") ? 0 : keyValue;
+        postData["isactivity"] = isactivity;
+        $.lrSaveForm(top.$.rootUrl + '/DM_APPManage/DM_Task/PubNewTask?keyValue=' + keyValue, postData, function (res) {
+            // 保存成功后才回调
+            //if (!!callBack) {
+            //    callBack();
+            //}
+            //learun.alert.success('发布成功');
+        });
+    }
     page.init();
 }

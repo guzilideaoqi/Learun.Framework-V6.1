@@ -78,6 +78,11 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult ActivityTaskList() {
+            return View();
+        }
         #endregion
 
         #region 获取数据
@@ -187,6 +192,7 @@ namespace Learun.Application.Web.Areas.DM_APPManage.Controllers
         [ValidateInput(false)]
         public ActionResult PubNewTask(int keyValue, dm_taskEntity entity)
         {
+            entity.id = keyValue;
             dM_TaskIBLL.ReleaseTaskByWeb(entity);
             return Success("发布成功！");
         }
