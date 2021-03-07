@@ -132,7 +132,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
             try
             {
                 string appid = CheckAPPID(); string token = base.Request.Headers["token"];
-                string cacheKey = Md5Helper.Hash("CommonSettingInfo" + appid + token);
+                string platform = CheckPlaform();
+
+                string cacheKey = Md5Helper.Hash("CommonSettingInfo" + appid + token + platform);
                 CommonSettingInfo commonSettingInfo = redisCache.Read<CommonSettingInfo>(cacheKey, 7);
 
                 if (commonSettingInfo.IsEmpty())
@@ -142,7 +144,6 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     if (dm_BasesettingEntity.openchecked == "1")
                     { //开启审核模式
                         string version = CheckVersion();
-                        string platform = CheckPlaform();
                         if ((platform == "ios" && version == dm_BasesettingEntity.previewversion) || (platform == "android" && version == dm_BasesettingEntity.previewversionandroid))
                             Status = 1;
                     }
@@ -150,12 +151,13 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     #region 活动配置校验
                     bool JoinActivity = false;
                     dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageEntity();
-                    if (!token.IsEmpty())
+
+                    dm_Activity_ManageEntity = dm_Activity_ManageIBLL.GetActivityInfo();
+                    if (dm_Activity_ManageEntity.IsEmpty())
+                        dm_Activity_ManageEntity = new dm_activity_manageEntity { ActivityStatus = 0 };
+                    else
                     {
-                        dm_Activity_ManageEntity = dm_Activity_ManageIBLL.GetActivityInfo();
-                        if (dm_Activity_ManageEntity.IsEmpty())
-                            dm_Activity_ManageEntity = new dm_activity_manageEntity { ActivityStatus = 0 };
-                        else
+                        if (!token.IsEmpty())
                         {
                             dm_userEntity dm_UserEntity = CacheHelper.ReadUserInfoByToken(token);
                             if (!dm_UserEntity.IsEmpty())
@@ -167,6 +169,9 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                         }
                     }
                     #endregion
+
+                    if (platform != "android")
+                        JoinActivity = false;
 
                     commonSettingInfo = new CommonSettingInfo
                     {

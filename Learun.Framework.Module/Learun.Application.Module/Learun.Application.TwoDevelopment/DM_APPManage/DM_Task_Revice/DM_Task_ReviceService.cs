@@ -334,68 +334,73 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 接受任务
         public dm_task_reviceEntity ReviceTask(dm_task_reviceEntity dm_Task_ReviceEntity, string appid)
         {
-            IRepository db = null;
-            try
+            lock (_object)
             {
-                dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(appid);
-                if (dm_BasesettingEntity.IsEmpty())
-                    throw new Exception("配置信息获取错误!");
-
-                dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
-                if (dm_TaskEntity.IsEmpty())
-                    throw new Exception("任务id错误!");
-                if (dm_TaskEntity.task_status == -2)
-                    throw new Exception("任务正在审核中，暂时无法接受!");
-                if (dm_TaskEntity.task_status == 1)
-                    throw new Exception("您来晚了一步,当前任务已抢光!");
-                if (dm_TaskEntity.task_status == 2)
-                    throw new Exception("当前任务已取消,您可接受其他任务!");
-                if (dm_TaskEntity.task_status == 3)
-                    throw new Exception("当前任务已下架,您可接受其他任务!");
-
-                if (dm_TaskEntity.revicecount >= dm_TaskEntity.needcount)
-                    throw new Exception("您来晚了一步,当前任务已抢光!");
-
-                /*一个任务可重复接受  2020-07-27*/
-                /*dm_task_reviceEntity reviceEntity = GetReviceEntity(dm_Task_ReviceEntity.user_id, dm_Task_ReviceEntity.task_id);
-                if (!reviceEntity.IsEmpty())
-                    throw new Exception("请勿重复接受该任务!");*/
-
-                dm_userEntity dm_UserEntity = dM_UserService.GetEntity(dm_Task_ReviceEntity.user_id);
-                if (dm_UserEntity.userlevel != 1 && dm_UserEntity.userlevel != 2)
-                    throw new Exception("当前等级无法接受任务,请升级后重试!");
-
-                //判断当前未在审核状态的任务数量
-                int noFinishCount = BaseRepository("dm_data").IQueryable<dm_task_reviceEntity>(t => (t.status == 1 || t.status == 2) && t.user_id == dm_Task_ReviceEntity.user_id).Count();
-                if (noFinishCount >= dm_BasesettingEntity.revicetaskcountlimit)
-                    throw new Exception("同时接单任务数已达到上限,请先完成其他任务后再来接单!");
-
-
-                dm_Task_ReviceEntity.revice_time = DateTime.Now;
-                dm_Task_ReviceEntity.status = 1;
-                dm_Task_ReviceEntity.Create();
-
-                dm_TaskEntity.revicecount += 1;
-                dm_TaskEntity.Modify(dm_TaskEntity.id);
-
-                db = BaseRepository("dm_data").BeginTrans();
-                db.Update(dm_TaskEntity);
-                db.Insert(dm_Task_ReviceEntity);
-                db.Commit();
-
-                return dm_Task_ReviceEntity;
-            }
-            catch (Exception ex)
-            {
-                if (db != null)
-                    db.Rollback();
-                if (ex is ExceptionEx)
+                IRepository db = null;
+                try
                 {
-                    throw;
+                    dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingService.GetEntityByCache(appid);
+                    if (dm_BasesettingEntity.IsEmpty())
+                        throw new Exception("配置信息获取错误!");
+
+                    dm_taskEntity dm_TaskEntity = dm_TaskService.GetEntity(dm_Task_ReviceEntity.task_id);
+                    if (dm_TaskEntity.IsEmpty())
+                        throw new Exception("任务id错误!");
+                    if (dm_TaskEntity.task_status == -2)
+                        throw new Exception("任务正在审核中，暂时无法接受!");
+                    if (dm_TaskEntity.task_status == 1)
+                        throw new Exception("您来晚了一步,当前任务已抢光!");
+                    if (dm_TaskEntity.task_status == 2)
+                        throw new Exception("当前任务已取消,您可接受其他任务!");
+                    if (dm_TaskEntity.task_status == 3)
+                        throw new Exception("当前任务已下架,您可接受其他任务!");
+
+                    if (dm_TaskEntity.revicecount >= dm_TaskEntity.needcount)
+                        throw new Exception("您来晚了一步,当前任务已抢光!");
+
+                    /*一个任务可重复接受  2020-07-27*/
+                    dm_task_reviceEntity reviceEntity = GetReviceEntity(dm_Task_ReviceEntity.user_id, dm_Task_ReviceEntity.task_id);
+                    if (!reviceEntity.IsEmpty()) {
+                        //throw new Exception("请勿重复接受该任务!");
+                        throw new Exception("您已接受该任务,请勿重复接受!!");
+                    }
+
+                    dm_userEntity dm_UserEntity = dM_UserService.GetEntity(dm_Task_ReviceEntity.user_id);
+                    if (dm_UserEntity.userlevel != 1 && dm_UserEntity.userlevel != 2)
+                        throw new Exception("当前等级无法接受任务,请升级后重试!");
+
+                    //判断当前未在审核状态的任务数量
+                    int noFinishCount = BaseRepository("dm_data").IQueryable<dm_task_reviceEntity>(t => (t.status == 1 || t.status == 2) && t.user_id == dm_Task_ReviceEntity.user_id).Count();
+                    if (noFinishCount >= dm_BasesettingEntity.revicetaskcountlimit)
+                        throw new Exception("同时接单任务数已达到上限,请先完成其他任务后再来接单!");
+
+
+                    dm_Task_ReviceEntity.revice_time = DateTime.Now;
+                    dm_Task_ReviceEntity.status = 1;
+                    dm_Task_ReviceEntity.Create();
+
+                    dm_TaskEntity.revicecount += 1;
+                    dm_TaskEntity.Modify(dm_TaskEntity.id);
+
+                    db = BaseRepository("dm_data").BeginTrans();
+                    db.Update(dm_TaskEntity);
+                    db.Insert(dm_Task_ReviceEntity);
+                    db.Commit();
+
+                    return dm_Task_ReviceEntity;
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw ExceptionEx.ThrowServiceException(ex);
+                    if (db != null)
+                        db.Rollback();
+                    if (ex is ExceptionEx)
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        throw ExceptionEx.ThrowServiceException(ex);
+                    }
                 }
             }
         }
@@ -892,50 +897,53 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         #region 领取活动任务
         public void ReviceActivityTask(string[] task_ids, int user_id)
         {
-            try
+            lock (_object)
             {
-                dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageService().GetActivityInfo();
-                if (dm_Activity_ManageEntity.IsEmpty())
-                    throw new Exception(CommonConfig.NoActivityTip);
-
-                DateTime currentTime = DateTime.Now;
-                if (currentTime < dm_Activity_ManageEntity.ActivityStartTime || currentTime > dm_Activity_ManageEntity.ActivityEndTime)
+                try
                 {
-                    throw new Exception("不在活动时间内，无法接受任务!");
-                }
+                    dm_activity_manageEntity dm_Activity_ManageEntity = new dm_activity_manageService().GetActivityInfo();
+                    if (dm_Activity_ManageEntity.IsEmpty())
+                        throw new Exception(CommonConfig.NoActivityTip);
 
-                IEnumerable<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == user_id && t.activitycode == dm_Activity_ManageEntity.f_id);
-                if (dm_Task_ReviceEntities.Count() > 0)
-                    throw new Exception("每个活动每人只能接一次!");
-
-                List<dm_task_reviceEntity> dm_task_reviceList = new List<dm_task_reviceEntity>();
-                for (int i = 0; i < task_ids.Length; i++)
-                {
-                    dm_task_reviceEntity dm_Task_ReviceEntity = new dm_task_reviceEntity
+                    DateTime currentTime = DateTime.Now;
+                    if (currentTime < dm_Activity_ManageEntity.ActivityStartTime || currentTime > dm_Activity_ManageEntity.ActivityEndTime)
                     {
-                        revice_time = currentTime,
-                        recordindex = i + 1,
-                        status = 1,
-                        task_id = int.Parse(task_ids[i]),
-                        user_id = user_id,
-                        activitycode = dm_Activity_ManageEntity.f_id
-                    };
-                    dm_Task_ReviceEntity.Create();
-                    dm_task_reviceList.Add(dm_Task_ReviceEntity);
-                }
+                        throw new Exception("不在活动时间内，无法接受任务!");
+                    }
 
-                if (dm_task_reviceList.Count > 0)
-                    this.BaseRepository("dm_data").Insert(dm_task_reviceList);
-            }
-            catch (Exception ex)
-            {
-                if (ex is ExceptionEx)
-                {
-                    throw;
+                    IEnumerable<dm_task_reviceEntity> dm_Task_ReviceEntities = this.BaseRepository("dm_data").FindList<dm_task_reviceEntity>(t => t.user_id == user_id && t.activitycode == dm_Activity_ManageEntity.f_id);
+                    if (dm_Task_ReviceEntities.Count() > 0)
+                        throw new Exception("每个活动每人只能接一次!");
+
+                    List<dm_task_reviceEntity> dm_task_reviceList = new List<dm_task_reviceEntity>();
+                    for (int i = 0; i < task_ids.Length; i++)
+                    {
+                        dm_task_reviceEntity dm_Task_ReviceEntity = new dm_task_reviceEntity
+                        {
+                            revice_time = currentTime,
+                            recordindex = i + 1,
+                            status = 1,
+                            task_id = int.Parse(task_ids[i]),
+                            user_id = user_id,
+                            activitycode = dm_Activity_ManageEntity.f_id
+                        };
+                        dm_Task_ReviceEntity.Create();
+                        dm_task_reviceList.Add(dm_Task_ReviceEntity);
+                    }
+
+                    if (dm_task_reviceList.Count > 0)
+                        this.BaseRepository("dm_data").Insert(dm_task_reviceList);
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw ExceptionEx.ThrowServiceException(ex);
+                    if (ex is ExceptionEx)
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        throw ExceptionEx.ThrowServiceException(ex);
+                    }
                 }
             }
         }

@@ -1098,7 +1098,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(userid);
                     if (dm_UserEntity.tb_relationid.IsEmpty())
                     {
-                        return NoRelationID("渠道未备案!");
+                        return NoRelationID("渠道未备案,请点击'自购省'完成备案再分享!");
                     }
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);
@@ -1162,7 +1162,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                     dm_userEntity dm_UserEntity = dm_userIBLL.GetEntityByCache(user_id);
                     if (dm_UserEntity.tb_relationid.IsEmpty())
                     {
-                        return NoRelationID("渠道未备案!");
+                        return NoRelationID("渠道未备案,请点击'自购省'完成备案再分享!");
                     }
                     dm_basesettingEntity dm_BasesettingEntity = dM_BaseSettingIBLL.GetEntityByCache(appid);
                     DTK_ApiManage dTK_ApiManage = new DTK_ApiManage(dm_BasesettingEntity.dtk_appkey, dm_BasesettingEntity.dtk_appsecret);

@@ -644,7 +644,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                 dm_Activity_RecordEntity.invitenum += 1;
                             db_activity.Update(dm_Activity_RecordEntity);
 
-                            if (dm_Activity_RecordEntity.invitenum >= 3)
+                            if (dm_Activity_RecordEntity.invitenum == 3)
                             {
                                 #region 给用户账户返钱
                                 parent_UserEntity.accountprice += dm_Activity_ManageEntity.RewardPrice;
