@@ -35,7 +35,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
 
         #region 生成小程序支付参数
         [NoNeedLogin]
-        public ActionResult General_Pay_Param(string openid = "of_-85QWeJbeqAkODjpVlNuM7XQs", decimal amount = 1.0M)
+        public ActionResult General_Pay_Param(string openid = "of_-85QWeJbeqAkODjpVlNuM7XQs", decimal amount = 0.01M)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
                 //"}}";
                 //              string resultContent = Hyg.Common.OtherTools.AjaxRequest.HttpPost("https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi", param);
 
-                return Success(resultContent);
+                return Success("获取成功", resultContent);
             }
             catch (Exception ex)
             {
