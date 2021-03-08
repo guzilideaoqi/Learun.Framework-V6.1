@@ -262,6 +262,7 @@
     <Compile Include="Controllers\DM_APIControl\PDDCatInfo.cs" />
     <Compile Include="Controllers\DM_APIControl\SmallCate.cs" />
     <Compile Include="Controllers\DM_APIControl\TencentMeetingController.cs" />
+    <Compile Include="Controllers\DM_APIControl\XCX_ApiManageController.cs" />
     <Compile Include="Controllers\RobotApiController.cs" />
     <Compile Include="Controllers\TBUserInfoControllerController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -2553,6 +2554,7 @@
     <Folder Include="Views\A_Pay\" />
     <Folder Include="Views\DM_Circle\" />
     <Folder Include="Views\TencentMeeting\" />
+    <Folder Include="Views\XCX_ApiManage\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

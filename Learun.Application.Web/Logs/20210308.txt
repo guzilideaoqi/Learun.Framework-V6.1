@@ -1,0 +1,36 @@
+【时间】=>2021-03-08 16:19:25 228
+【错误类型】=>Exception
+【方法名称】=>HttpPost
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>远程服务器返回错误: (400) 错误的请求。
+【异常位置】=>   在 System.Net.HttpWebRequest.GetResponse()
+   在 Hyg.Common.OtherTools.AjaxRequest.HttpPost(String Url, String postDataStr, Dictionary`2 header, String cookie, String contenttype)
+
+【时间】=>2021-03-08 16:19:37 948
+【错误类型】=>Exception
+【方法名称】=>HttpPost
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>远程服务器返回错误: (400) 错误的请求。
+【异常位置】=>   在 System.Net.HttpWebRequest.GetResponse()
+   在 Hyg.Common.OtherTools.AjaxRequest.HttpPost(String Url, String postDataStr, Dictionary`2 header, String cookie, String contenttype)
+
+【时间】=>2021-03-08 16:19:53 438
+【错误类型】=>Exception
+【方法名称】=>HttpPost
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>远程服务器返回错误: (400) 错误的请求。
+【异常位置】=>   在 System.Net.HttpWebRequest.GetResponse()
+   在 Hyg.Common.OtherTools.AjaxRequest.HttpPost(String Url, String postDataStr, Dictionary`2 header, String cookie, String contenttype)
+
+【时间】=>2021-03-08 16:21:59 199
+【错误类型】=>Exception
+【方法名称】=>HttpPost
+【请求参数】=>
+【用户Token】=>
+【异常消息】=>远程服务器返回错误: (400) 错误的请求。
+【异常位置】=>   在 System.Net.HttpWebRequest.GetResponse()
+   在 Hyg.Common.OtherTools.AjaxRequest.HttpPost(String Url, String postDataStr, Dictionary`2 header, String cookie, String contenttype)
+

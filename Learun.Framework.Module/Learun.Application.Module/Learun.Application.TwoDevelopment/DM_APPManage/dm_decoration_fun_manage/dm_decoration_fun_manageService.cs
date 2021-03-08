@@ -28,6 +28,7 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                 t.fun_type,
                 t.fun_param,
                 t.fun_remark,
+                t.fun_category,
                 t.createtime,
                 t.updatetime
             ";

@@ -607,7 +607,7 @@ namespace Learun.Application.Web.Controllers.DM_APIControl
         }
         #endregion
 
-        #region 个性化装修模块转链
+        #region 个性化装修模块
         [NoNeedLogin]
         public ActionResult GetDecorationTemplateData()
         {

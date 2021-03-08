@@ -289,6 +289,8 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                                     module_fun_name = dm_Decoration_Fun_ManageEntity.fun_name,
                                     module_fun_type = dm_Decoration_Fun_ManageEntity.fun_type,
                                     module_fun_param = dm_Decoration_Fun_ManageEntity.fun_param,
+                                    module_fun_category= dm_Decoration_Fun_ManageEntity.fun_category,
+                                    module_fun_category_name= GetCategoryName(dm_Decoration_Fun_ManageEntity.fun_category),
                                     module_item_image = dm_Decoration_Template_Module_ItemEntity.module_item_image,
                                     module_item_name = dm_Decoration_Template_Module_ItemEntity.module_item_name,
                                     module_item_type = dm_Decoration_ModuleEntity.module_type,
@@ -322,6 +324,33 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
                     throw ExceptionEx.ThrowServiceException(ex);
                 }
             }
+        }
+
+        string GetCategoryName(int? fun_category) {
+            string typeName = "";
+            switch (fun_category)
+            {
+                case 0:
+                    typeName = "热门";
+                    break;
+                case 1:
+                    typeName = "购物";
+                    break;
+                case 2:
+                    typeName = "生活";
+                    break;
+                case 3:
+                    typeName = "美食";
+                    break;
+                case 4:
+                    typeName = "充值";
+                    break;
+                default:
+                    typeName = "其他";
+                    break;
+            }
+
+            return typeName;
         }
         #endregion
     }

@@ -51,6 +51,16 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage.dm_decoration_template_
         public string module_fun_param { get; set; }
 
         /// <summary>
+        /// 模块所属类别
+        /// </summary>
+        public int? module_fun_category { get; set; }
+
+        /// <summary>
+        /// 模块类别名称
+        /// </summary>
+        public string module_fun_category_name { get; set; }
+
+        /// <summary>
         /// 模块项对应排序
         /// </summary>
         public int? module_sort { get; set; }

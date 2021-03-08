@@ -95,6 +95,33 @@ var bootstrap = function ($, learun) {
                         }
                     },
                     { label: '功能对应参数值', name: 'fun_param', width: 200, align: "left" },
+                    {
+                        label: '功能归类', name: 'fun_category', width: 200, align: "left", formatter: function (cellvalue, rowdata, options) {
+                            var typeName = "";
+                            switch (cellvalue) {
+
+                                case 0:
+                                    typeName = "热门";
+                                    break;
+                                case 1:
+                                    typeName = "购物";
+                                    break;
+                                case 2:
+                                    typeName = "生活";
+                                    break;
+                                case 3:
+                                    typeName = "美食";
+                                    break;
+                                case 4:
+                                    typeName = "充值";
+                                    break;
+                                default:
+                                    typeName = "其他";
+                                    break;
+                            }
+                            return typeName;
+                        }
+                    },
                     { label: '功能描述', name: 'fun_remark', width: 200, align: "left" },
                     { label: '创建时间', name: 'createtime', width: 200, align: "left" },
                     { label: '修改时间', name: 'updatetime', width: 200, align: "left" },

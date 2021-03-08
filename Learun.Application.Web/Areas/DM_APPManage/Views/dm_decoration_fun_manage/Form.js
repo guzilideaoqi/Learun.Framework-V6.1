@@ -16,6 +16,7 @@ var bootstrap = function ($, learun) {
         },
         bind: function () {
             $('#fun_type').lrselect();
+            $('#fun_category').lrselect();
         },
         initData: function () {
             if (!!selectedRow) {

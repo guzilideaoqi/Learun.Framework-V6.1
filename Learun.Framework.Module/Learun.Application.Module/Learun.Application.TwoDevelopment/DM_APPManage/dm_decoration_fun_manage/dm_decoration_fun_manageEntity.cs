@@ -11,14 +11,15 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
     /// 日 期：2021-03-03 10:53
     /// 描 述：装修模块分类
     /// </summary>
-    public class dm_decoration_fun_manageEntity 
+    public class dm_decoration_fun_manageEntity
     {
         #region 实体成员
         /// <summary>
         /// id
         /// </summary>
         /// <returns></returns>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        [Column("ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("ID")]
         public int? id { get; set; }
         /// <summary>
         /// 功能名称
@@ -44,6 +45,12 @@ namespace Learun.Application.TwoDevelopment.DM_APPManage
         /// <returns></returns>
         [Column("FUN_REMARK")]
         public string fun_remark { get; set; }
+
+        /// <summary>
+        /// 功能模块所属类别
+        /// </summary>
+        [Column("FUN_CATEGORY")]
+        public int? fun_category { get; set; }
         /// <summary>
         /// createtime
         /// </summary>
